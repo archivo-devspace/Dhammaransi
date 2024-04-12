@@ -10,13 +10,13 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import {useNavigation, NavigationProp} from '@react-navigation/native';
 
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {NavigationMainStackScreenProps} from '../navigations/StackNavigation';
 import {theme} from '../theme';
+import {AntDesign} from '../utils/common';
 // import {
 //   NavigationScreenProps,
 //   RootStackParamList,
@@ -56,12 +56,16 @@ type Props = {
 const HomeScreen = ({navigation}: Props) => {
   return (
     <View style={styles.mainContainer}>
-      <StatusBar barStyle="default" backgroundColor="black" />
+      <StatusBar
+        barStyle="dark-content"
+        translucent
+        backgroundColor={theme.secondary_light}
+      />
       <SafeAreaView style={styles.safeAreaView}>
         <View style={styles.topView}>
-          <FontAwesome
+          <AntDesign
             size={30}
-            name="user"
+            name="menu-fold"
             color={theme.primary}
             onPress={navigation.openDrawer}
           />
@@ -70,7 +74,9 @@ const HomeScreen = ({navigation}: Props) => {
 
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{}}></ScrollView>
+        contentContainerStyle={{}}>
+        <Text>Home Page</Text>
+      </ScrollView>
     </View>
   );
 };
@@ -78,7 +84,7 @@ const HomeScreen = ({navigation}: Props) => {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: 'gray',
+    backgroundColor: theme.white,
   },
   safeAreaView: {
     marginBottom: Platform.OS === 'ios' ? 8 : 12,
