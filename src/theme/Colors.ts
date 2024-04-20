@@ -16,13 +16,13 @@ const light = {
 };
 
 const dark = {
-  primary: '#C89E00',
-  primary_light: '#C8AB00',
-  primary_dark: '#8F7000',
-  secondary: '#1a202c',
-  secondary_light: '#39424f',
-  secondary_dark: '#0d1117',
-  text: '#FFFFFF',
+  primary: '#8F7000',
+  primary_light: '#C09900',
+  primary_dark: '#2E2500',
+  secondary: '#242526',
+  secondary_light: '#3a3b3c',
+  secondary_dark: '#18191a',
+  text: '#9b9c9e',
   ...commonColor
 };
 
