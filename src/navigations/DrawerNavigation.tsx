@@ -7,12 +7,16 @@ import {
 import DrawerOneScreen from '../screens/DrawerOneScreen';
 import CustomDrawer from '../components/commons/CustomDrawer';
 import StackNavigation from './StackNavigation';
-import {theme} from '../theme';
+// import {theme} from '../theme';
 import {AntDesign, FontAwesome} from '../utils/common';
+import {useThemeContext} from '../contexts/ThemeContext';
+import {Colors} from '../theme';
+import SettingScreen from '../screens/SettingScreen';
 
 export type DrawerParamList = {
   StackNavigation: undefined;
   DrawerOne: undefined;
+  Setting: undefined;
 };
 
 export type NavigationDrawerScreenProps = {
@@ -22,22 +26,24 @@ export type NavigationDrawerScreenProps = {
 const Drawer = createDrawerNavigator();
 
 const DrawerNavigator = () => {
+  const {theme} = useThemeContext();
+
   return (
     <Drawer.Navigator
       drawerContent={props => <CustomDrawer {...props} />}
       initialRouteName="HomePage"
       screenOptions={{
         drawerStyle: {
-          backgroundColor: theme.white,
+          backgroundColor: Colors[theme]?.text,
           borderBottomRightRadius: 20,
           borderTopRightRadius: 20,
         },
 
         drawerLabelStyle: {
-          color: theme.secondary_light,
+          color: Colors[theme]?.text,
           fontSize: 16,
         },
-        drawerActiveBackgroundColor: theme.white,
+        drawerActiveBackgroundColor: Colors[theme]?.secondary,
       }}>
       <Drawer.Screen
         name="HomePage"
@@ -45,7 +51,7 @@ const DrawerNavigator = () => {
         options={{
           headerShown: false,
           drawerIcon: () => (
-            <FontAwesome name="home" size={26} color={theme.primary} />
+            <FontAwesome name="home" size={26} color={Colors[theme]?.primary} />
           ),
         }}
       />
@@ -55,7 +61,25 @@ const DrawerNavigator = () => {
         options={{
           headerShown: false,
           drawerIcon: () => (
-            <AntDesign name="appstore-o" size={26} color={theme.primary} />
+            <AntDesign
+              name="appstore-o"
+              size={26}
+              color={Colors[theme]?.primary}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Setting"
+        component={SettingScreen}
+        options={{
+          headerShown: false,
+          drawerIcon: () => (
+            <AntDesign
+              name="setting"
+              size={26}
+              color={Colors[theme]?.primary}
+            />
           ),
         }}
       />

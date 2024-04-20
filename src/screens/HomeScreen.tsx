@@ -15,8 +15,10 @@ import {useNavigation, NavigationProp} from '@react-navigation/native';
 
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {NavigationMainStackScreenProps} from '../navigations/StackNavigation';
-import {theme} from '../theme';
+// import {theme} from '../theme';
 import {AntDesign} from '../utils/common';
+import {Theme, useThemeContext} from '../contexts/ThemeContext';
+import {Colors} from '../theme';
 // import {
 //   NavigationScreenProps,
 //   RootStackParamList,
@@ -54,19 +56,20 @@ type Props = {
 };
 
 const HomeScreen = ({navigation}: Props) => {
+  const {theme} = useThemeContext();
+
+  // console.log('theme', theme);
+  const styles = styling(theme);
+
   return (
     <View style={styles.mainContainer}>
-      <StatusBar
-        barStyle="dark-content"
-        translucent
-        backgroundColor={theme.secondary_light}
-      />
+      <StatusBar barStyle="dark-content" translucent />
       <SafeAreaView style={styles.safeAreaView}>
         <View style={styles.topView}>
           <AntDesign
             size={30}
             name="menu-fold"
-            color={theme.primary}
+            color={Colors[theme]?.primary}
             onPress={navigation.openDrawer}
           />
         </View>
@@ -81,21 +84,22 @@ const HomeScreen = ({navigation}: Props) => {
   );
 };
 
-const styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-    backgroundColor: theme.white,
-  },
-  safeAreaView: {
-    marginBottom: Platform.OS === 'ios' ? 8 : 12,
-  },
-  topView: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginHorizontal: 10,
-  },
-  text: {},
-});
+const styling = (theme: Theme) =>
+  StyleSheet.create({
+    mainContainer: {
+      flex: 1,
+      backgroundColor: Colors[theme]?.secondary_light,
+    },
+    safeAreaView: {
+      marginBottom: Platform.OS === 'ios' ? 8 : 12,
+    },
+    topView: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginHorizontal: 10,
+    },
+    text: {},
+  });
 
 export default HomeScreen;

@@ -1,4 +1,6 @@
-import { StyleSheet } from "react-native"
+import Colors from './Colors';
+
+export { Colors };
 
 export const theme = {
     primary: "#C89E00",
@@ -11,4 +13,3 @@ export const theme = {
     danger: "#C8001A",
     white: "#FFFFFF",
 }
-
