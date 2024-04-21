@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from 'react-native';
 import React from 'react';
@@ -25,7 +26,7 @@ const CustomDrawer = (props: DrawerContentComponentProps) => {
 
   const styles = styling(theme);
 
-  // const themeColors = Colors[theme];
+  const {height} = useWindowDimensions();
 
   return (
     <ScrollView contentContainerStyle={{flex: 1}}>
@@ -33,9 +34,9 @@ const CustomDrawer = (props: DrawerContentComponentProps) => {
       <SafeAreaView
         style={{
           backgroundColor: Colors[theme]?.primary,
-          width: undefined,
-          padding: 16,
-          paddingTop: 52,
+
+          padding: 10,
+          paddingTop: height > 500 ? 48 : 30,
           borderTopRightRadius: 20,
         }}>
         <View style={{alignItems: 'center'}}>
@@ -51,16 +52,18 @@ const CustomDrawer = (props: DrawerContentComponentProps) => {
         <View
           style={{
             backgroundColor: Colors[theme]?.secondary_light,
-            flex: 5.2,
-            paddingTop: 20,
+            flex: height > 500 ? 5.2 : 4.5,
+            paddingVertical: 5,
             paddingHorizontal: 5,
             // borderBottomRightRadius: 20,
           }}>
-          <DrawerItemList {...props} />
+          <ScrollView>
+            <DrawerItemList {...props} />
+          </ScrollView>
         </View>
         <View
           style={{
-            flex: 0.8,
+            flex: height > 500 ? 0.8 : 1.5,
             justifyContent: 'center',
             borderBottomRightRadius: 20,
             backgroundColor: Colors[theme]?.secondary,
@@ -89,18 +92,6 @@ const CustomDrawer = (props: DrawerContentComponentProps) => {
 
 export default CustomDrawer;
 
-type ThemeColors = {
-  primary: string;
-  primary_light: string;
-  primary_dark: string;
-  secondary: string;
-  secondary_light: string;
-  success: string;
-  warnning: string;
-  danger: string;
-  text: string;
-};
-
 const styling = (theme: Theme) =>
   StyleSheet.create({
     mainContainer: {
@@ -109,8 +100,8 @@ const styling = (theme: Theme) =>
       borderBottomRightRadius: 20,
     },
     profile: {
-      width: 100,
-      height: 100,
+      width: 80,
+      height: 80,
       resizeMode: 'contain',
     },
     name: {
@@ -118,6 +109,6 @@ const styling = (theme: Theme) =>
       opacity: 0.8,
       fontWeight: '800',
       fontSize: 20,
-      marginVertical: 8,
+      marginBottom: 8,
     },
   });

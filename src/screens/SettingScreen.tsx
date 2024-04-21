@@ -74,7 +74,33 @@ const SettingScreen = ({navigation}: Props) => {
 
       <View style={styles.toggle}>
         <Text style={styles.text}>Use dark theme</Text>
-        <Switch value={isEnabled} handleSwitch={toggleSwitch} />
+        <Switch
+          value={isEnabled}
+          handleSwitch={toggleSwitch}
+          bgWidth={150}
+          bgHeight={80}
+          bgRadious={70}
+          headWidth={70}
+          headHeight={70}
+          fromOutputRange={6}
+          toOutputRange={74}
+          defaultBgColorCodes={[
+            Colors[theme]?.primary,
+            Colors[theme]?.secondary_dark,
+          ]}
+          defaultHeadColorCodes={[
+            Colors[theme]?.primary,
+            Colors[theme]?.secondary_light,
+          ]}
+          activeBgColorCodes={[
+            Colors[theme]?.primary,
+            Colors[theme]?.secondary_dark,
+          ]}
+          activeHeadColorCodes={[
+            Colors[theme]?.secondary_dark,
+            Colors[theme]?.secondary_light,
+          ]}
+        />
       </View>
     </View>
   );
@@ -97,7 +123,6 @@ const styling = (theme: Theme) =>
       marginHorizontal: 10,
     },
     toggle: {
-      flexDirection: 'row',
       justifyContent: 'center',
       alignItems: 'center',
       gap: 10,

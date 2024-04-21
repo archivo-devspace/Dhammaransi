@@ -83,6 +83,20 @@ const DrawerNavigator = () => {
           ),
         }}
       />
+      <Drawer.Screen
+        name="htet"
+        component={SettingScreen}
+        options={{
+          headerShown: false,
+          drawerIcon: () => (
+            <AntDesign
+              name="setting"
+              size={26}
+              color={Colors[theme]?.primary}
+            />
+          ),
+        }}
+      />
     </Drawer.Navigator>
   );
 };

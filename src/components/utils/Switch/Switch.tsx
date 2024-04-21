@@ -7,11 +7,36 @@ import {useThemeContext} from '../../../contexts/ThemeContext';
 type Props = {
   value: boolean;
   handleSwitch: () => void;
+  bgWidth?: number;
+  bgHeight?: number;
+  bgRadious?: number;
+  headWidth?: number;
+  headHeight?: number;
+  fromOutputRange?: number;
+  toOutputRange?: number;
+  defaultBgColorCodes?: string[];
+  defaultHeadColorCodes?: string[];
+  activeBgColorCodes?: string[];
+  activeHeadColorCodes?: string[];
 };
 
 const Switch = (props: Props) => {
   const {theme} = useThemeContext();
-  const {value, handleSwitch} = props;
+  const {
+    value,
+    handleSwitch,
+    bgWidth,
+    bgHeight,
+    bgRadious,
+    headWidth,
+    headHeight,
+    fromOutputRange,
+    toOutputRange,
+    defaultBgColorCodes,
+    defaultHeadColorCodes,
+    activeBgColorCodes,
+    activeHeadColorCodes,
+  } = props;
   const [animatedValue] = useState(new Animated.Value(value ? 1 : 0));
 
   useEffect(() => {
@@ -25,31 +50,46 @@ const Switch = (props: Props) => {
 
   const translateX = animatedValue.interpolate({
     inputRange: [0, 1],
-    outputRange: [4, 28], // Adjust the distance of the switch head
+    outputRange: [
+      fromOutputRange ? fromOutputRange : 4,
+      toOutputRange ? toOutputRange : 28,
+    ], // Adjust the distance of the switch head
   });
 
   const defaultStyles = {
-    bgGradientColors: [Colors[theme]?.primary, Colors[theme]?.secondary_dark],
-    headGradientColors: [
-      Colors[theme]?.primary,
-      Colors[theme]?.secondary_light,
-    ],
+    bgGradientColors: defaultBgColorCodes
+      ? defaultBgColorCodes
+      : [Colors[theme]?.primary, Colors[theme]?.secondary_dark],
+    headGradientColors: defaultHeadColorCodes
+      ? defaultHeadColorCodes
+      : [Colors[theme]?.primary, Colors[theme]?.secondary_light],
   };
 
   const activeStyles = {
-    bgGradientColors: [Colors[theme]?.primary, Colors[theme]?.secondary_dark],
-    headGradientColors: [
-      Colors[theme]?.secondary_dark,
-      Colors[theme]?.secondary_light,
-    ],
+    bgGradientColors: activeBgColorCodes
+      ? activeBgColorCodes
+      : [Colors[theme]?.primary, Colors[theme]?.secondary_dark],
+    headGradientColors: activeHeadColorCodes
+      ? activeHeadColorCodes
+      : [Colors[theme]?.secondary_dark, Colors[theme]?.secondary_light],
   };
   const currentStyles = value ? activeStyles : defaultStyles;
 
   return (
-    <Pressable onPress={handleSwitch} style={styles.pressable}>
+    <Pressable
+      onPress={handleSwitch}
+      style={
+        bgWidth
+          ? {width: bgWidth, height: bgHeight, borderRadius: bgRadious}
+          : styles.pressable
+      }>
       <LinearGradient
         colors={currentStyles.bgGradientColors}
-        style={styles.backgroundGradient}
+        style={
+          bgWidth
+            ? {borderRadius: bgRadious, flex: 1}
+            : styles.backgroundGradient
+        }
         start={{
           x: 0,
           y: 0.5,
@@ -61,7 +101,11 @@ const Switch = (props: Props) => {
             }}>
             <LinearGradient
               colors={currentStyles.headGradientColors}
-              style={styles.headGradient}
+              style={
+                bgWidth
+                  ? {width: headWidth, height: headHeight, borderRadius: 100}
+                  : styles.headGradient
+              }
             />
           </Animated.View>
         </View>
