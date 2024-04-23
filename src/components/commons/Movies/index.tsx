@@ -31,9 +31,9 @@ type Props = {
 export const Movies = ({data, navigation}: Props) => {
   const {width, height} = useWindowDimensions();
   const {theme} = useThemeContext();
-  const ITEM_WIDTH = width - width * 0.5;
-  const ITEM_HEIGHT = height - height * 0.7;
-  const MARGIN_HORIZONTAL = 20;
+  const ITEM_WIDTH = width - width * 0.3;
+  const ITEM_HEIGHT = height - height * 0.8;
+  const MARGIN_HORIZONTAL = 10;
   const ITEM_FULL_WIDTH = ITEM_WIDTH + MARGIN_HORIZONTAL * 2;
   const SPACER = (width - ITEM_FULL_WIDTH) / 2;
 
@@ -53,8 +53,8 @@ export const Movies = ({data, navigation}: Props) => {
   const styles = styling(theme);
 
   return (
-    <View style={[styles.mainContainer, {height: height - height * 0.6}]}>
-      <Text style={styles.text}>Movies</Text>
+    <View style={[styles.mainContainer, {height: height - height * 0.72}]}>
+      <Text style={styles.text}>Paintings</Text>
       <Animated.FlatList
         onScroll={onScroll}
         data={data}
@@ -90,7 +90,9 @@ export const Movies = ({data, navigation}: Props) => {
 
 const styling = (theme: Theme) =>
   StyleSheet.create({
-    mainContainer: {},
+    mainContainer: {
+      // backgroundColor: 'black',
+    },
     text: {
       color: Colors[theme].text,
       fontSize: 20,
@@ -100,7 +102,7 @@ const styling = (theme: Theme) =>
       textAlign: 'center',
     },
     flatListStyle: {
-      paddingTop: 10,
+      paddingTop: 5,
       alignSelf: 'center',
     },
   });

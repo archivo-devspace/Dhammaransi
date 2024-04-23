@@ -9,7 +9,7 @@ const Audios = () => {
   const {theme} = useThemeContext();
   const styles = styling(theme);
   return (
-    <>
+    <View>
       <Text style={styles.headerText}>Audios</Text>
       <ScrollView horizontal contentContainerStyle={styles.mainContainer}>
         <View style={styles.container}>
@@ -37,7 +37,7 @@ const Audios = () => {
           <Text style={styles.text}>audio1</Text>
         </View>
       </ScrollView>
-    </>
+    </View>
   );
 };
 
@@ -48,19 +48,18 @@ const styling = (theme: Theme) =>
     mainContainer: {
       flexDirection: 'row',
       marginHorizontal: 10,
+      marginVertical: 20,
       gap: 10,
     },
     headerText: {
       color: Colors[theme].text,
       fontSize: 20,
       marginHorizontal: 10,
-      marginBottom: remToPx(1),
       fontWeight: 'bold',
+      textAlign: 'center',
     },
     container: {
       gap: 2,
-      // width:50,
-      // height:50,
     },
     img: {
       width: 85,

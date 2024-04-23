@@ -26,6 +26,7 @@ import {Movies} from '../components/commons/Movies';
 import ImageSlider from '../components/commons/ImageSlider';
 import Animated from 'react-native-reanimated';
 import {CustomButton} from '../components/utils';
+import Audios from '../components/commons/Audio';
 
 export type ApiResponse<T> = {
   page: number;
@@ -92,6 +93,8 @@ const HomeScreen = ({navigation}: Props) => {
             </TouchableOpacity>
           ))}
         </View>
+        {/* audios  */}
+        <Audios />
         {/* Dhamma movies  */}
         <Movies data={movies} navigation={navigation} />
       </ScrollView>
@@ -119,18 +122,22 @@ const styling = (theme: Theme) =>
       flexDirection: 'row',
       justifyContent: 'center',
       flexWrap: 'wrap',
-      gap: 5,
-      marginVertical: 10,
+      gap: 10,
+      columnGap: 10,
+      marginVertical: 20,
     },
     menu: {
       backgroundColor: Colors[theme].secondary_dark,
       borderRadius: 10,
-      width: '40%',
-      height: 100,
+      width: '45%',
+      height: 70,
       padding: 5,
       gap: 10,
       justifyContent: 'center',
       alignItems: 'center',
+    },
+    audiosContainer: {
+      marginVertical: 20,
     },
     moviesContainer: {
       width: '100%',
@@ -144,7 +151,7 @@ const styling = (theme: Theme) =>
       width: 45,
       height: 45,
       borderRadius: 10,
-      backgroundColor: Colors[theme]?.primary,
+      backgroundColor: Colors[theme]?.secondary,
       padding: 5,
       justifyContent: 'center',
       alignItems: 'center',

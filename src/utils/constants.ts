@@ -35,13 +35,13 @@ export const menus = [
   {
     id: 3,
     icon: 'book',
-    name: 'PDFs',
-    link: 'Pdf',
+    name: 'Movies',
+    link: 'Movie',
   },
   {
     id: 4,
     icon: 'book',
-    name: 'PDFs',
+    name: 'Paintings',
     link: 'Pdf',
   },
 ];
