@@ -21,7 +21,7 @@ import {NavigationMainStackScreenProps} from '../navigations/StackNavigation';
 import {AntDesign, FontAwesome} from '../utils/common';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {Colors} from '../theme';
-import {images, movies} from '../utils/constants';
+import {images, menus, movies} from '../utils/constants';
 import {Movies} from '../components/commons/Movies';
 import ImageSlider from '../components/commons/ImageSlider';
 import Animated from 'react-native-reanimated';
@@ -43,18 +43,19 @@ type Props = {
 const HomeScreen = ({navigation}: Props) => {
   const {theme} = useThemeContext();
   const {width, height} = useWindowDimensions();
-
-  // console.log('theme', theme);
   const styles = styling(theme);
-  // const scrollA = useRef(new Animated.Value(0)).current;
+
+  const handleNavigate = (link: string) => {
+    if (link === 'Home' || link === 'Audios' || link === 'Pdf') {
+      navigation.navigate(link);
+    } else {
+      // Assuming the link is not predefined in the native stack typescript interface
+      console.log('The link is not provided in the stack navigation');
+    }
+  };
   return (
     <>
-      <ScrollView
-        style={styles.mainContainer}
-        // onScroll={Animated.event([
-        // {nativeEvent: {contentOffset:{y:scrollA}}}
-        // ])}
-      >
+      <ScrollView style={styles.mainContainer}>
         <StatusBar translucent backgroundColor={'transparent'} />
 
         {/**header bar */}
@@ -73,6 +74,23 @@ const HomeScreen = ({navigation}: Props) => {
         </SafeAreaView>
         <View>
           <ImageSlider images={images} />
+        </View>
+        {/* Menu Components  */}
+        <View style={styles.menuContainer}>
+          {menus?.map(menu => (
+            <TouchableOpacity
+              style={styles.menu}
+              key={menu.id}
+              onPress={() => handleNavigate(menu.link)}>
+              {/* use only fontawesome icon */}
+              <FontAwesome
+                name={menu.icon}
+                size={30}
+                color={Colors[theme].text}
+              />
+              <Text style={{color: Colors[theme].text}}>{menu.name}</Text>
+            </TouchableOpacity>
+          ))}
         </View>
         {/* Dhamma movies  */}
         <Movies data={movies} navigation={navigation} />
@@ -96,9 +114,23 @@ const styling = (theme: Theme) =>
       left: 10,
       zIndex: 10,
     },
-    text: {},
-    bannerContainer: {
-      flex: 0,
+    menuContainer: {
+      width: '100%',
+      flexDirection: 'row',
+      justifyContent: 'center',
+      flexWrap: 'wrap',
+      gap: 5,
+      marginVertical: 10,
+    },
+    menu: {
+      backgroundColor: Colors[theme].secondary_dark,
+      borderRadius: 10,
+      width: '40%',
+      height: 100,
+      padding: 5,
+      gap: 10,
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     moviesContainer: {
       width: '100%',
@@ -108,8 +140,6 @@ const styling = (theme: Theme) =>
       backgroundColor: 'gray',
       height: '100%',
     },
-    image: {},
-    audiosContainer: {},
     btn: {
       width: 45,
       height: 45,

@@ -19,6 +19,33 @@ export const movies = [
   },
 ];
 
+export const menus = [
+  {
+    id: 1,
+    icon: 'music',
+    name: 'Audios',
+    link: 'Audios',
+  },
+  {
+    id: 2,
+    icon: 'book',
+    name: 'PDFs',
+    link: 'Pdf',
+  },
+  {
+    id: 3,
+    icon: 'book',
+    name: 'PDFs',
+    link: 'Pdf',
+  },
+  {
+    id: 4,
+    icon: 'book',
+    name: 'PDFs',
+    link: 'Pdf',
+  },
+];
+
 export const images = [
   'https://www.epidemicsound.com/blog/content/images/size/w2000/2023/09/using-pinterest-header.webp',
   'https://www.epidemicsound.com/blog/content/images/2023/09/using-pinterest-on-a-laptop.webp',

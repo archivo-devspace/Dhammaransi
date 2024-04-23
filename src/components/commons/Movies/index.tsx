@@ -97,6 +97,7 @@ const styling = (theme: Theme) =>
       marginHorizontal: 10,
       marginBottom: remToPx(1),
       fontWeight: 'bold',
+      textAlign: 'center',
     },
     flatListStyle: {
       paddingTop: 10,
