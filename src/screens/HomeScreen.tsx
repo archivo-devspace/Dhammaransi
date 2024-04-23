@@ -7,8 +7,10 @@ import {
   TouchableOpacity,
   ScrollView,
   ImageSourcePropType,
+  Image,
+  useWindowDimensions,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 import {useNavigation, NavigationProp} from '@react-navigation/native';
@@ -16,31 +18,14 @@ import {useNavigation, NavigationProp} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {NavigationMainStackScreenProps} from '../navigations/StackNavigation';
 // import {theme} from '../theme';
-import {AntDesign} from '../utils/common';
+import {AntDesign, FontAwesome} from '../utils/common';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {Colors} from '../theme';
-// import {
-//   NavigationScreenProps,
-//   RootStackParamList,
-// } from '../navigation/AppNavigation';
-
-export type MovieProps = {
-  adult: boolean;
-  backdrop_path: string;
-  id: number;
-  title: string;
-  original_language: string;
-  original_title: string;
-  overview: string;
-  poster_path: string;
-  media_type: string;
-  genre_ids: number[];
-  popularity: number;
-  release_date: string;
-  video: boolean;
-  vote_average: number;
-  vote_count: number;
-};
+import {images, movies} from '../utils/constants';
+import {Movies} from '../components/commons/Movies';
+import ImageSlider from '../components/commons/ImageSlider';
+import Animated from 'react-native-reanimated';
+import Audios from '../components/commons/Audio';
 
 export type ApiResponse<T> = {
   page: number;
@@ -57,30 +42,40 @@ type Props = {
 
 const HomeScreen = ({navigation}: Props) => {
   const {theme} = useThemeContext();
+  const {width, height} = useWindowDimensions();
 
   // console.log('theme', theme);
   const styles = styling(theme);
-
+  // const scrollA = useRef(new Animated.Value(0)).current;
   return (
-    <View style={styles.mainContainer}>
-      <StatusBar barStyle="dark-content" translucent />
-      <SafeAreaView style={styles.safeAreaView}>
-        <View style={styles.topView}>
-          <AntDesign
-            size={30}
-            name="menu-fold"
-            color={Colors[theme]?.primary}
-            onPress={navigation.openDrawer}
-          />
-        </View>
-      </SafeAreaView>
-
+    <>
       <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{}}>
-        <Text>Home Page</Text>
+        style={styles.mainContainer}
+        // onScroll={Animated.event([
+        // {nativeEvent: {contentOffset:{y:scrollA}}}
+        // ])}
+      >
+        <StatusBar translucent backgroundColor={'transparent'} />
+
+        {/**header bar */}
+        <SafeAreaView style={styles.topView}>
+          <FontAwesome
+            size={30}
+            name="indent"
+            color={Colors[theme].primary}
+            onPress={navigation.openDrawer}
+            style={styles.topView}
+          />
+        </SafeAreaView>
+        <View>
+          <ImageSlider images={images} />
+        </View>
+        {/* Dhamma movies  */}
+        <Movies data={movies} navigation={navigation} />
+        {/* Audios  */}
+        <Audios />
       </ScrollView>
-    </View>
+    </>
   );
 };
 
@@ -88,18 +83,32 @@ const styling = (theme: Theme) =>
   StyleSheet.create({
     mainContainer: {
       flex: 1,
-      backgroundColor: Colors[theme]?.secondary_light,
+      backgroundColor: Colors[theme]?.secondary,
     },
     safeAreaView: {
       marginBottom: Platform.OS === 'ios' ? 8 : 12,
     },
     topView: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      marginHorizontal: 10,
+      position: 'absolute',
+      top: 20,
+      left: 2,
+      zIndex: 10,
     },
     text: {},
+
+    bannerContainer: {
+      flex: 0,
+    },
+    moviesContainer: {
+      width: '100%',
+    },
+    movie: {
+      width: '30%',
+      backgroundColor: 'gray',
+      height: '100%',
+    },
+    image: {},
+    audiosContainer: {},
   });
 
 export default HomeScreen;
