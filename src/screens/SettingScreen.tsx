@@ -14,6 +14,7 @@ import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {Colors} from '../theme';
 import {AntDesign} from '../utils/common';
 import {NavigationDrawerScreenProps} from '../navigations/DrawerNavigation';
+import CustomButton from '../components/utils/Button';
 
 type Props = {
   navigation: NavigationDrawerScreenProps['navigation'] & {
@@ -63,11 +64,22 @@ const SettingScreen = ({navigation}: Props) => {
 
       <SafeAreaView style={styles.safeAreaView}>
         <View style={styles.topView}>
-          <AntDesign
+          {/* <AntDesign
             size={30}
             name="menu-fold"
             color={Colors[theme]?.primary}
             onPress={navigation.openDrawer}
+          /> */}
+          <CustomButton
+            icon={
+              <AntDesign
+                name="menu-fold"
+                size={30}
+                color={Colors[theme].text}
+              />
+            }
+            onPress={navigation.openDrawer}
+            customButtonStyle={styles.btn}
           />
         </View>
       </SafeAreaView>
@@ -114,7 +126,7 @@ const styling = (theme: Theme) =>
     },
     safeAreaView: {
       marginBottom: Platform.OS === 'ios' ? 8 : 12,
-      marginTop: Platform.OS === 'ios' ? 8 : 52,
+      marginTop: Platform.OS === 'ios' ? 8 : 42,
     },
     topView: {
       flexDirection: 'row',
@@ -129,6 +141,15 @@ const styling = (theme: Theme) =>
     },
     text: {
       color: Colors[theme]?.text,
+    },
+    btn: {
+      width: 45,
+      height: 45,
+      borderRadius: 10,
+      backgroundColor: Colors[theme]?.primary,
+      padding: 5,
+      justifyContent: 'center',
+      alignItems: 'center',
     },
   });
 
