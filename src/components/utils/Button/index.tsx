@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import React, {ReactNode} from 'react';
-import {AntDesign} from '../../../utils/common';
 
 interface ButtonPorps {
   onPress?: () => void;

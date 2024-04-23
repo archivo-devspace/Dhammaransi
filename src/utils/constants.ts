@@ -25,3 +25,6 @@ export const images = [
   'https://www.epidemicsound.com/blog/content/images/2023/09/using-pinterest-on-a-laptop.webp',
   'https://www.epidemicsound.com/blog/content/images/2023/09/using-pinterest-on-a-laptop.webp',
 ];
+
+export const BANNER_H = 350;
+export const TOPNAVI_H = 50;

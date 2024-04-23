@@ -25,7 +25,7 @@ import {images, movies} from '../utils/constants';
 import {Movies} from '../components/commons/Movies';
 import ImageSlider from '../components/commons/ImageSlider';
 import Animated from 'react-native-reanimated';
-import Audios from '../components/commons/Audio';
+import {CustomButton} from '../components/utils';
 
 export type ApiResponse<T> = {
   page: number;
@@ -59,12 +59,16 @@ const HomeScreen = ({navigation}: Props) => {
 
         {/**header bar */}
         <SafeAreaView style={styles.topView}>
-          <FontAwesome
-            size={30}
-            name="indent"
-            color={Colors[theme].primary}
+          <CustomButton
+            icon={
+              <AntDesign
+                name="menu-fold"
+                size={30}
+                color={Colors[theme].text}
+              />
+            }
             onPress={navigation.openDrawer}
-            style={styles.topView}
+            customButtonStyle={styles.btn}
           />
         </SafeAreaView>
         <View>
@@ -72,8 +76,6 @@ const HomeScreen = ({navigation}: Props) => {
         </View>
         {/* Dhamma movies  */}
         <Movies data={movies} navigation={navigation} />
-        {/* Audios  */}
-        <Audios />
       </ScrollView>
     </>
   );
@@ -87,15 +89,14 @@ const styling = (theme: Theme) =>
     },
     safeAreaView: {
       marginBottom: Platform.OS === 'ios' ? 8 : 12,
+      marginTop: Platform.OS === 'ios' ? 8 : 42,
     },
     topView: {
       position: 'absolute',
-      top: 20,
-      left: 2,
+      left: 10,
       zIndex: 10,
     },
     text: {},
-
     bannerContainer: {
       flex: 0,
     },
@@ -109,6 +110,15 @@ const styling = (theme: Theme) =>
     },
     image: {},
     audiosContainer: {},
+    btn: {
+      width: 45,
+      height: 45,
+      borderRadius: 10,
+      backgroundColor: Colors[theme]?.primary,
+      padding: 5,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
   });
 
 export default HomeScreen;

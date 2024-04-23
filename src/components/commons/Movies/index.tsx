@@ -18,13 +18,14 @@ import Item from '../Item';
 import {remToPx} from '../../../utils/common';
 import {Theme, useThemeContext} from '../../../contexts/ThemeContext';
 import {Colors} from '../../../theme';
-import {NavigationMainStackScreenProps} from '../../../navigations/StackNavigation';
+import {
+  MovieProps,
+  NavigationMainStackScreenProps,
+} from '../../../navigations/StackNavigation';
 
 type Props = {
-  data: any;
-  navigation: NavigationMainStackScreenProps['navigation'] & {
-    openDrawer?: () => void; // Add openDrawer function to the navigation prop type
-  };
+  data: MovieProps[];
+  navigation: NavigationMainStackScreenProps['navigation'];
 };
 
 export const Movies = ({data, navigation}: Props) => {
@@ -44,14 +45,15 @@ export const Movies = ({data, navigation}: Props) => {
     },
   });
 
-  const handleClick = (item: any) => {
+  const handleClick = (item: MovieProps) => {
+    console.log('hello');
     navigation.navigate('Movie', {item});
   };
 
   const styles = styling(theme);
 
   return (
-    <View style={[styles.mainContainer, {height: height - height * 0.48}]}>
+    <View style={[styles.mainContainer, {height: height - height * 0.6}]}>
       <Text style={styles.text}>Movies</Text>
       <Animated.FlatList
         onScroll={onScroll}
@@ -96,7 +98,6 @@ const styling = (theme: Theme) =>
       marginBottom: remToPx(1),
       fontWeight: 'bold',
     },
-
     flatListStyle: {
       paddingTop: 10,
       alignSelf: 'center',
