@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import {Animated, StatusBar} from 'react-native';
+import {Animated, StatusBar, useWindowDimensions} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {BANNER_H, TOPNAVI_H} from '../../../utils/constants';
 import {Colors} from '../../../theme';
 import {useThemeContext} from '../../../contexts/ThemeContext';
 
@@ -14,6 +13,10 @@ const TopNavigation: React.FC<TopNavigationProps> = ({title, scrollA}) => {
   const safeArea = useSafeAreaInsets();
   const {theme} = useThemeContext();
   const [isTransparent, setTransparent] = useState(!!scrollA);
+  const {height} = useWindowDimensions();
+
+  const BANNER_H = height * 0.4;
+  const TOPNAVI_H = height * 0.05;
 
   useEffect(() => {
     const handleScroll = (event: {value: number}) => {
