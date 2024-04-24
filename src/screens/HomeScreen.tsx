@@ -4,7 +4,6 @@ import {
   Text,
   StatusBar,
   StyleSheet,
-  Platform,
   TouchableOpacity,
   Animated,
   useWindowDimensions,
@@ -14,12 +13,11 @@ import {NavigationMainStackScreenProps} from '../navigations/StackNavigation';
 import {FontAwesome} from '../utils/common';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {Colors} from '../theme';
-import {BANNER_H, images, menus, movies} from '../utils/constants';
+import {images, menus, movies} from '../utils/constants';
 import {Movies} from '../components/commons/Movies';
 import ImageSlider from '../components/commons/ImageSlider';
 import Audios from '../components/commons/Audio';
 import TopNavigation from '../components/commons/TopNavigation';
-import {useNavigation} from '@react-navigation/native';
 
 type Props = {
   navigation: NavigationMainStackScreenProps['navigation'];
@@ -33,7 +31,7 @@ const HomeScreen: React.FC<Props> = ({navigation}: Props) => {
 
   const customHeight = height * 0.35;
 
-  console.log('theme', theme);
+  const BANNER_H = height * 0.4;
 
   const handleNavigate = (link: string) => {
     if (link === 'Home' || link === 'Audios' || link === 'Pdf') {
@@ -63,7 +61,26 @@ const HomeScreen: React.FC<Props> = ({navigation}: Props) => {
         scrollEventThrottle={16}>
         <View style={styles.bannerContainer}>
           <Animated.View
-            style={[styles.banner(scrollA), {height: customHeight - 16}]}>
+            style={[
+              {
+                width: '100%',
+                transform: [
+                  {
+                    translateY: scrollA.interpolate({
+                      inputRange: [-BANNER_H, 0, BANNER_H, BANNER_H + 1],
+                      outputRange: [
+                        -BANNER_H / 2,
+                        0,
+                        BANNER_H * 0.75,
+                        BANNER_H * 0.75,
+                      ],
+                    }),
+                  },
+                  {scale: 1},
+                ],
+              },
+              {height: customHeight - 16},
+            ]}>
             <ImageSlider images={images} />
           </Animated.View>
         </View>
@@ -114,7 +131,38 @@ const HomeScreen: React.FC<Props> = ({navigation}: Props) => {
             lacinia. Mauris nec odio eget nisi rutrum ultricies. Fusce lobortis
             fermentum diam, eu luctus elit tristique vel. Nullam nec vehicula
             purus. Donec nec ullamcorper magna. Vivamus ut urna feugiat,
-            interdum dui in, volutpat magna. Nulla facilisi.
+            interdum dui in, volutpat magna. Nulla facilisi. Lorem ipsum dolor
+            sit amet, consectetur adipiscing elit. Nulla nec dui libero. Vivamus
+            vehicula faucibus ipsum, eget semper est fermentum sit amet. Donec
+            non mauris a arcu tempor finibus. Sed nec tellus ultrices, fringilla
+            purus eget, dictum leo. Cras non est nulla. Duis nec purus eget ex
+            cursus fringilla. Fusce auctor suscipit diam id fermentum. Nullam et
+            orci sed urna convallis tristique. Donec nec ipsum sed libero
+            pulvinar lacinia. Mauris nec odio eget nisi rutrum ultricies. Fusce
+            lobortis fermentum diam, eu luctus elit tristique vel. Nullam nec
+            vehicula purus. Donec nec ullamcorper magna. Vivamus ut urna
+            feugiat, interdum dui in, volutpat magna. Nulla facilisi. Lorem
+            ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec dui
+            libero. Vivamus vehicula faucibus ipsum, eget semper est fermentum
+            sit amet. Donec non mauris a arcu tempor finibus. Sed nec tellus
+            ultrices, fringilla purus eget, dictum leo. Cras non est nulla. Duis
+            nec purus eget ex cursus fringilla. Fusce auctor suscipit diam id
+            fermentum. Nullam et orci sed urna convallis tristique. Donec nec
+            ipsum sed libero pulvinar lacinia. Mauris nec odio eget nisi rutrum
+            ultricies. Fusce lobortis fermentum diam, eu luctus elit tristique
+            vel. Nullam nec vehicula purus. Donec nec ullamcorper magna. Vivamus
+            ut urna feugiat, interdum dui in, volutpat magna. Nulla facilisi.
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec
+            dui libero. Vivamus vehicula faucibus ipsum, eget semper est
+            fermentum sit amet. Donec non mauris a arcu tempor finibus. Sed nec
+            tellus ultrices, fringilla purus eget, dictum leo. Cras non est
+            nulla. Duis nec purus eget ex cursus fringilla. Fusce auctor
+            suscipit diam id fermentum. Nullam et orci sed urna convallis
+            tristique. Donec nec ipsum sed libero pulvinar lacinia. Mauris nec
+            odio eget nisi rutrum ultricies. Fusce lobortis fermentum diam, eu
+            luctus elit tristique vel. Nullam nec vehicula purus. Donec nec
+            ullamcorper magna. Vivamus ut urna feugiat, interdum dui in,
+            volutpat magna. Nulla
           </Text>
         </View>
       </Animated.ScrollView>
@@ -126,7 +174,7 @@ const styling = (theme: Theme) =>
   StyleSheet.create({
     mainContainer: {
       flex: 1,
-      backgroundColor: Colors[theme]?.primary,
+      backgroundColor: Colors[theme]?.secondary,
     },
     menuContainer: {
       width: '100%',
@@ -154,18 +202,6 @@ const styling = (theme: Theme) =>
       alignItems: 'center',
       overflow: 'visible',
     },
-    banner: (scrollA: Animated.Value) => ({
-      width: '100%',
-      transform: [
-        {
-          translateY: scrollA.interpolate({
-            inputRange: [-BANNER_H, 0, BANNER_H, BANNER_H + 1],
-            outputRange: [-BANNER_H / 2, 0, BANNER_H * 0.75, BANNER_H * 0.75],
-          }),
-        },
-        {scale: 1},
-      ],
-    }),
   });
 
 export default HomeScreen;
