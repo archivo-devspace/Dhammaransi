@@ -29,7 +29,7 @@ const HomeScreen: React.FC<Props> = ({navigation}: Props) => {
   const {width, height} = useWindowDimensions();
   const scrollA = useRef(new Animated.Value(0)).current;
 
-  const customHeight = height * 0.35;
+  const customHeight = height * 0.3;
 
   const BANNER_H = height * 0.4;
 
@@ -89,6 +89,7 @@ const HomeScreen: React.FC<Props> = ({navigation}: Props) => {
             backgroundColor: Colors[theme]?.secondary,
             borderTopRightRadius: 16,
             borderTopLeftRadius: 16,
+            paddingBottom: 60,
           }}>
           <View style={styles.menuContainer}>
             {menus?.map(menu => (
@@ -108,62 +109,8 @@ const HomeScreen: React.FC<Props> = ({navigation}: Props) => {
               </TouchableOpacity>
             ))}
           </View>
-          <Audios />
           <Movies data={movies} navigation={navigation} />
-          <Text>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec
-            dui libero. Vivamus vehicula faucibus ipsum, eget semper est
-            fermentum sit amet. Donec non mauris a arcu tempor finibus. Sed nec
-            tellus ultrices, fringilla purus eget, dictum leo. Cras non est
-            nulla. Duis nec purus eget ex cursus fringilla. Fusce auctor
-            suscipit diam id fermentum. Nullam et orci sed urna convallis
-            tristique. Donec nec ipsum sed libero pulvinar lacinia. Mauris nec
-            odio eget nisi rutrum ultricies. Fusce lobortis fermentum diam, eu
-            luctus elit tristique vel. Nullam nec vehicula purus. Donec nec
-            ullamcorper magna. Vivamus ut urna feugiat, interdum dui in,
-            volutpat magna. Nulla facilisi. Lorem ipsum dolor sit amet,
-            consectetur adipiscing elit. Nulla nec dui libero. Vivamus vehicula
-            faucibus ipsum, eget semper est fermentum sit amet. Donec non mauris
-            a arcu tempor finibus. Sed nec tellus ultrices, fringilla purus
-            eget, dictum leo. Cras non est nulla. Duis nec purus eget ex cursus
-            fringilla. Fusce auctor suscipit diam id fermentum. Nullam et orci
-            sed urna convallis tristique. Donec nec ipsum sed libero pulvinar
-            lacinia. Mauris nec odio eget nisi rutrum ultricies. Fusce lobortis
-            fermentum diam, eu luctus elit tristique vel. Nullam nec vehicula
-            purus. Donec nec ullamcorper magna. Vivamus ut urna feugiat,
-            interdum dui in, volutpat magna. Nulla facilisi. Lorem ipsum dolor
-            sit amet, consectetur adipiscing elit. Nulla nec dui libero. Vivamus
-            vehicula faucibus ipsum, eget semper est fermentum sit amet. Donec
-            non mauris a arcu tempor finibus. Sed nec tellus ultrices, fringilla
-            purus eget, dictum leo. Cras non est nulla. Duis nec purus eget ex
-            cursus fringilla. Fusce auctor suscipit diam id fermentum. Nullam et
-            orci sed urna convallis tristique. Donec nec ipsum sed libero
-            pulvinar lacinia. Mauris nec odio eget nisi rutrum ultricies. Fusce
-            lobortis fermentum diam, eu luctus elit tristique vel. Nullam nec
-            vehicula purus. Donec nec ullamcorper magna. Vivamus ut urna
-            feugiat, interdum dui in, volutpat magna. Nulla facilisi. Lorem
-            ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec dui
-            libero. Vivamus vehicula faucibus ipsum, eget semper est fermentum
-            sit amet. Donec non mauris a arcu tempor finibus. Sed nec tellus
-            ultrices, fringilla purus eget, dictum leo. Cras non est nulla. Duis
-            nec purus eget ex cursus fringilla. Fusce auctor suscipit diam id
-            fermentum. Nullam et orci sed urna convallis tristique. Donec nec
-            ipsum sed libero pulvinar lacinia. Mauris nec odio eget nisi rutrum
-            ultricies. Fusce lobortis fermentum diam, eu luctus elit tristique
-            vel. Nullam nec vehicula purus. Donec nec ullamcorper magna. Vivamus
-            ut urna feugiat, interdum dui in, volutpat magna. Nulla facilisi.
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec
-            dui libero. Vivamus vehicula faucibus ipsum, eget semper est
-            fermentum sit amet. Donec non mauris a arcu tempor finibus. Sed nec
-            tellus ultrices, fringilla purus eget, dictum leo. Cras non est
-            nulla. Duis nec purus eget ex cursus fringilla. Fusce auctor
-            suscipit diam id fermentum. Nullam et orci sed urna convallis
-            tristique. Donec nec ipsum sed libero pulvinar lacinia. Mauris nec
-            odio eget nisi rutrum ultricies. Fusce lobortis fermentum diam, eu
-            luctus elit tristique vel. Nullam nec vehicula purus. Donec nec
-            ullamcorper magna. Vivamus ut urna feugiat, interdum dui in,
-            volutpat magna. Nulla
-          </Text>
+          <Audios />
         </View>
       </Animated.ScrollView>
     </View>
@@ -187,10 +134,10 @@ const styling = (theme: Theme) =>
       marginVertical: 20,
     },
     menu: {
-      backgroundColor: Colors[theme].secondary_dark,
+      backgroundColor: Colors[theme].secondary_light,
       borderRadius: 10,
       width: '45%',
-
+      elevation: 2,
       padding: 5,
       gap: 10,
       justifyContent: 'center',

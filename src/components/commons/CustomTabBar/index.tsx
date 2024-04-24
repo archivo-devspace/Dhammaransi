@@ -106,9 +106,13 @@ const styling = (theme: Theme) =>
       right: 0,
     },
     tabBar: {
+      borderTopWidth: 1,
+      borderLeftWidth: 1,
+      borderRightWidth: 1,
+      borderColor: Colors[theme].secondary_dark,
       flexDirection: 'row',
       borderTopLeftRadius: 20, // Adjust the border radius as needed
       borderTopRightRadius: 20, // Adjust the border radius as needed
-      backgroundColor: Colors[theme].secondary_light, // Set the background color of the tab bar
+      backgroundColor: Colors[theme].secondary, // Set the background color of the tab bar
     },
   });

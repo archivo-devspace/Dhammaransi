@@ -1,4 +1,11 @@
-import {Image, StyleSheet, Text, View, FlatList} from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  useWindowDimensions,
+} from 'react-native';
 import React from 'react';
 import {Theme, useThemeContext} from '../../../contexts/ThemeContext';
 import {Colors} from '../../../theme';
@@ -13,10 +20,18 @@ const data = [
 const Audios = () => {
   const {theme} = useThemeContext();
   const styles = styling(theme);
+  const {width, height} = useWindowDimensions();
 
   const renderItem = ({item}: any) => (
     <View style={styles.container}>
-      <Image source={item.image} resizeMode="cover" style={styles.img} />
+      <Image
+        source={item.image}
+        resizeMode="cover"
+        style={[
+          styles.img,
+          {width: width - width * 0.7, height: height - height * 0.8},
+        ]}
+      />
       <Text style={styles.text}>{item.text}</Text>
     </View>
   );
@@ -40,8 +55,9 @@ export default Audios;
 const styling = (theme: Theme) =>
   StyleSheet.create({
     mainContainer: {
-      paddingHorizontal: 10,
+      paddingHorizontal: 16,
       paddingVertical: 20,
+      gap: 10,
     },
     headerText: {
       color: Colors[theme].text,
@@ -54,13 +70,12 @@ const styling = (theme: Theme) =>
       marginRight: 10,
     },
     img: {
-      width: 85,
-      height: 85,
-      borderRadius: 100,
+      borderRadius: 16,
     },
     text: {
       textAlign: 'center',
       fontWeight: 'bold',
+      paddingTop: 10,
       color: Colors[theme].text,
     },
   });

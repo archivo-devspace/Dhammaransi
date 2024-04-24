@@ -70,17 +70,6 @@ const SettingScreen = ({navigation}: Props) => {
             color={Colors[theme]?.primary}
             onPress={navigation.openDrawer}
           /> */}
-          <CustomButton
-            icon={
-              <AntDesign
-                name="menu-fold"
-                size={30}
-                color={Colors[theme].text}
-              />
-            }
-            onPress={navigation.openDrawer}
-            customButtonStyle={styles.btn}
-          />
         </View>
       </SafeAreaView>
 
@@ -122,7 +111,7 @@ const styling = (theme: Theme) =>
   StyleSheet.create({
     mainContainer: {
       flex: 1,
-      backgroundColor: Colors[theme]?.secondary_light,
+      backgroundColor: Colors[theme]?.secondary,
     },
     safeAreaView: {
       marginBottom: Platform.OS === 'ios' ? 8 : 12,

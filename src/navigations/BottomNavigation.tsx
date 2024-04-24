@@ -16,6 +16,7 @@ import {Colors} from '../theme';
 import {useThemeContext} from '../contexts/ThemeContext';
 import CustomTabBar from '../components/commons/CustomTabBar';
 import {FontAwesome, Ionicons} from '../utils/common';
+import {Platform, View} from 'react-native';
 
 export interface MovieProps {
   id: number;

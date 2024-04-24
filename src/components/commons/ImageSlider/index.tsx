@@ -10,10 +10,13 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import {Theme, useThemeContext} from '../../../contexts/ThemeContext';
+import {Colors} from '../../../theme';
 
 const ImageSlider = ({images}: {images: any}) => {
   const {width, height} = useWindowDimensions();
-  const customHeight = height * 0.35;
+  const {theme} = useThemeContext();
+  const customHeight = height * 0.3;
 
   console.log('width', width);
   const [active, setActive] = useState(0);
@@ -27,6 +30,8 @@ const ImageSlider = ({images}: {images: any}) => {
       setActive(slide);
     }
   };
+
+  const styles = Styling(theme);
 
   return (
     <View>
@@ -47,7 +52,7 @@ const ImageSlider = ({images}: {images: any}) => {
       <View style={styles.pagination}>
         {images.map((i: any, k: any) => (
           <Text key={k} style={k == active ? styles.activeDot : styles.dot}>
-            •
+            .
           </Text>
         ))}
       </View>
@@ -55,21 +60,22 @@ const ImageSlider = ({images}: {images: any}) => {
   );
 };
 
-const styles = StyleSheet.create({
-  pagination: {
-    flexDirection: 'row',
-    position: 'absolute',
-    bottom: -5,
-    alignSelf: 'center',
-  },
-  dot: {
-    color: '#888',
-    fontSize: 50,
-  },
-  activeDot: {
-    color: '#FFF',
-    fontSize: 50,
-  },
-});
+const Styling = (theme: Theme) =>
+  StyleSheet.create({
+    pagination: {
+      flexDirection: 'row',
+      position: 'absolute',
+      bottom: 10,
+      alignSelf: 'center',
+    },
+    dot: {
+      color: Colors[theme].primary_light,
+      fontSize: 50,
+    },
+    activeDot: {
+      color: Colors[theme].text,
+      fontSize: 50,
+    },
+  });
 
 export default ImageSlider;
