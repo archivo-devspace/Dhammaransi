@@ -1,100 +1,53 @@
 import React, {useState, useEffect} from 'react';
-import {
-  View,
-  Text,
-  StatusBar,
-  SafeAreaView,
-  StyleSheet,
-  ViewStyle,
-  TextStyle,
-} from 'react-native';
-import {useSafeArea} from 'react-native-safe-area-context';
+import {Animated, StatusBar} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {BANNER_H, TOPNAVI_H} from '../../../utils/constants';
-import {CustomButton} from '../../utils';
-import {AntDesign} from '../../../utils/common';
-import {Theme, useThemeContext} from '../../../contexts/ThemeContext';
 import {Colors} from '../../../theme';
+import {useThemeContext} from '../../../contexts/ThemeContext';
 
 interface TopNavigationProps {
   title: string;
-  scrollA?: any; // Adjust type accordingly
+  scrollA?: Animated.Value;
 }
 
-const TopNavigation: React.FC<TopNavigationProps> = props => {
-  const safeArea = useSafeArea();
-
-  const {title, scrollA} = props;
-  const isFloating = !!scrollA;
-  const [isTransparent, setTransparent] = useState(isFloating);
-
-  const {theme, setTheme} = useThemeContext();
-
-  const styles = styling(theme);
-
-  console.log('top', safeArea.top);
+const TopNavigation: React.FC<TopNavigationProps> = ({title, scrollA}) => {
+  const safeArea = useSafeAreaInsets();
+  const {theme} = useThemeContext();
+  const [isTransparent, setTransparent] = useState(!!scrollA);
 
   useEffect(() => {
-    if (!scrollA) {
-      return;
-    }
-    const listenerId = scrollA.addListener((a: {value: number}) => {
+    const handleScroll = (event: {value: number}) => {
       const topNaviOffset = BANNER_H - TOPNAVI_H - safeArea.top;
-      isTransparent !== a.value < topNaviOffset &&
-        setTransparent(!isTransparent);
-    });
-    return () => scrollA.removeListener(listenerId);
-  });
+      const shouldBeTransparent = event.value < topNaviOffset;
+      if (isTransparent !== shouldBeTransparent) {
+        setTransparent(shouldBeTransparent);
+      }
+    };
+
+    if (scrollA) {
+      const listenerId = scrollA.addListener(handleScroll);
+      return () => scrollA.removeListener(listenerId);
+    }
+  }, [scrollA, safeArea.top, isTransparent]);
+
+  const statusBarStyle = isTransparent
+    ? 'dark-content'
+    : theme === 'light'
+    ? 'dark-content'
+    : 'light-content';
+  const statusBarBackgroundColor = isTransparent
+    ? 'transparent'
+    : Colors[theme].secondary;
 
   return (
     <>
       <StatusBar
-        barStyle={isTransparent ? 'light-content' : 'dark-content'}
-        backgroundColor="transparent"
+        barStyle={statusBarStyle}
         translucent
+        backgroundColor={statusBarBackgroundColor}
       />
-      <View style={styles.container(safeArea, isFloating, isTransparent)}>
-        <Text style={styles.title(isTransparent)}>{title}</Text>
-      </View>
     </>
   );
-};
-
-const styling = (theme: Theme) => {
-  return StyleSheet.create({
-    container: (
-      safeArea: {top: number},
-      isFloating: boolean,
-      isTransparent: boolean,
-    ) => ({
-      paddingTop: safeArea.top,
-      marginBottom: isFloating ? -TOPNAVI_H - safeArea.top : 0,
-      height: TOPNAVI_H + safeArea.top,
-      justifyContent: 'center',
-      shadowOffset: {y: 0},
-      backgroundColor: isTransparent ? 'transparent' : '#FFF',
-      shadowOpacity: isTransparent ? 0 : 0.5,
-      elevation: isTransparent ? 0.01 : 5,
-      zIndex: 100,
-      alignItems: 'center',
-      paddingHorizontal: 10,
-    }),
-    title: (isTransparent: boolean) => ({
-      textAlign: 'center',
-      fontWeight: 'bold',
-      fontSize: 16,
-      color: isTransparent ? '#FFF' : '#000',
-    }),
-
-    btn: {
-      width: 45,
-      height: 45,
-      borderRadius: 10,
-      backgroundColor: Colors[theme]?.primary,
-      padding: 5,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-  });
 };
 
 export default TopNavigation;

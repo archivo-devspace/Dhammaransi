@@ -19,19 +19,21 @@ import {Movies} from '../components/commons/Movies';
 import ImageSlider from '../components/commons/ImageSlider';
 import Audios from '../components/commons/Audio';
 import TopNavigation from '../components/commons/TopNavigation';
+import {useNavigation} from '@react-navigation/native';
 
 type Props = {
-  navigation: NavigationMainStackScreenProps['navigation'] & {
-    openDrawer?: () => void;
-  };
+  navigation: NavigationMainStackScreenProps['navigation'];
 };
 
-const HomeScreen: React.FC<Props> = ({navigation}) => {
+const HomeScreen: React.FC<Props> = ({navigation}: Props) => {
+  // const navigation = useNavigation()
   const {theme} = useThemeContext();
   const {width, height} = useWindowDimensions();
   const scrollA = useRef(new Animated.Value(0)).current;
 
   const customHeight = height * 0.35;
+
+  console.log('theme', theme);
 
   const handleNavigate = (link: string) => {
     if (link === 'Home' || link === 'Audios' || link === 'Pdf') {
@@ -45,7 +47,11 @@ const HomeScreen: React.FC<Props> = ({navigation}) => {
 
   return (
     <View style={styles.mainContainer}>
-      <StatusBar translucent backgroundColor={'transparent'} />
+      <StatusBar
+        translucent
+        barStyle={'default'}
+        backgroundColor={'transparent'}
+      />
       <TopNavigation title="Home" scrollA={scrollA} />
       <Animated.ScrollView
         onScroll={Animated.event(
