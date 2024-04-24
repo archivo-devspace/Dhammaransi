@@ -54,13 +54,14 @@ const HomeScreen = ({navigation}: Props) => {
       console.log('The link is not provided in the stack navigation');
     }
   };
+
   return (
     <>
       <ScrollView style={styles.mainContainer}>
         <StatusBar translucent backgroundColor={'transparent'} />
 
         {/**header bar */}
-        <SafeAreaView style={styles.topView}>
+        {/* <SafeAreaView style={styles.topView}>
           <CustomButton
             icon={
               <AntDesign
@@ -72,7 +73,7 @@ const HomeScreen = ({navigation}: Props) => {
             onPress={navigation.openDrawer}
             customButtonStyle={styles.btn}
           />
-        </SafeAreaView>
+        </SafeAreaView> */}
         <View>
           <ImageSlider images={images} />
         </View>

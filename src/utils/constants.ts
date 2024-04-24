@@ -34,13 +34,13 @@ export const menus = [
   },
   {
     id: 3,
-    icon: 'book',
+    icon: 'film',
     name: 'Movies',
     link: 'Movie',
   },
   {
     id: 4,
-    icon: 'book',
+    icon: 'image',
     name: 'Paintings',
     link: 'Pdf',
   },

@@ -1,42 +1,36 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, View, FlatList} from 'react-native';
 import React from 'react';
-import {ScrollView} from 'react-native-gesture-handler';
 import {Theme, useThemeContext} from '../../../contexts/ThemeContext';
 import {Colors} from '../../../theme';
-import {remToPx} from '../../../utils/common';
+
+const data = [
+  {id: 1, image: require('../../../assets/marguerite.jpg'), text: 'audio1'},
+  {id: 2, image: require('../../../assets/marguerite.jpg'), text: 'audio2'},
+  {id: 3, image: require('../../../assets/marguerite.jpg'), text: 'audio3'},
+  // Add more items as needed
+];
 
 const Audios = () => {
   const {theme} = useThemeContext();
   const styles = styling(theme);
+
+  const renderItem = ({item}: any) => (
+    <View style={styles.container}>
+      <Image source={item.image} resizeMode="cover" style={styles.img} />
+      <Text style={styles.text}>{item.text}</Text>
+    </View>
+  );
+
   return (
     <View>
       <Text style={styles.headerText}>Audios</Text>
-      <ScrollView horizontal contentContainerStyle={styles.mainContainer}>
-        <View style={styles.container}>
-          <Image
-            source={require('../../../assets/marguerite.jpg')}
-            resizeMode="cover"
-            style={styles.img}
-          />
-          <Text style={styles.text}>audio1</Text>
-        </View>
-        <View style={styles.container}>
-          <Image
-            source={require('../../../assets/marguerite.jpg')}
-            resizeMode="cover"
-            style={styles.img}
-          />
-          <Text style={styles.text}>audio1</Text>
-        </View>
-        <View style={styles.container}>
-          <Image
-            source={require('../../../assets/marguerite.jpg')}
-            resizeMode="cover"
-            style={styles.img}
-          />
-          <Text style={styles.text}>audio1</Text>
-        </View>
-      </ScrollView>
+      <FlatList
+        data={data}
+        renderItem={renderItem}
+        keyExtractor={item => item.id.toString()}
+        horizontal
+        contentContainerStyle={styles.mainContainer}
+      />
     </View>
   );
 };
@@ -46,10 +40,8 @@ export default Audios;
 const styling = (theme: Theme) =>
   StyleSheet.create({
     mainContainer: {
-      flexDirection: 'row',
-      marginHorizontal: 10,
-      marginVertical: 20,
-      gap: 10,
+      paddingHorizontal: 10,
+      paddingVertical: 20,
     },
     headerText: {
       color: Colors[theme].text,
@@ -59,7 +51,7 @@ const styling = (theme: Theme) =>
       textAlign: 'center',
     },
     container: {
-      gap: 2,
+      marginRight: 10,
     },
     img: {
       width: 85,
