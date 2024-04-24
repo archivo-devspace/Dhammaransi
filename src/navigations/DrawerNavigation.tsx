@@ -8,10 +8,11 @@ import DrawerOneScreen from '../screens/DrawerOneScreen';
 import CustomDrawer from '../components/commons/CustomDrawer';
 import StackNavigation from './StackNavigation';
 // import {theme} from '../theme';
-import {AntDesign, FontAwesome} from '../utils/common';
+import {AntDesign, FontAwesome, Ionicons} from '../utils/common';
 import {useThemeContext} from '../contexts/ThemeContext';
 import {Colors} from '../theme';
 import SettingScreen from '../screens/SettingScreen';
+import Biography from '../screens/Biography';
 
 export type DrawerParamList = {
   StackNavigation: undefined;
@@ -56,13 +57,79 @@ const DrawerNavigator = () => {
         }}
       />
       <Drawer.Screen
-        name="DrawerOne"
+        name="Biography"
+        component={Biography}
+        options={{
+          headerShown: false,
+          drawerIcon: () => (
+            <Ionicons
+              name="person-circle-outline"
+              size={26}
+              color={Colors[theme]?.primary}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Timetable"
         component={DrawerOneScreen}
         options={{
           headerShown: false,
           drawerIcon: () => (
+            <Ionicons
+              name="calendar"
+              size={26}
+              color={Colors[theme]?.primary}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Books"
+        component={DrawerOneScreen}
+        options={{
+          headerShown: false,
+          drawerIcon: () => (
+            <FontAwesome name="book" size={26} color={Colors[theme]?.primary} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Audios"
+        component={DrawerOneScreen}
+        options={{
+          headerShown: false,
+          drawerIcon: () => (
+            <Ionicons
+              name="musical-notes-outline"
+              size={26}
+              color={Colors[theme]?.primary}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="သာသနာပြုလုပ်ငန်းစဉ်များ"
+        component={DrawerOneScreen}
+        options={{
+          headerShown: false,
+          drawerIcon: () => (
+            <Ionicons
+              name="musical-notes-outline"
+              size={26}
+              color={Colors[theme]?.primary}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Paintings"
+        component={SettingScreen}
+        options={{
+          headerShown: false,
+          drawerIcon: () => (
             <AntDesign
-              name="appstore-o"
+              name="picture"
               size={26}
               color={Colors[theme]?.primary}
             />
@@ -71,20 +138,6 @@ const DrawerNavigator = () => {
       />
       <Drawer.Screen
         name="Setting"
-        component={SettingScreen}
-        options={{
-          headerShown: false,
-          drawerIcon: () => (
-            <AntDesign
-              name="setting"
-              size={26}
-              color={Colors[theme]?.primary}
-            />
-          ),
-        }}
-      />
-      <Drawer.Screen
-        name="htet"
         component={SettingScreen}
         options={{
           headerShown: false,
