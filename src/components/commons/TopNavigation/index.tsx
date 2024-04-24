@@ -1,5 +1,13 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, StatusBar, SafeAreaView, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  StatusBar,
+  SafeAreaView,
+  StyleSheet,
+  ViewStyle,
+  TextStyle,
+} from 'react-native';
 import {useSafeArea} from 'react-native-safe-area-context';
 import {BANNER_H, TOPNAVI_H} from '../../../utils/constants';
 import {CustomButton} from '../../utils';
@@ -7,7 +15,12 @@ import {AntDesign} from '../../../utils/common';
 import {Theme, useThemeContext} from '../../../contexts/ThemeContext';
 import {Colors} from '../../../theme';
 
-const TopNavigation = (props: {title: any; scrollA: any}) => {
+interface TopNavigationProps {
+  title: string;
+  scrollA?: any; // Adjust type accordingly
+}
+
+const TopNavigation: React.FC<TopNavigationProps> = props => {
   const safeArea = useSafeArea();
 
   const {title, scrollA} = props;
@@ -18,12 +31,14 @@ const TopNavigation = (props: {title: any; scrollA: any}) => {
 
   const styles = styling(theme);
 
+  console.log('top', safeArea.top);
+
   useEffect(() => {
     if (!scrollA) {
       return;
     }
     const listenerId = scrollA.addListener((a: {value: number}) => {
-      const topNaviOffset = BANNER_H - TOPNAVI_H - safeArea.top - safeArea.top;
+      const topNaviOffset = BANNER_H - TOPNAVI_H - safeArea.top;
       isTransparent !== a.value < topNaviOffset &&
         setTransparent(!isTransparent);
     });
@@ -37,46 +52,33 @@ const TopNavigation = (props: {title: any; scrollA: any}) => {
         backgroundColor="transparent"
         translucent
       />
-      <View
-        style={[
-          styles.container(safeArea, isFloating, isTransparent),
-          {
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            paddingHorizontal: 10,
-          },
-        ]}>
-        <CustomButton
-          icon={
-            <AntDesign name="menu-fold" size={30} color={Colors[theme].text} />
-          }
-          customButtonStyle={styles.btn}
-        />
+      <View style={styles.container(safeArea, isFloating, isTransparent)}>
         <Text style={styles.title(isTransparent)}>{title}</Text>
       </View>
     </>
   );
 };
 
-const styling = (theme: Theme) =>
-  StyleSheet.create({
+const styling = (theme: Theme) => {
+  return StyleSheet.create({
     container: (
       safeArea: {top: number},
-      isFloating: any,
-      isTransparent: any,
+      isFloating: boolean,
+      isTransparent: boolean,
     ) => ({
       paddingTop: safeArea.top,
       marginBottom: isFloating ? -TOPNAVI_H - safeArea.top : 0,
       height: TOPNAVI_H + safeArea.top,
       justifyContent: 'center',
       shadowOffset: {y: 0},
-      backgroundColor: isTransparent ? '#0001' : '#FFF',
+      backgroundColor: isTransparent ? 'transparent' : '#FFF',
       shadowOpacity: isTransparent ? 0 : 0.5,
       elevation: isTransparent ? 0.01 : 5,
       zIndex: 100,
+      alignItems: 'center',
+      paddingHorizontal: 10,
     }),
-    title: (isTransparent: any) => ({
+    title: (isTransparent: boolean) => ({
       textAlign: 'center',
       fontWeight: 'bold',
       fontSize: 16,
@@ -93,5 +95,6 @@ const styling = (theme: Theme) =>
       alignItems: 'center',
     },
   });
+};
 
 export default TopNavigation;

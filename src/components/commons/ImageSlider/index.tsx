@@ -12,9 +12,10 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 
 const ImageSlider = ({images}: {images: any}) => {
-  const {width} = useWindowDimensions();
-  const height = width * 0.7;
+  const {width, height} = useWindowDimensions();
+  const customHeight = height * 0.35;
 
+  console.log('width', width);
   const [active, setActive] = useState(0);
 
   const onScrollChange = ({nativeEvent}: any) => {
@@ -34,12 +35,12 @@ const ImageSlider = ({images}: {images: any}) => {
         horizontal
         onScroll={onScrollChange}
         showsHorizontalScrollIndicator={false}
-        style={{width, height}}>
+        style={{width, height: customHeight}}>
         {images.map((image: any, index: any) => (
           <Image
             key={index}
             source={{uri: image}}
-            style={{width, height, resizeMode: 'cover'}}
+            style={{width, height: customHeight, resizeMode: 'cover'}}
           />
         ))}
       </ScrollView>
@@ -50,23 +51,6 @@ const ImageSlider = ({images}: {images: any}) => {
           </Text>
         ))}
       </View>
-      {/* <LinearGradient
-        colors={[
-          'transparent',
-          'rgba(23,23,25,0.3)',
-          'rgba(23,23,23,0.7)',
-          'transparent',
-        ]}
-        style={{
-          width,
-          height: height * 0.2,
-          position: 'absolute',
-          bottom: 0,
-          opacity: 0.4,
-        }}
-        start={{x: 0.5, y: 0}}
-        end={{x: 0.5, y: 1}}
-      /> */}
     </View>
   );
 };
@@ -75,7 +59,7 @@ const styles = StyleSheet.create({
   pagination: {
     flexDirection: 'row',
     position: 'absolute',
-    bottom: -15,
+    bottom: -5,
     alignSelf: 'center',
   },
   dot: {
