@@ -6,7 +6,7 @@ import {Ionicons} from '../../../utils/common';
 import {Colors} from '../../../theme';
 import {Theme, useThemeContext} from '../../../contexts/ThemeContext';
 
-const CustomTabBar = ({state, descriptors, navigation}) => {
+const CustomTabBar = ({state, descriptors, navigation}: any) => {
   const focusedOptions = descriptors[state.routes[state.index].key].options;
   const {navigate} = useNavigation();
   const linePosition = useRef(new Animated.Value(0)).current;
@@ -28,68 +28,73 @@ const CustomTabBar = ({state, descriptors, navigation}) => {
   return (
     <View style={styles.tabBarContainer}>
       <View style={styles.tabBar}>
-        {state.routes.map((route, index) => {
-          const {options} = descriptors[route.key];
+        {state.routes.map(
+          (
+            route: {key: string | number; name: React.Key | null | undefined},
+            index: any,
+          ) => {
+            const {options} = descriptors[route.key];
 
-          const label =
-            options.tabBarLabel !== undefined
-              ? options.tabBarLabel
-              : options.title !== undefined
-              ? options.title
-              : route.name;
+            const label =
+              options.tabBarLabel !== undefined
+                ? options.tabBarLabel
+                : options.title !== undefined
+                ? options.title
+                : route.name;
 
-          const isFocused = state.index === index;
+            const isFocused = state.index === index;
 
-          const onPress = () => {
-            const event = navigation.emit({
-              type: 'tabPress',
-              target: route.key,
-              canPreventDefault: true,
-            });
+            const onPress = () => {
+              const event = navigation.emit({
+                type: 'tabPress',
+                target: route.key,
+                canPreventDefault: true,
+              });
 
-            if (!isFocused && !event.defaultPrevented) {
-              navigate(route.name);
-            }
-          };
+              if (!isFocused && !event.defaultPrevented) {
+                navigate(route.name);
+              }
+            };
 
-          const onLongPress = () => {
-            navigation.emit({
-              type: 'tabLongPress',
-              target: route.key,
-            });
-          };
+            const onLongPress = () => {
+              navigation.emit({
+                type: 'tabLongPress',
+                target: route.key,
+              });
+            };
 
-          return (
-            <TouchableOpacity
-              accessibilityRole="button"
-              accessibilityState={isFocused ? {selected: true} : {}}
-              accessibilityLabel={options.tabBarAccessibilityLabel}
-              testID={options.tabBarTestID}
-              onPress={onPress}
-              onLongPress={onLongPress}
-              style={{
-                flexDirection: 'row',
-                flex: 1,
-                paddingVertical: 10,
-                paddingHorizontal: 5,
-                marginVertical: 10,
-                marginHorizontal: 5,
-                gap: 4,
-                alignItems: 'center',
-                backgroundColor: isFocused
-                  ? Colors[theme].primary
-                  : 'transparent',
-                borderRadius: 20,
-                justifyContent: 'center',
-              }}
-              key={route.name}>
-              {options?.tabBarIcon()}
-              {isFocused && (
-                <Text style={{color: Colors[theme].text}}>{label}</Text>
-              )}
-            </TouchableOpacity>
-          );
-        })}
+            return (
+              <TouchableOpacity
+                accessibilityRole="button"
+                accessibilityState={isFocused ? {selected: true} : {}}
+                accessibilityLabel={options.tabBarAccessibilityLabel}
+                testID={options.tabBarTestID}
+                onPress={onPress}
+                onLongPress={onLongPress}
+                style={{
+                  flexDirection: 'row',
+                  flex: 1,
+                  paddingVertical: 10,
+                  paddingHorizontal: 5,
+                  marginVertical: 10,
+                  marginHorizontal: 5,
+                  gap: 4,
+                  alignItems: 'center',
+                  backgroundColor: isFocused
+                    ? Colors[theme].primary
+                    : 'transparent',
+                  borderRadius: 20,
+                  justifyContent: 'center',
+                }}
+                key={route.name}>
+                {options?.tabBarIcon()}
+                {isFocused && (
+                  <Text style={{color: Colors[theme].text}}>{label}</Text>
+                )}
+              </TouchableOpacity>
+            );
+          },
+        )}
       </View>
     </View>
   );

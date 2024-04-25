@@ -18,13 +18,14 @@ import {Movies} from '../components/commons/Movies';
 import ImageSlider from '../components/commons/ImageSlider';
 import Audios from '../components/commons/Audio';
 import TopNavigation from '../components/commons/TopNavigation';
+import {useNavigation} from '@react-navigation/native';
 
 type Props = {
   navigation: NavigationMainStackScreenProps['navigation'];
 };
 
-const HomeScreen: React.FC<Props> = ({navigation}: Props) => {
-  // const navigation = useNavigation()
+const HomeScreen: React.FC<Props> = () => {
+  const navigation = useNavigation();
   const {theme} = useThemeContext();
   const {width, height} = useWindowDimensions();
   const scrollA = useRef(new Animated.Value(0)).current;
@@ -32,14 +33,6 @@ const HomeScreen: React.FC<Props> = ({navigation}: Props) => {
   const customHeight = height * 0.3;
 
   const BANNER_H = height * 0.4;
-
-  const handleNavigate = (link: string) => {
-    if (link === 'Home' || link === 'Audios' || link === 'Pdf') {
-      navigation.navigate(link);
-    } else {
-      console.log('The link is not provided in the stack navigation');
-    }
-  };
 
   const styles = styling(theme);
 
@@ -99,7 +92,7 @@ const HomeScreen: React.FC<Props> = ({navigation}: Props) => {
                   {height: width < 500 ? height * 0.1 : height * 0.11},
                 ]}
                 key={menu.id}
-                onPress={() => handleNavigate(menu.link)}>
+                onPress={() => navigation.navigate(menu.link)}>
                 <FontAwesome
                   name={menu.icon}
                   size={30}
