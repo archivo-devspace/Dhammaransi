@@ -18,7 +18,6 @@ const ImageSlider = ({images}: {images: any}) => {
   const {theme} = useThemeContext();
   const customHeight = height * 0.3;
 
-  console.log('width', width);
   const [active, setActive] = useState(0);
 
   const onScrollChange = ({nativeEvent}: any) => {

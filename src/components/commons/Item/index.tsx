@@ -15,6 +15,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import {Colors} from '../../../theme';
 import {Theme, useThemeContext} from '../../../contexts/ThemeContext';
+import {truncateText} from '../../../utils/common';
 
 type Props = {
   item: any;
@@ -24,6 +25,7 @@ type Props = {
   marginHorizontal: number;
   x: SharedValue<number>;
   fullWidth: number;
+  truncateIndex: number;
   handleClick: (item: any) => void;
 };
 
@@ -35,6 +37,7 @@ const Item = ({
   marginHorizontal,
   x,
   fullWidth,
+  truncateIndex,
   handleClick,
 }: Props) => {
   const {theme} = useThemeContext();
@@ -96,9 +99,7 @@ const Item = ({
               alignItems: 'center',
             }}>
             <Text style={styles.text}>
-              {item?.name?.length > 14
-                ? item?.name.slice(0, 20) + ' ...'
-                : item?.name}
+              {truncateText(item?.name, truncateIndex)}
             </Text>
           </View>
         </View>
@@ -119,16 +120,16 @@ const styling = (theme: Theme) =>
       position: 'relative',
       ...Platform.select({
         ios: {
-          shadowColor: '#000',
+          shadowColor: '#52006A',
           shadowOffset: {
             width: 0,
-            height: 3,
+            height: 2,
           },
           shadowOpacity: 0.3,
-          shadowRadius: 6,
+          shadowRadius: 5,
         },
         android: {
-          elevation: 0,
+          elevation: 7,
         },
       }),
     },
@@ -138,5 +139,6 @@ const styling = (theme: Theme) =>
     text: {
       color: Colors[theme].text,
       textAlign: 'center',
+      fontSize: 14,
     },
   });
