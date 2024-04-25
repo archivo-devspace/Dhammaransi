@@ -25,8 +25,8 @@ type Props = {
   navigation: NavigationMainStackScreenProps['navigation'];
 };
 
-const HomeScreen: React.FC<Props> = () => {
-  const navigation = useNavigation();
+const HomeScreen = ({navigation}: Props) => {
+  // const navigation = useNavigation();
   const {theme} = useThemeContext();
   const {width, height} = useWindowDimensions();
   const scrollA = useRef(new Animated.Value(0)).current;
@@ -95,7 +95,7 @@ const HomeScreen: React.FC<Props> = () => {
                   {height: width < 500 ? height * 0.1 : height * 0.11},
                 ]}
                 key={menu.id}
-                onPress={() => navigation.navigate(menu.link)}>
+                onPress={() => navigation.navigate(menu.link as any)}>
                 <FontAwesome
                   name={menu.icon}
                   size={30}

@@ -1,8 +1,8 @@
 import React from 'react';
 import HomeScreen from '../screens/HomeScreen';
 import MovieScreen from '../screens/MovieScreen';
-import Audios from '../screens/Audios';
-import Pdf from '../screens/Pdf';
+import Audios from '../screens/AudioListScreen';
+import Pdf from '../screens/PdfListScreen';
 import {
   BottomTabNavigationProp,
   createBottomTabNavigator,

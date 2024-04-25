@@ -6,10 +6,10 @@ import {
 } from '@react-navigation/native-stack';
 import HomeScreen from '../screens/HomeScreen';
 import MovieScreen from '../screens/MovieScreen';
-import Audios from '../screens/Audios';
-import Pdf from '../screens/Pdf';
+import Audios from '../screens/AudioListScreen';
+import Pdf from '../screens/PdfListScreen';
 import MovieListScreen from '../screens/MovieListScreen';
-import PaintingsScreen from '../screens/PaintingsScreen';
+import PaintingsScreen from '../screens/PaintingListScreen';
 
 // import { RootStackParamList } from './AppNavigation';
 
