@@ -37,6 +37,8 @@ export const Movies = ({data, navigation}: Props) => {
   const ITEM_FULL_WIDTH = ITEM_WIDTH + MARGIN_HORIZONTAL * 2;
   const SPACER = (width - ITEM_FULL_WIDTH) / 2;
 
+  const truncateIndex = 26;
+
   const x = useSharedValue(0);
 
   const onScroll = useAnimatedScrollHandler({
@@ -69,6 +71,7 @@ export const Movies = ({data, navigation}: Props) => {
               marginHorizontal={MARGIN_HORIZONTAL}
               x={x}
               fullWidth={ITEM_FULL_WIDTH}
+              truncateIndex={truncateIndex}
               handleClick={handleClick}
             />
           );
@@ -82,6 +85,12 @@ export const Movies = ({data, navigation}: Props) => {
         scrollEventThrottle={16}
         decelerationRate={'fast'}
         snapToInterval={ITEM_FULL_WIDTH}
+        initialScrollIndex={1}
+        getItemLayout={(data, index) => ({
+          length: ITEM_FULL_WIDTH,
+          offset: ITEM_FULL_WIDTH * index,
+          index,
+        })}
         style={styles.flatListStyle}
       />
     </View>

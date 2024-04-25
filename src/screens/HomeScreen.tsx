@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Animated,
   useWindowDimensions,
+  Platform,
 } from 'react-native';
 
 import {NavigationMainStackScreenProps} from '../navigations/StackNavigation';
@@ -42,6 +43,8 @@ const HomeScreen: React.FC<Props> = ({navigation}: Props) => {
   };
 
   const styles = styling(theme);
+  const platformIsIOS = Platform.OS === 'ios';
+  const platformIsAndroid = Platform.OS === 'android';
 
   return (
     <View style={styles.mainContainer}>
@@ -89,7 +92,7 @@ const HomeScreen: React.FC<Props> = ({navigation}: Props) => {
             backgroundColor: Colors[theme]?.secondary,
             borderTopRightRadius: 16,
             borderTopLeftRadius: 16,
-            paddingBottom: 60,
+            paddingBottom: 80,
           }}>
           <View style={styles.menuContainer}>
             {menus?.map(menu => (
@@ -110,7 +113,7 @@ const HomeScreen: React.FC<Props> = ({navigation}: Props) => {
             ))}
           </View>
           <Movies data={movies} navigation={navigation} />
-          <Audios />
+          <Audios data={movies} navigation={navigation} />
         </View>
       </Animated.ScrollView>
     </View>
@@ -137,12 +140,26 @@ const styling = (theme: Theme) =>
       backgroundColor: Colors[theme].secondary_light,
       borderRadius: 10,
       width: '45%',
-      elevation: 2,
+      ...Platform.select({
+        ios: {
+          shadowColor: '#52006A',
+          shadowOffset: {
+            width: 0,
+            height: 2,
+          },
+          shadowOpacity: 0.3,
+          shadowRadius: 5,
+        },
+        android: {
+          elevation: 10,
+        },
+      }),
       padding: 5,
       gap: 10,
       justifyContent: 'center',
       alignItems: 'center',
     },
+
     bannerContainer: {
       marginTop: -1000,
       paddingTop: 1000,

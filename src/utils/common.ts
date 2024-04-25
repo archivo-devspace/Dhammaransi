@@ -26,3 +26,8 @@ export const remToPx = (rem: number) => {
   const baseFontSize = 16;
   return rem * baseFontSize;
 };
+
+export const truncateText = (text:string, maxLength:number) => {
+  if (!text) return '';
+  return text.length > maxLength ? text.slice(0, maxLength) + ' ...' : text;
+};
