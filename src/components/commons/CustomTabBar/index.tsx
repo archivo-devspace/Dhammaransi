@@ -1,102 +1,90 @@
-// CustomTabBar.js
+// // CustomTabBar.js
+
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useRef} from 'react';
-import {View, TouchableOpacity, Text, Animated, StyleSheet} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {Ionicons} from '../../../utils/common';
-import {Colors} from '../../../theme';
+import Animated, {
+  Easing,
+  useAnimatedStyle,
+  withTiming,
+} from 'react-native-reanimated';
+import {FontAwesome} from '../../../utils/common';
+import {TabBar} from '../../../navigations/BottomNavigation';
 import {Theme, useThemeContext} from '../../../contexts/ThemeContext';
+import {Colors} from '../../../theme';
 
-const CustomTabBar = ({state, descriptors, navigation}: any) => {
-  const focusedOptions = descriptors[state.routes[state.index].key].options;
-  const {navigate} = useNavigation();
-  const linePosition = useRef(new Animated.Value(0)).current;
+interface CustomTabBarProps {
+  rest: any;
+  item: TabBar;
+}
+
+const CustomTabBar = ({rest, item}: CustomTabBarProps) => {
+  const {onPress, accessibilityState} = rest;
+  const focused = accessibilityState.selected;
+
   const {theme} = useThemeContext();
-
-  if (focusedOptions.tabBarVisible === false) {
-    return null;
-  }
-
-  const totalTabs = state.routes.length;
-  const tabWidth = 100; // Adjust as needed
-
-  const translateX = linePosition.interpolate({
-    inputRange: [0, totalTabs - 1],
-    outputRange: [0, (totalTabs - 1) * tabWidth],
-  });
   const styles = styling(theme);
 
+  const viewStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          scale: withTiming(focused ? 1 : 0.5, {
+            duration: 300,
+            easing: Easing.inOut(Easing.ease),
+          }),
+        },
+      ],
+    };
+  });
+
+  const textStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          scale: withTiming(focused ? 1 : 0, {
+            duration: 300,
+            easing: Easing.inOut(Easing.ease),
+          }),
+        },
+      ],
+    };
+  });
+
   return (
-    <View style={styles.tabBarContainer}>
-      <View style={styles.tabBar}>
-        {state.routes.map(
-          (
-            route: {key: string | number; name: React.Key | null | undefined},
-            index: any,
-          ) => {
-            const {options} = descriptors[route.key];
-
-            const label =
-              options.tabBarLabel !== undefined
-                ? options.tabBarLabel
-                : options.title !== undefined
-                ? options.title
-                : route.name;
-
-            const isFocused = state.index === index;
-
-            const onPress = () => {
-              const event = navigation.emit({
-                type: 'tabPress',
-                target: route.key,
-                canPreventDefault: true,
-              });
-
-              if (!isFocused && !event.defaultPrevented) {
-                navigate(route.name);
-              }
-            };
-
-            const onLongPress = () => {
-              navigation.emit({
-                type: 'tabLongPress',
-                target: route.key,
-              });
-            };
-
-            return (
-              <TouchableOpacity
-                accessibilityRole="button"
-                accessibilityState={isFocused ? {selected: true} : {}}
-                accessibilityLabel={options.tabBarAccessibilityLabel}
-                testID={options.tabBarTestID}
-                onPress={onPress}
-                onLongPress={onLongPress}
-                style={{
-                  flexDirection: 'row',
-                  flex: 1,
-                  paddingVertical: 10,
-                  paddingHorizontal: 5,
-                  marginVertical: 10,
-                  marginHorizontal: 5,
-                  gap: 4,
-                  alignItems: 'center',
-                  backgroundColor: isFocused
-                    ? Colors[theme].primary
-                    : 'transparent',
-                  borderRadius: 20,
-                  justifyContent: 'center',
-                }}
-                key={route.name}>
-                {options?.tabBarIcon()}
-                {isFocused && (
-                  <Text style={{color: Colors[theme].text}}>{label}</Text>
-                )}
-              </TouchableOpacity>
-            );
-          },
-        )}
-      </View>
-    </View>
+    <TouchableOpacity
+      onPress={onPress}
+      activeOpacity={1}
+      style={[styles.container, {flex: focused ? 1 : 0.65}]}>
+      <Animated.View>
+        <Animated.View
+          style={[
+            styles.btn,
+            viewStyle,
+            {
+              backgroundColor: focused
+                ? Colors[theme].secondary_dark
+                : 'transparent',
+            },
+          ]}>
+          {focused ? (
+            <FontAwesome
+              name={item.icon}
+              size={20}
+              color={Colors[theme].primary}
+            />
+          ) : (
+            <FontAwesome name={item.icon} size={40} color={'gray'} />
+          )}
+          <Animated.View style={textStyle}>
+            {focused && (
+              <Text style={{color: Colors[theme].text, fontWeight: '500'}}>
+                {item.label}
+              </Text>
+            )}
+          </Animated.View>
+        </Animated.View>
+      </Animated.View>
+    </TouchableOpacity>
   );
 };
 
@@ -104,20 +92,16 @@ export default CustomTabBar;
 
 const styling = (theme: Theme) =>
   StyleSheet.create({
-    tabBarContainer: {
-      position: 'absolute',
-      bottom: 0,
-      left: 0,
-      right: 0,
+    container: {
+      justifyContent: 'center',
+      alignItems: 'center',
     },
-    tabBar: {
-      borderTopWidth: 1,
-      borderLeftWidth: 1,
-      borderRightWidth: 1,
-      borderColor: Colors[theme].secondary_dark,
+    btn: {
       flexDirection: 'row',
-      borderTopLeftRadius: 20, // Adjust the border radius as needed
-      borderTopRightRadius: 20, // Adjust the border radius as needed
-      backgroundColor: Colors[theme].secondary, // Set the background color of the tab bar
+      alignItems: 'center',
+      padding: 10,
+      paddingHorizontal: 24,
+      borderRadius: 20,
+      gap: 12,
     },
   });

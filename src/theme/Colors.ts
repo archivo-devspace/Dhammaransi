@@ -11,7 +11,7 @@ const light = {
   secondary: '#E0E0E0',
   secondary_light: '#F5F5F5',
  secondary_dark: '#BDBDBD',
-  text: '#000',
+  text: '#272727',
   ...commonColor
 };
 

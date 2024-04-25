@@ -54,6 +54,7 @@ const HomeScreen = ({navigation}: Props) => {
             useNativeDriver: true,
           },
         )}
+        showsVerticalScrollIndicator={false}
         scrollEventThrottle={16}>
         <View style={styles.bannerContainer}>
           <Animated.View
@@ -86,6 +87,10 @@ const HomeScreen = ({navigation}: Props) => {
             borderTopRightRadius: 16,
             borderTopLeftRadius: 16,
             paddingBottom: 80,
+            borderColor: Colors[theme]?.secondary_dark,
+            borderTopWidth: 1,
+            borderLeftWidth: 1,
+            borderRightWidth: 1,
           }}>
           <View style={styles.menuContainer}>
             {menus?.map(menu => (
