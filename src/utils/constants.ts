@@ -36,13 +36,13 @@ export const menus = [
     id: 3,
     icon: 'film',
     name: 'Movies',
-    link: 'Movie',
+    link: 'MovieLists',
   },
   {
     id: 4,
     icon: 'image',
     name: 'Paintings',
-    link: 'Pdf',
+    link: 'Painting',
   },
 ];
 
