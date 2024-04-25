@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Image,
@@ -24,11 +24,26 @@ const ImageSlider = ({images}: {images: any}) => {
     const slide = Math.round(
       nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width,
     );
-    console.log('slide', slide);
     if (slide !== active) {
       setActive(slide);
     }
   };
+
+  const scrollViewRef = React.useRef<ScrollView>(null);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const nextIndex = (active + 1) % images.length;
+      setActive(nextIndex);
+      scrollViewRef.current?.scrollTo({
+        animated: true,
+        x: nextIndex * width,
+        y: 0,
+      });
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [active]);
 
   const styles = Styling(theme);
 
@@ -39,6 +54,7 @@ const ImageSlider = ({images}: {images: any}) => {
         horizontal
         onScroll={onScrollChange}
         showsHorizontalScrollIndicator={false}
+        ref={scrollViewRef}
         style={{width, height: customHeight}}>
         {images.map((image: any, index: any) => (
           <Image
