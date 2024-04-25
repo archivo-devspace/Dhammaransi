@@ -86,6 +86,7 @@ const HomeScreen = ({navigation}: Props) => {
             borderTopRightRadius: 16,
             borderTopLeftRadius: 16,
             paddingBottom: 80,
+            gap: 10,
           }}>
           <View style={styles.menuContainer}>
             {menus?.map(menu => (
@@ -152,7 +153,6 @@ const styling = (theme: Theme) =>
       justifyContent: 'center',
       alignItems: 'center',
     },
-
     bannerContainer: {
       marginTop: -1000,
       paddingTop: 1000,
