@@ -91,6 +91,7 @@ const HomeScreen = ({navigation}: Props) => {
             borderTopWidth: 1,
             borderLeftWidth: 1,
             borderRightWidth: 1,
+            gap: 10,
           }}>
           <View style={styles.menuContainer}>
             {menus?.map(menu => (
@@ -112,6 +113,31 @@ const HomeScreen = ({navigation}: Props) => {
           </View>
           <Movies data={movies} navigation={navigation} />
           <Audios data={movies} navigation={navigation} />
+          <Text>
+            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ad minima
+            nihil animi nemo quas temporibus adipisci sapiente labore voluptatum
+            ipsa vitae sit qui explicabo, enim optio deleniti atque laboriosam
+            corporis, a sed ex omnis! Earum recusandae, perferendis provident
+            facilis accusantium et, doloribus ipsam laudantium ex saepe fugit,
+            reiciendis quod architecto tempora? Dolor iste iusto recusandae
+            similique nobis aperiam. Consequatur sequi aperiam vero perferendis,
+            veritatis modi quae voluptatibus similique explicabo reiciendis
+            mollitia pariatur commodi possimus quidem alias voluptas veniam
+            inventore et quam! Sunt quas eligendi corporis provident, neque aut
+            tenetur ut error cupiditate in magni illum sequi aliquid nobis?
+            Porro odit iste quibusdam ad molestiae optio, alias dolor quae
+            pariatur beatae tenetur reprehenderit, explicabo voluptatum ducimus,
+            magnam nulla nostrum ab voluptatibus recusandae minus autem.
+            Similique maiores ipsa possimus assumenda repellendus ex, amet unde
+            tenetur ullam obcaecati fugit itaque qui labore sint, optio ipsam,
+            quaerat libero! Omnis quo ut assumenda, magnam, quia dolorem
+            tenetur, expedita alias labore a fuga deleniti est quibusdam
+            provident eveniet commodi in non praesentium eum pariatur mollitia
+            hic? Obcaecati pariatur deserunt ad facilis adipisci fugit placeat
+            dolores ducimus magnam asperiores quisquam nisi incidunt,
+            consequatur odit nam! Asperiores incidunt facilis libero sed,
+            laborum debitis nisi suscipit sunt dolore temporibus.
+          </Text>
         </View>
       </Animated.ScrollView>
     </View>
@@ -157,7 +183,6 @@ const styling = (theme: Theme) =>
       justifyContent: 'center',
       alignItems: 'center',
     },
-
     bannerContainer: {
       marginTop: -1000,
       paddingTop: 1000,

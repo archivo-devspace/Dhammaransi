@@ -16,7 +16,7 @@ const TopNavigation: React.FC<TopNavigationProps> = ({title, scrollA}) => {
   const {height} = useWindowDimensions();
 
   const BANNER_H = height * 0.4;
-  const TOPNAVI_H = height * 0.05;
+  const TOPNAVI_H = height * 0.07;
 
   useEffect(() => {
     const handleScroll = (event: {value: number}) => {
