@@ -5,7 +5,7 @@ import {StatusBar} from 'react-native';
 const MoreScreen = () => {
   return (
     <View>
-      <StatusBar backgroundColor={'red'} />
+      {/* <StatusBar backgroundColor={'red'} /> */}
       <Text>MoreScreen</Text>
     </View>
   );
