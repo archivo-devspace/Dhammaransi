@@ -55,33 +55,28 @@ const CustomTabBar = ({rest, item}: CustomTabBarProps) => {
       onPress={onPress}
       activeOpacity={1}
       style={[styles.container, {flex: focused ? 1 : 0.65}]}>
-      <Animated.View>
-        <Animated.View
-          style={[
-            styles.btn,
-            viewStyle,
-            {
-              backgroundColor: focused
-                ? Colors[theme].secondary_dark
-                : 'transparent',
-            },
-          ]}>
-          {focused ? (
-            <FontAwesome
-              name={item.icon}
-              size={20}
-              color={Colors[theme].primary}
-            />
-          ) : (
-            <FontAwesome name={item.icon} size={40} color={'gray'} />
+      <Animated.View
+        style={[
+          styles.btn,
+          viewStyle,
+          {
+            backgroundColor: focused
+              ? Colors[theme].secondary_dark
+              : 'transparent',
+          },
+        ]}>
+        <FontAwesome
+          name={item.icon}
+          size={focused ? 20 : 40}
+          color={focused ? Colors[theme].primary : 'gray'}
+        />
+
+        <Animated.View style={textStyle}>
+          {focused && (
+            <Text style={{color: Colors[theme].text, fontWeight: '500'}}>
+              {item.label}
+            </Text>
           )}
-          <Animated.View style={textStyle}>
-            {focused && (
-              <Text style={{color: Colors[theme].text, fontWeight: '500'}}>
-                {item.label}
-              </Text>
-            )}
-          </Animated.View>
         </Animated.View>
       </Animated.View>
     </TouchableOpacity>

@@ -1,7 +1,7 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 
-const Biography = () => {
+const BiographyScreen = () => {
   return (
     <View>
       <Text>Biography</Text>
@@ -9,6 +9,6 @@ const Biography = () => {
   );
 };
 
-export default Biography;
+export default BiographyScreen;
 
 const styles = StyleSheet.create({});

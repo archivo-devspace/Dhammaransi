@@ -1,7 +1,7 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 
-const Pdf = () => {
+const PdfListScreen = () => {
   return (
     <View>
       <Text>Pdf</Text>
@@ -9,6 +9,6 @@ const Pdf = () => {
   );
 };
 
-export default Pdf;
+export default PdfListScreen;
 
 const styles = StyleSheet.create({});

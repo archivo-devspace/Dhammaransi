@@ -1,14 +1,14 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 
-const TimetableScreen = () => {
+const ContactScreen = () => {
   return (
     <View>
-      <Text>Timetable</Text>
+      <Text>ContactScreen</Text>
     </View>
   );
 };
 
-export default TimetableScreen;
+export default ContactScreen;
 
 const styles = StyleSheet.create({});

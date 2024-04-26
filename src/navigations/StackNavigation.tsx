@@ -7,11 +7,9 @@ import {
 import HomeScreen from '../screens/HomeScreen';
 import MovieScreen from '../screens/MovieScreen';
 import Audios from '../screens/AudioListScreen';
-import Pdf from '../screens/PdfListScreen';
 import MovieListScreen from '../screens/MovieListScreen';
 import PaintingsScreen from '../screens/PaintingListScreen';
-
-// import { RootStackParamList } from './AppNavigation';
+import PdfListScreen from '../screens/PdfListScreen';
 
 export interface MovieProps {
   id: number;
@@ -31,6 +29,11 @@ export type MainStackParamList = {
   };
   Pdf: undefined;
   Painting: undefined;
+  Biography: undefined;
+  Timetable: undefined;
+  Contact: undefined;
+  More: undefined;
+  Missionary: undefined;
 };
 
 export type NavigationMainStackScreenProps = {
@@ -48,7 +51,7 @@ const StackNavigation = () => {
       <Stack.Screen name="Movie" component={MovieScreen} />
       <Stack.Screen name="MovieLists" component={MovieListScreen} />
       <Stack.Screen name="Audios" component={Audios} />
-      <Stack.Screen name="Pdf" component={Pdf} />
+      <Stack.Screen name="Pdf" component={PdfListScreen} />
       <Stack.Screen name="Painting" component={PaintingsScreen} />
     </Stack.Navigator>
   );

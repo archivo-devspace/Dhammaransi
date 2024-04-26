@@ -12,17 +12,8 @@ import Switch from '../components/utils/Switch/Switch';
 import {get, save} from '../utils/storage';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {Colors} from '../theme';
-import {AntDesign} from '../utils/common';
-import {NavigationDrawerScreenProps} from '../navigations/DrawerNavigation';
-import CustomButton from '../components/utils/Button';
 
-type Props = {
-  navigation: NavigationDrawerScreenProps['navigation'] & {
-    openDrawer?: () => void; // Add openDrawer function to the navigation prop type
-  };
-};
-
-const SettingScreen = ({navigation}: Props) => {
+const SettingScreen = () => {
   const {theme, setTheme} = useThemeContext();
   const [isEnabled, setIsEnabled] = useState<boolean>(false);
 

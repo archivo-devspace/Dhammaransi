@@ -1,22 +1,12 @@
-import React, {ComponentType, ReactNode} from 'react';
-import HomeScreen from '../screens/HomeScreen';
-import MovieScreen from '../screens/MovieScreen';
-import Audios from '../screens/AudioListScreen';
-import Pdf from '../screens/PdfListScreen';
-import {
-  BottomTabNavigationProp,
-  createBottomTabNavigator,
-} from '@react-navigation/bottom-tabs';
+import React, {ComponentType} from 'react';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import SettingScreen from '../screens/SettingScreen';
-
-// import { RootStackParamList } from './AppNavigation';
 import StackNavigation from './StackNavigation';
 import {Colors} from '../theme';
 import {useThemeContext} from '../contexts/ThemeContext';
 import CustomTabBar from '../components/commons/CustomTabBar';
-import {FontAwesome, Ionicons, Feather} from '../utils/common';
-import {Platform, SafeAreaView, View} from 'react-native';
-import MoreScreen from '../screens/MoreScreen';
+import {SafeAreaView} from 'react-native';
+import MoreStackNavigation from './MoreStackNavigation';
 
 export interface TabBar {
   route: string;
@@ -30,7 +20,7 @@ const TabArr: TabBar[] = [
     route: 'StackNavigation',
     label: 'Home',
     component: StackNavigation,
-    icon: 'search',
+    icon: 'home',
   },
   {
     route: 'Search',
@@ -38,17 +28,10 @@ const TabArr: TabBar[] = [
     component: SettingScreen,
     icon: 'cog',
   },
-
   {
-    route: 'More',
+    route: 'MoreStack',
     label: 'More',
-    component: MoreScreen,
-    icon: 'ellipsis-h',
-  },
-  {
-    route: 'More3',
-    label: 'More3',
-    component: MoreScreen,
+    component: MoreStackNavigation,
     icon: 'ellipsis-h',
   },
 ];
