@@ -35,12 +35,23 @@ const ImageSlider = ({images}: {images: any}) => {
     const interval = setInterval(() => {
       const nextIndex = (active + 1) % images.length;
       setActive(nextIndex);
-      scrollViewRef.current?.scrollTo({
-        animated: true,
-        x: nextIndex * width,
-        y: 0,
-      });
-    }, 3000);
+      const scrollToX = nextIndex * width;
+      const step = 60; // Increase for slower animation, decrease for faster
+      const duration = 3000; // Total duration of the animation in milliseconds
+      const steps = Math.floor(duration / step);
+      let currentStep = 0;
+      const timer = setInterval(() => {
+        scrollViewRef.current?.scrollTo({
+          x: scrollToX,
+          animated: true,
+        });
+        currentStep++;
+        if (currentStep >= steps) {
+          clearInterval(timer);
+          scrollViewRef.current?.scrollTo({x: scrollToX, animated: true});
+        }
+      }, step);
+    }, 10000);
 
     return () => clearInterval(interval);
   }, [active]);
@@ -52,6 +63,7 @@ const ImageSlider = ({images}: {images: any}) => {
       <ScrollView
         pagingEnabled
         horizontal
+        scrollEventThrottle={32}
         onScroll={onScrollChange}
         showsHorizontalScrollIndicator={false}
         ref={scrollViewRef}
