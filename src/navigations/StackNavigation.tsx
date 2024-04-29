@@ -10,6 +10,7 @@ import Audios from '../screens/AudioListScreen';
 import MovieListScreen from '../screens/MovieListScreen';
 import PaintingsScreen from '../screens/PaintingListScreen';
 import PdfListScreen from '../screens/PdfListScreen';
+import TrackScreen from '../screens/TrackScreen';
 
 export interface MovieProps {
   id: number;
@@ -34,6 +35,8 @@ export type MainStackParamList = {
   Contact: undefined;
   More: undefined;
   Missionary: undefined;
+  Track: undefined;
+  Setting: undefined;
 };
 
 export type NavigationMainStackScreenProps = {
@@ -53,6 +56,7 @@ const StackNavigation = () => {
       <Stack.Screen name="Audios" component={Audios} />
       <Stack.Screen name="Pdf" component={PdfListScreen} />
       <Stack.Screen name="Painting" component={PaintingsScreen} />
+      <Stack.Screen name="Track" component={TrackScreen} />
     </Stack.Navigator>
   );
 };

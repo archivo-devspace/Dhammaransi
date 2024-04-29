@@ -7,6 +7,7 @@ import {useThemeContext} from '../contexts/ThemeContext';
 import CustomTabBar from '../components/commons/CustomTabBar';
 import {SafeAreaView} from 'react-native';
 import MoreStackNavigation from './MoreStackNavigation';
+import TrackScreen from '../screens/TrackScreen';
 
 export interface TabBar {
   route: string;
@@ -23,10 +24,10 @@ const TabArr: TabBar[] = [
     icon: 'home',
   },
   {
-    route: 'Search',
-    label: 'Search',
-    component: SettingScreen,
-    icon: 'cog',
+    route: 'Track',
+    label: 'Track',
+    component: TrackScreen,
+    icon: 'play-circle',
   },
   {
     route: 'MoreStack',
@@ -47,7 +48,7 @@ const BottomTapNavigator = () => {
         screenOptions={{
           headerShown: false,
           tabBarStyle: {
-            height: 60,
+            height: 65,
             paddingHorizontal: 10,
             borderTopWidth: 1,
             borderLeftWidth: 1,

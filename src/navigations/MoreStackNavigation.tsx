@@ -7,6 +7,7 @@ import BiographyScreen from '../screens/BiographyScreen';
 import TimetableScreen from '../screens/TimetableScreen';
 import ContactScreen from '../screens/ContactScreen';
 import MissionaryScreen from '../screens/MissionaryScreen';
+import SettingScreen from '../screens/SettingScreen';
 
 const MoreStackNavigation = () => {
   const Stack = createNativeStackNavigator<MainStackParamList>();
@@ -19,6 +20,7 @@ const MoreStackNavigation = () => {
       <Stack.Screen name="Timetable" component={TimetableScreen} />
       <Stack.Screen name="Contact" component={ContactScreen} />
       <Stack.Screen name="Missionary" component={MissionaryScreen} />
+      <Stack.Screen name="Setting" component={SettingScreen} />
     </Stack.Navigator>
   );
 };

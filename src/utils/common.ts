@@ -5,8 +5,9 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
+import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-export {FontAwesome, AntDesign, Entypo, Ionicons, Feather};
+export {FontAwesome, AntDesign, Entypo, Ionicons, Feather, MaterialIcon};
 
 export const handleAxiosError = (error: any) => {
   if (axios.isAxiosError(error)) {
@@ -28,7 +29,7 @@ export const remToPx = (rem: number) => {
   return rem * baseFontSize;
 };
 
-export const truncateText = (text:string, maxLength:number) => {
+export const truncateText = (text: string, maxLength: number) => {
   if (!text) return '';
   return text.length > maxLength ? text.slice(0, maxLength) + ' ...' : text;
 };
