@@ -8,13 +8,15 @@ import {
   View,
   useWindowDimensions,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useLayoutEffect, useState} from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {Colors} from '../theme';
 import Slider from '@react-native-community/slider';
 import {CustomButton} from '../components/utils';
 import {Entypo, MaterialIcon} from '../utils/common';
+import TrackPlayer, {State, usePlaybackState} from 'react-native-track-player';
+import {trackLists} from '../utils/constants';
 
 const TrackScreen = () => {
   const insets = useSafeAreaInsets();
@@ -22,9 +24,32 @@ const TrackScreen = () => {
   const {width, height} = useWindowDimensions();
   const [repeatMode, setRepeatMode] = useState('off');
   const [isPlay, setIsPlayed] = useState('controller-play');
+  const playbackState = usePlaybackState();
 
   const styles = styling(theme);
   const {top, bottom, left, right} = insets;
+
+  const handleAddTrack = async () => {
+    await TrackPlayer.setupPlayer({});
+    await TrackPlayer.add(trackLists);
+  };
+
+  const togglePlayback = async (playbackState: any) => {
+    const currentTrack = await TrackPlayer.getCurrentTrack();
+    console.log('hello', playbackState);
+    console.log('currentTrack', currentTrack);
+    if (currentTrack !== null) {
+      if (playbackState === State.Playing) {
+        await TrackPlayer.pause();
+      } else {
+        await TrackPlayer.play();
+      }
+    }
+  };
+
+  useLayoutEffect(() => {
+    handleAddTrack();
+  }, []);
 
   const repeatIcon = () => {
     if (repeatMode === 'off') {
@@ -67,6 +92,10 @@ const TrackScreen = () => {
       return 'controller-paus';
     }
   };
+
+  const handleNextTrack = () => {};
+
+  const handlePrevTrack = () => {};
   return (
     <View style={styles.mainContainer}>
       <StatusBar backgroundColor={Colors[theme].secondary} />
@@ -112,6 +141,7 @@ const TrackScreen = () => {
             onPress={changeRepeatMode}
           />
           <CustomButton
+            onPress={handlePrevTrack}
             customButtonStyle={styles.btn}
             icon={
               <Entypo
@@ -123,16 +153,21 @@ const TrackScreen = () => {
           />
           <CustomButton
             customButtonStyle={styles.btn}
-            onPress={changePlayMode}
+            onPress={() => togglePlayback(playbackState)}
             icon={
               <Entypo
-                name={`${handePlayIcon()}`}
+                name={
+                  playbackState === State.Playing
+                    ? 'controller-paus'
+                    : 'controller-play'
+                }
                 size={70}
                 color={Colors[theme].text}
               />
             }
           />
           <CustomButton
+            onPress={handleNextTrack}
             customButtonStyle={styles.btn}
             icon={
               <Entypo

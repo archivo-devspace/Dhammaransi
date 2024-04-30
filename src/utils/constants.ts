@@ -55,3 +55,60 @@ export const images = [
 
 export const BANNER_H = 320;
 export const TOPNAVI_H = 40;
+
+export const trackLists = [
+  {
+    id: 1,
+    url: '../assets/mp3/Ali_Gatie_-_It_s_You.mp3', // Load media from the network
+    title: "It's you",
+    artist: 'Ali Gatie',
+    date: '2014-05-20T07:00:00+00:00', // RFC 3339
+    artwork: '../assets/marguerite.jpg', // Load artwork from the network
+    duration: 214, // Duration in seconds
+  },
+  {
+    id: 2,
+    url: '../assets/mp3/Metro_Boomin,_NAV,_A_Boogie_wit_da_Hoodie,_Swae_Lee_Calling256k.mp3', // Load media from the network
+    title: 'Calling',
+    artist: 'Metro_Boomin,_NAV,_A_Boogie_wit_da_Hoodie,_Swae_Lee',
+    date: '2014-05-20T07:00:00+00:00', // RFC 3339
+    artwork: '../assets/marguerite.jpg', // Load artwork from the network
+    duration: 119, // Duration in seconds
+  },
+  {
+    id: 3,
+    url: '../assets/mp3/Paul_Anka-_Put_Your_Head_On_My_Shoulder(256k).mp3', // Load media from the network
+    title: 'Put_Your_Head_On_My_Shoulder',
+    artist: 'Paul_Anka',
+    date: '2014-05-20T07:00:00+00:00', // RFC 3339
+    artwork: '../assets/marguerite.jpg', // Load artwork from the network
+    duration: 156, // Duration in seconds
+  },
+  {
+    id: 4,
+    url: '../assets/mp3/Post_Malone,_Swae_Lee_-_Sunflower(256k).mp3', // Load media from the network
+    title: 'Sunflower',
+    artist: 'Post_Malone,_Swae_Lee',
+    date: '2014-05-20T07:00:00+00:00', // RFC 3339
+    artwork: '../assets/marguerite.jpg', // Load artwork from the network
+    duration: 161, // Duration in seconds
+  },
+  {
+    id: 5,
+    url: '../assets/mp3/Queen_-_Love_Of_My_Life(256k)(1).mp3', // Load media from the network
+    title: 'Love_Of_My_Life',
+    artist: 'Queen',
+    date: '2014-05-20T07:00:00+00:00', // RFC 3339
+    artwork: '../assets/marguerite.jpg', // Load artwork from the network
+    duration: 217, // Duration in seconds
+  },
+  {
+    id: 6,
+    url: '../assets/mp3/Queen_-_Bohemian_Rhapsody(256k).mp3', // Load media from the network
+    title: 'Bohemian_Rhapsody',
+    artist: 'Queen',
+    date: '2014-05-20T07:00:00+00:00', // RFC 3339
+    artwork: '../assets/marguerite.jpg', // Load artwork from the network
+    duration: 354, // Duration in seconds
+  },
+];
