@@ -15,7 +15,11 @@ import {Colors} from '../theme';
 import Slider from '@react-native-community/slider';
 import {CustomButton} from '../components/utils';
 import {Entypo, MaterialIcon} from '../utils/common';
-import TrackPlayer, {State, usePlaybackState} from 'react-native-track-player';
+import TrackPlayer, {
+  State,
+  usePlaybackState,
+  useProgress,
+} from 'react-native-track-player';
 import {trackLists} from '../utils/constants';
 
 const TrackScreen = () => {
@@ -24,13 +28,15 @@ const TrackScreen = () => {
   const {width, height} = useWindowDimensions();
   const [repeatMode, setRepeatMode] = useState('off');
   const [isPlay, setIsPlayed] = useState('controller-play');
+  const progress = useProgress();
   const playbackState = usePlaybackState();
+  const [trackIndex, setTrackIndex] = useState(0);
 
   const styles = styling(theme);
   const {top, bottom, left, right} = insets;
 
   const handleAddTrack = async () => {
-    await TrackPlayer.setupPlayer({});
+    await TrackPlayer.setupPlayer();
     await TrackPlayer.add(trackLists);
   };
 
@@ -39,7 +45,7 @@ const TrackScreen = () => {
     console.log('hello', playbackState);
     console.log('currentTrack', currentTrack);
     if (currentTrack !== null) {
-      if (playbackState === State.Playing) {
+      if (playbackState.state === State.Playing) {
         await TrackPlayer.pause();
       } else {
         await TrackPlayer.play();
@@ -75,27 +81,19 @@ const TrackScreen = () => {
     }
   };
 
-  // const changePlayMode = () => {
-  //   if (isPlay === 'controller-play') {
-  //     setIsPlayed('controller-paus');
-  //   }
-  //   if (isPlay === 'controller-paus') {
-  //     setIsPlayed('controller-play');
-  //   }
-  // };
+  const handleNextTrack = async () => {
+    await TrackPlayer.skipToNext();
+  };
 
-  // const handePlayIcon = () => {
-  //   if (isPlay === 'controller-play') {
-  //     return 'controller-play';
-  //   }
-  //   if (isPlay === 'controller-paus') {
-  //     return 'controller-paus';
-  //   }
-  // };
-
-  const handleNextTrack = () => {};
-
-  const handlePrevTrack = () => {};
+  const handlePrevTrack = async () => {
+    const position = await TrackPlayer.getPosition();
+    console.log('position', position);
+    if (position < 3) {
+      await TrackPlayer.skipToPrevious();
+    } else {
+      await TrackPlayer.seekTo(0);
+    }
+  };
   return (
     <View style={styles.mainContainer}>
       <StatusBar backgroundColor={Colors[theme].secondary} />
@@ -108,8 +106,8 @@ const TrackScreen = () => {
               style={styles.img}
             />
           </View>
-          <Text style={styles.titleText}>Title</Text>
-          <Text style={styles.artistText}>hello</Text>
+          <Text style={styles.titleText}>{trackLists[trackIndex].title}</Text>
+          <Text style={styles.artistText}>{trackLists[trackIndex].artist}</Text>
         </View>
       </SafeAreaView>
       <View style={styles.contentContainer}>
@@ -117,14 +115,24 @@ const TrackScreen = () => {
         <View style={styles.trackContainer}>
           <Slider
             style={{width: '100%', height: 40}}
+            value={progress.position}
             minimumValue={0}
-            maximumValue={1}
+            maximumValue={progress.duration}
+            onSlidingComplete={async value => {
+              await TrackPlayer.seekTo(value);
+            }}
             minimumTrackTintColor={Colors[theme].primary_dark}
             maximumTrackTintColor={Colors[theme].text}
           />
           <View style={styles.trackDuration}>
-            <Text style={styles.durationText}>0:00</Text>
-            <Text style={styles.durationText}>0:00</Text>
+            <Text style={styles.durationText}>
+              {new Date(progress.duration * 1000).toISOString().substr(14, 5)}
+            </Text>
+            <Text style={styles.durationText}>
+              {new Date((progress.duration - progress.position) * 1000)
+                .toISOString()
+                .substr(14, 5)}
+            </Text>
           </View>
         </View>
         {/* play button  */}
@@ -157,7 +165,7 @@ const TrackScreen = () => {
             icon={
               <Entypo
                 name={
-                  playbackState === State.Playing
+                  playbackState.state === State.Playing
                     ? 'controller-paus'
                     : 'controller-play'
                 }
