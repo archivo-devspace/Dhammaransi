@@ -47,7 +47,7 @@ const TrackScreen = () => {
     }
   };
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     handleAddTrack();
   }, []);
 
@@ -75,23 +75,23 @@ const TrackScreen = () => {
     }
   };
 
-  const changePlayMode = () => {
-    if (isPlay === 'controller-play') {
-      setIsPlayed('controller-paus');
-    }
-    if (isPlay === 'controller-paus') {
-      setIsPlayed('controller-play');
-    }
-  };
+  // const changePlayMode = () => {
+  //   if (isPlay === 'controller-play') {
+  //     setIsPlayed('controller-paus');
+  //   }
+  //   if (isPlay === 'controller-paus') {
+  //     setIsPlayed('controller-play');
+  //   }
+  // };
 
-  const handePlayIcon = () => {
-    if (isPlay === 'controller-play') {
-      return 'controller-play';
-    }
-    if (isPlay === 'controller-paus') {
-      return 'controller-paus';
-    }
-  };
+  // const handePlayIcon = () => {
+  //   if (isPlay === 'controller-play') {
+  //     return 'controller-play';
+  //   }
+  //   if (isPlay === 'controller-paus') {
+  //     return 'controller-paus';
+  //   }
+  // };
 
   const handleNextTrack = () => {};
 
