@@ -13,66 +13,55 @@ import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {Colors} from '../theme';
 import {AntDesign} from '../utils/common';
 import {CustomButton} from '../components/utils';
-type Item = {
-  id: number;
-  name: string;
-  artist: string;
+import {trackLists} from '../utils/constants';
+import {useNavigation} from '@react-navigation/native';
+import {NavigationMainStackScreenProps} from '../navigations/StackNavigation';
+
+type Props = {
+  navigation: NavigationMainStackScreenProps['navigation'];
 };
 
-const data: Item[] = [
-  {id: 1, name: 'Hello', artist: 'Artist hello'},
-  {id: 2, name: 'Hello', artist: 'Artist hello'},
-  {id: 3, name: 'Hello', artist: 'Artist hello'},
-  {id: 4, name: 'Hello', artist: 'Artist hello'},
-  {id: 5, name: 'Hello', artist: 'Artist hello'},
-  {id: 6, name: 'Hello', artist: 'Artist hello'},
-  {id: 7, name: 'Hello', artist: 'Artist hello'},
-  {id: 8, name: 'Hello', artist: 'Artist hello'},
-  {id: 9, name: 'Hello', artist: 'Artist hello'},
-  {id: 10, name: 'Hello', artist: 'Artist hello'},
-];
-
-const Audios = () => {
+const Audios = ({navigation}: Props) => {
   const insets = useSafeAreaInsets();
   const {theme} = useThemeContext();
+
   const {width, height} = useWindowDimensions();
   const [isPlayed, setIsPlayed] = useState<boolean[]>(
-    Array(data.length).fill(false),
+    Array(trackLists.length).fill(false),
   );
   const styles = styling(theme);
   const {top, bottom, left, right} = insets;
 
-  const handlePlayAudio = (index: number) => {
+  const handlePlayAudio = (item: any) => {
     setIsPlayed(prevState => {
       const newState = [...prevState];
-      newState[index] = !newState[index];
+      newState[item.id] = !newState[item.id];
       return newState;
     });
+    console.log('hello', item);
+    navigation.navigate('Track', {item});
   };
 
   return (
     <View style={styles.mainContainer}>
       <ScrollView style={{marginTop: top}}>
         <StatusBar translucent backgroundColor={'transparent'} />
-        {data?.map(item => (
+        {trackLists?.map(item => (
           <React.Fragment key={item.id}>
             <View style={styles.container}>
               <View style={styles.trackContainer}>
                 <Image
-                  source={require('../assets/marguerite.jpg')}
+                  source={item.artwork}
                   resizeMode="cover"
-                  style={[
-                    styles.img,
-                    {height: height * 0.1, width: width * 0.2},
-                  ]}
+                  style={styles.img}
                 />
-                <View>
-                  <Text style={styles.title}>In My Feelings</Text>
-                  <Text style={styles.desc}>In My Feelings</Text>
+                <View style={{width: '75%', gap: 10}}>
+                  <Text style={styles.title}>{item.title}</Text>
+                  <Text style={styles.desc}>{item.artist}</Text>
                 </View>
               </View>
               <CustomButton
-                onPress={() => handlePlayAudio(item.id)}
+                onPress={() => handlePlayAudio(item)}
                 customButtonStyle={styles.btn}
                 icon={
                   <AntDesign
@@ -83,7 +72,7 @@ const Audios = () => {
                 }
               />
             </View>
-            {data.length !== item?.id && <View style={styles.divider} />}
+            {trackLists.length !== item?.id && <View style={styles.divider} />}
           </React.Fragment>
         ))}
       </ScrollView>
@@ -111,19 +100,24 @@ const styling = (theme: Theme) =>
       gap: 10,
       flexDirection: 'row',
       alignItems: 'center',
+      width: '90%',
     },
     img: {
-      // width:
+      width: 70,
+      height: 70,
+      borderRadius: 12,
     },
     btn: {
       backgroundColor: Colors[theme].secondary,
     },
     title: {
-      fontSize: 22,
+      fontSize: 16,
+
       color: Colors[theme].text,
     },
     desc: {
-      fontSize: 15,
+      fontSize: 12,
+
       color: Colors[theme].text,
     },
     divider: {

@@ -1,13 +1,20 @@
 import React, {ComponentType} from 'react';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {
+  BottomTabNavigationProp,
+  createBottomTabNavigator,
+} from '@react-navigation/bottom-tabs';
 import SettingScreen from '../screens/SettingScreen';
-import StackNavigation from './StackNavigation';
+import StackNavigation, {MainStackParamList} from './StackNavigation';
 import {Colors} from '../theme';
 import {useThemeContext} from '../contexts/ThemeContext';
 import CustomTabBar from '../components/commons/CustomTabBar';
 import {SafeAreaView} from 'react-native';
 import MoreStackNavigation from './MoreStackNavigation';
 import TrackScreen from '../screens/TrackScreen';
+
+export type NavigationMainBottomTabScreenProps = {
+  navigation: BottomTabNavigationProp<MainStackParamList>;
+};
 
 export interface TabBar {
   route: string;

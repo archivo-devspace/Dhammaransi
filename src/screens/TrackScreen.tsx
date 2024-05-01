@@ -2,6 +2,7 @@ import {
   Image,
   Platform,
   SafeAreaView,
+  ScrollView,
   StatusBar,
   StyleSheet,
   Text,
@@ -16,46 +17,99 @@ import Slider from '@react-native-community/slider';
 import {CustomButton} from '../components/utils';
 import {Entypo, MaterialIcon} from '../utils/common';
 import TrackPlayer, {
+  Capability,
   State,
   usePlaybackState,
   useProgress,
 } from 'react-native-track-player';
 import {trackLists} from '../utils/constants';
+import {RouteProp} from '@react-navigation/native';
+import {MainStackParamList} from '../navigations/StackNavigation';
+import {NavigationMainBottomTabScreenProps} from '../navigations/BottomNavigation';
 
-const TrackScreen = () => {
+type Props = {
+  route: RouteProp<MainStackParamList, 'Track'>;
+  navigation: NavigationMainBottomTabScreenProps['navigation'];
+};
+
+TrackPlayer.setupPlayer();
+
+const TrackScreen = ({route, navigation}: Props) => {
   const insets = useSafeAreaInsets();
   const {theme} = useThemeContext();
   const {width, height} = useWindowDimensions();
   const [repeatMode, setRepeatMode] = useState('off');
-  const [isPlay, setIsPlayed] = useState('controller-play');
   const progress = useProgress();
   const playbackState = usePlaybackState();
-  const [trackIndex, setTrackIndex] = useState(0);
+
+  const [currentTack, setCurrentTrack] = useState<any>('');
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isItem, setIsItem] = useState(null);
+
+  const item = route.params?.item;
 
   const styles = styling(theme);
-  const {top, bottom, left, right} = insets;
+  const {top} = insets;
 
-  const handleAddTrack = async () => {
-    await TrackPlayer.setupPlayer();
-    await TrackPlayer.add(trackLists);
+  useLayoutEffect(() => {
+    setIsItem(item);
+  }, [item]);
+
+  useEffect(() => {
+    const initializePlayer = async (item: any) => {
+      setCurrentTrack(item);
+
+      await TrackPlayer.reset();
+      await TrackPlayer.add({
+        url: item?.url,
+        title: item?.name,
+        artist: item?.artist,
+        artwork: item?.artwork,
+      });
+      await TrackPlayer.play();
+    };
+
+    initializePlayer(isItem);
+  }, [isItem]);
+
+  // useEffect(() => {
+  //   const updateTrackInfo = async () => {
+  //     const currentTrackId = await TrackPlayer.getActiveTrack();
+  //     setCurrentTrackTitle(currentTrackId?.title);
+  //   };
+
+  //   updateTrackInfo();
+  // }, [playbackState.state]);
+
+  TrackPlayer.updateOptions({
+    // Media controls capabilities
+    capabilities: [
+      Capability.Play,
+      Capability.Pause,
+      Capability.SkipToNext,
+      Capability.SkipToPrevious,
+    ],
+
+    // Capabilities that will show up when the notification is in the compact form on Android
+    compactCapabilities: [Capability.Play, Capability.Pause],
+  });
+
+  const handleNextTrack = async () => {
+    await TrackPlayer.skipToNext();
+  };
+
+  const handlePrevTrack = async () => {
+    await TrackPlayer.skipToPrevious();
   };
 
   const togglePlayback = async (playbackState: any) => {
-    const currentTrack = await TrackPlayer.getCurrentTrack();
-    console.log('hello', playbackState);
-    console.log('currentTrack', currentTrack);
-    if (currentTrack !== null) {
-      if (playbackState.state === State.Playing) {
-        await TrackPlayer.pause();
-      } else {
-        await TrackPlayer.play();
-      }
+    if (playbackState.state === State.Playing) {
+      await TrackPlayer.pause();
+    } else {
+      await TrackPlayer.play();
     }
+    setIsPlaying(!isPlaying);
   };
-
-  useEffect(() => {
-    handleAddTrack();
-  }, []);
 
   const repeatIcon = () => {
     if (repeatMode === 'off') {
@@ -81,33 +135,28 @@ const TrackScreen = () => {
     }
   };
 
-  const handleNextTrack = async () => {
-    await TrackPlayer.skipToNext();
-  };
-
-  const handlePrevTrack = async () => {
-    const position = await TrackPlayer.getPosition();
-    console.log('position', position);
-    if (position < 3) {
-      await TrackPlayer.skipToPrevious();
-    } else {
-      await TrackPlayer.seekTo(0);
-    }
-  };
   return (
-    <View style={styles.mainContainer}>
+    <ScrollView style={styles.mainContainer}>
       <StatusBar backgroundColor={Colors[theme].secondary} />
-      <SafeAreaView style={{flex: 1.3, paddingTop: top}}>
+      <SafeAreaView style={{flex: 1.5, paddingTop: top}}>
         <View style={styles.imgContainer}>
-          <View style={styles.imageShadow}>
+          <View
+            style={[
+              styles.imageShadow,
+              {width: width / 1.3, height: height / 2.5},
+            ]}>
             <Image
-              source={require('../assets/marguerite.jpg')}
+              source={
+                currentTack
+                  ? currentTack?.artwork
+                  : require('../assets/marguerite.jpg')
+              }
               resizeMode="cover"
               style={styles.img}
             />
           </View>
-          <Text style={styles.titleText}>{trackLists[trackIndex].title}</Text>
-          <Text style={styles.artistText}>{trackLists[trackIndex].artist}</Text>
+          <Text style={styles.titleText}>{currentTack?.title}</Text>
+          <Text style={styles.artistText}>{currentTack?.artist}</Text>
         </View>
       </SafeAreaView>
       <View style={styles.contentContainer}>
@@ -197,7 +246,7 @@ const TrackScreen = () => {
           />
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -211,12 +260,10 @@ const styling = (theme: Theme) =>
     },
     imgContainer: {
       alignItems: 'center',
-      gap: 10,
-      paddingVertical: 20,
+      gap: 14,
+      paddingVertical: 30,
     },
     imageShadow: {
-      width: '80%',
-      height: '80%',
       borderRadius: 20,
       shadowColor: Colors[theme].text,
       ...Platform.select({
@@ -239,18 +286,28 @@ const styling = (theme: Theme) =>
       borderRadius: 20,
     },
     titleText: {
-      fontSize: 22,
+      fontSize: 20,
+      width: '80%',
+      height: 50,
       fontWeight: 'bold',
+
+      textAlign: 'center',
+      marginTop: 16,
       color: Colors[theme].text,
     },
     artistText: {
-      fontSize: 18,
+      fontSize: 16,
+      width: '80%',
+      height: 50,
+
       color: Colors[theme].text,
+      textAlign: 'center',
     },
     contentContainer: {
       flex: 1,
       alignItems: 'center',
       width: '100%',
+      paddingBottom: 80,
     },
     trackContainer: {
       paddingHorizontal: '10%',

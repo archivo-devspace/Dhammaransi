@@ -64,7 +64,7 @@ export const trackLists = [
     artist: 'Ali Gatie',
     date: '2014-05-20T07:00:00+00:00', // RFC 3339
     artwork: require('../assets/marguerite.jpg'), // Load artwork from the network
-    duration: 214, // Duration in seconds
+  
   },
   {
     id: 2,
@@ -73,7 +73,7 @@ export const trackLists = [
     artist: 'Metro_Boomin,_NAV,_A_Boogie_wit_da_Hoodie,_Swae_Lee',
     date: '2014-05-20T07:00:00+00:00', // RFC 3339
     artwork: require('../assets/marguerite.jpg'), // Load artwork from the network
-    duration: 119, // Duration in seconds
+  
   },
   {
     id: 3,
@@ -82,7 +82,7 @@ export const trackLists = [
     artist: 'Paul_Anka',
     date: '2014-05-20T07:00:00+00:00', // RFC 3339
     artwork: require('../assets/marguerite.jpg'), // Load artwork from the network
-    duration: 156, // Duration in seconds
+  
   },
   {
     id: 4,
@@ -91,7 +91,7 @@ export const trackLists = [
     artist: 'Post_Malone,_Swae_Lee',
     date: '2014-05-20T07:00:00+00:00', // RFC 3339
     artwork: require('../assets/marguerite.jpg'), // Load artwork from the network
-    duration: 161, // Duration in seconds
+
   },
   {
     id: 5,
@@ -100,7 +100,7 @@ export const trackLists = [
     artist: 'Queen',
     date: '2014-05-20T07:00:00+00:00', // RFC 3339
     artwork: require('../assets/marguerite.jpg'), // Load artwork from the network
-    duration: 217, // Duration in seconds
+
   },
   {
     id: 6,
@@ -109,6 +109,6 @@ export const trackLists = [
     artist: 'Queen',
     date: '2014-05-20T07:00:00+00:00', // RFC 3339
     artwork: require('../assets/marguerite.jpg'), // Load artwork from the network
-    duration: 354, // Duration in seconds
+  
   },
 ];
