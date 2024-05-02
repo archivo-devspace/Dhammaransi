@@ -37,12 +37,15 @@ import {useColorScheme} from 'react-native';
 import {ThemeProvider} from './src/contexts/ThemeContext';
 import AppNavigation from './src/navigations/AppNavigation';
 import {get, save} from './src/utils/storage';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 const App = () => {
   return (
-    <ThemeProvider>
-      <AppNavigation />
-    </ThemeProvider>
+    <GestureHandlerRootView>
+      <ThemeProvider>
+        <AppNavigation />
+      </ThemeProvider>
+    </GestureHandlerRootView>
   );
 };
 
