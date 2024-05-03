@@ -7,15 +7,15 @@ import {
   Image,
   useWindowDimensions,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {Colors} from '../theme';
 import {AntDesign} from '../utils/common';
 import {CustomButton} from '../components/utils';
-import {trackLists} from '../utils/constants';
-import {useNavigation} from '@react-navigation/native';
 import {NavigationMainStackScreenProps} from '../navigations/StackNavigation';
+import {useTrackContext} from '../contexts/TrackContext';
+import {FlatList} from 'react-native';
 
 type Props = {
   navigation: NavigationMainStackScreenProps['navigation'];
@@ -24,7 +24,7 @@ type Props = {
 const Audios = ({navigation}: Props) => {
   const insets = useSafeAreaInsets();
   const {theme} = useThemeContext();
-
+  const {trackLists} = useTrackContext();
   const {width, height} = useWindowDimensions();
   const [isPlayed, setIsPlayed] = useState<boolean[]>(
     Array(trackLists.length).fill(false),
@@ -44,9 +44,11 @@ const Audios = ({navigation}: Props) => {
 
   return (
     <View style={styles.mainContainer}>
-      <ScrollView style={{marginTop: top}}>
-        <StatusBar translucent backgroundColor={'transparent'} />
-        {trackLists?.map(item => (
+      <StatusBar translucent backgroundColor={'transparent'} />
+      <FlatList
+        style={{marginTop: top}}
+        data={trackLists}
+        renderItem={({item}) => (
           <React.Fragment key={item.id}>
             <View style={styles.container}>
               <View style={styles.trackContainer}>
@@ -74,8 +76,10 @@ const Audios = ({navigation}: Props) => {
             </View>
             {trackLists.length !== item?.id && <View style={styles.divider} />}
           </React.Fragment>
-        ))}
-      </ScrollView>
+        )}
+        keyExtractor={item => item.id.toString()}
+        // Optional: Add extra FlatList props like `ItemSeparatorComponent`, etc.
+      />
     </View>
   );
 };

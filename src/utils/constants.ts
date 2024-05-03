@@ -56,7 +56,7 @@ export const images = [
 export const BANNER_H = 320;
 export const TOPNAVI_H = 40;
 
-export const trackLists = [
+export const tracks = [
   {
     id: 1,
     url: require('../assets/mp3/Ali_Gatie_-_It_s_You.mp3'), // Load media from the network
@@ -64,7 +64,6 @@ export const trackLists = [
     artist: 'Ali Gatie',
     date: '2014-05-20T07:00:00+00:00', // RFC 3339
     artwork: require('../assets/marguerite.jpg'), // Load artwork from the network
-  
   },
   {
     id: 2,
@@ -73,7 +72,6 @@ export const trackLists = [
     artist: 'Metro_Boomin,_NAV,_A_Boogie_wit_da_Hoodie,_Swae_Lee',
     date: '2014-05-20T07:00:00+00:00', // RFC 3339
     artwork: require('../assets/marguerite.jpg'), // Load artwork from the network
-  
   },
   {
     id: 3,
@@ -82,7 +80,6 @@ export const trackLists = [
     artist: 'Paul_Anka',
     date: '2014-05-20T07:00:00+00:00', // RFC 3339
     artwork: require('../assets/marguerite.jpg'), // Load artwork from the network
-  
   },
   {
     id: 4,
@@ -91,7 +88,6 @@ export const trackLists = [
     artist: 'Post_Malone,_Swae_Lee',
     date: '2014-05-20T07:00:00+00:00', // RFC 3339
     artwork: require('../assets/marguerite.jpg'), // Load artwork from the network
-
   },
   {
     id: 5,
@@ -100,7 +96,6 @@ export const trackLists = [
     artist: 'Queen',
     date: '2014-05-20T07:00:00+00:00', // RFC 3339
     artwork: require('../assets/marguerite.jpg'), // Load artwork from the network
-
   },
   {
     id: 6,
@@ -109,6 +104,5 @@ export const trackLists = [
     artist: 'Queen',
     date: '2014-05-20T07:00:00+00:00', // RFC 3339
     artwork: require('../assets/marguerite.jpg'), // Load artwork from the network
-  
   },
 ];

@@ -28,13 +28,13 @@ import TrackPlayer, {
   usePlaybackState,
   useProgress,
 } from 'react-native-track-player';
-import {trackLists} from '../utils/constants';
 import {RouteProp} from '@react-navigation/native';
 import {MainStackParamList} from '../navigations/StackNavigation';
 import {NavigationMainBottomTabScreenProps} from '../navigations/BottomNavigation';
 import BottomSheet, {
   BottomSheetMethods,
 } from '../components/commons/bottomSheet';
+import {useTrackContext} from '../contexts/TrackContext';
 
 type Props = {
   route: RouteProp<MainStackParamList, 'Track'>;
@@ -47,9 +47,10 @@ const TrackScreen = ({route, navigation}: Props) => {
   const insets = useSafeAreaInsets();
   const {theme} = useThemeContext();
   const {width, height} = useWindowDimensions();
-  const [repeatMode, setRepeatMode] = useState('off');
   const progress = useProgress();
   const playbackState = usePlaybackState();
+  const {trackLists, repeatIcon, changeRepeatMode} = useTrackContext();
+  // console.log('trackLists', trackLists);
 
   const [currentTack, setCurrentTrack] = useState<any>('');
   const [isPlaying, setIsPlaying] = useState(false);
@@ -70,22 +71,22 @@ const TrackScreen = ({route, navigation}: Props) => {
     setIsItem(item);
   }, [item]);
 
-  useEffect(() => {
-    const initializePlayer = async (item: any) => {
-      setCurrentTrack(item);
+  // useEffect(() => {
+  //   const initializePlayer = async (item: any) => {
+  //     setCurrentTrack(item);
 
-      await TrackPlayer.reset();
-      await TrackPlayer.add({
-        url: item?.url,
-        title: item?.name,
-        artist: item?.artist,
-        artwork: item?.artwork,
-      });
-      await TrackPlayer.play();
-    };
+  //     await TrackPlayer.reset();
+  //     await TrackPlayer.add({
+  //       url: item?.url,
+  //       title: item?.name,
+  //       artist: item?.artist,
+  //       artwork: item?.artwork,
+  //     });
+  //     await TrackPlayer.play();
+  //   };
 
-    initializePlayer(isItem);
-  }, [isItem]);
+  //   initializePlayer(isItem);
+  // }, [isItem]);
 
   // useEffect(() => {
   //   const updateTrackInfo = async () => {
@@ -124,30 +125,6 @@ const TrackScreen = ({route, navigation}: Props) => {
       await TrackPlayer.play();
     }
     setIsPlaying(!isPlaying);
-  };
-
-  const repeatIcon = () => {
-    if (repeatMode === 'off') {
-      return 'repeat-off';
-    }
-    if (repeatMode === 'track') {
-      return 'repeat-once';
-    }
-    if (repeatMode === 'repeat') {
-      return 'repeat';
-    }
-  };
-
-  const changeRepeatMode = () => {
-    if (repeatMode === 'off') {
-      setRepeatMode('track');
-    }
-    if (repeatMode === 'track') {
-      setRepeatMode('repeat');
-    }
-    if (repeatMode === 'repeat') {
-      setRepeatMode('off');
-    }
   };
 
   return (
