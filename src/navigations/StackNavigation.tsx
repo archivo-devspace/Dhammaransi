@@ -35,9 +35,7 @@ export type MainStackParamList = {
   Contact: undefined;
   More: undefined;
   Missionary: undefined;
-  Track: {
-    item: any;
-  };
+  Track: undefined;
   Setting: undefined;
 };
 

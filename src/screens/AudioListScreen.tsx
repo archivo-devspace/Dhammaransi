@@ -26,20 +26,21 @@ const Audios = ({navigation}: Props) => {
   const {theme} = useThemeContext();
   const {trackLists} = useTrackContext();
   const {width, height} = useWindowDimensions();
+  const {handlePlay} = useTrackContext();
   const [isPlayed, setIsPlayed] = useState<boolean[]>(
     Array(trackLists.length).fill(false),
   );
   const styles = styling(theme);
   const {top, bottom, left, right} = insets;
 
-  const handlePlayAudio = (item: any) => {
+  const handlePlayAudio = async (item: any) => {
     setIsPlayed(prevState => {
       const newState = [...prevState];
       newState[item.id] = !newState[item.id];
       return newState;
     });
-    console.log('hello', item);
-    navigation.navigate('Track', {item});
+    handlePlay(item.id);
+    navigation.navigate('Track');
   };
 
   return (

@@ -46,6 +46,7 @@ TrackPlayer.setupPlayer();
 const TrackScreen = ({route, navigation}: Props) => {
   const insets = useSafeAreaInsets();
   const {theme} = useThemeContext();
+  const {playingTrackLists} = useTrackContext();
   const {width, height} = useWindowDimensions();
   const progress = useProgress();
   const playbackState = usePlaybackState();
@@ -56,7 +57,7 @@ const TrackScreen = ({route, navigation}: Props) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isItem, setIsItem] = useState(null);
 
-  const item = route.params?.item;
+  // const item = route.params?.item;
 
   const styles = styling(theme);
   const {top} = insets;
@@ -67,9 +68,11 @@ const TrackScreen = ({route, navigation}: Props) => {
     bottomSheetRef.current?.expand();
   }, []);
 
-  useLayoutEffect(() => {
-    setIsItem(item);
-  }, [item]);
+  console.log('playingLists', playingTrackLists);
+
+  // useLayoutEffect(() => {
+  //   setIsItem(item);
+  // }, [item]);
 
   // useEffect(() => {
   //   const initializePlayer = async (item: any) => {

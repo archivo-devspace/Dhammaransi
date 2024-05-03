@@ -1,6 +1,7 @@
 import {ReactNode, createContext, useContext, useEffect, useState} from 'react';
 import TrackPlayer from 'react-native-track-player';
 import {tracks} from '../utils/constants';
+import {useNavigation} from '@react-navigation/native';
 
 export interface TrackProps {
   id: number;
@@ -14,18 +15,24 @@ export interface TrackProps {
 export interface TrackContextType {
   trackLists: Array<TrackProps>;
   setTrackLists: (trackLists: Array<TrackProps>) => void;
+  playingTrackLists: Array<TrackProps>;
+  setPlayingTrackLists: (playingTrackLists: Array<TrackProps>) => void;
   getAllTracks?: () => void;
   handleShuffleTracks: () => void;
   handleRepeatTracks: () => void;
   handleRepeatTrack: () => void;
   repeatIcon: () => 'repeat' | 'repeat-off' | 'repeat-once' | undefined;
   changeRepeatMode: () => void;
+  handlePlay: (trackId: number) => void;
 }
 
 const TrackContext = createContext<TrackContextType | undefined>(undefined);
 
 export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
   const [trackLists, setTrackLists] = useState<Array<TrackProps>>([]);
+  const [playingTrackLists, setPlayingTrackLists] = useState<Array<TrackProps>>(
+    [],
+  );
   const [repeatMode, setRepeatMode] = useState('off');
 
   const repeatIcon = () => {
@@ -57,8 +64,12 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     TrackPlayer.add(trackLists);
   };
 
-  const handlePlay = (trackId: number) => {
+  const handlePlay = async (trackId: number) => {
     // handle
+    const playingTrack = trackLists?.find(track => track.id === trackId);
+    const remainingTracks = trackLists?.filter(track => track.id !== trackId);
+    playingTrack && setPlayingTrackLists([playingTrack, ...remainingTracks]);
+    //  navigation.navigate('Track', {item});
   };
 
   useEffect(() => {
@@ -87,9 +98,12 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
   const contextValue: TrackContextType = {
     trackLists,
     setTrackLists,
+    playingTrackLists,
+    setPlayingTrackLists,
     handleShuffleTracks,
     handleRepeatTrack,
     handleRepeatTracks,
+    handlePlay,
     repeatIcon,
     changeRepeatMode,
   };

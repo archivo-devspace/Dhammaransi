@@ -1,6 +1,7 @@
 import {Dimensions, ScrollView, StyleSheet, Text, View} from 'react-native';
 import React, {
   forwardRef,
+  ReactNode,
   useCallback,
   useImperativeHandle,
   useState,
@@ -23,7 +24,7 @@ import BackDrop from '../BackDrop';
 interface Props extends AnimatedProps<AnimatedScrollViewProps> {
   snapTo: string;
   backGroundColor: string;
-  children: any;
+  children: ReactNode;
 }
 
 export interface BottomSheetMethods {
@@ -174,7 +175,6 @@ const BottomSheet = forwardRef<BottomSheetMethods, Props>(
             <GestureDetector
               gesture={Gesture.Simultaneous(scrollViewGesture, panScroll)}>
               <Animated.ScrollView
-                {...rest}
                 scrollEnabled={enableScroll}
                 bounces={false}
                 scrollEventThrottle={16}
