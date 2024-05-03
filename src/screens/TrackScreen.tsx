@@ -389,7 +389,7 @@ const styling = (theme: Theme) =>
       flex: 1,
       alignItems: 'center',
       width: '100%',
-      paddingBottom: 80,
+      paddingBottom: 135,
     },
     trackContainer: {
       paddingHorizontal: '10%',

@@ -4,6 +4,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useState,
 } from 'react';
@@ -29,13 +30,15 @@ export const useThemeContext = () => {
 
 export const ThemeProvider: React.FC<{children: ReactNode}> = ({children}) => {
   const [theme, setTheme] = useState<Theme>('light');
+  const [themeLoading, setThemeLoading] = useState(true);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const initializeTheme = async () => {
       const savedTheme = await get('Theme');
       console.log('saveTheme', savedTheme);
       const systemTheme = Appearance.getColorScheme();
       setTheme(savedTheme || systemTheme);
+      setThemeLoading(false);
     };
 
     initializeTheme();
@@ -52,6 +55,8 @@ export const ThemeProvider: React.FC<{children: ReactNode}> = ({children}) => {
   );
 
   return (
-    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
+    <ThemeContext.Provider value={value}>
+      {!themeLoading && children}
+    </ThemeContext.Provider>
   );
 };
