@@ -38,12 +38,15 @@ import {ThemeProvider} from './src/contexts/ThemeContext';
 import AppNavigation from './src/navigations/AppNavigation';
 import {get, save} from './src/utils/storage';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {TrackProvider} from './src/contexts/TrackContext';
 
 const App = () => {
   return (
     <GestureHandlerRootView>
       <ThemeProvider>
-        <AppNavigation />
+        <TrackProvider>
+          <AppNavigation />
+        </TrackProvider>
       </ThemeProvider>
     </GestureHandlerRootView>
   );
