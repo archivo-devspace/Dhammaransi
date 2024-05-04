@@ -16,6 +16,7 @@ import {CustomButton} from '../components/utils';
 import {NavigationMainStackScreenProps} from '../navigations/StackNavigation';
 import {useTrackContext} from '../contexts/TrackContext';
 import {FlatList} from 'react-native';
+import TrackPlayer from 'react-native-track-player';
 
 type Props = {
   navigation: NavigationMainStackScreenProps['navigation'];
@@ -24,7 +25,7 @@ type Props = {
 const Audios = ({navigation}: Props) => {
   const insets = useSafeAreaInsets();
   const {theme} = useThemeContext();
-  const {trackLists} = useTrackContext();
+  const {trackLists, playingTrackLists} = useTrackContext();
   const {width, height} = useWindowDimensions();
   const {handlePlay} = useTrackContext();
   const [isPlayed, setIsPlayed] = useState<boolean[]>(

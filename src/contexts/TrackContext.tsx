@@ -1,4 +1,12 @@
-import {ReactNode, createContext, useContext, useEffect, useState} from 'react';
+import {
+  ReactNode,
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from 'react';
 import TrackPlayer from 'react-native-track-player';
 import {tracks} from '../utils/constants';
 import {useNavigation} from '@react-navigation/native';
@@ -25,6 +33,7 @@ export interface TrackContextType {
   changeRepeatMode: () => void;
   handlePlay: (trackId: number) => void;
 }
+TrackPlayer.setupPlayer();
 
 const TrackContext = createContext<TrackContextType | undefined>(undefined);
 
@@ -64,20 +73,76 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     TrackPlayer.add(trackLists);
   };
 
-  const handlePlay = async (trackId: number) => {
-    // handle
-    const playingTrack = trackLists?.find(track => track.id === trackId);
-    const remainingTracks = trackLists?.filter(track => track.id !== trackId);
-    playingTrack && setPlayingTrackLists([playingTrack, ...remainingTracks]);
-    //  navigation.navigate('Track', {item});
-  };
-
-  useEffect(() => {
+  useLayoutEffect(() => {
     const getAllTracks = () => {
       setTrackLists(tracks);
     };
     getAllTracks();
   }, []);
+
+  const handlePlay = useCallback(
+    async (trackId: number) => {
+      const playingTrack = trackLists?.find(track => track.id === trackId);
+
+      const remainingTracks = trackLists?.filter(track => track.id !== trackId);
+      const current = playingTrack && [playingTrack, ...remainingTracks];
+      if (current) {
+        setPlayingTrackLists(current);
+      } else {
+        console.error('No track found to play.');
+        return;
+      }
+    },
+    [trackLists],
+  );
+
+  useEffect(() => {
+    const playTrack = async () => {
+      await TrackPlayer.reset();
+      console.log('after reset');
+      await TrackPlayer.add(playingTrackLists);
+      console.log('after add');
+      console.log('playingTrackLists', playingTrackLists);
+      await TrackPlayer.play();
+    };
+
+    if (playingTrackLists.length > 0) {
+      playTrack();
+    }
+  }, [playingTrackLists]);
+
+  // const handlePlay = useCallback(
+  //   async (trackId: number) => {
+  //     const playingTrack = trackLists?.find(track => track.id === trackId);
+
+  //     const remainingTracks = trackLists?.filter(track => track.id !== trackId);
+  //     const current = playingTrack && [playingTrack, ...remainingTracks];
+  //     current && setPlayingTrackLists(current);
+
+  //     await TrackPlayer.reset();
+  //     console.log('after reset');
+  //     await TrackPlayer.add(current ? playingTrackLists : []);
+  //     console.log('after add');
+  //     console.log('playingTrackLists', playingTrackLists);
+
+  //     await TrackPlayer.play();
+  //   },
+  //   [playingTrackLists, trackLists],
+  // );
+
+  // const handlePlay = async (trackId: number) => {
+  //   // handle
+  //   const playingTrack = trackLists?.find(track => track.id === trackId);
+  //   const remainingTracks = trackLists?.filter(track => track.id !== trackId);
+  //   playingTrack && setPlayingTrackLists([playingTrack, ...remainingTracks]);
+  //   //  navigation.navigate('Track', {item});
+
+  //   await TrackPlayer.reset();
+  //   await TrackPlayer.add(playingTrackLists);
+  //   await TrackPlayer.play();
+  //   const tracks = await TrackPlayer.getQueue();
+  //   console.log(`First title: ${tracks[5].title}`);
+  // };
 
   const handleShuffleTracks = () => {
     const shuffledTracks = [...trackLists]; // Create a copy of the original array

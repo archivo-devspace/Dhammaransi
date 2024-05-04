@@ -41,8 +41,6 @@ type Props = {
   navigation: NavigationMainBottomTabScreenProps['navigation'];
 };
 
-TrackPlayer.setupPlayer();
-
 const TrackScreen = ({route, navigation}: Props) => {
   const insets = useSafeAreaInsets();
   const {theme} = useThemeContext();
@@ -51,7 +49,6 @@ const TrackScreen = ({route, navigation}: Props) => {
   const progress = useProgress();
   const playbackState = usePlaybackState();
   const {trackLists, repeatIcon, changeRepeatMode} = useTrackContext();
-  // console.log('trackLists', trackLists);
 
   const [currentTack, setCurrentTrack] = useState<any>('');
   const [isPlaying, setIsPlaying] = useState(false);
@@ -67,8 +64,6 @@ const TrackScreen = ({route, navigation}: Props) => {
   const expandHandler = useCallback(() => {
     bottomSheetRef.current?.expand();
   }, []);
-
-  console.log('playingLists', playingTrackLists);
 
   // useLayoutEffect(() => {
   //   setIsItem(item);
