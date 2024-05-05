@@ -36,6 +36,21 @@ import BottomSheet, {
 } from '../components/commons/bottomSheet';
 import {useTrackContext} from '../contexts/TrackContext';
 
+TrackPlayer.setupPlayer();
+
+TrackPlayer.updateOptions({
+  // Media controls capabilities
+  capabilities: [
+    Capability.Play,
+    Capability.Pause,
+    Capability.SkipToNext,
+    Capability.SkipToPrevious,
+  ],
+
+  // Capabilities that will show up when the notification is in the compact form on Android
+  compactCapabilities: [Capability.Play, Capability.Pause],
+});
+
 type Props = {
   route: RouteProp<MainStackParamList, 'Track'>;
   navigation: NavigationMainBottomTabScreenProps['navigation'];
@@ -48,10 +63,17 @@ const TrackScreen = ({route, navigation}: Props) => {
   const {width, height} = useWindowDimensions();
   const progress = useProgress();
   const playbackState = usePlaybackState();
-  const {trackLists, repeatIcon, changeRepeatMode} = useTrackContext();
+  const {
+    trackLists,
+    repeatIcon,
+    playingIcon,
+    changeRepeatMode,
+    togglePlayingMode,
+    handleNextTrack,
+    handlePrevTrack,
+    currentTrack,
+  } = useTrackContext();
 
-  const [currentTack, setCurrentTrack] = useState<any>('');
-  const [isPlaying, setIsPlaying] = useState(false);
   const [isItem, setIsItem] = useState(null);
 
   // const item = route.params?.item;
@@ -64,66 +86,6 @@ const TrackScreen = ({route, navigation}: Props) => {
   const expandHandler = useCallback(() => {
     bottomSheetRef.current?.expand();
   }, []);
-
-  // useLayoutEffect(() => {
-  //   setIsItem(item);
-  // }, [item]);
-
-  // useEffect(() => {
-  //   const initializePlayer = async (item: any) => {
-  //     setCurrentTrack(item);
-
-  //     await TrackPlayer.reset();
-  //     await TrackPlayer.add({
-  //       url: item?.url,
-  //       title: item?.name,
-  //       artist: item?.artist,
-  //       artwork: item?.artwork,
-  //     });
-  //     await TrackPlayer.play();
-  //   };
-
-  //   initializePlayer(isItem);
-  // }, [isItem]);
-
-  // useEffect(() => {
-  //   const updateTrackInfo = async () => {
-  //     const currentTrackId = await TrackPlayer.getActiveTrack();
-  //     setCurrentTrackTitle(currentTrackId?.title);
-  //   };
-
-  //   updateTrackInfo();
-  // }, [playbackState.state]);
-
-  TrackPlayer.updateOptions({
-    // Media controls capabilities
-    capabilities: [
-      Capability.Play,
-      Capability.Pause,
-      Capability.SkipToNext,
-      Capability.SkipToPrevious,
-    ],
-
-    // Capabilities that will show up when the notification is in the compact form on Android
-    compactCapabilities: [Capability.Play, Capability.Pause],
-  });
-
-  const handleNextTrack = async () => {
-    await TrackPlayer.skipToNext();
-  };
-
-  const handlePrevTrack = async () => {
-    await TrackPlayer.skipToPrevious();
-  };
-
-  const togglePlayback = async (playbackState: any) => {
-    if (playbackState.state === State.Playing) {
-      await TrackPlayer.pause();
-    } else {
-      await TrackPlayer.play();
-    }
-    setIsPlaying(!isPlaying);
-  };
 
   return (
     <ScrollView style={styles.mainContainer}>
@@ -138,16 +100,24 @@ const TrackScreen = ({route, navigation}: Props) => {
             ]}>
             <Image
               source={
-                currentTack
-                  ? currentTack?.artwork
+                currentTrack
+                  ? currentTrack?.artwork
                   : require('../assets/marguerite.jpg')
               }
               resizeMode="cover"
               style={styles.img}
             />
           </View>
-          <Text style={styles.titleText}>{currentTack?.title}</Text>
-          <Text style={styles.artistText}>{currentTack?.artist}</Text>
+          <Text style={styles.titleText}>
+            {currentTrack === null
+              ? 'Choose From Playlist'
+              : currentTrack?.title}
+          </Text>
+          <Text style={styles.artistText}>
+            {currentTrack === null
+              ? 'Choose From Playlist'
+              : currentTrack?.artist}
+          </Text>
         </View>
       </SafeAreaView>
       <BottomSheet
@@ -266,14 +236,10 @@ const TrackScreen = ({route, navigation}: Props) => {
           />
           <CustomButton
             customButtonStyle={styles.btn}
-            onPress={() => togglePlayback(playbackState)}
+            onPress={togglePlayingMode}
             icon={
               <Entypo
-                name={
-                  playbackState.state === State.Playing
-                    ? 'controller-paus'
-                    : 'controller-play'
-                }
+                name={`${playingIcon()}`}
                 size={70}
                 color={Colors[theme].text}
               />
