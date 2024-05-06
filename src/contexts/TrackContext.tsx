@@ -33,7 +33,13 @@ export interface TrackContextType {
   handleShuffleTracks: () => void;
   handleRepeatTracks: () => void;
   handleRepeatTrack: () => void;
-  repeatIcon: () => 'repeat' | 'repeat-off' | 'repeat-once' | undefined;
+  repeatIcon: () =>
+    | 'repeat'
+    | 'repeat-off'
+    | 'repeat-once'
+    | 'shuffle'
+    | 'shuffle-disabled'
+    | undefined;
   changeRepeatMode: () => void;
   handlePlay: (trackId: number) => void;
   togglePlayingMode: () => void;
@@ -41,7 +47,24 @@ export interface TrackContextType {
   handleNextTrack: () => void;
   handlePrevTrack: () => void;
   currentTrack: any;
+  setRepeatMode: (repeatMode: string) => void;
+  repeatMode: string;
 }
+
+TrackPlayer.setupPlayer();
+
+TrackPlayer.updateOptions({
+  // Media controls capabilities
+  capabilities: [
+    Capability.Play,
+    Capability.Pause,
+    Capability.SkipToNext,
+    Capability.SkipToPrevious,
+  ],
+
+  // Capabilities that will show up when the notification is in the compact form on Android
+  compactCapabilities: [Capability.Play, Capability.Pause],
+});
 
 const TrackContext = createContext<TrackContextType | undefined>(undefined);
 
@@ -52,9 +75,8 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
   );
 
   const [currentTrack, setCurrentTrack] = useState<any>(null);
-
   const playbackState = usePlaybackState();
-  const [repeatMode, setRepeatMode] = useState('off');
+  const [repeatMode, setRepeatMode] = useState('shuffle-disabled');
 
   useLayoutEffect(() => {
     const getAllTracks = () => {
@@ -104,8 +126,11 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
   }, [playbackState]);
 
   const repeatIcon = () => {
-    if (repeatMode === 'off') {
-      return 'repeat-off';
+    if (repeatMode === 'shuffle-disabled') {
+      return 'shuffle-disabled';
+    }
+    if (repeatMode === 'shuffle') {
+      return 'shuffle';
     }
     if (repeatMode === 'track') {
       return 'repeat-once';
@@ -115,16 +140,24 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     }
   };
 
+  const handleOrderPlayingTrack = () => {
+    // setPlayingTrackLists()
+  };
+
   const changeRepeatMode = () => {
-    if (repeatMode === 'off') {
+    if (repeatMode === 'shuffle-disabled') {
+      handleOrderPlayingTrack();
+      setRepeatMode('shuffle');
+    }
+    if (repeatMode === 'shuffle') {
+      handleShuffleTracks();
       setRepeatMode('track');
     }
     if (repeatMode === 'track') {
       setRepeatMode('repeat');
     }
     if (repeatMode === 'repeat') {
-      handleShuffleTracks();
-      setRepeatMode('off');
+      setRepeatMode('shuffle-disabled');
     }
   };
 
@@ -183,6 +216,8 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     handleNextTrack,
     handlePrevTrack,
     currentTrack,
+    setRepeatMode,
+    repeatMode,
   };
 
   return (

@@ -36,21 +36,6 @@ import BottomSheet, {
 } from '../components/commons/bottomSheet';
 import {useTrackContext} from '../contexts/TrackContext';
 
-TrackPlayer.setupPlayer();
-
-TrackPlayer.updateOptions({
-  // Media controls capabilities
-  capabilities: [
-    Capability.Play,
-    Capability.Pause,
-    Capability.SkipToNext,
-    Capability.SkipToPrevious,
-  ],
-
-  // Capabilities that will show up when the notification is in the compact form on Android
-  compactCapabilities: [Capability.Play, Capability.Pause],
-});
-
 type Props = {
   route: RouteProp<MainStackParamList, 'Track'>;
   navigation: NavigationMainBottomTabScreenProps['navigation'];
@@ -86,6 +71,26 @@ const TrackScreen = ({route, navigation}: Props) => {
   const expandHandler = useCallback(() => {
     bottomSheetRef.current?.expand();
   }, []);
+
+  const getTrackDuration = (progress: any) => {
+    let durationString;
+    const durationInSeconds = progress.duration - progress.position;
+
+    // Check if the song has ended
+    if (durationInSeconds <= 0) {
+      // Display "00:00" when the song has ended
+      return (durationString = '00:00');
+    } else {
+      // Calculate the duration in minutes and seconds
+      const minutes = Math.floor(durationInSeconds / 60);
+      const seconds = Math.floor(durationInSeconds % 60);
+
+      // Format the duration string
+      return (durationString = `${minutes.toString().padStart(2, '0')}:${seconds
+        .toString()
+        .padStart(2, '0')}`);
+    }
+  };
 
   return (
     <ScrollView style={styles.mainContainer}>
@@ -204,9 +209,7 @@ const TrackScreen = ({route, navigation}: Props) => {
               {new Date(progress.duration * 1000).toISOString().substr(14, 5)}
             </Text>
             <Text style={styles.durationText}>
-              {new Date((progress.duration - progress.position) * 1000)
-                .toISOString()
-                .substr(14, 5)}
+              {getTrackDuration(progress)}
             </Text>
           </View>
         </View>

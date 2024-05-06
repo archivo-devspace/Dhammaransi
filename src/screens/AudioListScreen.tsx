@@ -16,7 +16,7 @@ import {CustomButton} from '../components/utils';
 import {NavigationMainStackScreenProps} from '../navigations/StackNavigation';
 import {useTrackContext} from '../contexts/TrackContext';
 import {FlatList} from 'react-native';
-import TrackPlayer from 'react-native-track-player';
+import TrackPlayer, {State, usePlaybackState} from 'react-native-track-player';
 
 type Props = {
   navigation: NavigationMainStackScreenProps['navigation'];
@@ -25,24 +25,27 @@ type Props = {
 const Audios = ({navigation}: Props) => {
   const insets = useSafeAreaInsets();
   const {theme} = useThemeContext();
-  const {trackLists, playingTrackLists} = useTrackContext();
+  const {
+    trackLists,
+    setRepeatMode,
+    handlePlay,
+    currentTrack,
+    togglePlayingMode,
+  } = useTrackContext();
   const {width, height} = useWindowDimensions();
-  const {handlePlay} = useTrackContext();
-  const [isPlayed, setIsPlayed] = useState<boolean[]>(
-    Array(trackLists.length).fill(false),
-  );
+  const playbackState = usePlaybackState();
   const styles = styling(theme);
   const {top, bottom, left, right} = insets;
 
   const handlePlayAudio = async (item: any) => {
-    setIsPlayed(prevState => {
-      const newState = [...prevState];
-      newState[item.id] = !newState[item.id];
-      return newState;
-    });
+    // togglePlayingMode();
     handlePlay(item.id);
     navigation.navigate('Track');
   };
+
+  useEffect(() => {
+    setRepeatMode('shuffle-disabled');
+  }, []);
 
   return (
     <View style={styles.mainContainer}>
@@ -69,7 +72,12 @@ const Audios = ({navigation}: Props) => {
                 customButtonStyle={styles.btn}
                 icon={
                   <AntDesign
-                    name={isPlayed[item.id] ? 'pause' : 'caretright'}
+                    name={
+                      currentTrack?.id === item.id &&
+                      playbackState.state === State.Playing
+                        ? 'pause'
+                        : 'caretright'
+                    }
                     size={25}
                     color={Colors[theme].text}
                   />
