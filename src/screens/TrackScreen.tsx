@@ -101,7 +101,7 @@ const TrackScreen = ({route, navigation}: Props) => {
           <View
             style={[
               styles.imageShadow,
-              {width: width / 1.3, height: height / 2.5},
+              {width: width / 1.3, height: height / 2.65},
             ]}>
             <Image
               source={
@@ -129,7 +129,7 @@ const TrackScreen = ({route, navigation}: Props) => {
         snapTo="70"
         ref={bottomSheetRef}
         backGroundColor={Colors[theme].secondary}>
-        <Text>
+        <Text style={{paddingBottom: 42}}>
           Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur
           incidunt cumque ipsa blanditiis, dolorum magnam molestiae sint, libero
           ipsum suscipit saepe molestias voluptates nemo tenetur ullam provident

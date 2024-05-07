@@ -140,13 +140,8 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     }
   };
 
-  const handleOrderPlayingTrack = () => {
-    // setPlayingTrackLists()
-  };
-
   const changeRepeatMode = () => {
     if (repeatMode === 'shuffle-disabled') {
-      handleOrderPlayingTrack();
       setRepeatMode('shuffle');
     }
     if (repeatMode === 'shuffle') {
@@ -160,6 +155,8 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
       setRepeatMode('shuffle-disabled');
     }
   };
+
+  console.log('reapeatIcon', repeatMode);
 
   const playingIcon = () => {
     if (playbackState.state === State.Playing) {

@@ -43,10 +43,6 @@ const Audios = ({navigation}: Props) => {
     navigation.navigate('Track');
   };
 
-  useEffect(() => {
-    setRepeatMode('shuffle-disabled');
-  }, []);
-
   return (
     <View style={styles.mainContainer}>
       <StatusBar translucent backgroundColor={'transparent'} />
