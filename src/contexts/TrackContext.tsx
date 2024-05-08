@@ -10,11 +10,10 @@ import {
 import TrackPlayer, {
   Capability,
   State,
+  Track,
   usePlaybackState,
 } from 'react-native-track-player';
 import {tracks} from '../utils/constants';
-import {useNavigation} from '@react-navigation/native';
-import {getActiveTrack} from 'react-native-track-player/lib/src/trackPlayer';
 
 export interface TrackProps {
   id: number;
@@ -31,7 +30,6 @@ export interface TrackContextType {
   playingTrackLists: Array<TrackProps>;
   setPlayingTrackLists: (playingTrackLists: Array<TrackProps>) => void;
   getAllTracks?: () => void;
-  handleShuffleTracks: () => void;
   handleRepeatTracks: () => void;
   handleRepeatTrack: () => void;
   repeatIcon: () =>
@@ -50,6 +48,7 @@ export interface TrackContextType {
   currentTrack: any;
   setRepeatMode: (repeatMode: string) => void;
   repeatMode: string;
+  getCurrentQueue: () => Promise<Track[]>;
 }
 
 TrackPlayer.setupPlayer();
@@ -112,21 +111,6 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     [trackLists],
   );
 
-  // useEffect(() => {
-  //   const playTrack = async () => {
-  //     await TrackPlayer.reset();
-  //     console.log('after reset');
-  //     await TrackPlayer.add(playingTrackLists);
-  //     console.log('after add');
-  //     console.log('playingTrackLists', playingTrackLists);
-  //     await TrackPlayer.play();
-  //   };
-
-  //   if (playingTrackLists.length > 0) {
-  //     playTrack();
-  //   }
-  // }, [playingTrackLists]);
-
   useEffect(() => {
     const getCurrentTrack = async () => {
       const current = await TrackPlayer.getActiveTrack();
@@ -167,8 +151,6 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     }
   };
 
-  console.log('reapeatIcon', repeatMode);
-
   const playingIcon = () => {
     if (playbackState.state === State.Playing) {
       return 'controller-paus';
@@ -176,10 +158,12 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     return 'controller-play';
   };
 
-  // let shuffleMode = false;
+  const getCurrentQueue = async () => {
+    return await TrackPlayer.getQueue();
+  };
 
   const handleShuffleTracks = async () => {
-    const currentQueue = await TrackPlayer.getQueue();
+    const currentQueue = await getCurrentQueue();
     console.log('currentQueue', currentQueue);
     for (let i = currentQueue.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -220,7 +204,6 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     setTrackLists,
     playingTrackLists,
     setPlayingTrackLists,
-    handleShuffleTracks,
     handleRepeatTrack,
     handleRepeatTracks,
     handlePlay,
@@ -233,6 +216,7 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     currentTrack,
     setRepeatMode,
     repeatMode,
+    getCurrentQueue,
   };
 
   return (
