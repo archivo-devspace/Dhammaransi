@@ -49,12 +49,10 @@ export interface TrackContextType {
   setRepeatMode: (repeatMode: string) => void;
   repeatMode: string;
   getCurrentQueue: () => Promise<Track[]>;
+  currentQueue: Track[];
 }
 
-TrackPlayer.setupPlayer();
-
 TrackPlayer.updateOptions({
-  // Media controls capabilities
   capabilities: [
     Capability.Play,
     Capability.Pause,
@@ -62,7 +60,6 @@ TrackPlayer.updateOptions({
     Capability.SkipToPrevious,
   ],
 
-  // Capabilities that will show up when the notification is in the compact form on Android
   compactCapabilities: [Capability.Play, Capability.Pause],
 });
 
@@ -77,6 +74,7 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
   const [currentTrack, setCurrentTrack] = useState<any>(null);
   const playbackState = usePlaybackState();
   const [repeatMode, setRepeatMode] = useState('shuffle-disabled');
+  const [currentQueue, setCurrentQueue] = useState<Track[]>([]);
 
   useLayoutEffect(() => {
     const getAllTracks = () => {
@@ -93,7 +91,6 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
       const current = playingTrack && [playingTrack, ...remainingTracks];
       const activeTrack = await TrackPlayer.getActiveTrack();
       if (current) {
-        // setPlayingTrackLists(current);
         if (playingTrack.id !== activeTrack?.id) {
           await TrackPlayer.reset();
         }
@@ -135,6 +132,8 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     }
   };
 
+  console.log('repeatMode', repeatMode);
+
   const changeRepeatMode = () => {
     if (repeatMode === 'shuffle-disabled') {
       setRepeatMode('shuffle');
@@ -162,20 +161,31 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     return await TrackPlayer.getQueue();
   };
 
+  // useEffect(() => {
+  //   const getQueue = async () => {
+  //     const currnet = await getCurrentQueue();
+  //     setCurrentQueue(currnet);
+  //   };
+  //   getQueue();
+  // }, []);
+
   const handleShuffleTracks = async () => {
     const currentQueue = await getCurrentQueue();
-    console.log('currentQueue', currentQueue);
-    for (let i = currentQueue.length - 1; i > 0; i--) {
+    const currentTrack = await TrackPlayer.getActiveTrack();
+
+    const remainingQueue = currentQueue.filter(item => {
+      return item.title !== currentTrack?.title;
+    });
+
+    for (let i = remainingQueue.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      const temp = currentQueue[i];
-      currentQueue[i] = currentQueue[j];
-      currentQueue[j] = temp;
+      const temp = remainingQueue[i];
+      remainingQueue[i] = remainingQueue[j];
+      remainingQueue[j] = temp;
     }
-    const newQueue = [...currentQueue];
-    console.log('newQueue', newQueue);
 
     await TrackPlayer.removeUpcomingTracks();
-    await TrackPlayer.add(newQueue);
+    await TrackPlayer.add(remainingQueue);
     await TrackPlayer.play();
   };
 
@@ -217,6 +227,7 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     setRepeatMode,
     repeatMode,
     getCurrentQueue,
+    currentQueue,
   };
 
   return (

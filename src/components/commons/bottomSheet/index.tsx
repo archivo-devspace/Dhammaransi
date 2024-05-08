@@ -139,7 +139,7 @@ const BottomSheet = forwardRef<BottomSheetMethods, Props>(
       })
       .onEnd(() => {
         runOnJS(setEnableScroll)(true);
-        if (topAnimation.value > openHeight + 50) {
+        if (topAnimation.value > openHeight + 100) {
           topAnimation.value = withSpring(closeHeight, {
             damping: 100,
             stiffness: 400,
@@ -200,7 +200,7 @@ const styling = (theme: Theme) =>
       borderTopRightRadius: 16,
 
       zIndex: 100,
-      paddingBottom: 22,
+      paddingBottom: 4,
       borderColor: Colors[theme].secondary_dark,
       borderTopWidth: 1,
       borderLeftWidth: 1,

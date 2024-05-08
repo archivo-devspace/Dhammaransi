@@ -25,6 +25,7 @@ import {Entypo, MaterialIcon} from '../utils/common';
 import TrackPlayer, {
   Capability,
   State,
+  Track,
   usePlaybackState,
   useProgress,
 } from 'react-native-track-player';
@@ -35,6 +36,9 @@ import BottomSheet, {
   BottomSheetMethods,
 } from '../components/commons/bottomSheet';
 import {useTrackContext} from '../contexts/TrackContext';
+import RenderItem from '../components/commons/RenderItem';
+
+TrackPlayer.setupPlayer();
 
 type Props = {
   route: RouteProp<MainStackParamList, 'Track'>;
@@ -44,7 +48,8 @@ type Props = {
 const TrackScreen = ({route, navigation}: Props) => {
   const insets = useSafeAreaInsets();
   const {theme} = useThemeContext();
-  const {playingTrackLists} = useTrackContext();
+  const [currentQueue, setCurrentQueue] = useState<Track[]>([]);
+  const {getCurrentQueue} = useTrackContext();
   const {width, height} = useWindowDimensions();
   const progress = useProgress();
   const playbackState = usePlaybackState();
@@ -67,6 +72,16 @@ const TrackScreen = ({route, navigation}: Props) => {
   const {top} = insets;
 
   const bottomSheetRef = useRef<BottomSheetMethods>(null);
+
+  useEffect(() => {
+    const getQueue = async () => {
+      const currentQueue = await getCurrentQueue();
+
+      setCurrentQueue(currentQueue);
+    };
+
+    getQueue();
+  }, [currentQueue]);
 
   const expandHandler = useCallback(() => {
     bottomSheetRef.current?.expand();
@@ -129,65 +144,7 @@ const TrackScreen = ({route, navigation}: Props) => {
         snapTo="70"
         ref={bottomSheetRef}
         backGroundColor={Colors[theme].secondary}>
-        <Text style={{paddingBottom: 42}}>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur
-          incidunt cumque ipsa blanditiis, dolorum magnam molestiae sint, libero
-          ipsum suscipit saepe molestias voluptates nemo tenetur ullam provident
-          asperiores dolore rerum! Rem nam laboriosam rerum in repellendus? Nam
-          molestiae rem dignissimos officia. Quibusdam, illum facere eum ratione
-          officia voluptatibus dignissimos perferendis quam. Odio fuga
-          dignissimos, magnam repellendus beatae qui distinctio eaque facere
-          iusto, a dolore fugit! Debitis quaerat nobis, inventore porro
-          voluptatem at consequuntur nulla quae amet soluta accusantium eos eum
-          nostrum, excepturi sequi. Perspiciatis saepe, necessitatibus sapiente
-          corporis blanditiis dolores iste enim, officia ratione nemo quibusdam
-          repellat nobis! Ea eos soluta sed fugiat placeat necessitatibus
-          repellendus laboriosam amet, enim eum? Corporis excepturi eius illo
-          amet commodi repudiandae, inventore in velit architecto dolorum quas
-          animi. Doloribus debitis consequatur nisi laboriosam rerum in sunt
-          incidunt quibusdam, doloremque alias omnis necessitatibus, magni amet
-          repellat, id inventore. Quasi impedit nam quam, sed expedita velit,
-          quo, quas sapiente aperiam alias dolorum? Quam commodi temporibus vel
-          fugiat fugit molestiae dolor accusamus repellat voluptatibus
-          voluptatem repudiandae debitis fuga et mollitia, quo, dicta laborum
-          saepe sint necessitatibus natus! Odio labore, eius porro repudiandae
-          eum ea fuga fugit ducimus et quisquam id cumque! Dignissimos
-          laudantium commodi ex assumenda eos perferendis fuga repellendus,
-          impedit nemo magni velit molestias, dicta similique harum ullam sed
-          quos nesciunt quibusdam exercitationem tempore minima, aspernatur nisi
-          veniam quaerat! Quisquam optio non earum hic reiciendis provident
-          sapiente, quos eligendi ipsam? Fuga voluptatum laboriosam minus, eos,
-          unde consectetur sunt voluptatem iusto consequuntur tempora et!
-          Suscipit alias ullam doloremque a! Eaque cupiditate unde ad similique
-          distinctio debitis quia? Reprehenderit dolorem, perspiciatis
-          necessitatibus itaque id eveniet earum aliquam officia rem corporis
-          facilis nesciunt voluptate molestiae, ipsum doloribus placeat
-          incidunt? Illum voluptates recusandae, in, aliquid excepturi quae,
-          aspernatur laboriosam obcaecati similique odit minima commodi a
-          aliquam magnam nobis at quas? Error neque culpa, dolor at totam illo
-          in quis ut. Placeat aliquam dolorem amet reprehenderit quo magnam
-          omnis, repellendus natus id voluptas. Quod qui error quo cum obcaecati
-          nam facere asperiores repudiandae? Officia ipsam fugit eos nobis,
-          harum labore, adipisci reiciendis natus eum tenetur quam esse ut optio
-          expedita dolorum libero obcaecati autem ea facilis cumque quos!
-          Deleniti natus voluptas ipsa quis est hic officia, magnam voluptate
-          autem dolorum provident praesentium, dolore dignissimos ut illum
-          assumenda suscipit illo dicta sit. Suscipit quibusdam numquam
-          asperiores quam vero consequuntur amet aliquid sunt ratione soluta cum
-          voluptates, voluptatum dicta, ea rerum illo hic! Sapiente repudiandae
-          harum odit natus consequatur pariatur aut explicabo doloremque
-          cupiditate laborum in quis, laboriosam error, consequuntur, animi
-          reiciendis sint placeat id obcaecati consectetur aperiam magni
-          quisquam! Rerum mollitia ut aliquam quis. Nulla repellendus, labore
-          nisi libero vero maxime quaerat consequuntur natus temporibus, officia
-          ab? Molestias omnis distinctio nam error voluptatibus aspernatur
-          repellat sit ad architecto hic! Maiores ex quasi nostrum perspiciatis
-          quo, temporibus perferendis nihil tenetur officiis amet fugiat,
-          suscipit quibusdam aut minima velit sed soluta, numquam officia fuga
-          nam. Aliquid dolor debitis, eveniet nobis ad nostrum dolorum.
-          Asperiores fugiat consequatur sequi cum obcaecati consectetur labore
-          eaque voluptatum corrupti.
-        </Text>
+        <RenderItem item={currentQueue} />
       </BottomSheet>
       <View style={styles.contentContainer}>
         {/* scroll bar  */}
