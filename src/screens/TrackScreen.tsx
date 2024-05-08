@@ -206,7 +206,7 @@ const TrackScreen = ({route, navigation}: Props) => {
           />
           <View style={styles.trackDuration}>
             <Text style={styles.durationText}>
-              {new Date(progress.duration * 1000).toISOString().substr(14, 5)}
+              {new Date(progress.position * 1000).toISOString().substr(14, 5)}
             </Text>
             <Text style={styles.durationText}>
               {getTrackDuration(progress)}

@@ -14,6 +14,7 @@ import TrackPlayer, {
 } from 'react-native-track-player';
 import {tracks} from '../utils/constants';
 import {useNavigation} from '@react-navigation/native';
+import {getActiveTrack} from 'react-native-track-player/lib/src/trackPlayer';
 
 export interface TrackProps {
   id: number;
@@ -91,8 +92,18 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
 
       const remainingTracks = trackLists?.filter(track => track.id !== trackId);
       const current = playingTrack && [playingTrack, ...remainingTracks];
+      const activeTrack = await TrackPlayer.getActiveTrack();
       if (current) {
-        setPlayingTrackLists(current);
+        // setPlayingTrackLists(current);
+        if (playingTrack.id !== activeTrack?.id) {
+          await TrackPlayer.reset();
+        }
+        await TrackPlayer.add(current);
+        await TrackPlayer.play();
+        if (repeatMode === 'shuffle') {
+          console.log('Playing');
+          handleShuffleTracks();
+        }
       } else {
         console.error('No track found to play.');
         return;
@@ -101,20 +112,20 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     [trackLists],
   );
 
-  useEffect(() => {
-    const playTrack = async () => {
-      await TrackPlayer.reset();
-      console.log('after reset');
-      await TrackPlayer.add(playingTrackLists);
-      console.log('after add');
-      console.log('playingTrackLists', playingTrackLists);
-      await TrackPlayer.play();
-    };
+  // useEffect(() => {
+  //   const playTrack = async () => {
+  //     await TrackPlayer.reset();
+  //     console.log('after reset');
+  //     await TrackPlayer.add(playingTrackLists);
+  //     console.log('after add');
+  //     console.log('playingTrackLists', playingTrackLists);
+  //     await TrackPlayer.play();
+  //   };
 
-    if (playingTrackLists.length > 0) {
-      playTrack();
-    }
-  }, [playingTrackLists]);
+  //   if (playingTrackLists.length > 0) {
+  //     playTrack();
+  //   }
+  // }, [playingTrackLists]);
 
   useEffect(() => {
     const getCurrentTrack = async () => {
@@ -143,9 +154,9 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
   const changeRepeatMode = () => {
     if (repeatMode === 'shuffle-disabled') {
       setRepeatMode('shuffle');
+      handleShuffleTracks();
     }
     if (repeatMode === 'shuffle') {
-      handleShuffleTracks();
       setRepeatMode('track');
     }
     if (repeatMode === 'track') {
@@ -165,16 +176,23 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     return 'controller-play';
   };
 
-  const handleShuffleTracks = () => {
-    const shuffledTracks = [...trackLists]; // Create a copy of the original array
-    for (let i = shuffledTracks.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1)); // Generate random index
-      [shuffledTracks[i], shuffledTracks[j]] = [
-        shuffledTracks[j],
-        shuffledTracks[i],
-      ]; // Swap elements
+  // let shuffleMode = false;
+
+  const handleShuffleTracks = async () => {
+    const currentQueue = await TrackPlayer.getQueue();
+    console.log('currentQueue', currentQueue);
+    for (let i = currentQueue.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const temp = currentQueue[i];
+      currentQueue[i] = currentQueue[j];
+      currentQueue[j] = temp;
     }
-    return shuffledTracks;
+    const newQueue = [...currentQueue];
+    console.log('newQueue', newQueue);
+
+    await TrackPlayer.removeUpcomingTracks();
+    await TrackPlayer.add(newQueue);
+    await TrackPlayer.play();
   };
 
   const togglePlayingMode = async () => {
