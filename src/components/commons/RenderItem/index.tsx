@@ -18,23 +18,24 @@ type Props = {
 const RenderItem = ({items}: Props) => {
   const {theme} = useThemeContext();
   const [currentQueue, setCurrentQueue] = useState<Track[]>([]);
-  const {trackLists, setRepeatMode, handlePlay, currentTrack, getCurrentQueue} =
-    useTrackContext();
+  const {currentTrack, getCurrentQueue, togglePlayingMode} = useTrackContext();
   const playbackState = usePlaybackState();
   const styles = styling(theme);
 
   useEffect(() => {
     const getQueue = async () => {
       const queue = await getCurrentQueue();
-
       setCurrentQueue(queue);
     };
 
     getQueue();
   }, [currentQueue]);
 
-  const handlePlaylistPlay = (i: number) => {
-    TrackPlayer.skip(i);
+  const handlePlaylistPlay = async (i: number, id: number) => {
+    await TrackPlayer.skip(i);
+    currentTrack?.id === id && playbackState.state === State.Playing
+      ? TrackPlayer.pause()
+      : TrackPlayer.play();
   };
 
   return (
@@ -42,13 +43,8 @@ const RenderItem = ({items}: Props) => {
       {currentQueue.map((item: any, i: number) => {
         return (
           <View style={[styles.container]}>
-            <View style={styles.imageContainer}>
-              <Image source={{uri: item.artwork.uri}} style={styles.image} />
-            </View>
-            <Text style={styles.text}>{item.title}</Text>
-            <Text style={styles.text}>{item.id}</Text>
             <CustomButton
-              onPress={() => handlePlaylistPlay(i)}
+              onPress={() => handlePlaylistPlay(i, item.id)}
               customButtonStyle={styles.btn}
               icon={
                 <AntDesign
@@ -59,10 +55,21 @@ const RenderItem = ({items}: Props) => {
                       : 'caretright'
                   }
                   size={25}
-                  color={Colors[theme].text}
+                  color={Colors[theme].primary_dark}
                 />
               }
             />
+            <View style={styles.textContainer}>
+              <Text style={[styles.text, {fontSize: 18}]}>
+                {item.title.length > 30
+                  ? item.title.slice(0, 30) + '...'
+                  : item.title}
+              </Text>
+              {currentTrack?.id === item.id &&
+                playbackState.state === State.Playing && (
+                  <Text style={[styles.text, {fontSize: 14}]}>Active</Text>
+                )}
+            </View>
           </View>
         );
       })}
@@ -87,14 +94,17 @@ const styling = (theme: Theme) =>
       borderRadius: 8,
     },
     btn: {
-      backgroundColor: Colors[theme].secondary,
+      backgroundColor: Colors[theme].secondary_dark,
+      padding: 5,
+      borderRadius: 10,
     },
     image: {
       width: 30,
       height: 30,
     },
+    textContainer: {},
     text: {
       color: Colors[theme].text,
-      fontSize: 16,
+      fontWeight: 'bold',
     },
   });

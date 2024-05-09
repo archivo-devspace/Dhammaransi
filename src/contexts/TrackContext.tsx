@@ -158,14 +158,6 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     return await TrackPlayer.getQueue();
   };
 
-  // useEffect(() => {
-  //   const getQueue = async () => {
-  //     const currnet = await getCurrentQueue();
-  //     setCurrentQueue(currnet);
-  //   };
-  //   getQueue();
-  // }, []);
-
   const handleShuffleTracks = async () => {
     const currentQueue = await getCurrentQueue();
     const currentTrack = await TrackPlayer.getActiveTrack();
@@ -181,7 +173,6 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
       currentTrackIndex > 0
         ? Array.from({length: currentTrackIndex}, (_, i) => i)
         : [];
-    console.log('previous', previousQueue);
 
     const remainingQueue = [...upcomingQueue, ...previousQueue];
 
