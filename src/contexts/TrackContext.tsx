@@ -92,12 +92,13 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
         if (playingTrack.id !== activeTrack?.id) {
           await TrackPlayer.reset();
         }
-
-        await TrackPlayer.add(current);
-        await TrackPlayer.play();
-        if (repeatMode === 'shuffle') {
+        console.log('shuggle', repeatMode);
+        if (repeatMode == 'shuffle') {
           console.log('shuggle', repeatMode);
           handleShuffleTracks();
+        } else {
+          await TrackPlayer.add(current);
+          await TrackPlayer.play();
         }
       } else {
         console.error('No track found to play.');

@@ -1,27 +1,22 @@
+import React, {useEffect, useRef, useState} from 'react';
 import {
   Image,
   Platform,
-  SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
   Text,
-  View,
   useWindowDimensions,
+  View,
 } from 'react-native';
-import React, {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {Theme, useThemeContext} from '../contexts/ThemeContext';
-import {Colors} from '../theme';
 import Slider from '@react-native-community/slider';
+import {BottomSheetMethods} from '../components/commons/bottomSheet';
+import RenderItem from '../components/commons/RenderItem';
+import BottomSheet from '../components/commons/bottomSheet';
 import {CustomButton} from '../components/utils';
 import {Entypo, MaterialIcon} from '../utils/common';
+import {Colors} from '../theme';
 import TrackPlayer, {
   Capability,
   State,
@@ -32,11 +27,8 @@ import TrackPlayer, {
 import {RouteProp} from '@react-navigation/native';
 import {MainStackParamList} from '../navigations/StackNavigation';
 import {NavigationMainBottomTabScreenProps} from '../navigations/BottomNavigation';
-import BottomSheet, {
-  BottomSheetMethods,
-} from '../components/commons/bottomSheet';
 import {useTrackContext} from '../contexts/TrackContext';
-import RenderItem from '../components/commons/RenderItem';
+import {Theme, useThemeContext} from '../contexts/ThemeContext';
 
 TrackPlayer.setupPlayer();
 
@@ -54,7 +46,6 @@ const TrackScreen = ({route, navigation}: Props) => {
   const progress = useProgress();
   const playbackState = usePlaybackState();
   const {
-    trackLists,
     repeatIcon,
     playingIcon,
     changeRepeatMode,
@@ -64,36 +55,49 @@ const TrackScreen = ({route, navigation}: Props) => {
     currentTrack,
   } = useTrackContext();
 
-  const [isItem, setIsItem] = useState(null);
-
-  // const item = route.params?.item;
+  const [currentActiveTrack, setCurrentActiveTrack] = useState<Track | null>(
+    null,
+  );
 
   const styles = styling(theme);
   const {top} = insets;
 
   const bottomSheetRef = useRef<BottomSheetMethods>(null);
 
-  const expandHandler = useCallback(() => {
+  useEffect(() => {
+    const getQueue = async () => {
+      const queue = await getCurrentQueue();
+      setCurrentQueue(queue);
+    };
+
+    getQueue();
+  }, [currentQueue]);
+
+  useEffect(() => {
+    const getCurrentTrack = async () => {
+      const current = await TrackPlayer.getActiveTrack();
+
+      current && setCurrentActiveTrack(current);
+    };
+    getCurrentTrack();
+  }, [currentTrack]);
+
+  const expandHandler = () => {
     bottomSheetRef.current?.expand();
-  }, []);
+  };
 
   const getTrackDuration = (progress: any) => {
-    let durationString;
     const durationInSeconds = progress.duration - progress.position;
 
-    // Check if the song has ended
     if (durationInSeconds <= 0) {
-      // Display "00:00" when the song has ended
-      return (durationString = '00:00');
+      return '00:00';
     } else {
-      // Calculate the duration in minutes and seconds
       const minutes = Math.floor(durationInSeconds / 60);
       const seconds = Math.floor(durationInSeconds % 60);
 
-      // Format the duration string
-      return (durationString = `${minutes.toString().padStart(2, '0')}:${seconds
+      return `${minutes.toString().padStart(2, '0')}:${seconds
         .toString()
-        .padStart(2, '0')}`);
+        .padStart(2, '0')}`;
     }
   };
 
@@ -101,7 +105,7 @@ const TrackScreen = ({route, navigation}: Props) => {
     <ScrollView style={styles.mainContainer}>
       <StatusBar backgroundColor={Colors[theme].secondary} />
 
-      <SafeAreaView style={{flex: 1.5, paddingTop: top}}>
+      <View style={{flex: 1.5, paddingTop: top}}>
         <View style={styles.imgContainer}>
           <View
             style={[
@@ -129,18 +133,20 @@ const TrackScreen = ({route, navigation}: Props) => {
               : currentTrack?.artist}
           </Text>
         </View>
-      </SafeAreaView>
+      </View>
       <BottomSheet
         snapTo="65"
         ref={bottomSheetRef}
         backGroundColor={Colors[theme].secondary}>
         <View style={{paddingBottom: 62}}>
-          <RenderItem items={currentQueue} />
+          <RenderItem
+            currentQueue={currentQueue}
+            currentTrack={currentActiveTrack}
+            setCurrentTrack={setCurrentActiveTrack}
+          />
         </View>
       </BottomSheet>
       <View style={styles.contentContainer}>
-        {/* scroll bar  */}
-
         <View style={styles.trackContainer}>
           <Slider
             style={{width: '100%', height: 40}}
@@ -162,7 +168,6 @@ const TrackScreen = ({route, navigation}: Props) => {
             </Text>
           </View>
         </View>
-        {/* play button  */}
         <View style={styles.buttonContainer}>
           <CustomButton
             customButtonStyle={styles.btn}

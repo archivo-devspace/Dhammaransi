@@ -39,7 +39,9 @@ const Audios = ({navigation}: Props) => {
 
   const handlePlayAudio = async (item: any) => {
     // togglePlayingMode();
-    handlePlay(item.id);
+    if (currentTrack === null || currentTrack.id !== item.id) {
+      handlePlay(item.id);
+    }
     navigation.navigate('Track');
   };
 

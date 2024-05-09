@@ -12,63 +12,112 @@ import TrackPlayer, {
 } from 'react-native-track-player';
 
 type Props = {
-  items: any;
+  currentQueue: Track[];
+  currentTrack: Track | null;
+  setCurrentTrack: React.Dispatch<React.SetStateAction<Track | null>>;
 };
 
-const RenderItem = ({items}: Props) => {
+const RenderItem = ({currentQueue, currentTrack, setCurrentTrack}: Props) => {
   const {theme} = useThemeContext();
-  const [currentQueue, setCurrentQueue] = useState<Track[]>([]);
-  const {currentTrack, getCurrentQueue, togglePlayingMode} = useTrackContext();
+  const {getCurrentQueue, togglePlayingMode} = useTrackContext();
   const playbackState = usePlaybackState();
   const styles = styling(theme);
 
-  useEffect(() => {
-    const getQueue = async () => {
-      const queue = await getCurrentQueue();
-      setCurrentQueue(queue);
-    };
-
-    getQueue();
-  }, [currentQueue]);
+  const [loadingTrackId, setLoadingTrackId] = useState<number | null>(null);
 
   const handlePlaylistPlay = async (i: number, id: number) => {
-    await TrackPlayer.skip(i);
-    currentTrack?.id === id && playbackState.state === State.Playing
-      ? TrackPlayer.pause()
-      : TrackPlayer.play();
+    if (loadingTrackId !== id) {
+      setLoadingTrackId(id);
+      setCurrentTrack(null);
+      await TrackPlayer.skip(i);
+
+      const isCurrentTrackPlaying =
+        currentTrack?.id === id && playbackState.state === State.Playing;
+      if (isCurrentTrackPlaying) {
+        await TrackPlayer.pause();
+        setLoadingTrackId(null);
+      } else {
+        await TrackPlayer.play();
+      }
+    } else {
+      await TrackPlayer.pause();
+      setLoadingTrackId(null);
+    }
   };
 
   return (
     <>
       {currentQueue.map((item: any, i: number) => {
         return (
-          <View style={[styles.container]}>
+          <View style={[styles.container]} key={i}>
             <CustomButton
               onPress={() => handlePlaylistPlay(i, item.id)}
               customButtonStyle={styles.btn}
               icon={
-                <AntDesign
-                  name={
-                    currentTrack?.id === item.id &&
-                    playbackState.state === State.Playing
-                      ? 'pause'
-                      : 'caretright'
-                  }
-                  size={25}
-                  color={Colors[theme].primary_dark}
-                />
+                loadingTrackId === item.id &&
+                playbackState.state !== State.Playing ? (
+                  <AntDesign
+                    name="loading1"
+                    size={25}
+                    color={Colors[theme].primary}
+                  />
+                ) : currentTrack?.id === item.id &&
+                  playbackState.state === State.Playing ? (
+                  <AntDesign
+                    name="pause"
+                    size={25}
+                    color={Colors[theme].primary}
+                  />
+                ) : currentTrack?.id !== item.id &&
+                  loadingTrackId !== item.id ? (
+                  <AntDesign
+                    name="caretright"
+                    size={25}
+                    color={Colors[theme].primary}
+                  />
+                ) : currentTrack?.id === item.id &&
+                  playbackState.state === State.Paused ? (
+                  <AntDesign
+                    name="caretright"
+                    size={25}
+                    color={Colors[theme].primary}
+                  />
+                ) : (
+                  <AntDesign
+                    name="loading1"
+                    size={25}
+                    color={Colors[theme].primary}
+                  />
+                )
               }
             />
             <View style={styles.textContainer}>
-              <Text style={[styles.text, {fontSize: 18}]}>
-                {item.title.length > 30
-                  ? item.title.slice(0, 30) + '...'
-                  : item.title}
-              </Text>
               {currentTrack?.id === item.id &&
-                playbackState.state === State.Playing && (
-                  <Text style={[styles.text, {fontSize: 14}]}>Active</Text>
-                )}
+              playbackState.state === State.Playing ? (
+                <Text style={[styles.text, {fontSize: 18}]}>
+                  {item.title.length > 40
+                    ? item.title.slice(0, 40) + '...'
+                    : item.title}
+                </Text>
+              ) : (
+                <Text
+                  style={[styles.inactiveText, {fontSize: 18, opacity: 0.8}]}>
+                  {item.title}
+                </Text>
+              )}
+              {currentTrack?.id === item.id &&
+              playbackState.state === State.Playing ? (
+                <Text style={[styles.text, {fontSize: 14}]}>
+                  {item.artist.length > 45
+                    ? item.artist.slice(0, 45) + '...'
+                    : item.artist}
+                </Text>
+              ) : (
+                <Text
+                  style={[styles.inactiveText, {fontSize: 12, opacity: 0.5}]}>
+                  {item.artist}
+                </Text>
+              )}
             </View>
           </View>
         );
@@ -94,7 +143,7 @@ const styling = (theme: Theme) =>
       borderRadius: 8,
     },
     btn: {
-      backgroundColor: Colors[theme].secondary_dark,
+      backgroundColor: Colors[theme].text,
       padding: 5,
       borderRadius: 10,
     },
@@ -104,6 +153,10 @@ const styling = (theme: Theme) =>
     },
     textContainer: {},
     text: {
+      color: Colors[theme].primary_dark,
+      fontWeight: 'bold',
+    },
+    inactiveText: {
       color: Colors[theme].text,
       fontWeight: 'bold',
     },
