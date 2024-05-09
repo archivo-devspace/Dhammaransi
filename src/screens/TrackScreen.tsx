@@ -73,16 +73,6 @@ const TrackScreen = ({route, navigation}: Props) => {
 
   const bottomSheetRef = useRef<BottomSheetMethods>(null);
 
-  useEffect(() => {
-    const getQueue = async () => {
-      const queue = await getCurrentQueue();
-
-      setCurrentQueue(queue);
-    };
-
-    getQueue();
-  }, [currentQueue]);
-
   const expandHandler = useCallback(() => {
     bottomSheetRef.current?.expand();
   }, []);
@@ -141,7 +131,7 @@ const TrackScreen = ({route, navigation}: Props) => {
         </View>
       </SafeAreaView>
       <BottomSheet
-        snapTo="50"
+        snapTo="65"
         ref={bottomSheetRef}
         backGroundColor={Colors[theme].secondary}>
         <View style={{paddingBottom: 62}}>

@@ -92,10 +92,11 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
         if (playingTrack.id !== activeTrack?.id) {
           await TrackPlayer.reset();
         }
+
         await TrackPlayer.add(current);
         await TrackPlayer.play();
         if (repeatMode === 'shuffle') {
-          console.log('Playing');
+          console.log('shuggle', repeatMode);
           handleShuffleTracks();
         }
       } else {
@@ -169,9 +170,20 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     const currentQueue = await getCurrentQueue();
     const currentTrack = await TrackPlayer.getActiveTrack();
 
-    const remainingQueue = currentQueue.filter(item => {
-      return item.title !== currentTrack?.title;
+    const currentTrackIndex = currentQueue.findIndex(item => {
+      return item.title === currentTrack?.title;
     });
+
+    const upcomingQueue = currentQueue.slice(currentTrackIndex + 1);
+    const previousQueue = currentQueue.splice(0, currentTrackIndex);
+
+    const previousTrackIndexArray =
+      currentTrackIndex > 0
+        ? Array.from({length: currentTrackIndex}, (_, i) => i)
+        : [];
+    console.log('previous', previousQueue);
+
+    const remainingQueue = [...upcomingQueue, ...previousQueue];
 
     for (let i = remainingQueue.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -180,6 +192,7 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
       remainingQueue[j] = temp;
     }
 
+    await TrackPlayer.remove(previousTrackIndexArray);
     await TrackPlayer.removeUpcomingTracks();
     await TrackPlayer.add(remainingQueue);
     await TrackPlayer.play();
