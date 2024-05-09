@@ -179,7 +179,7 @@ const BottomSheet = forwardRef<BottomSheetMethods, Props>(
                 bounces={false}
                 scrollEventThrottle={16}
                 onScroll={onScroll}>
-                {children}
+                <View style={{}}>{children}</View>
               </Animated.ScrollView>
             </GestureDetector>
           </Animated.View>

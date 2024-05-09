@@ -49,7 +49,6 @@ export interface TrackContextType {
   setRepeatMode: (repeatMode: string) => void;
   repeatMode: string;
   getCurrentQueue: () => Promise<Track[]>;
-  currentQueue: Track[];
 }
 
 TrackPlayer.updateOptions({
@@ -74,7 +73,6 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
   const [currentTrack, setCurrentTrack] = useState<any>(null);
   const playbackState = usePlaybackState();
   const [repeatMode, setRepeatMode] = useState('shuffle-disabled');
-  const [currentQueue, setCurrentQueue] = useState<Track[]>([]);
 
   useLayoutEffect(() => {
     const getAllTracks = () => {
@@ -131,8 +129,6 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
       return 'repeat';
     }
   };
-
-  console.log('repeatMode', repeatMode);
 
   const changeRepeatMode = () => {
     if (repeatMode === 'shuffle-disabled') {
@@ -227,7 +223,6 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     setRepeatMode,
     repeatMode,
     getCurrentQueue,
-    currentQueue,
   };
 
   return (

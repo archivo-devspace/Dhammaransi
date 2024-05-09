@@ -75,9 +75,9 @@ const TrackScreen = ({route, navigation}: Props) => {
 
   useEffect(() => {
     const getQueue = async () => {
-      const currentQueue = await getCurrentQueue();
+      const queue = await getCurrentQueue();
 
-      setCurrentQueue(currentQueue);
+      setCurrentQueue(queue);
     };
 
     getQueue();
@@ -141,10 +141,12 @@ const TrackScreen = ({route, navigation}: Props) => {
         </View>
       </SafeAreaView>
       <BottomSheet
-        snapTo="70"
+        snapTo="50"
         ref={bottomSheetRef}
         backGroundColor={Colors[theme].secondary}>
-        <RenderItem item={currentQueue} />
+        <View style={{paddingBottom: 62}}>
+          <RenderItem items={currentQueue} />
+        </View>
       </BottomSheet>
       <View style={styles.contentContainer}>
         {/* scroll bar  */}
