@@ -51,12 +51,13 @@ const Audios = ({navigation}: Props) => {
       <FlatList
         style={{marginTop: top}}
         data={trackLists}
+        showsVerticalScrollIndicator={false}
         renderItem={({item}) => (
           <React.Fragment key={item.id}>
             <View style={styles.container}>
               <View style={styles.trackContainer}>
                 <Image
-                  source={item.artwork}
+                  source={{uri: item.artwork}}
                   resizeMode="cover"
                   style={styles.img}
                 />

@@ -26,11 +26,11 @@ const RenderItem = ({currentQueue, currentTrack, setCurrentTrack}: Props) => {
   const [loadingTrackId, setLoadingTrackId] = useState<number | null>(null);
 
   const handlePlaylistPlay = async (i: number, id: number) => {
+    const presentTrack: any = currentQueue.find(track => track.id === id);
     if (loadingTrackId !== id) {
       setLoadingTrackId(id);
       setCurrentTrack(null);
-      await TrackPlayer.skip(i);
-
+      TrackPlayer.skip(i);
       const isCurrentTrackPlaying =
         currentTrack?.id === id && playbackState.state === State.Playing;
       if (isCurrentTrackPlaying) {
@@ -45,6 +45,31 @@ const RenderItem = ({currentQueue, currentTrack, setCurrentTrack}: Props) => {
     }
   };
 
+  const getButtonIcon = (item: any) => {
+    if (loadingTrackId === item.id && playbackState.state !== State.Playing) {
+      return 'loading1';
+    } else if (
+      currentTrack?.id === item.id &&
+      playbackState.state === State.Playing
+    ) {
+      return 'pause';
+    } else if (
+      (currentTrack?.id !== item.id && loadingTrackId !== item.id) ||
+      (currentTrack?.id === item.id && playbackState.state === State.Paused)
+    ) {
+      return 'caretright';
+    } else {
+      return 'loading1';
+    }
+  };
+
+  const renderButtonIcon = (item: any) => {
+    const iconName = getButtonIcon(item);
+    return (
+      <AntDesign name={iconName} size={25} color={Colors[theme].primary} />
+    );
+  };
+
   return (
     <>
       {currentQueue.map((item: any, i: number) => {
@@ -53,43 +78,7 @@ const RenderItem = ({currentQueue, currentTrack, setCurrentTrack}: Props) => {
             <CustomButton
               onPress={() => handlePlaylistPlay(i, item.id)}
               customButtonStyle={styles.btn}
-              icon={
-                loadingTrackId === item.id &&
-                playbackState.state !== State.Playing ? (
-                  <AntDesign
-                    name="loading1"
-                    size={25}
-                    color={Colors[theme].primary}
-                  />
-                ) : currentTrack?.id === item.id &&
-                  playbackState.state === State.Playing ? (
-                  <AntDesign
-                    name="pause"
-                    size={25}
-                    color={Colors[theme].primary}
-                  />
-                ) : currentTrack?.id !== item.id &&
-                  loadingTrackId !== item.id ? (
-                  <AntDesign
-                    name="caretright"
-                    size={25}
-                    color={Colors[theme].primary}
-                  />
-                ) : currentTrack?.id === item.id &&
-                  playbackState.state === State.Paused ? (
-                  <AntDesign
-                    name="caretright"
-                    size={25}
-                    color={Colors[theme].primary}
-                  />
-                ) : (
-                  <AntDesign
-                    name="loading1"
-                    size={25}
-                    color={Colors[theme].primary}
-                  />
-                )
-              }
+              icon={renderButtonIcon(item)}
             />
             <View style={styles.textContainer}>
               {currentTrack?.id === item.id &&

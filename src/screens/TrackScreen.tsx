@@ -115,7 +115,7 @@ const TrackScreen = ({route, navigation}: Props) => {
             <Image
               source={
                 currentTrack
-                  ? currentTrack?.artwork
+                  ? {uri: currentTrack?.artwork}
                   : require('../assets/marguerite.jpg')
               }
               resizeMode="cover"
