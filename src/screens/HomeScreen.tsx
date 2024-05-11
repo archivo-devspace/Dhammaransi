@@ -105,7 +105,7 @@ const HomeScreen = ({navigation}: Props) => {
                 <FontAwesome
                   name={menu.icon}
                   size={30}
-                  color={Colors[theme].text}
+                  color={Colors[theme].primary}
                 />
                 <Text style={{color: Colors[theme].text}}>{menu.name}</Text>
               </TouchableOpacity>

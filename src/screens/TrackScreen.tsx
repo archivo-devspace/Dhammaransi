@@ -1,4 +1,10 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import {
   Image,
   Platform,
@@ -30,8 +36,6 @@ import {NavigationMainBottomTabScreenProps} from '../navigations/BottomNavigatio
 import {useTrackContext} from '../contexts/TrackContext';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
 
-TrackPlayer.setupPlayer();
-
 type Props = {
   route: RouteProp<MainStackParamList, 'Track'>;
   navigation: NavigationMainBottomTabScreenProps['navigation'];
@@ -59,10 +63,21 @@ const TrackScreen = ({route, navigation}: Props) => {
     null,
   );
 
+  const [currentTrackId, setCurrentTrackId] = useState<number | null>(null);
+
   const styles = styling(theme);
   const {top} = insets;
 
   const bottomSheetRef = useRef<BottomSheetMethods>(null);
+
+  useLayoutEffect(() => {
+    const getCurrentTrack = async () => {
+      const current = await TrackPlayer.getActiveTrack();
+
+      current && setCurrentActiveTrack(current);
+    };
+    getCurrentTrack();
+  }, [currentTrackId, currentTrack]);
 
   useEffect(() => {
     const getQueue = async () => {
@@ -73,14 +88,12 @@ const TrackScreen = ({route, navigation}: Props) => {
     getQueue();
   }, [currentQueue]);
 
-  useEffect(() => {
-    const getCurrentTrack = async () => {
-      const current = await TrackPlayer.getActiveTrack();
-
-      current && setCurrentActiveTrack(current);
-    };
-    getCurrentTrack();
-  }, [currentTrack]);
+  const getCurrentActiveTrack = useCallback(
+    async (id: number) => {
+      setCurrentTrackId(id);
+    },
+    [currentTrackId],
+  );
 
   const expandHandler = () => {
     bottomSheetRef.current?.expand();
@@ -110,7 +123,7 @@ const TrackScreen = ({route, navigation}: Props) => {
           <View
             style={[
               styles.imageShadow,
-              {width: width / 1.3, height: height / 2.65},
+              {width: width / 1.2, height: height / 2.75},
             ]}>
             <Image
               source={
@@ -141,8 +154,9 @@ const TrackScreen = ({route, navigation}: Props) => {
         <View style={{paddingBottom: 62}}>
           <RenderItem
             currentQueue={currentQueue}
-            currentTrack={currentActiveTrack}
-            setCurrentTrack={setCurrentActiveTrack}
+            currentActiveTrack={currentActiveTrack}
+            setCurrentActiveTrack={setCurrentActiveTrack}
+            getCurrentActiveTrack={getCurrentActiveTrack}
           />
         </View>
       </BottomSheet>
@@ -156,7 +170,7 @@ const TrackScreen = ({route, navigation}: Props) => {
             onSlidingComplete={async value => {
               await TrackPlayer.seekTo(value);
             }}
-            minimumTrackTintColor={Colors[theme].primary_dark}
+            minimumTrackTintColor={Colors[theme].primary}
             maximumTrackTintColor={Colors[theme].text}
           />
           <View style={styles.trackDuration}>
@@ -175,19 +189,19 @@ const TrackScreen = ({route, navigation}: Props) => {
               <MaterialIcon
                 name={`${repeatIcon()}`}
                 size={30}
-                color={Colors[theme].text}
+                color={Colors[theme].primary}
               />
             }
             onPress={changeRepeatMode}
           />
           <CustomButton
             onPress={handlePrevTrack}
-            customButtonStyle={styles.btn}
+            customButtonStyle={[styles.btn]}
             icon={
               <Entypo
                 name={`controller-jump-to-start`}
-                size={45}
-                color={Colors[theme].text}
+                size={35}
+                color={Colors[theme].primary}
               />
             }
           />
@@ -197,8 +211,9 @@ const TrackScreen = ({route, navigation}: Props) => {
             icon={
               <Entypo
                 name={`${playingIcon()}`}
-                size={70}
-                color={Colors[theme].text}
+                size={65}
+                style={{elevation: 2}}
+                color={Colors[theme].primary}
               />
             }
           />
@@ -208,8 +223,8 @@ const TrackScreen = ({route, navigation}: Props) => {
             icon={
               <Entypo
                 name={`controller-next`}
-                size={45}
-                color={Colors[theme].text}
+                size={35}
+                color={Colors[theme].primary}
               />
             }
           />
@@ -220,7 +235,7 @@ const TrackScreen = ({route, navigation}: Props) => {
               <MaterialIcon
                 name={`playlist-music`}
                 size={30}
-                color={Colors[theme].text}
+                color={Colors[theme].primary}
               />
             }
           />
@@ -245,7 +260,7 @@ const styling = (theme: Theme) =>
     },
     imageShadow: {
       borderRadius: 20,
-      shadowColor: Colors[theme].text,
+      shadowColor: Colors[theme].primary_dark,
       ...Platform.select({
         ios: {
           shadowOffset: {
@@ -261,8 +276,9 @@ const styling = (theme: Theme) =>
       }),
     },
     img: {
-      width: '100%',
+      width: '98%',
       height: '100%',
+      alignSelf: 'center',
       borderRadius: 20,
     },
     titleText: {
@@ -273,14 +289,14 @@ const styling = (theme: Theme) =>
 
       textAlign: 'center',
       marginTop: 16,
-      color: Colors[theme].text,
+      color: Colors[theme].primary,
     },
     artistText: {
       fontSize: 16,
       width: '80%',
       height: 50,
 
-      color: Colors[theme].text,
+      color: Colors[theme].primary,
       textAlign: 'center',
     },
     contentContainer: {
@@ -300,12 +316,12 @@ const styling = (theme: Theme) =>
       paddingHorizontal: '4%',
     },
     durationText: {
-      color: Colors[theme].text,
+      color: Colors[theme].primary,
       fontSize: 14,
       fontWeight: 'bold',
     },
     btn: {
-      backgroundColor: Colors[theme].secondary,
+      backgroundColor: 'transparent',
     },
     buttonContainer: {
       justifyContent: 'center',

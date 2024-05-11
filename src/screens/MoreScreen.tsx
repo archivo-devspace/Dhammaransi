@@ -14,6 +14,7 @@ import {Colors} from '../theme';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {FontAwesome} from '../utils/common';
 import {NavigationMainStackScreenProps} from '../navigations/StackNavigation';
+import {CustomButton} from '../components/utils';
 
 type Props = {
   navigation: NavigationMainStackScreenProps['navigation'];
@@ -67,29 +68,35 @@ const MoreScreen = ({navigation}: Props) => {
       <ScrollView style={styles.optionContainer}>
         {menuOptions.map(menu => (
           <React.Fragment key={menu.id}>
-            <Pressable
-              style={styles.menu}
+            <CustomButton
+              customButtonStyle={styles.menu}
               onPress={() => navigation.navigate(menu.link as any)}>
-              <View style={styles.menuText}>
-                <View
-                  style={{
-                    width: 40,
-                    alignItems: 'center',
-                  }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  width: '100%',
+                  padding: 20,
+                  gap: 30,
+                }}>
+                <View style={styles.menuText}>
                   <FontAwesome
                     name={menu.icon}
                     size={25}
-                    color={Colors[theme].text}
+                    color={Colors[theme].primary}
                   />
+
+                  <Text style={{color: Colors[theme].text, fontSize: 14}}>
+                    {menu.name}
+                  </Text>
                 </View>
-                <Text style={{color: Colors[theme].text}}>{menu.name}</Text>
+                <FontAwesome
+                  name={'angle-right'}
+                  size={20}
+                  color={Colors[theme].text}
+                />
               </View>
-              <FontAwesome
-                name={'angle-right'}
-                size={20}
-                color={Colors[theme].text}
-              />
-            </Pressable>
+            </CustomButton>
             {menuOptions.length !== menu.id && <View style={styles.divider} />}
           </React.Fragment>
         ))}
@@ -131,6 +138,6 @@ const styling = (theme: Theme) =>
       width: '100%',
       height: 1,
       backgroundColor: Colors[theme].secondary_dark,
-      marginVertical: 20,
+      marginVertical: 10,
     },
   });

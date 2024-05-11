@@ -209,9 +209,6 @@ const styling = (theme: Theme) =>
     lineContainer: {
       alignItems: 'center',
       paddingVertical: 14,
-
-      borderColor: Colors[theme].secondary_dark,
-      borderBottomWidth: 1,
     },
     line: {
       borderBottomWidth: 1,
@@ -219,7 +216,7 @@ const styling = (theme: Theme) =>
     },
     playlists: {
       color: Colors[theme].text,
-      fontSize: 18,
+      fontSize: 20,
       fontWeight: 'bold',
     },
   });

@@ -51,6 +51,8 @@ export interface TrackContextType {
   getCurrentQueue: () => Promise<Track[]>;
 }
 
+TrackPlayer.setupPlayer();
+
 TrackPlayer.updateOptions({
   capabilities: [
     Capability.Play,
