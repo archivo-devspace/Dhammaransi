@@ -40,7 +40,8 @@ const CustomButton = ({
         <TouchableOpacity
           onPress={onPress}
           style={customButtonStyle ? customButtonStyle : styles.button}>
-          <View style={{flexDirection: 'row'}}>
+          <View
+            style={{flexDirection: 'row', gap: 10, justifyContent: 'center'}}>
             <View>{icon}</View>
             <Text
               style={

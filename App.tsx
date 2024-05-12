@@ -39,6 +39,9 @@ import AppNavigation from './src/navigations/AppNavigation';
 import {get, save} from './src/utils/storage';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {TrackProvider} from './src/contexts/TrackContext';
+import TrackPlayer from 'react-native-track-player';
+
+TrackPlayer.setupPlayer();
 
 const App = () => {
   return (

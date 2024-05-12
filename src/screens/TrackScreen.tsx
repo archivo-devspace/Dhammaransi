@@ -21,7 +21,7 @@ import {BottomSheetMethods} from '../components/commons/bottomSheet';
 import RenderItem from '../components/commons/RenderItem';
 import BottomSheet from '../components/commons/bottomSheet';
 import {CustomButton} from '../components/utils';
-import {Entypo, MaterialIcon} from '../utils/common';
+import {Entypo, FontAwesome, MaterialIcon} from '../utils/common';
 import {Colors} from '../theme';
 import TrackPlayer, {
   Capability,
@@ -64,6 +64,14 @@ const TrackScreen = ({route, navigation}: Props) => {
   );
 
   const [currentTrackId, setCurrentTrackId] = useState<number | null>(null);
+
+  const [icon, setIcon] = useState();
+
+  useEffect(() => {
+    MaterialIcon.getImageSource('circle', 20, Colors[theme].primary).then(
+      setIcon,
+    );
+  }, []);
 
   const styles = styling(theme);
   const {top} = insets;
@@ -128,23 +136,36 @@ const TrackScreen = ({route, navigation}: Props) => {
             <Image
               source={
                 currentTrack
-                  ? currentTrack?.artwork
+                  ? {uri: currentTrack?.artwork}
                   : require('../assets/marguerite.jpg')
               }
               resizeMode="cover"
               style={styles.img}
             />
           </View>
-          <Text style={styles.titleText}>
-            {currentTrack === null
-              ? 'Choose From Playlist'
-              : currentTrack?.title}
-          </Text>
-          <Text style={styles.artistText}>
-            {currentTrack === null
-              ? 'Choose From Playlist'
-              : currentTrack?.artist}
-          </Text>
+          <View>
+            <Text style={styles.titleText}>
+              {currentTrack === null ? '' : currentTrack?.title}
+            </Text>
+
+            {currentTrack === null ? (
+              <CustomButton
+                title="Choose from alblum"
+                customButtonStyle={styles.chooseFromBtn}
+                customButtonTextStyle={styles.chooseFrom}
+                onPress={() => navigation.navigate('Audios')}
+                icon={
+                  <FontAwesome
+                    name="music"
+                    size={15}
+                    color={Colors[theme].primary}
+                  />
+                }
+              />
+            ) : (
+              <Text style={styles.artistText}>{currentTrack?.artist}</Text>
+            )}
+          </View>
         </View>
       </View>
       <BottomSheet
@@ -163,13 +184,20 @@ const TrackScreen = ({route, navigation}: Props) => {
       <View style={styles.contentContainer}>
         <View style={styles.trackContainer}>
           <Slider
-            style={{width: '100%', height: 40}}
+            style={{
+              width: '100%',
+
+              height: 30,
+            }}
+            trackImage={icon}
             value={progress.position}
             minimumValue={0}
             maximumValue={progress.duration}
+            thumbTintColor={Colors[theme].primary}
             onSlidingComplete={async value => {
               await TrackPlayer.seekTo(value);
             }}
+            thumbImage={icon}
             minimumTrackTintColor={Colors[theme].primary}
             maximumTrackTintColor={Colors[theme].text}
           />
@@ -329,5 +357,15 @@ const styling = (theme: Theme) =>
       flexDirection: 'row',
       alignItems: 'center',
       gap: 20,
+    },
+    chooseFrom: {
+      color: Colors[theme].primary_light,
+      fontSize: 14,
+    },
+    chooseFromBtn: {
+      backgroundColor: Colors[theme].text,
+      borderRadius: 20,
+      paddingHorizontal: 20,
+      paddingVertical: 10,
     },
   });

@@ -56,53 +56,80 @@ export const images = [
 export const BANNER_H = 320;
 export const TOPNAVI_H = 40;
 
+
+
+
 export const tracks = [
   {
     id: 1,
-    url: require('../assets/mp3/Ali_Gatie_-_It_s_You.mp3'), // Load media from the network
-    title: "It's you",
-    artist: 'Ali Gatie',
+    url: 'https://www.bensound.com/bensound-music/bensound-happyrock.mp3',
+    title: 'Happy Rock',
+    artist: 'Benjamin Tissot',
+    album: "Bensound's rock",
     date: '2014-05-20T07:00:00+00:00', // RFC 3339
-    artwork: require('../assets/marguerite.jpg'), // Load artwork from the network
+    artwork: 'https://www.bensound.com/bensound-img/happyrock.jpg', // Load artwork from the network
   },
   {
     id: 2,
-    url: require('../assets/mp3/Metro_Boomin,_NAV,_A_Boogie_wit_da_Hoodie,_Swae_Lee_Calling256k.mp3'), // Load media from the network
-    title: 'Calling',
-    artist: 'Metro_Boomin,_NAV,_A_Boogie_wit_da_Hoodie,_Swae_Lee',
+    url: 'https://www.bensound.com/bensound-music/bensound-anewbeginning.mp3',
+    title: 'Punky',
+    artist: 'Benjamin Tissot',
+    album: "Bensound's rock",
     date: '2014-05-20T07:00:00+00:00', // RFC 3339
-    artwork: require('../assets/marguerite.jpg'), // Load artwork from the network
+    artwork: 'https://www.bensound.com/bensound-img/punky.jpg', 
   },
   {
     id: 3,
-    url: require('../assets/mp3/Paul_Anka-_Put_Your_Head_On_My_Shoulder(256k).mp3'), // Load media from the network
-    title: 'Put_Your_Head_On_My_Shoulder',
-    artist: 'Paul_Anka',
+    url: 'https://www.bensound.com/bensound-music/bensound-actionable.mp3',
+    title: 'Actionable',
+    artist: 'Benjamin Tissot',
+    album: "Bensound's rock",
     date: '2014-05-20T07:00:00+00:00', // RFC 3339
-    artwork: require('../assets/marguerite.jpg'), // Load artwork from the network
+    artwork: 'https://www.bensound.com/bensound-img/actionable.jpg',
   },
   {
     id: 4,
-    url: require('../assets/mp3/Post_Malone,_Swae_Lee_-_Sunflower(256k).mp3'), // Load media from the network
-    title: 'Sunflower',
-    artist: 'Post_Malone,_Swae_Lee',
+    url: 'https://www.bensound.com/bensound-music/bensound-romantic.mp3',
+    title: 'Romantic',
+    artist: 'Benjamin Tissot',
+    album: "Bensound's Jazz",
     date: '2014-05-20T07:00:00+00:00', // RFC 3339
-    artwork: require('../assets/marguerite.jpg'), // Load artwork from the network
+    artwork: 'https://www.bensound.com/bensound-img/romantic.jpg', 
   },
   {
     id: 5,
-    url: require('../assets/mp3/Queen_-_Love_Of_My_Life(256k)(1).mp3'), // Load media from the network
-    title: 'Love_Of_My_Life',
-    artist: 'Queen',
+    url: 'https://www.bensound.com/bensound-music/bensound-allthat.mp3',
+    title: 'All That',
+    artist: 'Benjamin Tissot',
+    album: "Bensound's Jazz",
     date: '2014-05-20T07:00:00+00:00', // RFC 3339
-    artwork: require('../assets/marguerite.jpg'), // Load artwork from the network
+    artwork: 'https://www.bensound.com/bensound-img/allthat.jpg',
   },
   {
     id: 6,
-    url: require('../assets/mp3/Queen_-_Bohemian_Rhapsody(256k).mp3'), // Load media from the network
-    title: 'Bohemian_Rhapsody',
-    artist: 'Queen',
+    url: 'https://www.bensound.com/bensound-music/bensound-love.mp3',
+    title: 'Love',
+    artist: 'Benjamin Tissot',
+    album: "Bensound's Jazz",
     date: '2014-05-20T07:00:00+00:00', // RFC 3339
-    artwork: require('../assets/marguerite.jpg'), // Load artwork from the network
+    artwork: 'https://www.bensound.com/bensound-img/love.jpg',
+  },
+  {
+    id: 7,
+    url: 'https://www.bensound.com/bensound-music/bensound-dreams.mp3',
+    title: 'Dreams',
+    artist: 'Benjamin Tissot',
+    album: "Bensound's Electronica",
+    date: '2014-05-20T07:00:00+00:00', // RFC 3339
+    artwork: 'https://www.bensound.com/bensound-img/dreams.jpg',
+  },
+  {
+    id: 8,
+    url: 'https://www.bensound.com/bensound-music/bensound-dance.mp3',
+    title: 'Dance',
+    artist: 'Benjamin Tissot',
+    album: "Bensound's Electronica",
+    date: '2014-05-20T07:00:00+00:00', // RFC 3339
+    artwork: 'https://www.bensound.com/bensound-img/dance.jpg',
   },
 ];

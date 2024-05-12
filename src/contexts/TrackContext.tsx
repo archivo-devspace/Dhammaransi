@@ -51,8 +51,6 @@ export interface TrackContextType {
   getCurrentQueue: () => Promise<Track[]>;
 }
 
-TrackPlayer.setupPlayer();
-
 TrackPlayer.updateOptions({
   capabilities: [
     Capability.Play,
@@ -154,7 +152,10 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     if (playbackState.state === State.Playing) {
       return 'controller-paus';
     }
-    return 'controller-play';
+    if (playbackState.state === State.Paused) {
+      return 'controller-play';
+    }
+    return 'controller-stop';
   };
 
   const getCurrentQueue = async () => {

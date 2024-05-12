@@ -61,7 +61,7 @@ const Audios = ({navigation}: Props) => {
                 <View style={styles.trackContainer}>
                   <View style={{flexDirection: 'row', gap: 16}}>
                     <Image
-                      source={item.artwork}
+                      source={{uri: item.artwork}}
                       resizeMode="cover"
                       style={styles.img}
                     />
@@ -102,6 +102,7 @@ const styling = (theme: Theme) =>
       backgroundColor: Colors[theme].secondary,
       paddingHorizontal: 20,
       paddingVertical: 20,
+      paddingBottom: 25,
       marginBottom: 40,
     },
     container: {
