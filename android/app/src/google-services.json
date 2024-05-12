@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "223500300678",
+    "project_id": "dhammaransi-36e9d",
+    "storage_bucket": "dhammaransi-36e9d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:223500300678:android:210eeaf67160d67d903c07",
+        "android_client_info": {
+          "package_name": "com.dhammaransiapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "223500300678-bdqvi0joadcq4t0f4bbhmn6knbh8jfai.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dhammaransiapp",
+            "certificate_hash": "858562d13d550c58a675acca71a0d1097f963bf3"
+          }
+        },
+        {
+          "client_id": "223500300678-n2gtsma94ebls4c5n7g95r9qsmfus0qa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZuX2SZ3tRAZwBkNr4EeFH_8HBan1yBrI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "223500300678-n2gtsma94ebls4c5n7g95r9qsmfus0qa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
