@@ -51,17 +51,6 @@ export interface TrackContextType {
   getCurrentQueue: () => Promise<Track[]>;
 }
 
-TrackPlayer.updateOptions({
-  capabilities: [
-    Capability.Play,
-    Capability.Pause,
-    Capability.SkipToNext,
-    Capability.SkipToPrevious,
-  ],
-
-  compactCapabilities: [Capability.Play, Capability.Pause],
-});
-
 const TrackContext = createContext<TrackContextType | undefined>(undefined);
 
 export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
