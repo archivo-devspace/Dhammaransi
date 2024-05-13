@@ -1,6 +1,7 @@
 import {
   Image,
   Platform,
+  SafeAreaView,
   StatusBar,
   StyleSheet,
   Text,
@@ -23,41 +24,48 @@ const PdfListScreen = () => {
   const {top} = inset;
   const styles = styling(theme);
   return (
-    <View>
+    <View style={styles.mainContainer}>
       <StatusBar translucent backgroundColor={'transparent'} />
-      <Text style={[{marginTop: top}, styles.headerText]}>တရားစာအုပ်များ</Text>
+      <SafeAreaView>
+        <Text style={[{marginTop: top}, styles.headerText]}>
+          တရားစာအုပ်များ
+        </Text>
+      </SafeAreaView>
       <ScrollView contentContainerStyle={styles.container}>
         {ebooks?.map(ebook => (
-          <View key={ebook.id} style={[styles.contentContainer, {}]}>
+          <React.Fragment key={ebook.id}>
             <View style={styles.contentContainer}>
-              <View
-                style={[
-                  styles.img,
-                  {
-                    width: width * 0.2,
-                    height: height * 0.16,
-                  },
-                ]}>
-                <Image
-                  style={{width: '100%', height: '100%', borderRadius: 10}}
-                  source={{uri: ebook.image}}
-                  resizeMode="cover"
-                />
+              <View style={styles.contentContainer}>
+                <View
+                  style={[
+                    styles.img,
+                    {
+                      width: width * 0.25,
+                      height: height * 0.16,
+                    },
+                  ]}>
+                  <Image
+                    style={{width: '100%', height: '100%', borderRadius: 10}}
+                    source={{uri: ebook.image}}
+                    resizeMode="cover"
+                  />
+                </View>
+                <Text style={styles.text}>{ebook.title}</Text>
               </View>
-              <Text style={styles.text}>{ebook.title}</Text>
+              <CustomButton
+                onPress={() => console.log('hello')}
+                icon={
+                  <Ionicons
+                    name={`cloud-download-outline`}
+                    size={30}
+                    color={Colors[theme].primary}
+                  />
+                }
+                customButtonStyle={styles.btn}
+              />
             </View>
-            <CustomButton
-              onPress={() => console.log('hello')}
-              icon={
-                <Ionicons
-                  name={`cloud-download-outline`}
-                  size={30}
-                  color={Colors[theme].text}
-                />
-              }
-              customButtonStyle={styles.btn}
-            />
-          </View>
+            {ebooks.length !== ebook?.id && <View style={styles.divider} />}
+          </React.Fragment>
         ))}
       </ScrollView>
     </View>
@@ -68,7 +76,10 @@ export default PdfListScreen;
 
 const styling = (theme: Theme) =>
   StyleSheet.create({
-    mainContainer: {},
+    mainContainer: {
+      flex: 1,
+      backgroundColor: Colors[theme].secondary,
+    },
     headerText: {
       fontSize: 22,
       fontWeight: 'bold',
@@ -77,13 +88,15 @@ const styling = (theme: Theme) =>
       marginBottom: 10,
     },
     container: {
-      paddingHorizontal: 30,
-      paddingBottom: 150,
+      paddingTop: 20,
+      paddingLeft: 20,
+      paddingRight: 30,
+      paddingBottom: 63,
     },
     contentContainer: {
       flexDirection: 'row',
       alignItems: 'center',
-      gap: 10,
+      gap: 20,
       justifyContent: 'space-between',
       marginBottom: 10,
     },
@@ -104,13 +117,15 @@ const styling = (theme: Theme) =>
           shadowRadius: 5,
         },
         android: {
-          shadowColor: '#000',
-          shadowOffset: {width: 0, height: 2},
-          shadowOpacity: 0.5,
-          shadowRadius: 2,
           elevation: 4,
         },
       }),
+    },
+    divider: {
+      width: '100%',
+      height: 1,
+      backgroundColor: Colors[theme].secondary_dark,
+      marginVertical: 20,
     },
     btn: {},
   });
