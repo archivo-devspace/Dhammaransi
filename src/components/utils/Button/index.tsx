@@ -5,8 +5,11 @@ import {
   StyleSheet,
   Platform,
   TouchableOpacity,
+  TouchableOpacityComponent,
 } from 'react-native';
 import React, {ReactNode} from 'react';
+import {TouchableWithoutFeedback} from 'react-native';
+import {TouchableOpacityBase} from 'react-native';
 
 interface ButtonPorps {
   onPress?: () => void;
@@ -14,6 +17,7 @@ interface ButtonPorps {
   icon?: ReactNode;
   customButtonStyle?: object;
   customButtonTextStyle?: object;
+  children?: ReactNode;
 }
 
 const CustomButton = ({
@@ -22,19 +26,33 @@ const CustomButton = ({
   icon,
   customButtonStyle,
   customButtonTextStyle,
+  children,
 }: ButtonPorps) => {
   return (
-    <TouchableOpacity
-      onPress={onPress}
-      style={customButtonStyle ? customButtonStyle : styles.button}>
-      <View style={{flexDirection: 'row'}}>
-        <View>{icon}</View>
-        <Text
-          style={customButtonTextStyle ? customButtonTextStyle : styles.text}>
-          {title}
-        </Text>
-      </View>
-    </TouchableOpacity>
+    <>
+      {children ? (
+        <TouchableOpacity
+          onPress={onPress}
+          style={customButtonStyle ? customButtonStyle : styles.button}>
+          <View style={{flexDirection: 'row'}}>{children}</View>
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity
+          onPress={onPress}
+          style={customButtonStyle ? customButtonStyle : styles.button}>
+          <View
+            style={{flexDirection: 'row', gap: 10, justifyContent: 'center'}}>
+            <View>{icon}</View>
+            <Text
+              style={
+                customButtonTextStyle ? customButtonTextStyle : styles.text
+              }>
+              {title}
+            </Text>
+          </View>
+        </TouchableOpacity>
+      )}
+    </>
   );
 };
 

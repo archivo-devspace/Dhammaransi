@@ -55,21 +55,21 @@ const Audios = ({navigation}: Props) => {
         renderItem={({item}) => (
           <React.Fragment key={item.id}>
             <View style={styles.container}>
-              <View style={styles.trackContainer}>
-                <Image
-                  source={{uri: item.artwork}}
-                  resizeMode="cover"
-                  style={styles.img}
-                />
-                <View style={{width: '75%', gap: 10}}>
-                  <Text style={styles.title}>{item.title}</Text>
-                  <Text style={styles.desc}>{item.artist}</Text>
-                </View>
-              </View>
               <CustomButton
                 onPress={() => handlePlayAudio(item)}
-                customButtonStyle={styles.btn}
-                icon={
+                customButtonStyle={styles.btn}>
+                <View style={styles.trackContainer}>
+                  <View style={{flexDirection: 'row', gap: 16}}>
+                    <Image
+                      source={{uri: item.artwork}}
+                      resizeMode="cover"
+                      style={styles.img}
+                    />
+                    <View style={{width: '70%', gap: 10}}>
+                      <Text style={styles.title}>{item.title}</Text>
+                      <Text style={styles.desc}>{item.artist}</Text>
+                    </View>
+                  </View>
                   <AntDesign
                     name={
                       currentTrack?.id === item.id &&
@@ -77,11 +77,11 @@ const Audios = ({navigation}: Props) => {
                         ? 'pause'
                         : 'caretright'
                     }
-                    size={25}
-                    color={Colors[theme].text}
+                    size={30}
+                    color={Colors[theme].primary}
                   />
-                }
-              />
+                </View>
+              </CustomButton>
             </View>
             {trackLists.length !== item?.id && <View style={styles.divider} />}
           </React.Fragment>
@@ -102,6 +102,7 @@ const styling = (theme: Theme) =>
       backgroundColor: Colors[theme].secondary,
       paddingHorizontal: 20,
       paddingVertical: 20,
+      paddingBottom: 25,
       marginBottom: 40,
     },
     container: {
@@ -110,14 +111,16 @@ const styling = (theme: Theme) =>
       alignItems: 'center',
     },
     trackContainer: {
-      gap: 10,
+      gap: 5,
       flexDirection: 'row',
+      justifyContent: 'space-between',
       alignItems: 'center',
-      width: '90%',
+      width: '100%',
+      paddingRight: 10,
     },
     img: {
-      width: 70,
-      height: 70,
+      width: 60,
+      height: 60,
       borderRadius: 12,
     },
     btn: {
@@ -125,12 +128,10 @@ const styling = (theme: Theme) =>
     },
     title: {
       fontSize: 16,
-
       color: Colors[theme].text,
     },
     desc: {
       fontSize: 12,
-
       color: Colors[theme].text,
     },
     divider: {

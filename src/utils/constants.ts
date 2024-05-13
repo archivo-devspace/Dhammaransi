@@ -62,6 +62,7 @@ export const tracks = [
     url: 'https://www.bensound.com/bensound-music/bensound-happyrock.mp3',
     title: 'Happy Rock',
     artist: 'Benjamin Tissot',
+    album: "Bensound's rock",
     date: '2014-05-20T07:00:00+00:00', // RFC 3339
     artwork: 'https://www.bensound.com/bensound-img/happyrock.jpg', // Load artwork from the network
   },
@@ -70,6 +71,7 @@ export const tracks = [
     url: 'https://www.bensound.com/bensound-music/bensound-anewbeginning.mp3',
     title: 'Punky',
     artist: 'Benjamin Tissot',
+    album: "Bensound's rock",
     date: '2014-05-20T07:00:00+00:00', // RFC 3339
     artwork: 'https://www.bensound.com/bensound-img/punky.jpg',
   },
@@ -78,6 +80,7 @@ export const tracks = [
     url: 'https://www.bensound.com/bensound-music/bensound-actionable.mp3',
     title: 'Actionable',
     artist: 'Benjamin Tissot',
+    album: "Bensound's rock",
     date: '2014-05-20T07:00:00+00:00', // RFC 3339
     artwork: 'https://www.bensound.com/bensound-img/actionable.jpg',
   },
@@ -86,6 +89,7 @@ export const tracks = [
     url: 'https://www.bensound.com/bensound-music/bensound-romantic.mp3',
     title: 'Romantic',
     artist: 'Benjamin Tissot',
+    album: "Bensound's Jazz",
     date: '2014-05-20T07:00:00+00:00', // RFC 3339
     artwork: 'https://www.bensound.com/bensound-img/romantic.jpg',
   },
@@ -94,6 +98,7 @@ export const tracks = [
     url: 'https://www.bensound.com/bensound-music/bensound-allthat.mp3',
     title: 'All That',
     artist: 'Benjamin Tissot',
+    album: "Bensound's Jazz",
     date: '2014-05-20T07:00:00+00:00', // RFC 3339
     artwork: 'https://www.bensound.com/bensound-img/allthat.jpg',
   },
@@ -102,6 +107,7 @@ export const tracks = [
     url: 'https://www.bensound.com/bensound-music/bensound-love.mp3',
     title: 'Love',
     artist: 'Benjamin Tissot',
+    album: "Bensound's Jazz",
     date: '2014-05-20T07:00:00+00:00', // RFC 3339
     artwork: 'https://www.bensound.com/bensound-img/love.jpg',
   },
@@ -110,14 +116,16 @@ export const tracks = [
     url: 'https://www.bensound.com/bensound-music/bensound-dreams.mp3',
     title: 'Dreams',
     artist: 'Benjamin Tissot',
+    album: "Bensound's Electronica",
     date: '2014-05-20T07:00:00+00:00', // RFC 3339
     artwork: 'https://www.bensound.com/bensound-img/dreams.jpg',
   },
   {
     id: 8,
     url: 'https://www.bensound.com/bensound-music/bensound-dance.mp3',
-    title: 'Love',
+    title: 'Dance',
     artist: 'Benjamin Tissot',
+    album: "Bensound's Electronica",
     date: '2014-05-20T07:00:00+00:00', // RFC 3339
     artwork: 'https://www.bensound.com/bensound-img/dance.jpg',
   },
