@@ -32,7 +32,7 @@
 // const styles = StyleSheet.create({});
 
 // App.tsx
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {useColorScheme} from 'react-native';
 import {ThemeProvider} from './src/contexts/ThemeContext';
 import AppNavigation from './src/navigations/AppNavigation';
@@ -40,8 +40,11 @@ import {get, save} from './src/utils/storage';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {TrackProvider} from './src/contexts/TrackContext';
 import TrackPlayer, {Capability} from 'react-native-track-player';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import i18next from 'i18next';
 
 const App = () => {
+  const [storeLanguages, setStoreLanguages] = useState<string | null>('');
   useEffect(() => {
     const setUpPlayer = async () => {
       await TrackPlayer.setupPlayer();
@@ -63,6 +66,21 @@ const App = () => {
     };
     setUpPlayer();
   }, []);
+
+  useEffect(() => {
+    const loadLanguage = async () => {
+      try {
+        const getstoredLanguage = await AsyncStorage.getItem('LANGUAGE');
+        setStoreLanguages(getstoredLanguage);
+        if (storeLanguages) {
+          i18next.changeLanguage(storeLanguages);
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    loadLanguage();
+  }, [storeLanguages]); //need a dependencies for the immediately changes
 
   return (
     <GestureHandlerRootView>

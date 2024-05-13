@@ -16,10 +16,12 @@ import {Colors} from '../theme';
 import {CustomButton} from '../components/utils';
 import {Ionicons} from '../utils/common';
 import {ebooks} from '../utils/constants';
+import {useTranslation} from 'react-i18next';
 
 const PdfListScreen = () => {
   const {theme} = useThemeContext();
   const {width, height} = useWindowDimensions();
+  const {t} = useTranslation();
   const inset = useSafeAreaInsets();
   const {top} = inset;
   const styles = styling(theme);
@@ -28,7 +30,7 @@ const PdfListScreen = () => {
       <StatusBar translucent backgroundColor={'transparent'} />
       <SafeAreaView>
         <Text style={[{marginTop: top}, styles.headerText]}>
-          တရားစာအုပ်များ
+          {t('PDFSCREEN_TITLE')}
         </Text>
       </SafeAreaView>
       <ScrollView contentContainerStyle={styles.container}>

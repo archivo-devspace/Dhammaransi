@@ -35,6 +35,7 @@ export type MainStackParamList = {
   Missionary: undefined;
   Track: undefined;
   Setting: undefined;
+  Languages: undefined;
 };
 
 export type NavigationMainStackScreenProps = {

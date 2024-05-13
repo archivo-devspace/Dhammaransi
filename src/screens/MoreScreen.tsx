@@ -57,6 +57,12 @@ const MoreScreen = ({navigation}: Props) => {
       icon: 'cog',
       link: 'Setting',
     },
+    {
+      id: 6,
+      name: 'Languages',
+      icon: 'cog',
+      link: 'Languages',
+    },
   ];
   return (
     <View style={styles.mainContainer}>
