@@ -41,19 +41,29 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {TrackProvider} from './src/contexts/TrackContext';
 import TrackPlayer, {Capability} from 'react-native-track-player';
 
-TrackPlayer.setupPlayer();
-TrackPlayer.updateOptions({
-  capabilities: [
-    Capability.Play,
-    Capability.Pause,
-    Capability.SkipToNext,
-    Capability.SkipToPrevious,
-  ],
-
-  compactCapabilities: [Capability.Play, Capability.Pause],
-});
-
 const App = () => {
+  useEffect(() => {
+    const setUpPlayer = async () => {
+      await TrackPlayer.setupPlayer();
+      await TrackPlayer.updateOptions({
+        capabilities: [
+          Capability.Play,
+          Capability.Pause,
+          Capability.SkipToNext,
+          Capability.SkipToPrevious,
+        ],
+
+        compactCapabilities: [
+          Capability.Play,
+          Capability.Pause,
+          Capability.SkipToNext,
+          Capability.SkipToPrevious,
+        ],
+      });
+    };
+    setUpPlayer();
+  }, []);
+
   return (
     <GestureHandlerRootView>
       <ThemeProvider>

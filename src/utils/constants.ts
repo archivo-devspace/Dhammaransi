@@ -130,3 +130,46 @@ export const tracks = [
     artwork: 'https://www.bensound.com/bensound-img/dance.jpg',
   },
 ];
+
+export const ebooks = [
+  {
+    id: 1,
+    title: 'book1',
+    image: 'https://www.bensound.com/bensound-img/happyrock.jpg',
+  },
+  {
+    id: 2,
+    title: 'book2',
+    image: 'https://www.bensound.com/bensound-img/punky.jpg',
+  },
+  {
+    id: 3,
+    title: 'book1',
+    image: 'https://www.bensound.com/bensound-img/dance.jpg',
+  },
+  {
+    id: 4,
+    title: 'book2',
+    image: 'https://www.bensound.com/bensound-img/dreams.jpg',
+  },
+  {
+    id: 5,
+    title: 'book1',
+    image: 'https://www.bensound.com/bensound-img/dance.jpg',
+  },
+  {
+    id: 6,
+    title: 'book2',
+    image: 'https://www.bensound.com/bensound-img/dreams.jpg',
+  },
+  {
+    id: 7,
+    title: 'book1',
+    image: 'https://www.bensound.com/bensound-img/dance.jpg',
+  },
+  {
+    id: 8,
+    title: 'book2',
+    image: 'https://www.bensound.com/bensound-img/love.jpg',
+  },
+];

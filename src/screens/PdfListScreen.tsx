@@ -14,6 +14,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {Colors} from '../theme';
 import {CustomButton} from '../components/utils';
 import {Ionicons} from '../utils/common';
+import {ebooks} from '../utils/constants';
 
 const PdfListScreen = () => {
   const {theme} = useThemeContext();
@@ -25,29 +26,39 @@ const PdfListScreen = () => {
     <View>
       <StatusBar translucent backgroundColor={'transparent'} />
       <Text style={[{marginTop: top}, styles.headerText]}>တရားစာအုပ်များ</Text>
-      <ScrollView style={styles.container}>
-        <View
-          style={[styles.contentContainer, {justifyContent: 'space-between'}]}>
-          <View style={styles.contentContainer}>
-            <Image
-              source={require('../assets/marguerite.jpg')}
-              resizeMode="cover"
-              style={[styles.img, {width: width * 0.2, height: height * 0.1}]}
+      <ScrollView contentContainerStyle={styles.container}>
+        {ebooks?.map(ebook => (
+          <View key={ebook.id} style={[styles.contentContainer, {}]}>
+            <View style={styles.contentContainer}>
+              <View
+                style={[
+                  styles.img,
+                  {
+                    width: width * 0.2,
+                    height: height * 0.16,
+                  },
+                ]}>
+                <Image
+                  style={{width: '100%', height: '100%', borderRadius: 10}}
+                  source={{uri: ebook.image}}
+                  resizeMode="cover"
+                />
+              </View>
+              <Text style={styles.text}>{ebook.title}</Text>
+            </View>
+            <CustomButton
+              onPress={() => console.log('hello')}
+              icon={
+                <Ionicons
+                  name={`cloud-download-outline`}
+                  size={30}
+                  color={Colors[theme].text}
+                />
+              }
+              customButtonStyle={styles.btn}
             />
-            <Text style={styles.text}>hwllo world</Text>
           </View>
-          <CustomButton
-            onPress={() => console.log('hello')}
-            icon={
-              <Ionicons
-                name={`cloud-download-outline`}
-                size={30}
-                color={Colors[theme].text}
-              />
-            }
-            customButtonStyle={styles.btn}
-          />
-        </View>
+        ))}
       </ScrollView>
     </View>
   );
@@ -66,12 +77,15 @@ const styling = (theme: Theme) =>
       marginBottom: 10,
     },
     container: {
-      paddingHorizontal: 10,
+      paddingHorizontal: 30,
+      paddingBottom: 150,
     },
     contentContainer: {
       flexDirection: 'row',
       alignItems: 'center',
       gap: 10,
+      justifyContent: 'space-between',
+      marginBottom: 10,
     },
     text: {
       fontWeight: 'bold',
@@ -79,7 +93,7 @@ const styling = (theme: Theme) =>
       fontSize: 18,
     },
     img: {
-      borderRadius: 10,
+      borderRadius: 100,
       ...Platform.select({
         ios: {
           shadowOffset: {
@@ -90,7 +104,11 @@ const styling = (theme: Theme) =>
           shadowRadius: 5,
         },
         android: {
-          elevation: 7,
+          shadowColor: '#000',
+          shadowOffset: {width: 0, height: 2},
+          shadowOpacity: 0.5,
+          shadowRadius: 2,
+          elevation: 4,
         },
       }),
     },
