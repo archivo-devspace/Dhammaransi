@@ -62,30 +62,30 @@ const RenderItem = ({
     [currentTrackId, currentActiveTrack, playbackState.state],
   );
 
-  const getButtonIcon = (item: any) => {
-    if (loadingTrackId === item.id && playbackState.state !== State.Playing) {
-      return 'loading1';
-    } else if (
-      currentTrack?.id === item.id &&
-      playbackState.state === State.Playing
-    ) {
-      return 'pause';
-    } else if (
-      (currentTrack?.id !== item.id && loadingTrackId !== item.id) ||
-      (currentTrack?.id === item.id && playbackState.state === State.Paused)
-    ) {
-      return 'caretright';
-    } else {
-      return 'loading1';
-    }
-  };
+  //const getButtonIcon = (item: any) => {
+  //   if (loadingTrackId === item.id && playbackState.state !== State.Playing) {
+  //     return 'loading1';
+  //   } else if (
+  //     currentTrack?.id === item.id &&
+  //     playbackState.state === State.Playing
+  //   ) {
+  //     return 'pause';
+  //   } else if (
+  //     (currentTrack?.id !== item.id && loadingTrackId !== item.id) ||
+  //     (currentTrack?.id === item.id && playbackState.state === State.Paused)
+  //   ) {
+  //     return 'caretright';
+  //   } else {
+  //     return 'loading1';
+  //   }
+  // };
 
-  const renderButtonIcon = (item: any) => {
-    const iconName = getButtonIcon(item);
-    return (
-      <AntDesign name={iconName} size={25} color={Colors[theme].primary} />
-    );
-  };
+  // const renderButtonIcon = (item: any) => {
+  //   const iconName = getButtonIcon(item);
+  //   return (
+  //     <AntDesign name={iconName} size={25} color={Colors[theme].primary} />
+  //   );
+  // };
 
   return (
     <>

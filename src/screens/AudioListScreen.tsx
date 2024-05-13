@@ -59,15 +59,28 @@ const Audios = ({navigation}: Props) => {
                 onPress={() => handlePlayAudio(item)}
                 customButtonStyle={styles.btn}>
                 <View style={styles.trackContainer}>
-                  <View style={{flexDirection: 'row', gap: 16}}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      gap: 16,
+                      alignItems: 'center',
+                    }}>
                     <Image
                       source={{uri: item.artwork}}
                       resizeMode="cover"
                       style={styles.img}
                     />
                     <View style={{width: '70%', gap: 10}}>
-                      <Text style={styles.title}>{item.title}</Text>
-                      <Text style={styles.desc}>{item.artist}</Text>
+                      <Text style={styles.title}>
+                        {item.title.length > 50
+                          ? item.title.slice(0, 50) + '...'
+                          : item.title}
+                      </Text>
+                      <Text style={styles.desc}>
+                        {item.artist.length > 30
+                          ? item.artist.slice(0, 30) + '...'
+                          : item.artist}
+                      </Text>
                     </View>
                   </View>
                   <AntDesign
@@ -116,7 +129,8 @@ const styling = (theme: Theme) =>
       justifyContent: 'space-between',
       alignItems: 'center',
       width: '100%',
-      paddingRight: 10,
+      paddingRight: 20,
+      height: 60,
     },
     img: {
       width: 60,

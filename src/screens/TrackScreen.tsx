@@ -143,12 +143,15 @@ const TrackScreen = ({route, navigation}: Props) => {
               style={styles.img}
             />
           </View>
-          <View>
-            <Text style={styles.titleText}>
-              {currentTrack === null ? '' : currentTrack?.title}
-            </Text>
-
-            {currentTrack === null ? (
+          <View
+            style={{
+              marginTop: 30,
+              marginBottom: 20,
+              alignItems: 'center',
+              paddingHorizontal: 40,
+              gap: 5,
+            }}>
+            {!currentTrack ? (
               <CustomButton
                 title="Choose from alblum"
                 customButtonStyle={styles.chooseFromBtn}
@@ -163,7 +166,10 @@ const TrackScreen = ({route, navigation}: Props) => {
                 }
               />
             ) : (
-              <Text style={styles.artistText}>{currentTrack?.artist}</Text>
+              <>
+                <Text style={styles.titleText}>{currentTrack?.title}</Text>
+                <Text style={styles.artistText}>{currentTrack?.artist}</Text>
+              </>
             )}
           </View>
         </View>
@@ -311,19 +317,16 @@ const styling = (theme: Theme) =>
     },
     titleText: {
       fontSize: 20,
-      width: '80%',
+      // width: '80%',
       height: 50,
       fontWeight: 'bold',
-
       textAlign: 'center',
-      marginTop: 16,
       color: Colors[theme].primary,
     },
     artistText: {
       fontSize: 16,
-      width: '80%',
+      // width: '80%',
       height: 50,
-
       color: Colors[theme].primary,
       textAlign: 'center',
     },
