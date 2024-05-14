@@ -22,6 +22,7 @@ import {
   MovieProps,
   NavigationMainStackScreenProps,
 } from '../../../navigations/StackNavigation';
+import {useTranslation} from 'react-i18next';
 
 type Props = {
   data: MovieProps[];
@@ -31,6 +32,8 @@ type Props = {
 export const Audios = ({data, navigation}: Props) => {
   const {width, height} = useWindowDimensions();
   const {theme} = useThemeContext();
+  const {t} = useTranslation();
+
   const ITEM_WIDTH = width - width * 0.6;
   const ITEM_HEIGHT = height - height * 0.82;
   const MARGIN_HORIZONTAL = 10;
@@ -55,7 +58,7 @@ export const Audios = ({data, navigation}: Props) => {
 
   return (
     <View style={[styles.mainContainer, {height: height - height * 0.74}]}>
-      <Text style={styles.text}>Audios</Text>
+      <Text style={styles.text}>{t('TOP_AUDIOS')}</Text>
       <Animated.FlatList
         onScroll={onScroll}
         data={data}
