@@ -20,6 +20,7 @@ import ImageSlider from '../components/commons/ImageSlider';
 import Audios from '../components/commons/Audio';
 import TopNavigation from '../components/commons/TopNavigation';
 import {useNavigation} from '@react-navigation/native';
+import {useTranslation} from 'react-i18next';
 
 type Props = {
   navigation: NavigationMainStackScreenProps['navigation'];
@@ -29,6 +30,7 @@ const HomeScreen = ({navigation}: Props) => {
   // const navigation = useNavigation();
   const {theme} = useThemeContext();
   const {width, height} = useWindowDimensions();
+  const {t} = useTranslation();
   const scrollA = useRef(new Animated.Value(0)).current;
 
   const customHeight = height * 0.3;
@@ -107,7 +109,7 @@ const HomeScreen = ({navigation}: Props) => {
                   size={30}
                   color={Colors[theme].primary}
                 />
-                <Text style={{color: Colors[theme].text}}>{menu.name}</Text>
+                <Text style={{color: Colors[theme].text}}>{t(menu.name)}</Text>
               </TouchableOpacity>
             ))}
           </View>

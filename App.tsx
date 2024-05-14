@@ -67,21 +67,6 @@ const App = () => {
     setUpPlayer();
   }, []);
 
-  useEffect(() => {
-    const loadLanguage = async () => {
-      try {
-        const getstoredLanguage = await AsyncStorage.getItem('LANGUAGE');
-        setStoreLanguages(getstoredLanguage);
-        if (storeLanguages) {
-          i18next.changeLanguage(storeLanguages);
-        }
-      } catch (e) {
-        console.log(e);
-      }
-    };
-    loadLanguage();
-  }, [storeLanguages]); //need a dependencies for the immediately changes
-
   return (
     <GestureHandlerRootView>
       <ThemeProvider>
