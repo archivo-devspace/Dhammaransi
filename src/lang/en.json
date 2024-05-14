@@ -2,6 +2,17 @@
   "translation": {
     "PDFSCREEN_TITLE": "Ebooks",
     "CANCEL": "Cancel",
-    "SAVE": "Save"
+    "SAVE": "Save",
+    "SETTING": "Setting",
+    "DARK_MODE_ON": "Turn on dark mode",
+    "LANGUAGES": "Switch to Burmese Language",
+    "AUDIOS": "Audios",
+    "EBOOKS": "Ebooks",
+    "MOVIES": "Movies",
+    "PICTURES": "Pictures",
+    "BIOGRAPHY": "Biography",
+    "MEDITATION_TIMETABLE": "Mediation Timetable",
+    "JOURNEY": "Missionary Processes",
+    "CONTACT": "Contact"
   }
 }

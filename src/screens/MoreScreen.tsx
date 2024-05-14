@@ -15,6 +15,7 @@ import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {FontAwesome} from '../utils/common';
 import {NavigationMainStackScreenProps} from '../navigations/StackNavigation';
 import {CustomButton} from '../components/utils';
+import {useTranslation} from 'react-i18next';
 
 type Props = {
   navigation: NavigationMainStackScreenProps['navigation'];
@@ -23,45 +24,39 @@ type Props = {
 const MoreScreen = ({navigation}: Props) => {
   const insets = useSafeAreaInsets();
   const {theme} = useThemeContext();
-  console.log('insets', insets);
+  const {t} = useTranslation();
   const styles = styling(theme);
 
   const menuOptions = [
     {
       id: 1,
-      name: 'ဆရာတော်ဘုရားထေရုပတ္တိ',
+      name: 'BIOGRAPHY',
       icon: 'user-circle',
       link: 'Biography',
     },
     {
       id: 2,
-      name: 'တရားစခန်းအချိန်စာရင်း',
+      name: 'MEDITATION_TIMETABLE',
       icon: 'calendar-alt',
       link: 'Timetable',
     },
     {
       id: 3,
-      name: 'သာသနာပြုလုပ်ငန်းစဉ်များ',
+      name: 'JOURNEY',
       icon: 'place-of-worship',
       link: 'Missionary',
     },
     {
       id: 4,
-      name: 'ဆက်သွယ်ရန်',
+      name: 'CONTACT',
       icon: 'portrait',
       link: 'Contact',
     },
     {
       id: 5,
-      name: 'Setting',
+      name: 'SETTING',
       icon: 'cog',
       link: 'Setting',
-    },
-    {
-      id: 6,
-      name: 'Languages',
-      icon: 'cog',
-      link: 'Languages',
     },
   ];
   return (
@@ -93,7 +88,7 @@ const MoreScreen = ({navigation}: Props) => {
                   />
 
                   <Text style={{color: Colors[theme].text, fontSize: 14}}>
-                    {menu.name}
+                    {t(menu.name)}
                   </Text>
                 </View>
                 <FontAwesome

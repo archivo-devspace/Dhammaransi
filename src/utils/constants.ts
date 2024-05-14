@@ -23,25 +23,25 @@ export const menus = [
   {
     id: 1,
     icon: 'music',
-    name: 'Audios',
+    name: 'AUDIOS',
     link: 'Audios',
   },
   {
     id: 2,
     icon: 'book',
-    name: 'PDFs',
+    name: 'EBOOKS',
     link: 'Pdf',
   },
   {
     id: 3,
     icon: 'film',
-    name: 'Movies',
+    name: 'MOVIES',
     link: 'MovieLists',
   },
   {
     id: 4,
     icon: 'image',
-    name: 'Paintings',
+    name: 'PICTURES',
     link: 'Painting',
   },
 ];
