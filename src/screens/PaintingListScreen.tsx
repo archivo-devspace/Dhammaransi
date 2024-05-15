@@ -1,6 +1,7 @@
 import {
   Image,
   Platform,
+  Pressable,
   SafeAreaView,
   StatusBar,
   StyleSheet,
@@ -13,8 +14,6 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Colors} from '../theme';
-import {CustomButton} from '../components/utils';
-import {Ionicons} from '../utils/common';
 import {ebooks} from '../utils/constants';
 import {useTranslation} from 'react-i18next';
 
@@ -37,13 +36,13 @@ const PaintingsScreen = () => {
         {ebooks?.map(ebook => (
           <React.Fragment key={ebook.id}>
             <View style={styles.contentContainer}>
-              <View style={styles.contentContainer}>
+              <Pressable style={styles.contentContainer}>
                 <View
                   style={[
                     styles.img,
                     {
                       width: width * 0.9,
-                      height: height * 0.16,
+                      height: height * 0.18,
                     },
                   ]}>
                   <Image
@@ -52,8 +51,9 @@ const PaintingsScreen = () => {
                     resizeMode="cover"
                   />
                 </View>
+
                 <Text style={styles.text}>{ebook.title}</Text>
-              </View>
+              </Pressable>
             </View>
             {ebooks.length !== ebook?.id && <View style={styles.divider} />}
           </React.Fragment>

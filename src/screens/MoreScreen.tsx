@@ -26,6 +26,7 @@ const MoreScreen = ({navigation}: Props) => {
   const {theme} = useThemeContext();
   const {t} = useTranslation();
   const styles = styling(theme);
+  const {top} = insets;
 
   const menuOptions = [
     {
@@ -63,7 +64,7 @@ const MoreScreen = ({navigation}: Props) => {
     <View style={styles.mainContainer}>
       <StatusBar translucent backgroundColor="transparent" />
       {/* <SafeAreaView /> */}
-      <View style={{marginTop: insets.top}}>
+      <View style={{marginTop: top}}>
         <Text style={styles.headerText}>{t('TITLES.MORE')}</Text>
       </View>
       <ScrollView style={styles.optionContainer}>

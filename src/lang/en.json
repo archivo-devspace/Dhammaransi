@@ -4,8 +4,8 @@
       "TOP_PICTURES": "Historical Buddhist Paintings",
       "TOP_AUDIOS": "Top List Dhamma Talk Audios",
       "PDFSCREEN_TITLE": "Dhamma Scriptures",
-      "MORE" : "More",
-      "SETTING" : "Setting"
+      "MORE": "More",
+      "SETTING": "Setting"
     },
     "MENUS": {
       "AUDIOS": "Dhamma Talk Audios",
@@ -20,7 +20,7 @@
     },
     "UTILS": {
       "DARK_MODE_ON": "Turn on Dark Mode",
-      "LANGUAGES": "Switch to Burmese Language"
+      "LANGUAGES": "Turn on English Language"
     }
   }
 }
