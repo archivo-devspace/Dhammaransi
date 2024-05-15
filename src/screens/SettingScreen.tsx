@@ -41,21 +41,6 @@ const SettingScreen = () => {
     updateEnabledState();
   }, [theme, languages]);
 
-  const getAppSetting = useCallback(async () => {
-    const savedTheme = await get('Theme');
-    const savedLanguages = await get('LANGUAGE');
-    if (savedTheme !== null) {
-      setTheme(savedTheme);
-    }
-    if (savedLanguages !== null) {
-      setLanguages(savedLanguages);
-    }
-  }, [setTheme, setLanguages]);
-
-  useEffect(() => {
-    getAppSetting();
-  }, [getAppSetting]);
-
   const toggleTheme = useCallback(() => {
     const newTheme = theme === 'dark' ? 'light' : 'dark';
     save('Theme', newTheme);
@@ -64,7 +49,7 @@ const SettingScreen = () => {
 
   const toggleLanguages = async () => {
     const newLanguage = languages === 'en' ? 'mm' : 'en';
-    save('LANGUAGE', newLanguage);
+
     setLanguages(newLanguage);
   };
 
@@ -82,7 +67,7 @@ const SettingScreen = () => {
     <View style={styles.mainContainer}>
       <StatusBar translucent backgroundColor="transparent" />
       {/* <SafeAreaView /> */}
-      <View style={{marginTop: insets.top}}>
+      <View style={{marginTop: top}}>
         <Text style={styles.headerText}>More</Text>
       </View>
       <ScrollView style={styles.optionContainer}>
@@ -167,6 +152,7 @@ const styling = (theme: Theme) =>
     contentContainer: {
       flexDirection: 'row',
       justifyContent: 'space-between',
+      alignItems: 'center',
       width: '100%',
       padding: 20,
       gap: 30,
@@ -177,7 +163,7 @@ const styling = (theme: Theme) =>
     },
     optionContainer: {
       paddingHorizontal: 10,
-      marginTop: 20,
+      marginTop: 30,
     },
     menu: {
       width: '100%',

@@ -40,13 +40,12 @@ export const ThemeProvider: React.FC<{children: ReactNode}> = ({children}) => {
   useLayoutEffect(() => {
     const initializeTheme = async () => {
       const savedTheme = await get('Theme');
-      console.log('saveTheme', savedTheme);
+      const saveLanguage = await get('LANGUAGE');
+
       const systemTheme = Appearance.getColorScheme();
       setTheme(savedTheme || systemTheme);
-      //for languages
-      const saveLanguages = await get('LANGUAGE');
-      console.log('saveLanguages', saveLanguages);
-      setLanguages(saveLanguages);
+      setLanguages(saveLanguage || 'mm');
+
       setThemeLoading(false);
     };
 

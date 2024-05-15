@@ -122,7 +122,7 @@ const styling = (theme: Theme) =>
     },
     optionContainer: {
       paddingHorizontal: 10,
-      marginTop: 20,
+      marginTop: 30,
     },
     menu: {
       width: '100%',
