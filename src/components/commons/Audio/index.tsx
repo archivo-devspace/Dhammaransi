@@ -58,7 +58,7 @@ export const Audios = ({data, navigation}: Props) => {
 
   return (
     <View style={[styles.mainContainer, {height: height - height * 0.74}]}>
-      <Text style={styles.text}>{t('TOP_AUDIOS')}</Text>
+      <Text style={styles.text}>{t('TITLES.TOP_AUDIOS')}</Text>
       <Animated.FlatList
         onScroll={onScroll}
         data={data}

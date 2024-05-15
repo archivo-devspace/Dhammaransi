@@ -30,31 +30,31 @@ const MoreScreen = ({navigation}: Props) => {
   const menuOptions = [
     {
       id: 1,
-      name: 'BIOGRAPHY',
+      name: 'MENUS.BIOGRAPHY',
       icon: 'user-circle',
       link: 'Biography',
     },
     {
       id: 2,
-      name: 'MEDITATION_TIMETABLE',
+      name: 'MENUS.MEDITATION_TIMETABLE',
       icon: 'calendar-alt',
       link: 'Timetable',
     },
     {
       id: 3,
-      name: 'JOURNEY',
+      name: 'MENUS.JOURNEY',
       icon: 'place-of-worship',
       link: 'Missionary',
     },
     {
       id: 4,
-      name: 'CONTACT',
+      name: 'MENUS.CONTACT',
       icon: 'portrait',
       link: 'Contact',
     },
     {
       id: 5,
-      name: 'SETTING',
+      name: 'MENUS.SETTING',
       icon: 'cog',
       link: 'Setting',
     },
@@ -64,7 +64,7 @@ const MoreScreen = ({navigation}: Props) => {
       <StatusBar translucent backgroundColor="transparent" />
       {/* <SafeAreaView /> */}
       <View style={{marginTop: insets.top}}>
-        <Text style={styles.headerText}>More</Text>
+        <Text style={styles.headerText}>{t('TITLES.MORE')}</Text>
       </View>
       <ScrollView style={styles.optionContainer}>
         {menuOptions.map(menu => (
