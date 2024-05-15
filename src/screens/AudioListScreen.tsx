@@ -1,13 +1,5 @@
-import {
-  StyleSheet,
-  Text,
-  ScrollView,
-  View,
-  StatusBar,
-  Image,
-  useWindowDimensions,
-} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import {StyleSheet, Text, View, StatusBar, Image} from 'react-native';
+import React from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {Colors} from '../theme';
@@ -16,7 +8,7 @@ import {CustomButton} from '../components/utils';
 import {NavigationMainStackScreenProps} from '../navigations/StackNavigation';
 import {useTrackContext} from '../contexts/TrackContext';
 import {FlatList} from 'react-native';
-import TrackPlayer, {State, usePlaybackState} from 'react-native-track-player';
+import {State, usePlaybackState} from 'react-native-track-player';
 import {useTranslation} from 'react-i18next';
 
 type Props = {
@@ -27,17 +19,10 @@ const Audios = ({navigation}: Props) => {
   const insets = useSafeAreaInsets();
   const {theme} = useThemeContext();
   const {t} = useTranslation();
-  const {
-    trackLists,
-    setRepeatMode,
-    handlePlay,
-    currentTrack,
-    togglePlayingMode,
-  } = useTrackContext();
-  const {width, height} = useWindowDimensions();
+  const {trackLists, handlePlay, currentTrack} = useTrackContext();
   const playbackState = usePlaybackState();
   const styles = styling(theme);
-  const {top, bottom, left, right} = insets;
+  const {top} = insets;
 
   const handlePlayAudio = async (item: any) => {
     // togglePlayingMode();
@@ -78,8 +63,8 @@ const Audios = ({navigation}: Props) => {
                     />
                     <View style={{width: '70%', gap: 10}}>
                       <Text style={styles.title}>
-                        {item.title.length > 50
-                          ? item.title.slice(0, 50) + '...'
+                        {item.title.length > 45
+                          ? item.title.slice(0, 45) + '...'
                           : item.title}
                       </Text>
                       <Text style={styles.desc}>
@@ -134,6 +119,7 @@ const styling = (theme: Theme) =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
+      paddingVertical: 20,
     },
     trackContainer: {
       gap: 5,
@@ -164,6 +150,5 @@ const styling = (theme: Theme) =>
       width: '100%',
       height: 1,
       backgroundColor: Colors[theme].secondary_dark,
-      marginVertical: 20,
     },
   });

@@ -146,10 +146,12 @@ const TrackScreen = ({route, navigation}: Props) => {
           <View
             style={{
               marginTop: 30,
-              marginBottom: 20,
-              alignItems: 'center',
-              paddingHorizontal: 40,
+
+              justifyContent: 'center',
+              paddingHorizontal: 20,
               gap: 5,
+
+              height: 120,
             }}>
             {!currentTrack ? (
               <CustomButton
@@ -289,7 +291,7 @@ const styling = (theme: Theme) =>
     },
     imgContainer: {
       alignItems: 'center',
-      gap: 14,
+      gap: 1,
       paddingVertical: 30,
     },
     imageShadow: {
@@ -318,6 +320,7 @@ const styling = (theme: Theme) =>
     titleText: {
       fontSize: 20,
       // width: '80%',
+
       height: 50,
       fontWeight: 'bold',
       textAlign: 'center',
@@ -326,9 +329,11 @@ const styling = (theme: Theme) =>
     artistText: {
       fontSize: 16,
       // width: '80%',
-      height: 50,
+
+      height: 70,
       color: Colors[theme].primary,
       textAlign: 'center',
+      paddingHorizontal: 20,
     },
     contentContainer: {
       flex: 1,
@@ -339,7 +344,7 @@ const styling = (theme: Theme) =>
     trackContainer: {
       paddingHorizontal: '10%',
       width: '100%',
-      height: 100,
+      height: 60,
     },
     trackDuration: {
       flexDirection: 'row',
@@ -367,7 +372,7 @@ const styling = (theme: Theme) =>
     },
     chooseFromBtn: {
       backgroundColor: Colors[theme].text,
-      borderRadius: 20,
+      borderRadius: 10,
       paddingHorizontal: 20,
       paddingVertical: 10,
     },
