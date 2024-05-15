@@ -32,7 +32,7 @@ const TabArr: TabBar[] = [
   },
   {
     route: 'Track',
-    label: 'Track',
+    label: 'Play',
     component: TrackScreen,
     icon: 'play-circle',
   },

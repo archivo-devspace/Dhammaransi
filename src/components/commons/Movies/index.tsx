@@ -58,7 +58,7 @@ export const Movies = ({data, navigation}: Props) => {
 
   return (
     <View style={[styles.mainContainer, {height: height - height * 0.69}]}>
-      <Text style={styles.text}>{t('TOP_PICTURES')}</Text>
+      <Text style={styles.text}>{t('TITLES.TOP_PICTURES')}</Text>
       <Animated.FlatList
         onScroll={onScroll}
         data={data}

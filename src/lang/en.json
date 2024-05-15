@@ -1,20 +1,26 @@
 {
   "translation": {
-    "PDFSCREEN_TITLE": "Ebooks",
-    "CANCEL": "Cancel",
-    "SAVE": "Save",
-    "SETTING": "Setting",
-    "DARK_MODE_ON": "Turn on dark mode",
-    "LANGUAGES": "Switch to Burmese Language",
-    "AUDIOS": "Audios",
-    "EBOOKS": "Ebooks",
-    "MOVIES": "Movies",
-    "PICTURES": "Pictures",
-    "BIOGRAPHY": "Biography",
-    "MEDITATION_TIMETABLE": "Mediation Timetable",
-    "JOURNEY": "Missionary Processes",
-    "CONTACT": "Contact",
-    "TOP_PICTURES" : "Top List Pictures",
-    "TOP_AUDIOS" : "Top List AUDIOS"
+    "TITLES": {
+      "TOP_PICTURES": "Historical Buddhist Paintings",
+      "TOP_AUDIOS": "Top List Dhamma Talk Audios",
+      "PDFSCREEN_TITLE": "Dhamma Scriptures",
+      "MORE" : "More",
+      "SETTING" : "Setting"
+    },
+    "MENUS": {
+      "AUDIOS": "Dhamma Talk Audios",
+      "EBOOKS": "Dhamma Scriptures",
+      "MOVIES": "Lectures on The Sermon",
+      "PICTURES": "Buddhist Paintings",
+      "BIOGRAPHY": "Biography",
+      "MEDITATION_TIMETABLE": "Mediation Timetable",
+      "JOURNEY": "Missionary Processes",
+      "CONTACT": "Contact",
+      "SETTING": "Setting"
+    },
+    "UTILS": {
+      "DARK_MODE_ON": "Turn on Dark Mode",
+      "LANGUAGES": "Switch to Burmese Language"
+    }
   }
 }

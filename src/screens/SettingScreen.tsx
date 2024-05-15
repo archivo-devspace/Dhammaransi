@@ -68,11 +68,11 @@ const SettingScreen = () => {
       <StatusBar translucent backgroundColor="transparent" />
       {/* <SafeAreaView /> */}
       <View style={{marginTop: top}}>
-        <Text style={styles.headerText}>More</Text>
+        <Text style={styles.headerText}>{t('TITLES.SETTING')}</Text>
       </View>
       <ScrollView style={styles.optionContainer}>
         <View style={styles.contentContainer}>
-          <Text style={styles.text}>{t('DARK_MODE_ON')}</Text>
+          <Text style={styles.text}>{t('UTILS.DARK_MODE_ON')}</Text>
           <Switch
             value={isEnabled}
             handleSwitch={toggleSwitch}
@@ -103,7 +103,7 @@ const SettingScreen = () => {
         </View>
         <View style={styles.divider} />
         <View style={styles.contentContainer}>
-          <Text style={styles.text}>{t('LANGUAGES')}</Text>
+          <Text style={styles.text}>{t('UTILS.LANGUAGES')}</Text>
           <Switch
             value={burmeseLanguages}
             handleSwitch={toggleSwitchLang}
