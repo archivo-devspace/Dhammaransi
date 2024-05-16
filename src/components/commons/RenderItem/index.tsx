@@ -1,10 +1,9 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
-import React, {useCallback, useEffect, useLayoutEffect, useState} from 'react';
+import {StyleSheet, Text, View} from 'react-native';
+import React, {useCallback, useState} from 'react';
 import {Theme, useThemeContext} from '../../../contexts/ThemeContext';
 import {Colors} from '../../../theme';
 import {CustomButton} from '../../utils';
 import {AntDesign, truncateText} from '../../../utils/common';
-import {useTrackContext} from '../../../contexts/TrackContext';
 import TrackPlayer, {
   State,
   Track,
@@ -21,30 +20,15 @@ type Props = {
 const RenderItem = ({
   currentQueue,
   currentActiveTrack,
-  setCurrentActiveTrack,
+
   getCurrentActiveTrack,
 }: Props) => {
   const {theme} = useThemeContext();
-  const {getCurrentQueue, togglePlayingMode} = useTrackContext();
+
   const playbackState = usePlaybackState();
   const styles = styling(theme);
 
-  const [loadingTrackId, setLoadingTrackId] = useState<number | null>(null);
-
-  // const [currentActiveTrack, setCurrentActiveTrack] = useState<Track | null>(
-  //   null,
-  // );
-
   const [currentTrackId, setCurrentTrackId] = useState<number | null>(null);
-
-  // useEffect(() => {
-  //   const getCurrentTrack = async () => {
-  //     const current = await TrackPlayer.getActiveTrack();
-
-  //     current && setCurrentActiveTrack(current);
-  //   };
-  //   getCurrentTrack();
-  // }, [currentTrackId]);
 
   const handlePlaylistPlay = useCallback(
     async (index: number, id: number) => {
@@ -61,31 +45,6 @@ const RenderItem = ({
     },
     [currentTrackId, currentActiveTrack, playbackState.state],
   );
-
-  //const getButtonIcon = (item: any) => {
-  //   if (loadingTrackId === item.id && playbackState.state !== State.Playing) {
-  //     return 'loading1';
-  //   } else if (
-  //     currentTrack?.id === item.id &&
-  //     playbackState.state === State.Playing
-  //   ) {
-  //     return 'pause';
-  //   } else if (
-  //     (currentTrack?.id !== item.id && loadingTrackId !== item.id) ||
-  //     (currentTrack?.id === item.id && playbackState.state === State.Paused)
-  //   ) {
-  //     return 'caretright';
-  //   } else {
-  //     return 'loading1';
-  //   }
-  // };
-
-  // const renderButtonIcon = (item: any) => {
-  //   const iconName = getButtonIcon(item);
-  //   return (
-  //     <AntDesign name={iconName} size={25} color={Colors[theme].primary} />
-  //   );
-  // };
 
   return (
     <>

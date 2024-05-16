@@ -20,6 +20,9 @@ import Animated, {
 } from 'react-native-reanimated';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import BackDrop from '../BackDrop';
+import {CustomButton} from '../../utils';
+import {AntDesign, Entypo} from '../../../utils/common';
+import {useTranslation} from 'react-i18next';
 
 interface Props extends AnimatedProps<AnimatedScrollViewProps> {
   snapTo: string;
@@ -46,6 +49,7 @@ const BottomSheet = forwardRef<BottomSheetMethods, Props>(
     const scrollBegin = useSharedValue(0);
     const scrollY = useSharedValue(0);
     const [enableScroll, setEnableScroll] = useState(true);
+    const {t} = useTranslation();
 
     const expand = useCallback(() => {
       'worklet';
@@ -170,16 +174,25 @@ const BottomSheet = forwardRef<BottomSheetMethods, Props>(
               {backgroundColor: backGroundColor},
             ]}>
             <View style={styles.lineContainer}>
-              <Text style={styles.playlists}>PlayLists</Text>
+              <Text style={styles.playlists}>{t('UTILS.PLAYLIST')}</Text>
+
+              <CustomButton customButtonStyle={styles.icon} onPress={close}>
+                <Entypo
+                  name="circle-with-cross"
+                  size={25}
+                  color={Colors[theme].text}
+                />
+              </CustomButton>
             </View>
             <GestureDetector
               gesture={Gesture.Simultaneous(scrollViewGesture, panScroll)}>
               <Animated.ScrollView
                 scrollEnabled={enableScroll}
                 bounces={false}
+                showsVerticalScrollIndicator={false}
                 scrollEventThrottle={16}
                 onScroll={onScroll}>
-                <View style={{}}>{children}</View>
+                {children}
               </Animated.ScrollView>
             </GestureDetector>
           </Animated.View>
@@ -207,8 +220,9 @@ const styling = (theme: Theme) =>
       borderRightWidth: 1,
     },
     lineContainer: {
-      alignItems: 'center',
+      justifyContent: 'center',
       paddingVertical: 14,
+      flexDirection: 'row',
     },
     line: {
       borderBottomWidth: 1,
@@ -217,6 +231,14 @@ const styling = (theme: Theme) =>
     playlists: {
       color: Colors[theme].text,
       fontSize: 20,
-      fontWeight: 'bold',
+      fontWeight: '500',
+    },
+    icon: {
+      backgroundColor: Colors[theme].primary,
+      alignSelf: 'center',
+      borderRadius: 30,
+      padding: 4,
+      position: 'absolute',
+      right: 16,
     },
   });

@@ -20,7 +20,8 @@
     },
     "UTILS": {
       "DARK_MODE_ON": "Turn on Dark Mode",
-      "LANGUAGES": "Turn on English Language"
+      "LANGUAGES": "Turn on English Language",
+      "PLAYLIST": "Playlists"
     }
   }
 }
