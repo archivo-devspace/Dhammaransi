@@ -19,6 +19,7 @@ import MissionaryScreen from '../screens/MissionaryScreen';
 import LanguageScreen from '../screens/LanguagesScreen';
 import SettingScreen from '../screens/SettingScreen';
 import BottomTapNavigator from './BottomNavigation';
+import TrackPopupScreen from '../screens/TrackPopupScreen';
 
 export interface MovieProps {
   id: number;
@@ -42,6 +43,7 @@ export type MainStackParamList = {
   More: undefined;
   Missionary: undefined;
   Track: undefined;
+
   Setting: undefined;
   Languages: undefined;
 };
@@ -63,7 +65,7 @@ const StackNavigation = () => {
       <Stack.Screen name="Audios" component={Audios} />
       <Stack.Screen name="Pdf" component={PdfListScreen} />
       <Stack.Screen name="Painting" component={PaintingsScreen} />
-      <Stack.Screen name="Track" component={TrackScreen} />
+      <Stack.Screen name="Track" component={TrackPopupScreen} />
 
       <Stack.Screen name="More" component={MoreScreen} />
       <Stack.Screen name="Biography" component={BiographyScreen} />

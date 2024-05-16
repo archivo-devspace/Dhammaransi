@@ -29,7 +29,6 @@ const Header = ({title}: HeaderProps) => {
         alignItems: 'center',
         justifyContent: 'center',
         marginBottom: 30,
-        width: width,
       }}>
       <CustomButton
         onPress={() => navigation.goBack()}
