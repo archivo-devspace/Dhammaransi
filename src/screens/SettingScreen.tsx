@@ -1,37 +1,19 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {
-  Image,
-  Platform,
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  View,
-  useWindowDimensions,
-} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import Switch from '../components/utils/Switch/Switch';
-import {get, save} from '../utils/storage';
+import {save} from '../utils/storage';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {Colors} from '../theme';
-import {CustomButton} from '../components/utils';
-import {Ionicons} from '../utils/common';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useTranslation} from 'react-i18next';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import i18next from 'i18next';
-import Header from '../components/commons/Header';
+import Container from '../components/commons/Container';
 
 const SettingScreen = () => {
   const {theme, setTheme, languages, setLanguages} = useThemeContext();
-  const {width, height} = useWindowDimensions();
-  const insets = useSafeAreaInsets();
   const {t} = useTranslation();
   const [isEnabled, setIsEnabled] = useState<boolean>(false);
   const [burmeseLanguages, setBurmeseLanguages] = useState<boolean>(false);
 
   const styles = styling(theme);
-  const {top} = insets;
 
   useEffect(() => {
     const updateEnabledState = () => {
@@ -65,9 +47,7 @@ const SettingScreen = () => {
   };
 
   return (
-    <View style={styles.mainContainer}>
-      <StatusBar translucent backgroundColor="transparent" />
-      <Header title="MENUS.SETTING" />
+    <Container title="MENUS.SETTING">
       <ScrollView style={styles.optionContainer}>
         <View style={styles.contentContainer}>
           <Text style={styles.text}>{t('UTILS.DARK_MODE_ON')}</Text>
@@ -131,16 +111,12 @@ const SettingScreen = () => {
           />
         </View>
       </ScrollView>
-    </View>
+    </Container>
   );
 };
 
 const styling = (theme: Theme) =>
   StyleSheet.create({
-    mainContainer: {
-      flex: 1,
-      backgroundColor: Colors[theme]?.secondary,
-    },
     contentContainer: {
       flexDirection: 'row',
       justifyContent: 'space-between',

@@ -11,6 +11,7 @@ import {FlatList} from 'react-native';
 import {State, usePlaybackState} from 'react-native-track-player';
 import {useTranslation} from 'react-i18next';
 import Header from '../components/commons/Header';
+import Container from '../components/commons/Container';
 
 type Props = {
   navigation: NavigationMainStackScreenProps['navigation'];
@@ -34,10 +35,7 @@ const Audios = ({navigation}: Props) => {
   };
 
   return (
-    <View style={styles.mainContainer}>
-      <StatusBar translucent backgroundColor="transparent" />
-      {/* <SafeAreaView /> */}
-      <Header title="MENUS.AUDIOS" />
+    <Container title="MENUS.AUDIOS">
       <FlatList
         data={trackLists}
         showsVerticalScrollIndicator={false}
@@ -87,7 +85,7 @@ const Audios = ({navigation}: Props) => {
         keyExtractor={item => item.id.toString()}
         // Optional: Add extra FlatList props like `ItemSeparatorComponent`, etc.
       />
-    </View>
+    </Container>
   );
 };
 
@@ -95,10 +93,6 @@ export default Audios;
 
 const styling = (theme: Theme) =>
   StyleSheet.create({
-    mainContainer: {
-      flex: 1,
-      backgroundColor: Colors[theme].secondary,
-    },
     container: {
       flexDirection: 'row',
       justifyContent: 'space-between',
