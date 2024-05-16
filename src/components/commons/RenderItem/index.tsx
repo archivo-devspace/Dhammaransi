@@ -3,7 +3,7 @@ import React, {useCallback, useEffect, useLayoutEffect, useState} from 'react';
 import {Theme, useThemeContext} from '../../../contexts/ThemeContext';
 import {Colors} from '../../../theme';
 import {CustomButton} from '../../utils';
-import {AntDesign} from '../../../utils/common';
+import {AntDesign, truncateText} from '../../../utils/common';
 import {useTrackContext} from '../../../contexts/TrackContext';
 import TrackPlayer, {
   State,
@@ -134,40 +134,30 @@ const RenderItem = ({
                   )}
                 </View>
                 <View style={styles.textContainer}>
-                  {currentActiveTrack?.id === item.id ? (
-                    <Text style={[styles.text, {fontSize: 18}]}>
-                      {item.title.length > 23
-                        ? item.title.slice(0, 23) + '  .....'
-                        : item.title}
-                    </Text>
-                  ) : (
-                    <Text
-                      style={[
-                        styles.inactiveText,
-                        {fontSize: 18, opacity: 0.8},
-                      ]}>
-                      {item.title.length > 23
-                        ? item.title.slice(0, 23) + '  .....'
-                        : item.title}
-                    </Text>
-                  )}
-                  {currentActiveTrack?.id === item.id ? (
-                    <Text style={[styles.text, {fontSize: 14}]}>
-                      {item.artist.length > 33
-                        ? item.artist.slice(0, 33) + '  .....'
-                        : item.artist}
-                    </Text>
-                  ) : (
-                    <Text
-                      style={[
-                        styles.inactiveText,
-                        {fontSize: 12, opacity: 0.5},
-                      ]}>
-                      {item.artist.length > 37
-                        ? item.artist.slice(0, 37) + '  .....'
-                        : item.artist}
-                    </Text>
-                  )}
+                  <Text
+                    style={[
+                      currentActiveTrack?.id === item.id
+                        ? styles.text
+                        : styles.inactiveText,
+                      {
+                        fontSize: 18,
+                        opacity: currentActiveTrack?.id === item.id ? 1 : 0.8,
+                      },
+                    ]}>
+                    {truncateText(item.title, 23)}
+                  </Text>
+                  <Text
+                    style={[
+                      currentActiveTrack?.id === item.id
+                        ? styles.text
+                        : styles.inactiveText,
+                      {
+                        fontSize: currentActiveTrack?.id === item.id ? 14 : 12,
+                        opacity: currentActiveTrack?.id === item.id ? 1 : 0.5,
+                      },
+                    ]}>
+                    {truncateText(item.artist, 33)}
+                  </Text>
                 </View>
               </View>
             </CustomButton>
