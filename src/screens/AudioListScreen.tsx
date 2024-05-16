@@ -3,7 +3,7 @@ import React from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {Colors} from '../theme';
-import {AntDesign} from '../utils/common';
+import {AntDesign, truncateText} from '../utils/common';
 import {CustomButton} from '../components/utils';
 import {NavigationMainStackScreenProps} from '../navigations/StackNavigation';
 import {useTrackContext} from '../contexts/TrackContext';
@@ -63,14 +63,10 @@ const Audios = ({navigation}: Props) => {
                     />
                     <View style={{width: '70%', gap: 10}}>
                       <Text style={styles.title}>
-                        {item.title.length > 45
-                          ? item.title.slice(0, 45) + '...'
-                          : item.title}
+                        {truncateText(item.title, 45)}
                       </Text>
                       <Text style={styles.desc}>
-                        {item.artist.length > 30
-                          ? item.artist.slice(0, 30) + '...'
-                          : item.artist}
+                        {truncateText(item.artist, 30)}
                       </Text>
                     </View>
                   </View>
