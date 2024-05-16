@@ -1,35 +1,26 @@
 import {
   Image,
   Platform,
-  SafeAreaView,
-  StatusBar,
   StyleSheet,
   Text,
   View,
   useWindowDimensions,
 } from 'react-native';
 import React from 'react';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Colors} from '../theme';
 import {CustomButton} from '../components/utils';
 import {Ionicons} from '../utils/common';
 import {ebooks} from '../utils/constants';
-import {useTranslation} from 'react-i18next';
-import Header from '../components/commons/Header';
+import Container from '../components/commons/Container';
 
 const PdfListScreen = () => {
   const {theme} = useThemeContext();
   const {width, height} = useWindowDimensions();
-  const {t} = useTranslation();
-  const inset = useSafeAreaInsets();
-  const {top} = inset;
   const styles = styling(theme);
   return (
-    <View style={styles.mainContainer}>
-      <StatusBar translucent backgroundColor={'transparent'} />
-      <Header title="TITLES.PDFSCREEN_TITLE" />
+    <Container title="TITLES.PDFSCREEN_TITLE">
       <ScrollView
         contentContainerStyle={styles.container}
         showsVerticalScrollIndicator={false}>
@@ -69,7 +60,7 @@ const PdfListScreen = () => {
           </React.Fragment>
         ))}
       </ScrollView>
-    </View>
+    </Container>
   );
 };
 
@@ -77,10 +68,6 @@ export default PdfListScreen;
 
 const styling = (theme: Theme) =>
   StyleSheet.create({
-    mainContainer: {
-      flex: 1,
-      backgroundColor: Colors[theme].secondary,
-    },
     container: {
       paddingTop: 20,
       paddingHorizontal: 20,

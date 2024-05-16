@@ -15,15 +15,14 @@ import {Colors} from '../theme';
 import {ebooks} from '../utils/constants';
 
 import Header from '../components/commons/Header';
+import Container from '../components/commons/Container';
 
 const PaintingsScreen = () => {
   const {theme} = useThemeContext();
   const {width, height} = useWindowDimensions();
   const styles = styling(theme);
   return (
-    <View style={styles.mainContainer}>
-      <StatusBar translucent backgroundColor={'transparent'} />
-      <Header title="MENUS.PICTURES" />
+    <Container title="MENUS.PICTURES">
       <ScrollView
         contentContainerStyle={styles.container}
         showsVerticalScrollIndicator={false}>
@@ -53,7 +52,7 @@ const PaintingsScreen = () => {
           </React.Fragment>
         ))}
       </ScrollView>
-    </View>
+    </Container>
   );
 };
 
@@ -61,10 +60,6 @@ export default PaintingsScreen;
 
 const styling = (theme: Theme) =>
   StyleSheet.create({
-    mainContainer: {
-      flex: 1,
-      backgroundColor: Colors[theme].secondary,
-    },
     container: {
       paddingTop: 20,
       paddingHorizontal: 20,
