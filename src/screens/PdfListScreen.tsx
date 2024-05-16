@@ -17,6 +17,7 @@ import {CustomButton} from '../components/utils';
 import {Ionicons} from '../utils/common';
 import {ebooks} from '../utils/constants';
 import {useTranslation} from 'react-i18next';
+import Header from '../components/commons/Header';
 
 const PdfListScreen = () => {
   const {theme} = useThemeContext();
@@ -28,12 +29,10 @@ const PdfListScreen = () => {
   return (
     <View style={styles.mainContainer}>
       <StatusBar translucent backgroundColor={'transparent'} />
-      <SafeAreaView>
-        <Text style={[{marginTop: top}, styles.headerText]}>
-          {t('PDFSCREEN_TITLE')}
-        </Text>
-      </SafeAreaView>
-      <ScrollView contentContainerStyle={styles.container}>
+      <Header title="TITLES.PDFSCREEN_TITLE" />
+      <ScrollView
+        contentContainerStyle={styles.container}
+        showsVerticalScrollIndicator={false}>
         {ebooks?.map(ebook => (
           <React.Fragment key={ebook.id}>
             <View style={styles.contentContainer}>
@@ -82,18 +81,10 @@ const styling = (theme: Theme) =>
       flex: 1,
       backgroundColor: Colors[theme].secondary,
     },
-    headerText: {
-      fontSize: 22,
-      fontWeight: 'bold',
-      color: Colors[theme].text,
-      textAlign: 'center',
-      marginBottom: 10,
-    },
     container: {
       paddingTop: 20,
-      paddingLeft: 20,
-      paddingRight: 30,
-      paddingBottom: 63,
+      paddingHorizontal: 20,
+      paddingRight: 10,
     },
     contentContainer: {
       flexDirection: 'row',

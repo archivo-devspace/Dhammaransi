@@ -2,7 +2,6 @@ import {
   Image,
   Platform,
   Pressable,
-  SafeAreaView,
   StatusBar,
   StyleSheet,
   Text,
@@ -10,29 +9,24 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import React from 'react';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Colors} from '../theme';
 import {ebooks} from '../utils/constants';
-import {useTranslation} from 'react-i18next';
+
+import Header from '../components/commons/Header';
 
 const PaintingsScreen = () => {
   const {theme} = useThemeContext();
   const {width, height} = useWindowDimensions();
-  const {t} = useTranslation();
-  const inset = useSafeAreaInsets();
-  const {top} = inset;
   const styles = styling(theme);
   return (
     <View style={styles.mainContainer}>
       <StatusBar translucent backgroundColor={'transparent'} />
-      <SafeAreaView>
-        <Text style={[{marginTop: top}, styles.headerText]}>
-          {t('PDFSCREEN_TITLE')}
-        </Text>
-      </SafeAreaView>
-      <ScrollView contentContainerStyle={styles.container}>
+      <Header title="MENUS.PICTURES" />
+      <ScrollView
+        contentContainerStyle={styles.container}
+        showsVerticalScrollIndicator={false}>
         {ebooks?.map(ebook => (
           <React.Fragment key={ebook.id}>
             <View style={styles.contentContainer}>
@@ -71,18 +65,9 @@ const styling = (theme: Theme) =>
       flex: 1,
       backgroundColor: Colors[theme].secondary,
     },
-    headerText: {
-      fontSize: 22,
-      fontWeight: 'bold',
-      color: Colors[theme].text,
-      textAlign: 'center',
-      marginBottom: 10,
-    },
     container: {
       paddingTop: 20,
-      paddingLeft: 20,
-      paddingRight: 30,
-      paddingBottom: 63,
+      paddingHorizontal: 20,
     },
     contentContainer: {
       // flexDirection: 'row',

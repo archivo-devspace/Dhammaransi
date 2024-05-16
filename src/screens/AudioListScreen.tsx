@@ -10,6 +10,7 @@ import {useTrackContext} from '../contexts/TrackContext';
 import {FlatList} from 'react-native';
 import {State, usePlaybackState} from 'react-native-track-player';
 import {useTranslation} from 'react-i18next';
+import Header from '../components/commons/Header';
 
 type Props = {
   navigation: NavigationMainStackScreenProps['navigation'];
@@ -36,11 +37,8 @@ const Audios = ({navigation}: Props) => {
     <View style={styles.mainContainer}>
       <StatusBar translucent backgroundColor="transparent" />
       {/* <SafeAreaView /> */}
-      <View style={{marginTop: top}}>
-        <Text style={styles.headerText}>{t('MENUS.AUDIOS')}</Text>
-      </View>
+      <Header title="MENUS.AUDIOS" />
       <FlatList
-        style={{marginTop: 30}}
         data={trackLists}
         showsVerticalScrollIndicator={false}
         renderItem={({item}) => (
@@ -100,22 +98,13 @@ const styling = (theme: Theme) =>
     mainContainer: {
       flex: 1,
       backgroundColor: Colors[theme].secondary,
-      paddingHorizontal: 20,
-      // paddingVertical: 20,
-      paddingBottom: 25,
-      marginBottom: 40,
-    },
-    headerText: {
-      textAlign: 'center',
-      fontWeight: 'bold',
-      fontSize: 25,
-      color: Colors[theme].text,
     },
     container: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
       paddingVertical: 20,
+      paddingHorizontal: 20,
     },
     trackContainer: {
       gap: 5,

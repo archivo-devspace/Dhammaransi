@@ -20,6 +20,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useTranslation} from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import i18next from 'i18next';
+import Header from '../components/commons/Header';
 
 const SettingScreen = () => {
   const {theme, setTheme, languages, setLanguages} = useThemeContext();
@@ -66,10 +67,7 @@ const SettingScreen = () => {
   return (
     <View style={styles.mainContainer}>
       <StatusBar translucent backgroundColor="transparent" />
-      {/* <SafeAreaView /> */}
-      <View style={{marginTop: top}}>
-        <Text style={styles.headerText}>{t('TITLES.SETTING')}</Text>
-      </View>
+      <Header title="MENUS.SETTING" />
       <ScrollView style={styles.optionContainer}>
         <View style={styles.contentContainer}>
           <Text style={styles.text}>{t('UTILS.DARK_MODE_ON')}</Text>
@@ -143,18 +141,11 @@ const styling = (theme: Theme) =>
       flex: 1,
       backgroundColor: Colors[theme]?.secondary,
     },
-    headerText: {
-      textAlign: 'center',
-      fontWeight: 'bold',
-      fontSize: 25,
-      color: Colors[theme].text,
-    },
     contentContainer: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
       width: '100%',
-      padding: 20,
       gap: 30,
     },
     text: {
@@ -162,8 +153,8 @@ const styling = (theme: Theme) =>
       fontSize: 14,
     },
     optionContainer: {
-      paddingHorizontal: 10,
       marginTop: 30,
+      paddingHorizontal: 20,
     },
     menu: {
       width: '100%',
