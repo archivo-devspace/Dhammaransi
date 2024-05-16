@@ -35,6 +35,7 @@ import {MainStackParamList} from '../navigations/StackNavigation';
 import {NavigationMainBottomTabScreenProps} from '../navigations/BottomNavigation';
 import {useTrackContext} from '../contexts/TrackContext';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
+import {useTranslation} from 'react-i18next';
 
 type Props = {
   route: RouteProp<MainStackParamList, 'Track'>;
@@ -43,6 +44,7 @@ type Props = {
 
 const TrackScreen = ({route, navigation}: Props) => {
   const insets = useSafeAreaInsets();
+  const {t} = useTranslation();
   const {theme} = useThemeContext();
   const [currentQueue, setCurrentQueue] = useState<Track[]>([]);
   const {getCurrentQueue} = useTrackContext();
@@ -155,7 +157,7 @@ const TrackScreen = ({route, navigation}: Props) => {
             }}>
             {!currentTrack ? (
               <CustomButton
-                title="Choose from alblum"
+                title={t('UTILS.CHOOSEALBLUM')}
                 customButtonStyle={styles.chooseFromBtn}
                 customButtonTextStyle={styles.chooseFrom}
                 onPress={() => navigation.navigate('Audios')}

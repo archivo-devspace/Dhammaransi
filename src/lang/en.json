@@ -21,7 +21,9 @@
     "UTILS": {
       "DARK_MODE_ON": "Turn on Dark Mode",
       "LANGUAGES": "Turn on English Language",
-      "PLAYLIST": "Playlists"
+      "PLAYLIST": "Playlists",
+      "EMPTY": "Empty",
+      "CHOOEALBLUM": "Choose from alblum"
     }
   }
 }

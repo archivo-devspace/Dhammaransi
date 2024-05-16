@@ -9,6 +9,7 @@ import TrackPlayer, {
   Track,
   usePlaybackState,
 } from 'react-native-track-player';
+import {useTranslation} from 'react-i18next';
 
 type Props = {
   currentQueue: Track[];
@@ -24,6 +25,7 @@ const RenderItem = ({
   getCurrentActiveTrack,
 }: Props) => {
   const {theme} = useThemeContext();
+  const {t} = useTranslation();
 
   const playbackState = usePlaybackState();
   const styles = styling(theme);
@@ -48,81 +50,97 @@ const RenderItem = ({
 
   return (
     <>
-      {currentQueue.map((item: any, index: number) => {
-        return (
-          <View
-            style={[
-              styles.container,
-              {
-                borderColor:
-                  currentActiveTrack?.id === item.id
-                    ? Colors[theme].primary
-                    : Colors[theme].secondary_light,
-              },
-            ]}
-            key={index}>
-            <CustomButton
-              onPress={async () => {
-                setCurrentTrackId(item.id);
-                getCurrentActiveTrack(item.id);
-                await handlePlaylistPlay(index, item.id);
-              }}
-              customButtonStyle={styles.btn}>
-              <View style={styles.btnContainer}>
-                <View style={styles.icon}>
-                  {currentActiveTrack?.id === item.id ? (
-                    playbackState.state === State.Paused ? (
-                      <AntDesign
-                        name="caretright"
-                        size={25}
-                        color={Colors[theme].primary}
-                      />
-                    ) : (
-                      <AntDesign
-                        name="pause"
-                        size={25}
-                        color={Colors[theme].primary}
-                      />
-                    )
-                  ) : (
-                    <AntDesign
-                      name="caretright"
-                      size={25}
-                      color={Colors[theme].primary}
-                    />
-                  )}
-                </View>
-                <View style={styles.textContainer}>
-                  <Text
-                    style={[
+      {currentQueue.length > 0 ? (
+        <>
+          {currentQueue.map((item: any, index: number) => {
+            return (
+              <View
+                style={[
+                  styles.container,
+                  {
+                    borderColor:
                       currentActiveTrack?.id === item.id
-                        ? styles.text
-                        : styles.inactiveText,
-                      {
-                        fontSize: 18,
-                        opacity: currentActiveTrack?.id === item.id ? 1 : 0.8,
-                      },
-                    ]}>
-                    {truncateText(item.title, 23)}
-                  </Text>
-                  <Text
-                    style={[
-                      currentActiveTrack?.id === item.id
-                        ? styles.text
-                        : styles.inactiveText,
-                      {
-                        fontSize: currentActiveTrack?.id === item.id ? 14 : 12,
-                        opacity: currentActiveTrack?.id === item.id ? 1 : 0.5,
-                      },
-                    ]}>
-                    {truncateText(item.artist, 33)}
-                  </Text>
-                </View>
+                        ? Colors[theme].primary
+                        : Colors[theme].secondary_light,
+                  },
+                ]}
+                key={index}>
+                <CustomButton
+                  onPress={async () => {
+                    setCurrentTrackId(item.id);
+                    getCurrentActiveTrack(item.id);
+                    await handlePlaylistPlay(index, item.id);
+                  }}
+                  customButtonStyle={styles.btn}>
+                  <View style={styles.btnContainer}>
+                    <View style={styles.icon}>
+                      {currentActiveTrack?.id === item.id ? (
+                        playbackState.state === State.Paused ? (
+                          <AntDesign
+                            name="caretright"
+                            size={25}
+                            color={Colors[theme].primary}
+                          />
+                        ) : (
+                          <AntDesign
+                            name="pause"
+                            size={25}
+                            color={Colors[theme].primary}
+                          />
+                        )
+                      ) : (
+                        <AntDesign
+                          name="caretright"
+                          size={25}
+                          color={Colors[theme].primary}
+                        />
+                      )}
+                    </View>
+                    <View style={styles.textContainer}>
+                      <Text
+                        style={[
+                          currentActiveTrack?.id === item.id
+                            ? styles.text
+                            : styles.inactiveText,
+                          {
+                            fontSize: 18,
+                            opacity:
+                              currentActiveTrack?.id === item.id ? 1 : 0.8,
+                          },
+                        ]}>
+                        {truncateText(item.title, 23)}
+                      </Text>
+                      <Text
+                        style={[
+                          currentActiveTrack?.id === item.id
+                            ? styles.text
+                            : styles.inactiveText,
+                          {
+                            fontSize:
+                              currentActiveTrack?.id === item.id ? 14 : 12,
+                            opacity:
+                              currentActiveTrack?.id === item.id ? 1 : 0.5,
+                          },
+                        ]}>
+                        {truncateText(item.artist, 33)}
+                      </Text>
+                    </View>
+                  </View>
+                </CustomButton>
               </View>
-            </CustomButton>
-          </View>
-        );
-      })}
+            );
+          })}
+        </>
+      ) : (
+        <View
+          style={{
+            alignItems: 'center',
+            alignSelf: 'center',
+            marginTop: '50%',
+          }}>
+          <Text style={{color: Colors[theme].text}}>{t('UTILS.EMPTY')}</Text>
+        </View>
+      )}
     </>
   );
 };
