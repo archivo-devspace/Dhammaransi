@@ -52,7 +52,7 @@ const MovieListScreen = () => {
                 />
               </View> */}
               <YoutubePlayer
-                height={height * 0.18}
+                height={height * 0.3}
                 width={width * 0.9}
                 play={playing}
                 videoId={video.videoId}
