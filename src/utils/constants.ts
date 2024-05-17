@@ -174,3 +174,38 @@ export const ebooks = [
     image: 'https://www.bensound.com/bensound-img/love.jpg',
   },
 ];
+
+// utils/constants.js
+
+export const youtubeVideos = [
+  {
+    id: 1,
+    videoId: 'iee2TATGMyI',
+    title: 'Introduction to React Native',
+    description: 'An introductory video to React Native framework.',
+  },
+  {
+    id: 2,
+    videoId: 'OEV8gMkCHXQ',
+    title: 'React Native Tutorial',
+    description: 'A comprehensive tutorial on React Native development.',
+  },
+  {
+    id: 3,
+    videoId: 'QPLzL93Xa1o',
+    title: 'Advanced React Native',
+    description: 'An advanced guide to building React Native applications.',
+  },
+  {
+    id: 4,
+    videoId: 'r1Ev8yqryyk',
+    title: 'React Native UI Design',
+    description: 'Learn how to design beautiful UIs with React Native.',
+  },
+  {
+    id: 5,
+    videoId: 'KEP1p5d3N1A',
+    title: 'State Management in React Native',
+    description: 'An overview of state management techniques in React Native.',
+  },
+];
