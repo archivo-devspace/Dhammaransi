@@ -27,7 +27,7 @@ const MovieListScreen = () => {
     }
   }, []);
   return (
-    <Container title="MENUS.PICTURES">
+    <Container title="MENUS.MOVIES">
       <ScrollView
         contentContainerStyle={styles.container}
         showsVerticalScrollIndicator={false}>
