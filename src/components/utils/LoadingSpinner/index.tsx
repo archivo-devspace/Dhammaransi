@@ -4,7 +4,6 @@ import {Theme, useThemeContext} from '../../../contexts/ThemeContext';
 import {Colors} from '../../../theme';
 
 interface Props {
-  color: ColorValue;
   durationMs?: number;
 }
 
@@ -16,13 +15,13 @@ const startRotationAnimation = (
     Animated.timing(rotationDegree, {
       toValue: 1,
       duration: durationMs,
-      easing: Easing.linear,
+      easing: Easing.sin,
       useNativeDriver: true,
     }),
   ).start();
 };
 
-const LoadingSpinner = ({color, durationMs = 1000}: Props): JSX.Element => {
+const LoadingSpinner = ({durationMs = 1000}: Props): JSX.Element => {
   const rotationDegree = useRef(new Animated.Value(0)).current;
 
   const {theme} = useThemeContext();
@@ -35,11 +34,15 @@ const LoadingSpinner = ({color, durationMs = 1000}: Props): JSX.Element => {
 
   return (
     <View style={styles.container} accessibilityRole="progressbar">
-      <View style={[styles.background, {borderColor: color}]} />
+      <Animated.View style={[styles.background]} />
       <Animated.View
         style={[
           styles.progress,
-          {borderTopColor: color, borderRightColor: color},
+          {
+            borderTopColor: Colors[theme].primary_dark,
+
+            borderBottomColor: Colors[theme].primary_dark,
+          },
           {
             transform: [
               {
@@ -71,15 +74,15 @@ const styling = (theme: Theme) =>
       height: '100%',
       borderRadius: height / 2,
       borderWidth: 4,
-      opacity: 0.25,
+      opacity: 0.5,
+      borderColor: Colors[theme].primary,
     },
     progress: {
       width: '100%',
       height: '100%',
       borderRadius: height / 2,
-      borderLeftColor: Colors[theme].secondary_dark,
-
-      borderBottomColor: Colors[theme].secondary_dark,
+      borderLeftColor: Colors[theme].primary_light,
+      borderRightColor: Colors[theme].primary_light,
       borderWidth: 4,
       position: 'absolute',
     },
