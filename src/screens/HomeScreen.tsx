@@ -8,6 +8,7 @@ import {
   Animated,
   useWindowDimensions,
   Platform,
+  SafeAreaView,
 } from 'react-native';
 
 import {NavigationMainStackScreenProps} from '../navigations/StackNavigation';
@@ -31,7 +32,7 @@ const HomeScreen = ({navigation}: Props) => {
   const {theme} = useThemeContext();
   const {width, height} = useWindowDimensions();
   const {t} = useTranslation();
-  const scrollA = useRef(new Animated.Value(0)).current;
+  const scrollA = useRef(new Animated.Value(0.5)).current;
 
   const customHeight = height * 0.3;
 
@@ -48,7 +49,9 @@ const HomeScreen = ({navigation}: Props) => {
         barStyle={'default'}
         backgroundColor={'transparent'}
       />
-      <TopNavigation title="Home" scrollA={scrollA} />
+      <SafeAreaView>
+        <TopNavigation title="Home" scrollA={scrollA} />
+      </SafeAreaView>
       <Animated.ScrollView
         onScroll={Animated.event(
           [{nativeEvent: {contentOffset: {y: scrollA}}}],
@@ -88,7 +91,7 @@ const HomeScreen = ({navigation}: Props) => {
             backgroundColor: Colors[theme]?.secondary,
             borderTopRightRadius: 16,
             borderTopLeftRadius: 16,
-            paddingBottom: 80,
+            paddingBottom: 60,
             borderColor: Colors[theme]?.secondary_dark,
             borderTopWidth: 1,
             borderLeftWidth: 1,

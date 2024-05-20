@@ -52,7 +52,7 @@ const MovieListScreen = () => {
                 />
               </View> */}
               <YoutubePlayer
-                height={height * 0.3}
+                height={height * 0.25}
                 width={width * 0.9}
                 play={playing}
                 videoId={video.videoId}
@@ -110,7 +110,7 @@ const styling = (theme: Theme) =>
       width: '100%',
       height: 1,
       backgroundColor: Colors[theme].secondary_dark,
-      marginVertical: 20,
+      marginVertical: 30,
     },
     btn: {},
   });
