@@ -54,7 +54,7 @@ export const images = [
 ];
 
 export const BANNER_H = 320;
-export const TOPNAVI_H = 40;
+export const TOPNAVI_H = 55;
 
 export const tracks = [
   {

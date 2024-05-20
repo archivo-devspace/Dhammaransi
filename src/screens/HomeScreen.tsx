@@ -32,7 +32,7 @@ const HomeScreen = ({navigation}: Props) => {
   const {theme} = useThemeContext();
   const {width, height} = useWindowDimensions();
   const {t} = useTranslation();
-  const scrollA = useRef(new Animated.Value(0.5)).current;
+  const scrollA = useRef(new Animated.Value(0)).current;
 
   const customHeight = height * 0.3;
 
@@ -50,7 +50,7 @@ const HomeScreen = ({navigation}: Props) => {
         backgroundColor={'transparent'}
       />
       <SafeAreaView>
-        <TopNavigation title="Home" scrollA={scrollA} />
+        <TopNavigation title={t('TITLES.HOME')} scrollA={scrollA} />
       </SafeAreaView>
       <Animated.ScrollView
         onScroll={Animated.event(
@@ -116,6 +116,16 @@ const HomeScreen = ({navigation}: Props) => {
               </TouchableOpacity>
             ))}
           </View>
+          <Text>
+            Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+            Exercitationem aut velit incidunt quos, voluptatem blanditiis quam
+            neque natus libero minima, fuga adipisci. Eveniet perferendis
+            mollitia soluta distinctio, aliquid minima debitis. Lorem, ipsum
+            dolor sit amet consectetur adipisicing elit. Exercitationem aut
+            velit incidunt quos, voluptatem blanditiis quam neque natus libero
+            minima, fuga adipisci. Eveniet perferendis mollitia soluta
+            distinctio, aliquid minima debitis.
+          </Text>
           <Movies data={movies} navigation={navigation} />
           <Audios data={movies} navigation={navigation} />
         </View>

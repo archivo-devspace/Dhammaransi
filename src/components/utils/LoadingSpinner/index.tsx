@@ -1,10 +1,23 @@
 import React, {useEffect, useRef} from 'react';
-import {StyleSheet, View, ColorValue, Animated, Easing} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  ColorValue,
+  Animated,
+  Easing,
+  Text,
+} from 'react-native';
 import {Theme, useThemeContext} from '../../../contexts/ThemeContext';
 import {Colors} from '../../../theme';
 
 interface Props {
-  durationMs?: number;
+  durationMs: number;
+  loaderSize: number;
+  loadingText: string;
+  loadingTextColor: string;
+  loadingTextSize: number;
+  bgColor: string;
+  color: string;
 }
 
 const startRotationAnimation = (
@@ -15,33 +28,78 @@ const startRotationAnimation = (
     Animated.timing(rotationDegree, {
       toValue: 1,
       duration: durationMs,
-      easing: Easing.sin,
+      easing: Easing.bounce,
       useNativeDriver: true,
     }),
   ).start();
 };
 
-const LoadingSpinner = ({durationMs = 1000}: Props): JSX.Element => {
+const startPulseAnimation = (
+  durationMs: number,
+  pulseScale: Animated.Value,
+): void => {
+  Animated.loop(
+    Animated.sequence([
+      Animated.timing(pulseScale, {
+        toValue: 1.3,
+        duration: durationMs,
+        easing: Easing.inOut(Easing.ease),
+        useNativeDriver: true,
+      }),
+      Animated.timing(pulseScale, {
+        toValue: 0.5,
+        duration: durationMs,
+        easing: Easing.inOut(Easing.ease),
+        useNativeDriver: true,
+      }),
+    ]),
+  ).start();
+};
+
+const LoadingSpinner = ({
+  durationMs,
+  loaderSize,
+  bgColor,
+  color,
+  loadingText,
+  loadingTextColor,
+  loadingTextSize,
+}: Props): JSX.Element => {
   const rotationDegree = useRef(new Animated.Value(0)).current;
+  const pulseScale = useRef(new Animated.Value(0.5)).current;
 
   const {theme} = useThemeContext();
 
-  const styles = styling(theme);
+  const styles = styling(theme, loaderSize);
 
   useEffect(() => {
     startRotationAnimation(durationMs, rotationDegree);
-  }, [durationMs, rotationDegree]);
+    startPulseAnimation(durationMs, pulseScale);
+  }, [durationMs, rotationDegree, pulseScale]);
 
   return (
     <View style={styles.container} accessibilityRole="progressbar">
-      <Animated.View style={[styles.background]} />
+      <Animated.View style={[styles.background, {borderColor: bgColor}]}>
+        <Animated.View style={[{transform: [{scale: pulseScale}]}]}>
+          <Text
+            style={{
+              alignSelf: 'center',
+              color: loadingTextColor,
+              fontSize: loadingTextSize,
+              fontWeight: 'bold',
+            }}>
+            {loadingText}
+          </Text>
+        </Animated.View>
+      </Animated.View>
       <Animated.View
         style={[
           styles.progress,
           {
-            borderTopColor: Colors[theme].primary_dark,
-
-            borderBottomColor: Colors[theme].primary_dark,
+            borderTopColor: color,
+            borderBottomColor: color,
+            borderLeftColor: bgColor,
+            borderRightColor: bgColor,
           },
           {
             transform: [
@@ -59,30 +117,28 @@ const LoadingSpinner = ({durationMs = 1000}: Props): JSX.Element => {
   );
 };
 
-const height = 45;
-
-const styling = (theme: Theme) =>
+const styling = (theme: Theme, loaderSize: number) =>
   StyleSheet.create({
     container: {
-      width: height,
-      height: height,
+      width: loaderSize,
+      height: loaderSize,
       justifyContent: 'center',
       alignItems: 'center',
     },
     background: {
       width: '100%',
       height: '100%',
-      borderRadius: height / 2,
+      borderRadius: loaderSize / 2,
+      justifyContent: 'center',
+      alignContent: 'center',
       borderWidth: 4,
-      opacity: 0.5,
-      borderColor: Colors[theme].primary,
+      opacity: 1,
     },
     progress: {
       width: '100%',
       height: '100%',
-      borderRadius: height / 2,
-      borderLeftColor: Colors[theme].primary_light,
-      borderRightColor: Colors[theme].primary_light,
+      borderRadius: loaderSize / 2,
+
       borderWidth: 4,
       position: 'absolute',
     },

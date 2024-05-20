@@ -107,10 +107,10 @@ const styling = (theme: Theme) =>
     },
     text: {
       color: Colors[theme].text,
-      fontSize: 19,
+      fontSize: 16,
       marginHorizontal: 10,
       marginBottom: remToPx(0.8),
-      fontWeight: '500',
+      fontWeight: '600',
       textAlign: 'center',
     },
     flatListStyle: {
