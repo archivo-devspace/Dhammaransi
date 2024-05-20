@@ -34,7 +34,9 @@ export type MainStackParamList = {
   Movie: {
     item: MovieProps;
   };
-  Audios: undefined;
+  Audios: {
+    item: MovieProps | null;
+  };
   Pdf: undefined;
   Painting: undefined;
   Biography: undefined;

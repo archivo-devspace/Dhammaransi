@@ -50,7 +50,6 @@ export const Audios = ({data, navigation}: Props) => {
   });
 
   const handleClick = (item: MovieProps) => {
-    console.log('hello');
     navigation.navigate('Audios', {item});
   };
 
@@ -107,10 +106,11 @@ const styling = (theme: Theme) =>
     },
     text: {
       color: Colors[theme].text,
-      fontSize: 16,
+      fontSize: 18,
       marginHorizontal: 10,
       marginBottom: remToPx(0.8),
-      fontWeight: '600',
+      fontWeight: '500',
+      opacity: 0.7,
       textAlign: 'center',
     },
     flatListStyle: {

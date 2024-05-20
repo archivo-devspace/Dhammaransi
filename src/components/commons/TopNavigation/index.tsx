@@ -63,13 +63,13 @@ import {
   useWindowDimensions,
   StyleSheet,
 } from 'react-native';
-import {useSafeArea} from 'react-native-safe-area-context';
+import {useSafeArea, useSafeAreaInsets} from 'react-native-safe-area-context';
 import {TOPNAVI_H} from '../../../utils/constants';
 import {Colors} from '../../../theme';
 import {Theme, useThemeContext} from '../../../contexts/ThemeContext';
 
 const TopNavigation = (props: any) => {
-  const safeArea = useSafeArea();
+  const {top} = useSafeAreaInsets();
   const {height} = useWindowDimensions();
   const {theme} = useThemeContext();
   const {title, scrollA} = props;
@@ -82,21 +82,21 @@ const TopNavigation = (props: any) => {
       return;
     }
     const listenerId = scrollA.addListener((a: any) => {
-      const topNaviOffset =
-        BANNER_H - TOPNAVI_H - safeArea.top - (TOPNAVI_H + safeArea.top + 10);
+      const topNaviOffset = BANNER_H - TOPNAVI_H - top - (TOPNAVI_H - top + 65);
       isTransparent !== a.value < topNaviOffset &&
         setTransparent(!isTransparent);
     });
     return () => scrollA.removeListener(listenerId);
   });
 
-  const styles = styling(theme, safeArea, isFloating, isTransparent);
+  const styles = styling(theme, top, isFloating, isTransparent);
 
   return (
     <>
       <StatusBar
         barStyle={isTransparent ? 'light-content' : 'dark-content'}
         backgroundColor="transparent"
+        translucent
       />
       <View style={styles.container}>
         <Text style={styles.title}>{title}</Text>
@@ -107,15 +107,15 @@ const TopNavigation = (props: any) => {
 
 const styling = (
   theme: Theme,
-  safeArea: any,
-  isFloating: any,
-  isTransparent: any,
+  top: number,
+  isFloating: boolean,
+  isTransparent: boolean,
 ) =>
   StyleSheet.create({
     container: {
-      paddingTop: safeArea.top,
-      marginBottom: isFloating ? -TOPNAVI_H - safeArea.top : 0,
-      height: TOPNAVI_H + safeArea.top,
+      paddingTop: top - 6,
+      marginBottom: isFloating ? -TOPNAVI_H - top : 0,
+      height: TOPNAVI_H + top,
       justifyContent: 'center',
       borderBottomLeftRadius: 10,
       borderBottomRightRadius: 10,
@@ -128,7 +128,9 @@ const styling = (
       borderRightColor: isTransparent
         ? 'transparent'
         : Colors[theme].secondary_dark,
-      borderWidth: 1,
+      borderBottomWidth: 1,
+      borderLeftWidth: 1,
+      borderRightWidth: 1,
       backgroundColor: isTransparent ? '#0001' : Colors[theme].secondary,
       shadowOpacity: isTransparent ? 0 : 0.5,
       elevation: isTransparent ? 0.05 : 5,
@@ -136,11 +138,14 @@ const styling = (
     },
     title: {
       textAlign: 'center',
-      fontWeight: '500',
+      fontWeight: '600',
+      fontVariant: ['small-caps'],
+      paddingTop: 5,
       fontSize: 18,
       paddingHorizontal: 20,
-      lineHeight: 24,
-      color: isTransparent ? '#FFF' : Colors[theme].text,
+      lineHeight: 22,
+      opacity: isTransparent ? 0.6 : 0.7,
+      color: isTransparent ? Colors[theme].secondary_light : Colors[theme].text,
     },
   });
 

@@ -36,8 +36,8 @@ const ImageSlider = ({images}: {images: any}) => {
       const nextIndex = (active + 1) % images.length;
       setActive(nextIndex);
       const scrollToX = nextIndex * width;
-      const step = 60; // Increase for slower animation, decrease for faster
-      const duration = 3000; // Total duration of the animation in milliseconds
+      const step = 100; // Increase for slower animation, decrease for faster
+      const duration = 2000; // Total duration of the animation in milliseconds
       const steps = Math.floor(duration / step);
       let currentStep = 0;
       const timer = setInterval(() => {
@@ -51,7 +51,7 @@ const ImageSlider = ({images}: {images: any}) => {
           scrollViewRef.current?.scrollTo({x: scrollToX, animated: true});
         }
       }, step);
-    }, 10000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [active]);

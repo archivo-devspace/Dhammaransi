@@ -36,6 +36,7 @@ import {NavigationMainBottomTabScreenProps} from '../navigations/BottomNavigatio
 import {useTrackContext} from '../contexts/TrackContext';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {useTranslation} from 'react-i18next';
+import LoadingSpinner from '../components/utils/LoadingSpinner';
 
 type Props = {
   route: RouteProp<MainStackParamList, 'Track'>;
@@ -126,7 +127,7 @@ const TrackScreen = ({route, navigation}: Props) => {
 
   return (
     <ScrollView style={styles.mainContainer}>
-      <StatusBar backgroundColor={Colors[theme].secondary} />
+      <StatusBar translucent backgroundColor={Colors[theme].secondary} />
 
       <View style={{flex: 1.5, paddingTop: top}}>
         <View style={styles.imgContainer}>
@@ -160,7 +161,7 @@ const TrackScreen = ({route, navigation}: Props) => {
                 title={t('UTILS.CHOOSEALBLUM')}
                 customButtonStyle={styles.chooseFromBtn}
                 customButtonTextStyle={styles.chooseFrom}
-                onPress={() => navigation.navigate('Audios')}
+                onPress={() => navigation.navigate('Audios', {item: null})}
                 icon={
                   <FontAwesome
                     name="music"
@@ -245,12 +246,39 @@ const TrackScreen = ({route, navigation}: Props) => {
             customButtonStyle={styles.btn}
             onPress={togglePlayingMode}
             icon={
-              <Entypo
-                name={`${playingIcon()}`}
-                size={65}
-                style={{elevation: 2}}
-                color={Colors[theme].primary}
-              />
+              playbackState.state === State.Playing ? (
+                <Entypo
+                  name={`controller-paus`}
+                  size={65}
+                  style={{elevation: 2}}
+                  color={Colors[theme].primary}
+                />
+              ) : playbackState.state === State.Paused ? (
+                <Entypo
+                  name={`controller-play`}
+                  size={65}
+                  style={{elevation: 2}}
+                  color={Colors[theme].primary}
+                />
+              ) : playbackState.state === State.Ready ||
+                playbackState.state === State.Buffering ? (
+                <LoadingSpinner
+                  durationMs={1500}
+                  bgColor={Colors[theme].secondary_dark}
+                  color={Colors[theme].primary}
+                  loaderSize={65}
+                  loadingText="connecting"
+                  loadingTextColor={Colors[theme].primary}
+                  loadingTextSize={6}
+                />
+              ) : (
+                <Entypo
+                  name={`controller-stop`}
+                  size={65}
+                  style={{elevation: 2}}
+                  color={Colors[theme].primary}
+                />
+              )
             }
           />
           <CustomButton
