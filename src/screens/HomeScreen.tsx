@@ -44,11 +44,11 @@ const HomeScreen = ({navigation}: Props) => {
 
   return (
     <View style={styles.mainContainer}>
-      <StatusBar
+      {/* <StatusBar
         translucent
         barStyle={'default'}
         backgroundColor={'transparent'}
-      />
+      /> */}
       <SafeAreaView>
         <TopNavigation title={t('TITLES.HOME')} scrollA={scrollA} />
       </SafeAreaView>
@@ -112,20 +112,18 @@ const HomeScreen = ({navigation}: Props) => {
                   size={30}
                   color={Colors[theme].primary}
                 />
-                <Text style={{color: Colors[theme].text}}>{t(menu.name)}</Text>
+                <Text
+                  style={{
+                    color: Colors[theme].text,
+                    fontSize: 14,
+                    opacity: 0.8,
+                  }}>
+                  {t(menu.name)}
+                </Text>
               </TouchableOpacity>
             ))}
           </View>
-          <Text>
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-            Exercitationem aut velit incidunt quos, voluptatem blanditiis quam
-            neque natus libero minima, fuga adipisci. Eveniet perferendis
-            mollitia soluta distinctio, aliquid minima debitis. Lorem, ipsum
-            dolor sit amet consectetur adipisicing elit. Exercitationem aut
-            velit incidunt quos, voluptatem blanditiis quam neque natus libero
-            minima, fuga adipisci. Eveniet perferendis mollitia soluta
-            distinctio, aliquid minima debitis.
-          </Text>
+
           <Movies data={movies} navigation={navigation} />
           <Audios data={movies} navigation={navigation} />
         </View>
