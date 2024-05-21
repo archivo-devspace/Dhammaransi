@@ -60,8 +60,7 @@ export const tracks = [
   {
     id: 1,
     url: 'https://www.bensound.com/bensound-music/bensound-happyrock.mp3',
-    title:
-      'Happy Rock',
+    title: 'Happy Rock',
     artist: 'Benjamin Tissot',
     album: "Bensound's rock",
     date: '2014-05-20T07:00:00+00:00', // RFC 3339
@@ -192,20 +191,20 @@ export const youtubeVideos = [
   },
   {
     id: 3,
-    videoId: 'QPLzL93Xa1o',
+    videoId: 'w2ifba5_1qI',
     title: 'Advanced React Native',
     description: 'An advanced guide to building React Native applications.',
   },
   {
     id: 4,
-    videoId: 'r1Ev8yqryyk',
-    title: 'React Native UI Design',
+    videoId: '0ckOUBiuxVY',
+    title: 'React Conf 2024 Day 2',
     description: 'Learn how to design beautiful UIs with React Native.',
   },
   {
     id: 5,
-    videoId: 'KEP1p5d3N1A',
-    title: 'State Management in React Native',
+    videoId: 'p3vaaD9pn9I',
+    title: 'Networking For Hackers! (Common Network Protocols)',
     description: 'An overview of state management techniques in React Native.',
   },
 ];

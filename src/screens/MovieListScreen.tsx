@@ -13,6 +13,7 @@ import {Colors} from '../theme';
 import {ebooks, youtubeVideos} from '../utils/constants';
 import Container from '../components/commons/Container';
 import YoutubePlayer from 'react-native-youtube-iframe';
+import {truncateText} from '../utils/common';
 
 const MovieListScreen = () => {
   const {theme} = useThemeContext();
@@ -60,7 +61,9 @@ const MovieListScreen = () => {
               />
             </View>
             <Text style={styles.text}>{video.title}</Text>
-            <Text style={styles.text}>{video.description}</Text>
+            <Text style={styles.text}>
+              {truncateText(video.description, 40)}
+            </Text>
 
             {ebooks.length !== video?.id && <View style={styles.divider} />}
           </React.Fragment>
