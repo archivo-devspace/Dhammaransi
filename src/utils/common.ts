@@ -6,8 +6,9 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-export {FontAwesome, AntDesign, Entypo, Ionicons, Feather, MaterialIcon};
+export {FontAwesome, AntDesign, Entypo, Ionicons, Feather, MaterialIcon, MaterialIcons};
 
 export const handleAxiosError = (error: any) => {
   if (axios.isAxiosError(error)) {

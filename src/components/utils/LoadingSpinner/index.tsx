@@ -20,7 +20,7 @@ interface Props {
   color: string;
 }
 
-const startRotationAnimation = (
+export const startRotationAnimation = (
   durationMs: number,
   rotationDegree: Animated.Value,
 ): void => {
@@ -34,7 +34,7 @@ const startRotationAnimation = (
   ).start();
 };
 
-const startPulseAnimation = (
+export const startPulseAnimation = (
   durationMs: number,
   pulseScale: Animated.Value,
 ): void => {

@@ -18,6 +18,7 @@ interface ButtonPorps {
   customButtonStyle?: object;
   customButtonTextStyle?: object;
   children?: ReactNode;
+  gap?: number;
 }
 
 const CustomButton = ({
@@ -27,6 +28,7 @@ const CustomButton = ({
   customButtonStyle,
   customButtonTextStyle,
   children,
+  gap = 0,
 }: ButtonPorps) => {
   return (
     <>
@@ -41,7 +43,7 @@ const CustomButton = ({
           onPress={onPress}
           style={customButtonStyle ? customButtonStyle : styles.button}>
           <View
-            style={{flexDirection: 'row', gap: 10, justifyContent: 'center'}}>
+            style={{flexDirection: 'row', gap: gap, justifyContent: 'center'}}>
             <View>{icon}</View>
             <Text
               style={

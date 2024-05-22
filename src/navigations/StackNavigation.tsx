@@ -20,6 +20,7 @@ import LanguageScreen from '../screens/LanguagesScreen';
 import SettingScreen from '../screens/SettingScreen';
 import BottomTapNavigator from './BottomNavigation';
 import TrackPopupScreen from '../screens/TrackPopupScreen';
+import OfflineDownloadGrid from '../screens/DownloadedAudioListScreen';
 
 export interface MovieProps {
   id: number;
@@ -48,6 +49,7 @@ export type MainStackParamList = {
 
   Setting: undefined;
   Languages: undefined;
+  Downloaded: undefined;
 };
 
 export type NavigationMainStackScreenProps = {
@@ -76,6 +78,7 @@ const StackNavigation = () => {
       <Stack.Screen name="Missionary" component={MissionaryScreen} />
       <Stack.Screen name="Languages" component={LanguageScreen} />
       <Stack.Screen name="Setting" component={SettingScreen} />
+      <Stack.Screen name="Downloaded" component={OfflineDownloadGrid} />
     </Stack.Navigator>
   );
 };

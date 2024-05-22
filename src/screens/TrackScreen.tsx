@@ -6,12 +6,14 @@ import React, {
   useState,
 } from 'react';
 import {
+  Animated,
   Image,
   Platform,
   ScrollView,
   StatusBar,
   StyleSheet,
   Text,
+  TouchableOpacity,
   useWindowDimensions,
   View,
 } from 'react-native';
@@ -21,7 +23,13 @@ import {BottomSheetMethods} from '../components/commons/bottomSheet';
 import RenderItem from '../components/commons/RenderItem';
 import BottomSheet from '../components/commons/bottomSheet';
 import {CustomButton} from '../components/utils';
-import {Entypo, FontAwesome, MaterialIcon} from '../utils/common';
+import {
+  Entypo,
+  FontAwesome,
+  Ionicons,
+  MaterialIcon,
+  MaterialIcons,
+} from '../utils/common';
 import {Colors} from '../theme';
 import TrackPlayer, {
   Capability,
@@ -37,6 +45,12 @@ import {useTrackContext} from '../contexts/TrackContext';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {useTranslation} from 'react-i18next';
 import LoadingSpinner from '../components/utils/LoadingSpinner';
+import Toast from 'react-native-toast-message';
+import DownloadModal from '../components/commons/DownloadModal';
+import {
+  fetchDownloadedDataFromLocalDir,
+  sendDownloadedDataToLocalDir,
+} from '../api_services/downloadService';
 
 type Props = {
   route: RouteProp<MainStackParamList, 'Track'>;
@@ -68,7 +82,78 @@ const TrackScreen = ({route, navigation}: Props) => {
 
   const [currentTrackId, setCurrentTrackId] = useState<number | null>(null);
 
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [isAlreadyDownload, setAlreadyDownload] = useState(false);
+  const [isDownloading, setDownloading] = useState(false);
   const [icon, setIcon] = useState();
+  const [downloadProgress, setDownloadProgress] = useState(0);
+  const [downloadingTrackIds, setDownloadingTrackIds] = useState<any>([]);
+  const [loading, setLoading] = useState(false);
+
+  useLayoutEffect(() => {
+    fetchDownloadedDataFromLocalDir(item => {
+      if (item?.length > 0) {
+        const track = item.find(
+          (obj: any) => obj?.contentId === currentTrack.id,
+        );
+        setAlreadyDownload(!!track);
+      } else {
+        setAlreadyDownload(false);
+      }
+    });
+
+    const find = downloadingTrackIds.find(
+      (element: any) => element === currentTrack.id,
+    );
+
+    console.log('find', find);
+    if (find !== undefined) {
+      setLoading(true);
+    } else {
+      setLoading(false);
+    }
+    // Reset the downloading state if the current track changes
+    if (!find) {
+      setDownloading(false);
+    }
+  }, [currentTrack, downloadingTrackIds]);
+
+  const onDownloadPress = () => {
+    const find = downloadingTrackIds.find(
+      (element: any) => element === currentTrack.id,
+    );
+    if (!find) {
+      setModalVisible(true);
+      setDownloading(true);
+      setDownloadingTrackIds((prevIds: any) => [...prevIds, currentTrack.id]);
+
+      sendDownloadedDataToLocalDir(
+        err => {
+          if (err) {
+            setDownloading(false);
+            setDownloadingTrackIds((prevIds: any) =>
+              prevIds.filter((id: any) => id !== currentTrack.id),
+            );
+          }
+        },
+        currentTrack.id,
+        currentTrack.url,
+        currentTrack.artist,
+        currentTrack.title,
+        currentTrack.artwork,
+        true,
+      );
+    } else {
+      setModalVisible(true); // Show the modal with current progress if already downloading
+    }
+  };
+  const onAlreadyDownloadPress = () => {
+    showToast(
+      'success',
+      'Already downloaded',
+      'This content is already downloaded 👋',
+    );
+  };
 
   useEffect(() => {
     MaterialIcon.getImageSource('circle', 20, Colors[theme].primary).then(
@@ -219,6 +304,49 @@ const TrackScreen = ({route, navigation}: Props) => {
             </Text>
           </View>
         </View>
+        {currentTrack && (
+          <View
+            style={{
+              marginBottom: 16,
+            }}>
+            {isAlreadyDownload ? (
+              <CustomButton
+                customButtonStyle={styles.btn}
+                onPress={onAlreadyDownloadPress}
+                icon={
+                  <Ionicons
+                    name={`cloud-done-sharp`}
+                    size={40}
+                    color={Colors[theme].primary}
+                  />
+                }
+              />
+            ) : isDownloading || loading ? (
+              <CustomButton
+                customButtonStyle={styles.btn}
+                icon={
+                  <MaterialIcon
+                    name={'weather-cloudy-clock'}
+                    size={40}
+                    color={Colors[theme].primary}
+                  />
+                }
+              />
+            ) : (
+              <CustomButton
+                customButtonStyle={styles.btn}
+                onPress={onDownloadPress}
+                icon={
+                  <MaterialIcon
+                    name={`cloud-download`}
+                    size={40}
+                    color={Colors[theme].primary}
+                  />
+                }
+              />
+            )}
+          </View>
+        )}
         <View style={styles.buttonContainer}>
           <CustomButton
             customButtonStyle={styles.btn}
@@ -305,6 +433,22 @@ const TrackScreen = ({route, navigation}: Props) => {
           />
         </View>
       </View>
+
+      <DownloadModal
+        isModalVisible={isModalVisible}
+        onClosePress={() => setModalVisible(false)}
+        contentId={currentTrack?.id}
+        downloadProgress={downloadProgress}
+        onDownloadFinished={(track: any) => {
+          if (track) {
+            setAlreadyDownload(true);
+            setDownloading(false);
+            setDownloadingTrackIds((prevIds: any) =>
+              prevIds.filter((id: any) => id !== track.id),
+            );
+          }
+        }}
+      />
     </ScrollView>
   );
 };
@@ -386,6 +530,7 @@ const styling = (theme: Theme) =>
     },
     btn: {
       backgroundColor: 'transparent',
+      alignSelf: 'center',
     },
     buttonContainer: {
       justifyContent: 'center',
@@ -404,4 +549,22 @@ const styling = (theme: Theme) =>
       paddingHorizontal: 20,
       paddingVertical: 10,
     },
+
+    suffelIcon: {
+      width: 30,
+      height: 30,
+    },
   });
+
+export const showToast = (type: any, text1: string, text2: string) => {
+  Toast.show({
+    type: type,
+    text1: text1,
+    text2: text2,
+
+    position: 'top',
+    topOffset: 50,
+    visibilityTime: 4000,
+    autoHide: true,
+  });
+};

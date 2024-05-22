@@ -59,6 +59,12 @@ const MoreScreen = ({navigation}: Props) => {
       icon: 'cog',
       link: 'Setting',
     },
+    {
+      id: 6,
+      name: 'Downloaded',
+      icon: 'cog',
+      link: 'Downloaded',
+    },
   ];
   return (
     <View style={styles.mainContainer}>
