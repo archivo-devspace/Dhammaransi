@@ -1,6 +1,21 @@
 import {View, Easing, Animated, SafeAreaView, StyleSheet} from 'react-native';
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useLayoutEffect, useRef} from 'react';
 import Svg, {G, Circle, Text} from 'react-native-svg';
+import {useThemeContext} from '../../../contexts/ThemeContext';
+import {Colors} from '../../../theme';
+
+interface Props {
+  percentage: string;
+  centerText: string;
+
+  fourthText?: string;
+  customStyle?: any;
+  circularSize?: number;
+  fillColor?: string;
+  strokeColor?: string;
+  progressColor?: string;
+  strokeWidthValue?: number;
+}
 
 const CircularProgressBar = ({
   percentage,
@@ -8,10 +23,10 @@ const CircularProgressBar = ({
   fourthText,
   customStyle,
   circularSize = 55,
-  fillColor = '#29322C',
   strokeColor = '#B0B0B9',
+  progressColor,
   strokeWidthValue = 4,
-}: any) => {
+}: Props) => {
   const size = circularSize;
   const strokeWidth = strokeWidthValue;
   const center = size / 2;
@@ -19,8 +34,9 @@ const CircularProgressBar = ({
   const circumference = 2 * Math.PI * radius;
   const progressAnimation = useRef(new Animated.Value(0)).current;
   const progressRef = useRef({setNativeProps: ({}) => {}});
+  const {theme} = useThemeContext();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const animation = (toValue: any) => {
       return Animated.timing(progressAnimation, {
         toValue,
@@ -32,7 +48,7 @@ const CircularProgressBar = ({
     animation(percentage);
   }, [progressAnimation, percentage]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     progressAnimation.addListener(value => {
       const strokeDashoffset =
         circumference - (circumference * value.value) / 100;
@@ -77,7 +93,7 @@ const CircularProgressBar = ({
               strokeWidth={strokeWidth}
             />
             <Circle
-              stroke={'#fff'}
+              stroke={progressColor}
               ref={progressRef as any}
               fill="transparent"
               cx={center}

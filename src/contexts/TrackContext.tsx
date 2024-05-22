@@ -1,5 +1,7 @@
 import {
+  Dispatch,
   ReactNode,
+  SetStateAction,
   createContext,
   useCallback,
   useContext,
@@ -14,6 +16,11 @@ import TrackPlayer, {
   usePlaybackState,
 } from 'react-native-track-player';
 import {tracks} from '../utils/constants';
+import {
+  fetchDownloadedDataFromLocalDir,
+  sendDownloadedDataToLocalDir,
+} from '../api_services/downloadService';
+import {showToast} from '../screens/TrackScreen';
 
 export interface TrackProps {
   id: number;
@@ -30,8 +37,6 @@ export interface TrackContextType {
   playingTrackLists: Array<TrackProps>;
   setPlayingTrackLists: (playingTrackLists: Array<TrackProps>) => void;
   getAllTracks?: () => void;
-  handleRepeatTracks: () => void;
-  handleRepeatTrack: () => void;
   repeatIcon: () =>
     | 'repeat'
     | 'repeat-off'
@@ -42,13 +47,23 @@ export interface TrackContextType {
   changeRepeatMode: () => void;
   handlePlay: (trackId: number) => void;
   togglePlayingMode: () => void;
-  playingIcon: () => any;
   handleNextTrack: () => void;
   handlePrevTrack: () => void;
   currentTrack: any;
   setRepeatMode: (repeatMode: string) => void;
   repeatMode: string;
   getCurrentQueue: () => Promise<Track[]>;
+  onDownloadPress: () => void;
+  onAlreadyDownloadPress: () => void;
+  setDownloadingTrackIds: Dispatch<any>;
+  setDownloading: Dispatch<SetStateAction<boolean>>;
+  isAlreadyDownload: boolean;
+  setAlreadyDownload: Dispatch<SetStateAction<boolean>>;
+  isDownloading: boolean;
+  loading: boolean;
+  setLoading: Dispatch<SetStateAction<boolean>>;
+  isModalVisible: boolean;
+  setModalVisible: Dispatch<SetStateAction<boolean>>;
 }
 
 const TrackContext = createContext<TrackContextType | undefined>(undefined);
@@ -58,7 +73,11 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
   const [playingTrackLists, setPlayingTrackLists] = useState<Array<TrackProps>>(
     [],
   );
-
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [isAlreadyDownload, setAlreadyDownload] = useState(false);
+  const [downloadingTrackIds, setDownloadingTrackIds] = useState<any>([]);
+  const [loading, setLoading] = useState(false);
+  const [isDownloading, setDownloading] = useState(false);
   const [currentTrack, setCurrentTrack] = useState<any>(null);
   const playbackState = usePlaybackState();
   const [repeatMode, setRepeatMode] = useState('shuffle-disabled');
@@ -69,6 +88,72 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     };
     getAllTracks();
   }, []);
+
+  useLayoutEffect(() => {
+    fetchDownloadedDataFromLocalDir(item => {
+      if (item?.length > 0) {
+        const track = item.find(
+          (obj: any) => obj?.contentId === currentTrack.id,
+        );
+        setAlreadyDownload(!!track);
+      } else {
+        setAlreadyDownload(false);
+      }
+    });
+
+    const find = downloadingTrackIds.find(
+      (element: any) => element === currentTrack.id,
+    );
+
+    console.log('find', find);
+    if (find !== undefined) {
+      setLoading(true);
+    } else {
+      setLoading(false);
+    }
+    // Reset the downloading state if the current track changes
+    if (!find) {
+      setDownloading(false);
+    }
+  }, [currentTrack, downloadingTrackIds]);
+
+  const onDownloadPress = () => {
+    const find = downloadingTrackIds.find(
+      (element: any) => element === currentTrack.id,
+    );
+    if (!find) {
+      setModalVisible(true);
+      setDownloading(true);
+      setDownloadingTrackIds((prevIds: any) => [...prevIds, currentTrack.id]);
+
+      sendDownloadedDataToLocalDir(
+        err => {
+          if (err) {
+            setDownloading(false);
+            setDownloadingTrackIds((prevIds: any) =>
+              prevIds.filter((id: any) => id !== currentTrack.id),
+            );
+          }
+        },
+        currentTrack.id,
+        currentTrack.url,
+        currentTrack.artist,
+        currentTrack.title,
+        currentTrack.artwork,
+        true,
+      );
+    } else {
+      setModalVisible(true); // Show the modal with current progress if already downloading
+    }
+  };
+
+  const onAlreadyDownloadPress = () => {
+    showToast(
+      'success',
+      'Already downloaded',
+      'This content is already downloaded 👋',
+    );
+  };
 
   const handlePlay = useCallback(
     async (trackId: number) => {
@@ -137,16 +222,6 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     }
   };
 
-  const playingIcon = () => {
-    if (playbackState.state === State.Playing) {
-      return 'controller-paus';
-    }
-    if (playbackState.state === State.Paused) {
-      return 'controller-play';
-    }
-    return 'controller-stop';
-  };
-
   const getCurrentQueue = async () => {
     return await TrackPlayer.getQueue();
   };
@@ -190,10 +265,6 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     }
   };
 
-  const handleRepeatTracks = () => {};
-
-  const handleRepeatTrack = () => {};
-
   const handleNextTrack = async () => {
     await TrackPlayer.skipToNext();
   };
@@ -207,19 +278,27 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     setTrackLists,
     playingTrackLists,
     setPlayingTrackLists,
-    handleRepeatTrack,
-    handleRepeatTracks,
     handlePlay,
     togglePlayingMode,
     repeatIcon,
     changeRepeatMode,
-    playingIcon,
     handleNextTrack,
     handlePrevTrack,
     currentTrack,
     setRepeatMode,
     repeatMode,
     getCurrentQueue,
+    onDownloadPress,
+    onAlreadyDownloadPress,
+    setDownloadingTrackIds,
+    setDownloading,
+    isAlreadyDownload,
+    setAlreadyDownload,
+    isDownloading,
+    loading,
+    setLoading,
+    isModalVisible,
+    setModalVisible,
   };
 
   return (

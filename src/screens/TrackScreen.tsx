@@ -68,12 +68,22 @@ const TrackScreen = ({route, navigation}: Props) => {
   const playbackState = usePlaybackState();
   const {
     repeatIcon,
-    playingIcon,
     changeRepeatMode,
     togglePlayingMode,
     handleNextTrack,
     handlePrevTrack,
     currentTrack,
+    onDownloadPress,
+    onAlreadyDownloadPress,
+    setDownloadingTrackIds,
+    isAlreadyDownload,
+    setAlreadyDownload,
+    isDownloading,
+    setDownloading,
+    loading,
+    setLoading,
+    isModalVisible,
+    setModalVisible,
   } = useTrackContext();
 
   const [currentActiveTrack, setCurrentActiveTrack] = useState<Track | null>(
@@ -82,78 +92,78 @@ const TrackScreen = ({route, navigation}: Props) => {
 
   const [currentTrackId, setCurrentTrackId] = useState<number | null>(null);
 
-  const [isModalVisible, setModalVisible] = useState(false);
-  const [isAlreadyDownload, setAlreadyDownload] = useState(false);
-  const [isDownloading, setDownloading] = useState(false);
+  // const [isModalVisible, setModalVisible] = useState(false);
+  // const [isAlreadyDownload, setAlreadyDownload] = useState(false);
+  // const [isDownloading, setDownloading] = useState(false);
   const [icon, setIcon] = useState();
   const [downloadProgress, setDownloadProgress] = useState(0);
-  const [downloadingTrackIds, setDownloadingTrackIds] = useState<any>([]);
-  const [loading, setLoading] = useState(false);
+  // const [downloadingTrackIds, setDownloadingTrackIds] = useState<any>([]);
+  // const [loading, setLoading] = useState(false);
 
-  useLayoutEffect(() => {
-    fetchDownloadedDataFromLocalDir(item => {
-      if (item?.length > 0) {
-        const track = item.find(
-          (obj: any) => obj?.contentId === currentTrack.id,
-        );
-        setAlreadyDownload(!!track);
-      } else {
-        setAlreadyDownload(false);
-      }
-    });
+  // useLayoutEffect(() => {
+  //   fetchDownloadedDataFromLocalDir(item => {
+  //     if (item?.length > 0) {
+  //       const track = item.find(
+  //         (obj: any) => obj?.contentId === currentTrack.id,
+  //       );
+  //       setAlreadyDownload(!!track);
+  //     } else {
+  //       setAlreadyDownload(false);
+  //     }
+  //   });
 
-    const find = downloadingTrackIds.find(
-      (element: any) => element === currentTrack.id,
-    );
+  //   const find = downloadingTrackIds.find(
+  //     (element: any) => element === currentTrack.id,
+  //   );
 
-    console.log('find', find);
-    if (find !== undefined) {
-      setLoading(true);
-    } else {
-      setLoading(false);
-    }
-    // Reset the downloading state if the current track changes
-    if (!find) {
-      setDownloading(false);
-    }
-  }, [currentTrack, downloadingTrackIds]);
+  //   console.log('find', find);
+  //   if (find !== undefined) {
+  //     setLoading(true);
+  //   } else {
+  //     setLoading(false);
+  //   }
+  //   // Reset the downloading state if the current track changes
+  //   if (!find) {
+  //     setDownloading(false);
+  //   }
+  // }, [currentTrack, downloadingTrackIds]);
 
-  const onDownloadPress = () => {
-    const find = downloadingTrackIds.find(
-      (element: any) => element === currentTrack.id,
-    );
-    if (!find) {
-      setModalVisible(true);
-      setDownloading(true);
-      setDownloadingTrackIds((prevIds: any) => [...prevIds, currentTrack.id]);
+  // const onDownloadPress = () => {
+  //   const find = downloadingTrackIds.find(
+  //     (element: any) => element === currentTrack.id,
+  //   );
+  //   if (!find) {
+  //     setModalVisible(true);
+  //     setDownloading(true);
+  //     setDownloadingTrackIds((prevIds: any) => [...prevIds, currentTrack.id]);
 
-      sendDownloadedDataToLocalDir(
-        err => {
-          if (err) {
-            setDownloading(false);
-            setDownloadingTrackIds((prevIds: any) =>
-              prevIds.filter((id: any) => id !== currentTrack.id),
-            );
-          }
-        },
-        currentTrack.id,
-        currentTrack.url,
-        currentTrack.artist,
-        currentTrack.title,
-        currentTrack.artwork,
-        true,
-      );
-    } else {
-      setModalVisible(true); // Show the modal with current progress if already downloading
-    }
-  };
-  const onAlreadyDownloadPress = () => {
-    showToast(
-      'success',
-      'Already downloaded',
-      'This content is already downloaded 👋',
-    );
-  };
+  //     sendDownloadedDataToLocalDir(
+  //       err => {
+  //         if (err) {
+  //           setDownloading(false);
+  //           setDownloadingTrackIds((prevIds: any) =>
+  //             prevIds.filter((id: any) => id !== currentTrack.id),
+  //           );
+  //         }
+  //       },
+  //       currentTrack.id,
+  //       currentTrack.url,
+  //       currentTrack.artist,
+  //       currentTrack.title,
+  //       currentTrack.artwork,
+  //       true,
+  //     );
+  //   } else {
+  //     setModalVisible(true); // Show the modal with current progress if already downloading
+  //   }
+  // };
+  // const onAlreadyDownloadPress = () => {
+  //   showToast(
+  //     'success',
+  //     'Already downloaded',
+  //     'This content is already downloaded 👋',
+  //   );
+  // };
 
   useEffect(() => {
     MaterialIcon.getImageSource('circle', 20, Colors[theme].primary).then(
@@ -212,7 +222,7 @@ const TrackScreen = ({route, navigation}: Props) => {
 
   return (
     <ScrollView style={styles.mainContainer}>
-      <StatusBar translucent backgroundColor={Colors[theme].secondary} />
+      <StatusBar translucent backgroundColor={'red'} />
 
       <View style={{flex: 1.5, paddingTop: top}}>
         <View style={styles.imgContainer}>
@@ -449,6 +459,7 @@ const TrackScreen = ({route, navigation}: Props) => {
           }
         }}
       />
+      <Toast />
     </ScrollView>
   );
 };

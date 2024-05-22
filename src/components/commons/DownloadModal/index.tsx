@@ -16,6 +16,15 @@ import {AntDesign} from '../../../utils/common';
 import {Colors} from '../../../theme';
 import {Theme, useThemeContext} from '../../../contexts/ThemeContext';
 
+interface Props {
+  isModalVisible: boolean;
+  onClosePress: () => void;
+  onAndroidBackPress?: () => void;
+  onDownloadFinished: any;
+  contentId: string;
+  downloadProgress: number;
+}
+
 const DownloadModal = ({
   isModalVisible = false,
   onClosePress = () => {},
@@ -23,7 +32,7 @@ const DownloadModal = ({
   onDownloadFinished = false,
   contentId,
   downloadProgress,
-}: any) => {
+}: Props) => {
   const [isDownloading, setDownloading] = useState(false);
   const [downloadPercentage, setDownloadPercentage] = useState(0);
 
@@ -45,6 +54,7 @@ const DownloadModal = ({
     );
     return () => {
       downloadListener.remove();
+      setDownloadPercentage(0);
     };
   }, [contentId]);
 
@@ -74,7 +84,9 @@ const DownloadModal = ({
 
   return (
     <>
-      <StatusBar backgroundColor={'#00000080'} />
+      {isModalVisible && (
+        <StatusBar translucent backgroundColor={'#00000099'} />
+      )}
       <Modal
         animationType="fade"
         transparent={true}
@@ -97,8 +109,10 @@ const DownloadModal = ({
               }
             />
             <CircularProgressBar
-              percentage={downloadPercentage}
-              centerText={downloadPercentage.toString()}
+              percentage={JSON.parse(String(downloadPercentage))}
+              centerText={JSON.parse(String(downloadPercentage))}
+              progressColor={Colors[theme].primary_light}
+              strokeColor={Colors[theme].secondary_light}
             />
             <Text style={styles.subHeading}>Downloading...</Text>
           </View>

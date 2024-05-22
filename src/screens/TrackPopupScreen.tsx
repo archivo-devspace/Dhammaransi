@@ -21,7 +21,7 @@ import {BottomSheetMethods} from '../components/commons/bottomSheet';
 import RenderItem from '../components/commons/RenderItem';
 import BottomSheet from '../components/commons/bottomSheet';
 import {CustomButton} from '../components/utils';
-import {Entypo, FontAwesome, MaterialIcon} from '../utils/common';
+import {Entypo, FontAwesome, Ionicons, MaterialIcon} from '../utils/common';
 import {Colors} from '../theme';
 import TrackPlayer, {
   Capability,
@@ -38,6 +38,8 @@ import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {useTranslation} from 'react-i18next';
 import Container from '../components/commons/Container';
 import LoadingSpinner from '../components/utils/LoadingSpinner';
+import DownloadModal from '../components/commons/DownloadModal';
+import Toast from 'react-native-toast-message';
 
 type Props = {
   route: RouteProp<MainStackParamList, 'Track'>;
@@ -55,12 +57,22 @@ const TrackPopupScreen = ({navigation}: Props) => {
   const playbackState = usePlaybackState();
   const {
     repeatIcon,
-    playingIcon,
     changeRepeatMode,
     togglePlayingMode,
     handleNextTrack,
     handlePrevTrack,
     currentTrack,
+    onDownloadPress,
+    onAlreadyDownloadPress,
+    setDownloadingTrackIds,
+    isAlreadyDownload,
+    setAlreadyDownload,
+    isDownloading,
+    setDownloading,
+    loading,
+    setLoading,
+    isModalVisible,
+    setModalVisible,
   } = useTrackContext();
 
   const [currentActiveTrack, setCurrentActiveTrack] = useState<Track | null>(
@@ -70,6 +82,7 @@ const TrackPopupScreen = ({navigation}: Props) => {
   const [currentTrackId, setCurrentTrackId] = useState<number | null>(null);
 
   const [icon, setIcon] = useState();
+  const [downloadProgress, setDownloadProgress] = useState(0);
 
   useEffect(() => {
     MaterialIcon.getImageSource('circle', 20, Colors[theme].primary).then(
@@ -217,6 +230,49 @@ const TrackPopupScreen = ({navigation}: Props) => {
             </Text>
           </View>
         </View>
+        {currentTrack && (
+          <View
+            style={{
+              marginBottom: 16,
+            }}>
+            {isAlreadyDownload ? (
+              <CustomButton
+                customButtonStyle={styles.btn}
+                onPress={onAlreadyDownloadPress}
+                icon={
+                  <Ionicons
+                    name={`cloud-done-sharp`}
+                    size={40}
+                    color={Colors[theme].primary}
+                  />
+                }
+              />
+            ) : isDownloading || loading ? (
+              <CustomButton
+                customButtonStyle={styles.btn}
+                icon={
+                  <MaterialIcon
+                    name={'weather-cloudy-clock'}
+                    size={40}
+                    color={Colors[theme].primary}
+                  />
+                }
+              />
+            ) : (
+              <CustomButton
+                customButtonStyle={styles.btn}
+                onPress={onDownloadPress}
+                icon={
+                  <MaterialIcon
+                    name={`cloud-download`}
+                    size={40}
+                    color={Colors[theme].primary}
+                  />
+                }
+              />
+            )}
+          </View>
+        )}
         <View style={styles.buttonContainer}>
           <CustomButton
             customButtonStyle={styles.btn}
@@ -304,6 +360,22 @@ const TrackPopupScreen = ({navigation}: Props) => {
           />
         </View>
       </View>
+      <DownloadModal
+        isModalVisible={isModalVisible}
+        onClosePress={() => setModalVisible(false)}
+        contentId={currentTrack?.id}
+        downloadProgress={downloadProgress}
+        onDownloadFinished={(track: any) => {
+          if (track) {
+            setAlreadyDownload(true);
+            setDownloading(false);
+            setDownloadingTrackIds((prevIds: any) =>
+              prevIds.filter((id: any) => id !== track.id),
+            );
+          }
+        }}
+      />
+      <Toast />
     </Container>
   );
 };
