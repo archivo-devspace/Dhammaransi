@@ -278,12 +278,14 @@ const TrackScreen = ({route, navigation}: Props) => {
         snapTo="65"
         ref={bottomSheetRef}
         backGroundColor={Colors[theme].secondary}>
-        <RenderItem
-          currentQueue={currentQueue}
-          currentActiveTrack={currentActiveTrack}
-          setCurrentActiveTrack={setCurrentActiveTrack}
-          getCurrentActiveTrack={getCurrentActiveTrack}
-        />
+        <View style={{paddingBottom: 65}}>
+          <RenderItem
+            currentQueue={currentQueue}
+            currentActiveTrack={currentActiveTrack}
+            setCurrentActiveTrack={setCurrentActiveTrack}
+            getCurrentActiveTrack={getCurrentActiveTrack}
+          />
+        </View>
       </BottomSheet>
       <View style={styles.contentContainer}>
         <View style={styles.trackContainer}>

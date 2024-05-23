@@ -49,7 +49,7 @@ const RenderItem = ({
   );
 
   return (
-    <>
+    <View>
       {currentQueue.length > 0 ? (
         <>
           {currentQueue.map((item: any, index: number) => {
@@ -141,7 +141,7 @@ const RenderItem = ({
           <Text style={{color: Colors[theme].text}}>{t('UTILS.EMPTY')}</Text>
         </View>
       )}
-    </>
+    </View>
   );
 };
 

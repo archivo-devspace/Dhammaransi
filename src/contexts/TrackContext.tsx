@@ -92,9 +92,7 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
   useLayoutEffect(() => {
     fetchDownloadedDataFromLocalDir(item => {
       if (item?.length > 0) {
-        const track = item.find(
-          (obj: any) => obj?.contentId === currentTrack.id,
-        );
+        const track = item.find((obj: any) => obj?.id === currentTrack.id);
         setAlreadyDownload(!!track);
       } else {
         setAlreadyDownload(false);

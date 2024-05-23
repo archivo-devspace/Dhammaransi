@@ -1,16 +1,29 @@
 import {Platform, DeviceEventEmitter} from 'react-native';
 
-import RNFetchBlob from 'rn-fetch-blob';
+import RNFetchBlob, { RNFetchBlobConfig } from 'rn-fetch-blob';
+
+type Callback = (err: any) => void;
+type ProgressCallback = (progress: number) => void;
+
+interface OfflineDownloadData {
+  id: string;
+  url: string;
+  artist: string;
+  title: string;
+  downloadDate: Date;
+  artwork: string;
+  isAudio: boolean;
+}
 
 export const sendDownloadedDataToLocalDir = async (
-  callback = (err:any) => {},
-  contentId:any,
-  src:any,
-  artistName:any,
-  songName:any,
-  posterImage:any,
-  isAudio:any,
-  onProgress?:any
+  callback: Callback = (err: any) => {},
+  contentId: string,
+  src: string,
+  artistName: string,
+  songName: string,
+  posterImage: string,
+  isAudio: boolean,
+  onProgress?: ProgressCallback
 ) => {
   const { dirs } = RNFetchBlob.fs;
   const dirToSave = Platform.OS === 'ios' ? dirs.DocumentDir : dirs.CacheDir;
@@ -37,11 +50,30 @@ export const sendDownloadedDataToLocalDir = async (
       title: commonConfig.title,
       path: commonConfig.path,
       appendExt: isAudio ? 'mp3' : 'mp4',
-    } as any,
+    } as RNFetchBlobConfig ,
     android: commonConfig,
   });
 
-  const startDownloadingTheRestContent = async (cb:any) => {
+  const saveMetadata = async (offlineObjData: OfflineDownloadData, cb: () => void) => {
+    let offlineDownloadList: OfflineDownloadData[] = [];
+    try {
+      const localDownloads = await RNFetchBlob.fs.readFile(path, 'utf8');
+      offlineDownloadList = JSON.parse(localDownloads) as OfflineDownloadData[];
+    } catch (e) {
+      // Handle file read error, if any
+    }
+
+    offlineDownloadList.push(offlineObjData);
+    await RNFetchBlob.fs.writeFile(path, JSON.stringify(offlineDownloadList), 'utf8')
+      .then(() => {
+        cb && cb();
+      })
+      .catch(() => {
+        // Handle file write error, if any
+      });
+  };
+
+  const startDownloadingPosterImage = async (cb: () => void) => {
     try {
       const res = await RNFetchBlob.config({
         fileCache: true,
@@ -51,43 +83,22 @@ export const sendDownloadedDataToLocalDir = async (
       if (res) {
         imageUrl = res.path();
       }
-    } catch (e) {}
+    } catch (e) {
+      // Handle image download error, if any
+    }
 
-    const offlineObjData = {
-      contentId,
-      source: offlineMusicPlayerUrl,
-      artistName,
-      songName,
-      downloadDate: new Date(),
-      posterImage: imageUrl,
-      isAudio,
-    };
-
-    let offlineDownloadList = [];
-    try {
-      let localDownloads = await RNFetchBlob.fs.readFile(path, 'utf8');
-      localDownloads = JSON.parse(localDownloads);
-      if (Array.isArray(localDownloads)) {
-        offlineDownloadList = localDownloads;
-      }
-    } catch (e) {}
-
-    offlineDownloadList.push(offlineObjData);
-    await RNFetchBlob.fs
-      .writeFile(path, JSON.stringify(offlineDownloadList), 'utf8')
-      .then(() => {
-        cb && cb();
-      })
-      .catch(() => {});
+    cb && cb();
   };
 
   if (src) {
-    RNFetchBlob.config(configOptions)
+    RNFetchBlob.config(configOptions as any)
       .fetch('GET', src, {})
       .progress((received, total) => {
         const percentageValue = (received / total) * 100;
         roundOffValue = Math.round(percentageValue);
-        // onProgress(roundOffValue);
+        if (onProgress) {
+          onProgress(roundOffValue);
+        }
 
         const params = {
           contentId,
@@ -102,19 +113,22 @@ export const sendDownloadedDataToLocalDir = async (
         if (Platform.OS === 'ios') {
           await RNFetchBlob.fs.writeFile(commonConfig.path, res.data, 'base64');
           offlineMusicPlayerUrl = commonConfig.path;
-          await startDownloadingTheRestContent(() => {
-            const params = {
-              contentId,
-              source: src,
-              artistName,
-              songName,
-              progressValue: JSON.stringify(roundOffValue),
-            };
-            DeviceEventEmitter.emit('downloadDone', params);
-          });
         } else {
           offlineMusicPlayerUrl = res.path();
-          startDownloadingTheRestContent(() => {
+        }
+
+        await startDownloadingPosterImage(async () => {
+          const offlineObjData: OfflineDownloadData = {
+            id:contentId,
+            url: offlineMusicPlayerUrl,
+            artist:artistName,
+            title:songName,
+            downloadDate: new Date(),
+            artwork: imageUrl,
+            isAudio,
+          };
+
+          await saveMetadata(offlineObjData, () => {
             const params = {
               contentId,
               source: src,
@@ -124,7 +138,7 @@ export const sendDownloadedDataToLocalDir = async (
             };
             DeviceEventEmitter.emit('downloadDone', params);
           });
-        }
+        });
       })
       .catch((err) => {
         callback('error');
