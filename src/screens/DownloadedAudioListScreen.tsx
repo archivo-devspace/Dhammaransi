@@ -18,14 +18,20 @@ import {
   deleteContentFromLocalDir,
   fetchDownloadedDataFromLocalDir,
 } from '../api_services/downloadService';
+import Container from '../components/commons/Container';
+import LoadingSpinner from '../components/utils/LoadingSpinner';
+import {Colors} from '../theme';
+import {useThemeContext} from '../contexts/ThemeContext';
 
 const OfflineDownloadGrid = ({navigation}: any) => {
   const [data, setData] = useState([]);
   const [reRender, setReRender] = useState(false);
   const [isDeletionModalVisible, setDeletionModalVisible] = useState(false);
   const [isSelectedPress, setSelectedPress] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const isFocused = useIsFocused();
+  const {theme} = useThemeContext();
 
   var TrackFolder =
     Platform.OS === 'android'
@@ -43,7 +49,7 @@ const OfflineDownloadGrid = ({navigation}: any) => {
       setData(sortedData);
     });
   };
-
+  console.log('data', data);
   useEffect(() => {
     fetchDownloadedData();
   }, [reRender, isFocused]);
@@ -105,96 +111,101 @@ const OfflineDownloadGrid = ({navigation}: any) => {
     const offlinePosterImageUrl =
       Platform.OS === 'android' ? 'file://' + posterImage : posterImage;
 
-    return (
-      <>
-        <TouchableOpacity
-          key={index}
-          style={styles.songItemContainer}
-          onPress={() => handlePlay(source, posterImage, item)}>
-          <ImageBackground
-            resizeMode="cover"
-            source={{uri: offlinePosterImageUrl}}
-            style={styles.songItem}>
-            <View
-              style={isSelectedPress ? styles.overlay : styles.overlayAlt}
+    <TouchableOpacity
+      key={index}
+      style={styles.songItemContainer}
+      onPress={() => handlePlay(source, posterImage, item)}>
+      <ImageBackground
+        resizeMode="cover"
+        source={{uri: offlinePosterImageUrl}}
+        style={styles.songItem}>
+        <View style={isSelectedPress ? styles.overlay : styles.overlayAlt} />
+        <Text style={styles.title}>{songName}</Text>
+        <Text style={styles.artist}>{artistName}</Text>
+        {isSelectedPress ? (
+          <TouchableOpacity
+            onPress={onInsideMenuPress}
+            style={styles.insideMenuContainer}>
+            <Image
+              style={styles.insideMenu}
+              source={require('../assets/menu.png')}
             />
-            <Text style={styles.title}>{songName}</Text>
-            <Text style={styles.artist}>{artistName}</Text>
-            {isSelectedPress ? (
-              <TouchableOpacity
-                onPress={onInsideMenuPress}
-                style={styles.insideMenuContainer}>
-                <Image
-                  style={styles.insideMenu}
-                  source={require('../assets/menu.png')}
-                />
-              </TouchableOpacity>
-            ) : (
-              <Image
-                style={styles.insideMenuContainerAlt}
-                source={require('../assets/greenIcon.png')}
-              />
-            )}
-          </ImageBackground>
-        </TouchableOpacity>
-
-        {/* <DeletionModal
-          isModalVisible={isDeletionModalVisible}
-          onClosePress={() => setDeletionModalVisible(false)}
-          onDeletionPress={() => onDeletionPress(id)}
-        /> */}
-      </>
-    );
-  };
-  return (
-    <View style={styles.container}>
-      <View style={styles.wrapper}>
-        <Text style={styles.heading}>Your Downloads</Text>
-
-        {data?.length > 1 ? (
-          <View style={{flexDirection: 'row'}}>
-            {!isSelectedPress ? (
-              <TouchableOpacity onPress={onDeleteAllPress}>
-                <Image
-                  style={{width: 25, height: 25, marginRight: 20}}
-                  source={require('../assets/delete.png')}
-                />
-              </TouchableOpacity>
-            ) : null}
-            <TouchableOpacity onPress={onToggleSelectPress}>
-              <Image
-                style={{width: 25, height: 25}}
-                source={
-                  isSelectedPress
-                    ? require('../assets/unselected.png')
-                    : require('../assets/aa.png')
-                }
-              />
-            </TouchableOpacity>
-          </View>
-        ) : null}
-      </View>
-      {data?.length > 0 ? (
-        <FlatList
-          data={data}
-          renderItem={renderSongItem}
-          keyExtractor={(item, index) => index.toString()}
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.flatlistContent}
-          bounces={false}
-          numColumns={3}
-        />
-      ) : (
-        <>
+          </TouchableOpacity>
+        ) : (
           <Image
-            resizeMode="cover"
-            style={styles.downloadContainer}
-            source={require('../assets/404-removebg.png')}
+            style={styles.insideMenuContainerAlt}
+            source={require('../assets/greenIcon.png')}
           />
-          <Text style={styles.downloadText}>No download found</Text>
-        </>
-      )}
-    </View>
+        )}
+      </ImageBackground>
+    </TouchableOpacity>;
+  };
+
+  let renderItem;
+  if (isLoading && data.length < 0) {
+    renderItem = (
+      <LoadingSpinner
+        durationMs={0}
+        loaderSize={30}
+        loadingText={'Loading data...'}
+        loadingTextColor={Colors[theme].text}
+        loadingTextSize={25}
+        bgColor={Colors[theme].primary}
+        color={Colors[theme].primary_dark}
+      />
+    );
+  } else if (!isLoading && data.length < 0) {
+    renderItem = <View>No Downloaded data found!</View>;
+  } else if (!isLoading && data.length > 0) {
+    <FlatList
+      data={data}
+      renderItem={renderSongItem}
+      keyExtractor={(item, index) => index.toString()}
+      showsHorizontalScrollIndicator={false}
+      contentContainerStyle={styles.flatlistContent}
+      bounces={false}
+      numColumns={3}
+    />;
+  }
+  return (
+    // <View style={styles.container}>
+    //   <View style={styles.wrapper}>
+
+    //     {data?.length > 1 ? (
+    //       <View style={{flexDirection: 'row'}}>
+    //         {!isSelectedPress ? (
+    //           <TouchableOpacity onPress={onDeleteAllPress}>
+    //             <Image
+    //               style={{width: 25, height: 25, marginRight: 20}}
+    //               source={require('../assets/delete.png')}
+    //             />
+    //           </TouchableOpacity>
+    //         ) : null}
+    //         <TouchableOpacity onPress={onToggleSelectPress}>
+    //           <Image
+    //             style={{width: 25, height: 25}}
+    //             source={
+    //               isSelectedPress
+    //                 ? require('../assets/unselected.png')
+    //                 : require('../assets/aa.png')
+    //             }
+    //           />
+    //         </TouchableOpacity>
+    //       </View>
+    //     ) : null}
+    //   </View>
+    //   {data?.length > 0 ? (
+
+    //   ) : (
+    //     <>
+
+    //   )}
+    // </View>
+
+    <Container title={'Your Downloaded Files'}>
+      <Text style={styles.heading}>Your Downloads</Text>
+      {renderItem}
+    </Container>
   );
 };
 
