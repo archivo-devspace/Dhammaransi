@@ -1,13 +1,12 @@
 import {
-  FlatList,
-  ImageBackground,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
   Image,
   DeviceEventEmitter,
   Platform,
+  useWindowDimensions,
+  FlatList,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 
@@ -21,7 +20,10 @@ import {
 import Container from '../components/commons/Container';
 import LoadingSpinner from '../components/utils/LoadingSpinner';
 import {Colors} from '../theme';
-import {useThemeContext} from '../contexts/ThemeContext';
+import {Theme, useThemeContext} from '../contexts/ThemeContext';
+import {ScrollView} from 'react-native-gesture-handler';
+import {CustomButton} from '../components/utils';
+import {AntDesign, truncateText} from '../utils/common';
 
 const OfflineDownloadGrid = ({navigation}: any) => {
   const [data, setData] = useState([]);
@@ -32,31 +34,43 @@ const OfflineDownloadGrid = ({navigation}: any) => {
 
   const isFocused = useIsFocused();
   const {theme} = useThemeContext();
+  const {height, width} = useWindowDimensions();
+  const styles = styling(theme);
 
-  var TrackFolder =
+  let TrackFolder =
     Platform.OS === 'android'
       ? RNFetchBlob.fs.dirs.CacheDir
       : RNFetchBlob.fs.dirs.DocumentDir;
 
-  const fetchDownloadedData = () => {
-    fetchDownloadedDataFromLocalDir(item => {
-      const sortedData = item.sort((a: any, b: any) => {
-        const dateA = new Date(a.downloadDate) as any;
-        const dateB = new Date(b.downloadDate) as any;
-        return dateB - dateA;
+  const fetchDownloadedData = async () => {
+    setIsLoading(true);
+    try {
+      await fetchDownloadedDataFromLocalDir(item => {
+        const sortedData = item.sort((a: any, b: any) => {
+          const dateA = new Date(a.downloadDate) as any;
+          const dateB = new Date(b.downloadDate) as any;
+          return dateB - dateA;
+        });
+        setData(sortedData);
       });
-
-      setData(sortedData);
-    });
+      setIsLoading(false); // Moved outside the try block
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setIsLoading(false);
+    }
   };
-  console.log('data', data);
-  useEffect(() => {
-    fetchDownloadedData();
-  }, [reRender, isFocused]);
+
+  // console.log('object');
+  // console.log('isLoading', isLoading);
+  // console.log('data', data);
+  // console.log('isLoading', isLoading);
 
   useEffect(() => {
-    setSelectedPress(true);
-  }, [isFocused]);
+    // Only fetch data if either reRender or isFocused changes
+    if (reRender || isFocused) {
+      fetchDownloadedData();
+    }
+  }, [reRender, isFocused]);
 
   useEffect(() => {
     const downloadListenerStatus = DeviceEventEmitter.addListener(
@@ -85,227 +99,142 @@ const OfflineDownloadGrid = ({navigation}: any) => {
     });
   };
 
-  const onInsideMenuPress = () => {
-    setDeletionModalVisible(true);
-  };
-
-  const onDeletionPress = (id: any) => {
-    deleteContentFromLocalDir(id);
-    setTimeout(() => {
-      fetchDownloadedData();
-    }, 500);
-  };
-
-  const onToggleSelectPress = () => {
-    setSelectedPress(!isSelectedPress);
-  };
-
-  const onDeleteAllPress = () => {
-    deleteAllDownloadDataFromLocal();
-    fetchDownloadedData();
-  };
-
-  const renderSongItem = ({item, index}: any) => {
-    const {source, posterImage, songName, artistName, id} = item;
-
-    const offlinePosterImageUrl =
-      Platform.OS === 'android' ? 'file://' + posterImage : posterImage;
-
-    <TouchableOpacity
-      key={index}
-      style={styles.songItemContainer}
-      onPress={() => handlePlay(source, posterImage, item)}>
-      <ImageBackground
-        resizeMode="cover"
-        source={{uri: offlinePosterImageUrl}}
-        style={styles.songItem}>
-        <View style={isSelectedPress ? styles.overlay : styles.overlayAlt} />
-        <Text style={styles.title}>{songName}</Text>
-        <Text style={styles.artist}>{artistName}</Text>
-        {isSelectedPress ? (
-          <TouchableOpacity
-            onPress={onInsideMenuPress}
-            style={styles.insideMenuContainer}>
-            <Image
-              style={styles.insideMenu}
-              source={require('../assets/menu.png')}
-            />
-          </TouchableOpacity>
-        ) : (
-          <Image
-            style={styles.insideMenuContainerAlt}
-            source={require('../assets/greenIcon.png')}
-          />
-        )}
-      </ImageBackground>
-    </TouchableOpacity>;
-  };
-
   let renderItem;
-  if (isLoading && data.length < 0) {
+  if (isLoading) {
     renderItem = (
-      <LoadingSpinner
-        durationMs={0}
-        loaderSize={30}
-        loadingText={'Loading data...'}
-        loadingTextColor={Colors[theme].text}
-        loadingTextSize={25}
-        bgColor={Colors[theme].primary}
-        color={Colors[theme].primary_dark}
+      <View style={styles.noDataConatiner}>
+        <LoadingSpinner
+          durationMs={1500}
+          loaderSize={70}
+          bgColor={Colors[theme].secondary_dark}
+          color={Colors[theme].primary_light}
+          loadingText="LOADING"
+          loadingTextColor={Colors[theme].primary}
+          loadingTextSize={8}
+        />
+      </View>
+    );
+  } else if (!isLoading && data.length === 0) {
+    renderItem = (
+      <View style={styles.noDataConatiner}>
+        <Image
+          source={require('../assets/nodata.png')}
+          style={{
+            width: width * 0.8,
+            height: height * 0.5,
+            borderRadius: 100,
+          }}
+          resizeMode="stretch"
+        />
+        <Text style={styles.noDataText}>No Downloaded data found!</Text>
+      </View>
+    );
+  } else if (!isLoading && data.length >= 0) {
+    renderItem = (
+      <FlatList
+        data={data}
+        showsVerticalScrollIndicator={false}
+        renderItem={({item}) => (
+          <React.Fragment key={item.id}>
+            <View style={styles.container}>
+              <CustomButton
+                // onPress={() => handlePlayAudio(item)}
+                customButtonStyle={styles.btn}>
+                <View style={styles.trackContainer}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      gap: 16,
+                      alignItems: 'center',
+                    }}>
+                    <Image
+                      source={{uri: item.artwork}}
+                      resizeMode="cover"
+                      style={styles.img}
+                    />
+                    <View style={{width: '70%', gap: 10}}>
+                      <Text style={styles.title}>
+                        {truncateText(item.title, 45)}
+                      </Text>
+                      <Text style={styles.desc}>
+                        {truncateText(item.artist, 30)}
+                      </Text>
+                    </View>
+                  </View>
+                  <AntDesign
+                    name={
+                      // currentTrack?.id === item.id &&
+                      // playbackState.state === State.Playing
+                      // ? 'pause':
+                      'caretright'
+                    }
+                    size={30}
+                    color={Colors[theme].primary}
+                  />
+                </View>
+              </CustomButton>
+            </View>
+            {data.length !== item?.id && <View style={styles.divider} />}
+          </React.Fragment>
+        )}
+        keyExtractor={(item: any) => item.id.toString()}
+        // Optional: Add extra FlatList props like `ItemSeparatorComponent`, etc.
       />
     );
-  } else if (!isLoading && data.length < 0) {
-    renderItem = <View>No Downloaded data found!</View>;
-  } else if (!isLoading && data.length > 0) {
-    <FlatList
-      data={data}
-      renderItem={renderSongItem}
-      keyExtractor={(item, index) => index.toString()}
-      showsHorizontalScrollIndicator={false}
-      contentContainerStyle={styles.flatlistContent}
-      bounces={false}
-      numColumns={3}
-    />;
   }
-  return (
-    // <View style={styles.container}>
-    //   <View style={styles.wrapper}>
-
-    //     {data?.length > 1 ? (
-    //       <View style={{flexDirection: 'row'}}>
-    //         {!isSelectedPress ? (
-    //           <TouchableOpacity onPress={onDeleteAllPress}>
-    //             <Image
-    //               style={{width: 25, height: 25, marginRight: 20}}
-    //               source={require('../assets/delete.png')}
-    //             />
-    //           </TouchableOpacity>
-    //         ) : null}
-    //         <TouchableOpacity onPress={onToggleSelectPress}>
-    //           <Image
-    //             style={{width: 25, height: 25}}
-    //             source={
-    //               isSelectedPress
-    //                 ? require('../assets/unselected.png')
-    //                 : require('../assets/aa.png')
-    //             }
-    //           />
-    //         </TouchableOpacity>
-    //       </View>
-    //     ) : null}
-    //   </View>
-    //   {data?.length > 0 ? (
-
-    //   ) : (
-    //     <>
-
-    //   )}
-    // </View>
-
-    <Container title={'Your Downloaded Files'}>
-      <Text style={styles.heading}>Your Downloads</Text>
-      {renderItem}
-    </Container>
-  );
+  return <Container title={'Your Downloaded Files'}>{renderItem}</Container>;
 };
 
 export default OfflineDownloadGrid;
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#000',
-  },
-  heading: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    marginHorizontal: 10,
-    color: '#fff',
-  },
-  flatlistContent: {
-    paddingBottom: 60,
-    alignItems: 'flex-start',
-  },
-  songItemContainer: {
-    marginHorizontal: 5,
-    marginBottom: 10,
-  },
-  songItem: {
-    width: 120,
-    height: 200,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    padding: 20,
-    borderRadius: 4,
-    overflow: 'hidden',
-  },
-  title: {
-    fontSize: 18,
-    textAlign: 'center',
-    fontWeight: 'bold',
-    color: '#fff',
-    marginBottom: 5,
-    width: '150%',
-  },
-  artist: {
-    fontSize: 13,
-    textAlign: 'center',
-    color: '#fff',
-    fontWeight: '600',
-    width: '150%',
-    marginBottom: -17,
-  },
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0,0,0,0.7)',
-  },
-  overlayAlt: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0,0,0,0.8)',
-  },
-  playIcon: {
-    width: 30,
-    height: 30,
-    tintColor: '#fff',
-  },
-  numberStyle: {
-    fontSize: 70,
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  insideMenu: {
-    width: 20,
-    height: 20,
-  },
-  wrapper: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  insideMenuContainer: {
-    position: 'absolute',
-    top: 8,
-    right: 2,
-  },
-  insideMenuContainerAlt: {
-    position: 'absolute',
-    top: 8,
-    right: 2,
-    width: 20,
-    height: 20,
-  },
-  downloadContainer: {
-    width: '80%',
-    height: 200,
-    marginTop: -40,
-    alignSelf: 'center',
-  },
-  downloadText: {
-    color: '#fff',
-    textAlign: 'center',
-    fontSize: 18,
-    marginVertical: 20,
-    fontWeight: '400',
-  },
-});
+const styling = (theme: Theme) =>
+  StyleSheet.create({
+    noDataConatiner: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      flex: 1,
+      gap: 20,
+    },
+    noDataText: {
+      color: Colors[theme].text,
+      fontWeight: 'bold',
+      fontSize: 25,
+    },
+    container: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingVertical: 20,
+      paddingHorizontal: 20,
+    },
+    trackContainer: {
+      gap: 5,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      width: '100%',
+      paddingRight: 20,
+      height: 60,
+    },
+    img: {
+      width: 60,
+      height: 60,
+      borderRadius: 12,
+    },
+    btn: {
+      backgroundColor: Colors[theme].secondary,
+    },
+    title: {
+      fontSize: 16,
+      color: Colors[theme].text,
+    },
+    desc: {
+      fontSize: 12,
+      color: Colors[theme].text,
+    },
+    divider: {
+      width: '100%',
+      height: 1,
+      backgroundColor: Colors[theme].secondary_dark,
+    },
+  });

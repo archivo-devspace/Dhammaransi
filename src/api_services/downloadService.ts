@@ -1,6 +1,6 @@
 import {Platform, DeviceEventEmitter} from 'react-native';
 
-import RNFetchBlob, { RNFetchBlobConfig } from 'rn-fetch-blob';
+import RNFetchBlob, {RNFetchBlobConfig} from 'rn-fetch-blob';
 
 type Callback = (err: any) => void;
 type ProgressCallback = (progress: number) => void;
@@ -23,9 +23,9 @@ export const sendDownloadedDataToLocalDir = async (
   songName: string,
   posterImage: string,
   isAudio: boolean,
-  onProgress?: ProgressCallback
+  onProgress?: ProgressCallback,
 ) => {
-  const { dirs } = RNFetchBlob.fs;
+  const {dirs} = RNFetchBlob.fs;
   const dirToSave = Platform.OS === 'ios' ? dirs.DocumentDir : dirs.CacheDir;
   const path = `${dirToSave}/.file.json`;
 
@@ -39,7 +39,9 @@ export const sendDownloadedDataToLocalDir = async (
     useDownloadManager: true,
     notification: true,
     title: songName,
-    path: isAudio ? `${dirToSave}/${getNewTime}.mp3` : `${dirToSave}/${getNewTime}.mp4`,
+    path: isAudio
+      ? `${dirToSave}/${getNewTime}.mp3`
+      : `${dirToSave}/${getNewTime}.mp4`,
     mediaScannable: true,
     description: 'file download',
   };
@@ -50,11 +52,14 @@ export const sendDownloadedDataToLocalDir = async (
       title: commonConfig.title,
       path: commonConfig.path,
       appendExt: isAudio ? 'mp3' : 'mp4',
-    } as RNFetchBlobConfig ,
+    } as RNFetchBlobConfig,
     android: commonConfig,
   });
 
-  const saveMetadata = async (offlineObjData: OfflineDownloadData, cb: () => void) => {
+  const saveMetadata = async (
+    offlineObjData: OfflineDownloadData,
+    cb: () => void,
+  ) => {
     let offlineDownloadList: OfflineDownloadData[] = [];
     try {
       const localDownloads = await RNFetchBlob.fs.readFile(path, 'utf8');
@@ -64,7 +69,8 @@ export const sendDownloadedDataToLocalDir = async (
     }
 
     offlineDownloadList.push(offlineObjData);
-    await RNFetchBlob.fs.writeFile(path, JSON.stringify(offlineDownloadList), 'utf8')
+    await RNFetchBlob.fs
+      .writeFile(path, JSON.stringify(offlineDownloadList), 'utf8')
       .then(() => {
         cb && cb();
       })
@@ -109,7 +115,7 @@ export const sendDownloadedDataToLocalDir = async (
         };
         DeviceEventEmitter.emit('downloadProgress', params);
       })
-      .then(async (res) => {
+      .then(async res => {
         if (Platform.OS === 'ios') {
           await RNFetchBlob.fs.writeFile(commonConfig.path, res.data, 'base64');
           offlineMusicPlayerUrl = commonConfig.path;
@@ -119,10 +125,10 @@ export const sendDownloadedDataToLocalDir = async (
 
         await startDownloadingPosterImage(async () => {
           const offlineObjData: OfflineDownloadData = {
-            id:contentId,
+            id: contentId,
             url: offlineMusicPlayerUrl,
-            artist:artistName,
-            title:songName,
+            artist: artistName,
+            title: songName,
             downloadDate: new Date(),
             artwork: imageUrl,
             isAudio,
@@ -140,14 +146,16 @@ export const sendDownloadedDataToLocalDir = async (
           });
         });
       })
-      .catch((err) => {
+      .catch(err => {
         callback('error');
         DeviceEventEmitter.emit('downloadError', true);
       });
   }
 };
 
-export const fetchDownloadedDataFromLocalDir = async (sendData = (localDownloads:any) => {}) => {
+export const fetchDownloadedDataFromLocalDir = async (
+  sendData = (localDownloads: any) => {},
+) => {
   const trackFolder =
     Platform.OS === 'ios'
       ? RNFetchBlob.fs.dirs.DocumentDir
@@ -166,7 +174,7 @@ export const fetchDownloadedDataFromLocalDir = async (sendData = (localDownloads
   } catch (e) {}
 };
 
-export const deleteContentFromLocalDir = async (downloadedId:any) => {
+export const deleteContentFromLocalDir = async (downloadedId: any) => {
   let jsonObj = [];
   const MyPath = RNFetchBlob.fs.dirs.CacheDir + `/.file.json`;
   try {
@@ -177,7 +185,7 @@ export const deleteContentFromLocalDir = async (downloadedId:any) => {
     }
   } catch (e) {}
 
-  let flag:any = '';
+  let flag: any = '';
   const contentIdToFind = downloadedId;
   jsonObj.map((item, index) => {
     if (item.id === contentIdToFind) {
@@ -192,7 +200,7 @@ export const deleteContentFromLocalDir = async (downloadedId:any) => {
 };
 
 export const deleteAllDownloadDataFromLocal = async () => {
-  let jsonObj:any = [];
+  let jsonObj: any = [];
   const MyPath = RNFetchBlob.fs.dirs.CacheDir + `/.file.json`;
   await RNFetchBlob.fs
     .writeFile(MyPath, JSON.stringify(jsonObj), 'utf8')
