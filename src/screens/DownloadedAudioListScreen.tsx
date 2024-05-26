@@ -7,6 +7,7 @@ import {
   Platform,
   useWindowDimensions,
   FlatList,
+  TouchableOpacity,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 
@@ -21,12 +22,12 @@ import Container from '../components/commons/Container';
 import LoadingSpinner from '../components/utils/LoadingSpinner';
 import {Colors} from '../theme';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
-import {ScrollView} from 'react-native-gesture-handler';
+import {ScrollView, Swipeable} from 'react-native-gesture-handler';
 import {CustomButton} from '../components/utils';
 import {AntDesign, truncateText} from '../utils/common';
 
 const OfflineDownloadGrid = ({navigation}: any) => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<any>([]);
   const [reRender, setReRender] = useState(false);
   const [isDeletionModalVisible, setDeletionModalVisible] = useState(false);
   const [isSelectedPress, setSelectedPress] = useState(false);
@@ -45,19 +46,41 @@ const OfflineDownloadGrid = ({navigation}: any) => {
   const fetchDownloadedData = async () => {
     setIsLoading(true);
     try {
-      await fetchDownloadedDataFromLocalDir(item => {
+      await fetchDownloadedDataFromLocalDir(async item => {
         const sortedData = item.sort((a: any, b: any) => {
           const dateA = new Date(a.downloadDate) as any;
           const dateB = new Date(b.downloadDate) as any;
           return dateB - dateA;
         });
-        setData(sortedData);
+        const updatedData = await Promise.all(
+          sortedData.map(async (item: any) => {
+            const filePath = item.artwork;
+            const fileExists = await RNFetchBlob.fs.exists(filePath);
+            return {
+              ...item,
+              artwork: fileExists
+                ? Platform.OS === 'android'
+                  ? `file://${filePath}`
+                  : filePath
+                : '',
+            };
+          }),
+        );
+
+        setData(updatedData);
       });
       setIsLoading(false); // Moved outside the try block
     } catch (error) {
       console.error('Error fetching data:', error);
       setIsLoading(false);
     }
+  };
+
+  const onDeletionPress = (id: any) => {
+    deleteContentFromLocalDir(id);
+    setTimeout(() => {
+      fetchDownloadedData();
+    }, 500);
   };
 
   // console.log('object');
@@ -99,6 +122,20 @@ const OfflineDownloadGrid = ({navigation}: any) => {
     });
   };
 
+  const rightSwipe = (id: any) => {
+    return (
+      <TouchableOpacity
+        onPress={() => onDeletionPress(id)}
+        style={{
+          justifyContent: 'center',
+          paddingHorizontal: 10,
+          backgroundColor: Colors[theme].secondary_dark,
+        }}>
+        <AntDesign name={'delete'} size={30} color={Colors[theme].danger} />
+      </TouchableOpacity>
+    );
+  };
+
   let renderItem;
   if (isLoading) {
     renderItem = (
@@ -134,12 +171,13 @@ const OfflineDownloadGrid = ({navigation}: any) => {
       <FlatList
         data={data}
         showsVerticalScrollIndicator={false}
-        renderItem={({item}) => (
-          <React.Fragment key={item.id}>
-            <View style={styles.container}>
-              <CustomButton
-                // onPress={() => handlePlayAudio(item)}
-                customButtonStyle={styles.btn}>
+        renderItem={({item}) => {
+          console.log('id', item.id);
+          return (
+            <Swipeable
+              key={item.id}
+              renderRightActions={() => rightSwipe(item.id)}>
+              <View style={styles.container}>
                 <View style={styles.trackContainer}>
                   <View
                     style={{
@@ -161,24 +199,27 @@ const OfflineDownloadGrid = ({navigation}: any) => {
                       </Text>
                     </View>
                   </View>
-                  <AntDesign
-                    name={
-                      // currentTrack?.id === item.id &&
-                      // playbackState.state === State.Playing
-                      // ? 'pause':
-                      'caretright'
-                    }
-                    size={30}
-                    color={Colors[theme].primary}
-                  />
+                  <CustomButton
+                    // onPress={() => handlePlayAudio(item)}
+                    customButtonStyle={styles.btn}>
+                    <AntDesign
+                      name={
+                        // currentTrack?.id === item.id &&
+                        // playbackState.state === State.Playing
+                        // ? 'pause':
+                        'caretright'
+                      }
+                      size={30}
+                      color={Colors[theme].primary}
+                    />
+                  </CustomButton>
                 </View>
-              </CustomButton>
-            </View>
-            {data.length !== item?.id && <View style={styles.divider} />}
-          </React.Fragment>
-        )}
+              </View>
+            </Swipeable>
+          );
+        }}
+        ItemSeparatorComponent={() => <View style={styles.divider} />}
         keyExtractor={(item: any) => item.id.toString()}
-        // Optional: Add extra FlatList props like `ItemSeparatorComponent`, etc.
       />
     );
   }
