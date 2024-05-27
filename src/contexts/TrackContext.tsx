@@ -64,6 +64,7 @@ export interface TrackContextType {
   setLoading: Dispatch<SetStateAction<boolean>>;
   isModalVisible: boolean;
   setModalVisible: Dispatch<SetStateAction<boolean>>;
+  deleteTrackById: (id: any) => void;
 }
 
 const TrackContext = createContext<TrackContextType | undefined>(undefined);
@@ -114,6 +115,15 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
       setDownloading(false);
     }
   }, [currentTrack, downloadingTrackIds]);
+
+  console.log('downloading...', downloadingTrackIds);
+
+  const deleteTrackById = (id: any) => {
+    const remainTracks = downloadingTrackIds.filter((item: any) => {
+      return item !== id;
+    });
+    setDownloadingTrackIds(remainTracks);
+  };
 
   const onDownloadPress = () => {
     const find = downloadingTrackIds.find(
@@ -297,6 +307,7 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     setLoading,
     isModalVisible,
     setModalVisible,
+    deleteTrackById,
   };
 
   return (

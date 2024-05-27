@@ -25,8 +25,10 @@ import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {ScrollView, Swipeable} from 'react-native-gesture-handler';
 import {CustomButton} from '../components/utils';
 import {AntDesign, truncateText} from '../utils/common';
+import {useTrackContext} from '../contexts/TrackContext';
 
 const OfflineDownloadGrid = ({navigation}: any) => {
+  const {deleteTrackById} = useTrackContext();
   const [data, setData] = useState<any>([]);
   const [reRender, setReRender] = useState(false);
   const [isDeletionModalVisible, setDeletionModalVisible] = useState(false);
@@ -78,6 +80,7 @@ const OfflineDownloadGrid = ({navigation}: any) => {
 
   const onDeletionPress = (id: any) => {
     deleteContentFromLocalDir(id);
+    deleteTrackById(id);
     setTimeout(() => {
       fetchDownloadedData();
     }, 500);
