@@ -50,6 +50,7 @@ export type MainStackParamList = {
   Setting: undefined;
   Languages: undefined;
   Downloaded: undefined;
+  TrackBottom: undefined;
 };
 
 export type NavigationMainStackScreenProps = {

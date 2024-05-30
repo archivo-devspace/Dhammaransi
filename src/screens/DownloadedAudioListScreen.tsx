@@ -228,7 +228,7 @@ const OfflineDownloadGrid = ({navigation}: Props) => {
       />
     );
   }
-  return <Container title="MENUS.DOWNLOADAUDOIS">{renderItem}</Container>;
+  return <Container title="TITLES.DOWNLOADAUDOIS">{renderItem}</Container>;
 };
 
 export default OfflineDownloadGrid;
