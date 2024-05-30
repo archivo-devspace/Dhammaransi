@@ -9,12 +9,11 @@ import {
   FlatList,
   TouchableOpacity,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useLayoutEffect, useState} from 'react';
 
 import {useIsFocused} from '@react-navigation/core';
 import RNFetchBlob from 'rn-fetch-blob';
 import {
-  deleteAllDownloadDataFromLocal,
   deleteContentFromLocalDir,
   fetchDownloadedDataFromLocalDir,
 } from '../api_services/downloadService';
@@ -22,17 +21,23 @@ import Container from '../components/commons/Container';
 import LoadingSpinner from '../components/utils/LoadingSpinner';
 import {Colors} from '../theme';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
-import {ScrollView, Swipeable} from 'react-native-gesture-handler';
+import {Swipeable} from 'react-native-gesture-handler';
 import {CustomButton} from '../components/utils';
 import {AntDesign, truncateText} from '../utils/common';
 import {useTrackContext} from '../contexts/TrackContext';
+import {useTranslation} from 'react-i18next';
+import {NavigationMainBottomTabScreenProps} from '../navigations/BottomNavigation';
 
-const OfflineDownloadGrid = ({navigation}: any) => {
-  const {deleteTrackById} = useTrackContext();
+type Props = {
+  navigation: NavigationMainBottomTabScreenProps['navigation'];
+};
+
+const OfflineDownloadGrid = ({navigation}: Props) => {
+  const {deleteTrackById, currentTrack, handlePlay, setTrackLists} =
+    useTrackContext();
+  const {t} = useTranslation();
   const [data, setData] = useState<any>([]);
   const [reRender, setReRender] = useState(false);
-  const [isDeletionModalVisible, setDeletionModalVisible] = useState(false);
-  const [isSelectedPress, setSelectedPress] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const isFocused = useIsFocused();
@@ -70,6 +75,7 @@ const OfflineDownloadGrid = ({navigation}: any) => {
         );
 
         setData(updatedData);
+        setTrackLists(updatedData);
       });
       setIsLoading(false); // Moved outside the try block
     } catch (error) {
@@ -78,18 +84,19 @@ const OfflineDownloadGrid = ({navigation}: any) => {
     }
   };
 
-  const onDeletionPress = (id: any) => {
-    deleteContentFromLocalDir(id);
-    deleteTrackById(id);
-    setTimeout(() => {
-      fetchDownloadedData();
-    }, 500);
+  const handlePlayAudio = async (item: any) => {
+    // togglePlayingMode();
+    if (currentTrack === null || currentTrack.id !== item.id) {
+      handlePlay(item.id);
+    }
+    navigation.navigate('TrackBottom');
   };
 
-  // console.log('object');
-  // console.log('isLoading', isLoading);
-  // console.log('data', data);
-  // console.log('isLoading', isLoading);
+  const onDeletionPress = async (id: any) => {
+    await deleteContentFromLocalDir(id);
+    deleteTrackById(id);
+    await fetchDownloadedData();
+  };
 
   useEffect(() => {
     // Only fetch data if either reRender or isFocused changes
@@ -110,20 +117,20 @@ const OfflineDownloadGrid = ({navigation}: any) => {
     };
   }, []);
 
-  const handlePlay = (url: any, thumbnail: any, item: any) => {
-    const finalUrl = url.split('/').pop();
-    const offlineUrl = TrackFolder + '/' + finalUrl;
+  // const handlePlay = (url: any, thumbnail: any, item: any) => {
+  //   const finalUrl = url.split('/').pop();
+  //   const offlineUrl = TrackFolder + '/' + finalUrl;
 
-    const thumbnailImage =
-      Platform.OS === 'android' ? 'file://' + thumbnail : thumbnail;
+  //   const thumbnailImage =
+  //     Platform.OS === 'android' ? 'file://' + thumbnail : thumbnail;
 
-    navigation.navigate('PlayerScreen', {
-      source: offlineUrl,
-      posterImage: thumbnailImage,
-      data: item,
-      offline: true,
-    });
-  };
+  //   navigation.navigate('PlayerScreen', {
+  //     source: offlineUrl,
+  //     posterImage: thumbnailImage,
+  //     data: item,
+  //     offline: true,
+  //   });
+  // };
 
   const rightSwipe = (id: any) => {
     return (
@@ -166,7 +173,7 @@ const OfflineDownloadGrid = ({navigation}: any) => {
           }}
           resizeMode="stretch"
         />
-        <Text style={styles.noDataText}>No Downloaded data found!</Text>
+        <Text style={styles.noDataText}>{t('UTILS.NODOWNLOADDATA')}</Text>
       </View>
     );
   } else if (!isLoading && data.length >= 0) {
@@ -203,15 +210,10 @@ const OfflineDownloadGrid = ({navigation}: any) => {
                     </View>
                   </View>
                   <CustomButton
-                    // onPress={() => handlePlayAudio(item)}
+                    onPress={() => handlePlayAudio(item)}
                     customButtonStyle={styles.btn}>
                     <AntDesign
-                      name={
-                        // currentTrack?.id === item.id &&
-                        // playbackState.state === State.Playing
-                        // ? 'pause':
-                        'caretright'
-                      }
+                      name={'caretright'}
                       size={30}
                       color={Colors[theme].primary}
                     />
@@ -226,7 +228,7 @@ const OfflineDownloadGrid = ({navigation}: any) => {
       />
     );
   }
-  return <Container title={'Your Downloaded Files'}>{renderItem}</Container>;
+  return <Container title="MENUS.DOWNLOADAUDOIS">{renderItem}</Container>;
 };
 
 export default OfflineDownloadGrid;
@@ -242,7 +244,7 @@ const styling = (theme: Theme) =>
     noDataText: {
       color: Colors[theme].text,
       fontWeight: 'bold',
-      fontSize: 25,
+      fontSize: 20,
     },
     container: {
       flexDirection: 'row',
@@ -282,3 +284,6 @@ const styling = (theme: Theme) =>
       backgroundColor: Colors[theme].secondary_dark,
     },
   });
+function setTrackLists(data: any) {
+  throw new Error('Function not implemented.');
+}

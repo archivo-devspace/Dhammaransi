@@ -15,7 +15,7 @@ import TrackPlayer, {
   Track,
   usePlaybackState,
 } from 'react-native-track-player';
-import {tracks} from '../utils/constants';
+
 import {
   fetchDownloadedDataFromLocalDir,
   sendDownloadedDataToLocalDir,
@@ -83,12 +83,12 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
   const playbackState = usePlaybackState();
   const [repeatMode, setRepeatMode] = useState('shuffle-disabled');
 
-  useLayoutEffect(() => {
-    const getAllTracks = () => {
-      setTrackLists(tracks);
-    };
-    getAllTracks();
-  }, []);
+  // useLayoutEffect(() => {
+  //   const getAllTracks = () => {
+  //     setTrackLists(tracks);
+  //   };
+  //   getAllTracks();
+  // }, []);
 
   useLayoutEffect(() => {
     fetchDownloadedDataFromLocalDir(item => {
@@ -118,7 +118,7 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
 
   console.log('downloading...', downloadingTrackIds);
 
-  const deleteTrackById = (id: any) => {
+  const deleteTrackById = async (id: any) => {
     const remainTracks = downloadingTrackIds.filter((item: any) => {
       return item !== id;
     });

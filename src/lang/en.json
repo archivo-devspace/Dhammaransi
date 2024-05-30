@@ -6,7 +6,7 @@
       "PDFSCREEN_TITLE": "Dhamma Scriptures",
       "MORE": "More",
       "SETTING": "Setting",
-      "HOME" : "Dhammaransi Mokutt Vipassana Meditation Center"
+      "HOME": "Dhammaransi Mokutt Vipassana Meditation Center"
     },
     "MENUS": {
       "AUDIOS": "Dhamma Talk Audios",
@@ -17,7 +17,8 @@
       "MEDITATION_TIMETABLE": "Mediation Timetable",
       "JOURNEY": "Missionary Processes",
       "CONTACT": "Contact",
-      "SETTING": "Setting"
+      "SETTING": "Setting",
+      "DOWNLOADAUDOIS": "Downloaded Dhamma Talk Audios"
     },
     "UTILS": {
       "DARK_MODE_ON": "Turn on Dark Mode",
@@ -28,7 +29,8 @@
       "SUCCESS" : "Content Downloaded",
       "SUCCESS_TEXT" : "The content downloaded successfully",
       "FAILED" : "Download Failed",
-      "FAILED_TEXT" : "The content failed to download"
+      "FAILED_TEXT" : "The content failed to download",
+      "NODOWNLOADDATA": "No Downloaded data found!"
     }
   }
 }

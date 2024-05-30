@@ -1,5 +1,5 @@
 import {StyleSheet, Text, View, StatusBar, Image} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {Colors} from '../theme';
@@ -10,8 +10,9 @@ import {useTrackContext} from '../contexts/TrackContext';
 import {FlatList} from 'react-native';
 import {State, usePlaybackState} from 'react-native-track-player';
 import {useTranslation} from 'react-i18next';
-import Header from '../components/commons/Header';
+
 import Container from '../components/commons/Container';
+import {tracks} from '../utils/constants';
 
 type Props = {
   navigation: NavigationMainStackScreenProps['navigation'];
@@ -21,10 +22,18 @@ const Audios = ({navigation}: Props) => {
   const insets = useSafeAreaInsets();
   const {theme} = useThemeContext();
   const {t} = useTranslation();
-  const {trackLists, handlePlay, currentTrack} = useTrackContext();
+  const {trackLists, handlePlay, currentTrack, setTrackLists} =
+    useTrackContext();
   const playbackState = usePlaybackState();
   const styles = styling(theme);
   const {top} = insets;
+
+  useEffect(() => {
+    const fetchAudioList = async () => {
+      setTrackLists(tracks);
+    };
+    fetchAudioList();
+  }, []);
 
   const handlePlayAudio = async (item: any) => {
     // togglePlayingMode();
