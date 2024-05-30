@@ -24,7 +24,11 @@
       "LANGUAGES": "Turn on English Language",
       "PLAYLIST": "Playlists",
       "EMPTY": "Empty",
-      "CHOOSEALBLUM": "Choose from alblum"
+      "CHOOSEALBLUM": "Choose from alblum",
+      "SUCCESS" : "Content Downloaded",
+      "SUCCESS_TEXT" : "The content downloaded successfully",
+      "FAILED" : "Download Failed",
+      "FAILED_TEXT" : "The content failed to download"
     }
   }
 }

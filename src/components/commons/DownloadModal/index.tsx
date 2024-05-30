@@ -15,6 +15,7 @@ import {CustomButton} from '../../utils';
 import {AntDesign} from '../../../utils/common';
 import {Colors} from '../../../theme';
 import {Theme, useThemeContext} from '../../../contexts/ThemeContext';
+import {useTranslation} from 'react-i18next';
 
 interface Props {
   isModalVisible: boolean;
@@ -37,6 +38,7 @@ const DownloadModal = ({
   const [downloadPercentage, setDownloadPercentage] = useState(0);
 
   const {theme} = useThemeContext();
+  const {t} = useTranslation();
 
   const styles = styling(theme);
 
@@ -65,8 +67,8 @@ const DownloadModal = ({
         if (e?.contentId === contentId) {
           showToast(
             'success',
-            'Content Downloaded',
-            'The content downloaded successfully 👋',
+            `${t('UTILS.SUCCESS')}`,
+            `${t('UTILS.SUCCESS_TEXT')}`,
           );
           onDownloadFinished(true);
           onClosePress();
