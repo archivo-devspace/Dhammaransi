@@ -24,7 +24,7 @@ export const menus = [
     id: 1,
     icon: 'music',
     name: 'MENUS.AUDIOS',
-    link: 'Audios',
+    link: 'AudioCategories',
   },
   {
     id: 2,
@@ -56,6 +56,21 @@ export const images = [
 export const BANNER_H = 320;
 export const TOPNAVI_H = 55;
 
+export const trackCategories = [
+  {
+    id: 1,
+    name: 'Category',
+    desc: 'Category description',
+    artwork: 'https://www.bensound.com/bensound-img/happyrock.jpg',
+  },
+  {
+    id: 2,
+    name: 'Category2',
+    desc: 'Category description2',
+    artwork: 'https://www.bensound.com/bensound-img/punky.jpg',
+  },
+];
+
 export const tracks = [
   {
     id: 1,
@@ -65,6 +80,7 @@ export const tracks = [
     album: "Bensound's rock",
     date: '2014-05-20T07:00:00+00:00', // RFC 3339
     artwork: 'https://www.bensound.com/bensound-img/happyrock.jpg', // Load artwork from the network
+    categoryId: 1,
   },
   {
     id: 2,
@@ -74,6 +90,7 @@ export const tracks = [
     album: "Bensound's rock",
     date: '2014-05-20T07:00:00+00:00', // RFC 3339
     artwork: 'https://www.bensound.com/bensound-img/punky.jpg',
+    categoryId: 1,
   },
   {
     id: 3,
@@ -83,6 +100,7 @@ export const tracks = [
     album: "Bensound's rock",
     date: '2014-05-20T07:00:00+00:00', // RFC 3339
     artwork: 'https://www.bensound.com/bensound-img/actionable.jpg',
+    categoryId: 1,
   },
   {
     id: 4,
@@ -92,6 +110,7 @@ export const tracks = [
     album: "Bensound's Jazz",
     date: '2014-05-20T07:00:00+00:00', // RFC 3339
     artwork: 'https://www.bensound.com/bensound-img/romantic.jpg',
+    categoryId: 1,
   },
   {
     id: 5,
@@ -101,6 +120,7 @@ export const tracks = [
     album: "Bensound's Jazz",
     date: '2014-05-20T07:00:00+00:00', // RFC 3339
     artwork: 'https://www.bensound.com/bensound-img/allthat.jpg',
+    categoryId: 1,
   },
   {
     id: 6,
@@ -110,6 +130,7 @@ export const tracks = [
     album: "Bensound's Jazz",
     date: '2014-05-20T07:00:00+00:00', // RFC 3339
     artwork: 'https://www.bensound.com/bensound-img/love.jpg',
+    categoryId: 1,
   },
   {
     id: 7,
@@ -119,6 +140,7 @@ export const tracks = [
     album: "Bensound's Electronica",
     date: '2014-05-20T07:00:00+00:00', // RFC 3339
     artwork: 'https://www.bensound.com/bensound-img/dreams.jpg',
+    categoryId: 1,
   },
   {
     id: 8,
@@ -128,6 +150,7 @@ export const tracks = [
     album: "Bensound's Electronica",
     date: '2014-05-20T07:00:00+00:00', // RFC 3339
     artwork: 'https://www.bensound.com/bensound-img/dance.jpg',
+    categoryId: 1,
   },
 ];
 

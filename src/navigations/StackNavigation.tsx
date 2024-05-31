@@ -21,6 +21,7 @@ import SettingScreen from '../screens/SettingScreen';
 import BottomTapNavigator from './BottomNavigation';
 import TrackPopupScreen from '../screens/TrackPopupScreen';
 import OfflineDownloadGrid from '../screens/DownloadedAudioListScreen';
+import AudioCategoryListScreen from '../screens/AudioCategoryListScreen';
 
 export interface MovieProps {
   id: number;
@@ -36,8 +37,10 @@ export type MainStackParamList = {
     item: MovieProps;
   };
   Audios: {
-    item: MovieProps | null;
+    item?: MovieProps | null;
+    id: number;
   };
+  AudioCategories: undefined;
   Pdf: undefined;
   Painting: undefined;
   Biography: undefined;
@@ -68,6 +71,10 @@ const StackNavigation = () => {
       <Stack.Screen name="Movie" component={MovieScreen} />
       <Stack.Screen name="MovieLists" component={MovieListScreen} />
       <Stack.Screen name="Audios" component={Audios} />
+      <Stack.Screen
+        name="AudioCategories"
+        component={AudioCategoryListScreen}
+      />
       <Stack.Screen name="Pdf" component={PdfListScreen} />
       <Stack.Screen name="Painting" component={PaintingsScreen} />
       <Stack.Screen name="Track" component={TrackPopupScreen} />

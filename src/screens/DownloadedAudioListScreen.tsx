@@ -45,10 +45,10 @@ const OfflineDownloadGrid = ({navigation}: Props) => {
   const {height, width} = useWindowDimensions();
   const styles = styling(theme);
 
-  let TrackFolder =
-    Platform.OS === 'android'
-      ? RNFetchBlob.fs.dirs.CacheDir
-      : RNFetchBlob.fs.dirs.DocumentDir;
+  // let TrackFolder =
+  //   Platform.OS === 'android'
+  //     ? RNFetchBlob.fs.dirs.CacheDir
+  //     : RNFetchBlob.fs.dirs.DocumentDir;
 
   const fetchDownloadedData = async () => {
     setIsLoading(true);
@@ -139,9 +139,10 @@ const OfflineDownloadGrid = ({navigation}: Props) => {
         style={{
           justifyContent: 'center',
           paddingHorizontal: 10,
-          backgroundColor: Colors[theme].secondary_dark,
+          zIndex: 10,
+          backgroundColor: Colors[theme].danger,
         }}>
-        <AntDesign name={'delete'} size={30} color={Colors[theme].danger} />
+        <AntDesign name={'delete'} size={30} color={'white'} />
       </TouchableOpacity>
     );
   };
@@ -216,6 +217,7 @@ const OfflineDownloadGrid = ({navigation}: Props) => {
                       name={'caretright'}
                       size={30}
                       color={Colors[theme].primary}
+                      style={{backgroundColor: 'transparent'}}
                     />
                   </CustomButton>
                 </View>
@@ -252,9 +254,9 @@ const styling = (theme: Theme) =>
       alignItems: 'center',
       paddingVertical: 20,
       paddingHorizontal: 20,
+      backgroundColor: Colors[theme]?.secondary,
     },
     trackContainer: {
-      gap: 5,
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
@@ -268,7 +270,7 @@ const styling = (theme: Theme) =>
       borderRadius: 12,
     },
     btn: {
-      backgroundColor: Colors[theme].secondary,
+      backgroundColor: 'transparent',
     },
     title: {
       fontSize: 16,

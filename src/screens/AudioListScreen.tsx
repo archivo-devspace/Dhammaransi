@@ -5,7 +5,10 @@ import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {Colors} from '../theme';
 import {AntDesign, truncateText} from '../utils/common';
 import {CustomButton} from '../components/utils';
-import {NavigationMainStackScreenProps} from '../navigations/StackNavigation';
+import {
+  MainStackParamList,
+  NavigationMainStackScreenProps,
+} from '../navigations/StackNavigation';
 import {useTrackContext} from '../contexts/TrackContext';
 import {FlatList} from 'react-native';
 import {State, usePlaybackState} from 'react-native-track-player';
@@ -13,20 +16,21 @@ import {useTranslation} from 'react-i18next';
 
 import Container from '../components/commons/Container';
 import {tracks} from '../utils/constants';
+import {RouteProp} from '@react-navigation/native';
 
 type Props = {
   navigation: NavigationMainStackScreenProps['navigation'];
+  route: RouteProp<MainStackParamList, 'Audios'>;
 };
 
-const Audios = ({navigation}: Props) => {
-  const insets = useSafeAreaInsets();
+const Audios = ({navigation, route}: Props) => {
+  console.log('route', route.params);
   const {theme} = useThemeContext();
   const {t} = useTranslation();
   const {trackLists, handlePlay, currentTrack, setTrackLists} =
     useTrackContext();
   const playbackState = usePlaybackState();
   const styles = styling(theme);
-  const {top} = insets;
 
   useEffect(() => {
     const fetchAudioList = async () => {
