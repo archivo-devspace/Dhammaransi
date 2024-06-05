@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 import {
   Animated,
+  DeviceEventEmitter,
   Image,
   Platform,
   ScrollView,
@@ -51,6 +52,7 @@ import {
   fetchDownloadedDataFromLocalDir,
   sendDownloadedDataToLocalDir,
 } from '../api_services/downloadService';
+import * as Progress from 'react-native-progress'; // Import Progress
 
 type Props = {
   route: RouteProp<MainStackParamList, 'Track'>;
@@ -171,6 +173,21 @@ const TrackScreen = ({route, navigation}: Props) => {
     );
   }, []);
 
+  useEffect(() => {
+    const listener = DeviceEventEmitter.addListener(
+      'downloadProgress',
+      data => {
+        if (data.contentId === currentTrack?.id) {
+          setDownloadProgress(parseInt(data.progressValue));
+        }
+      },
+    );
+
+    return () => {
+      listener.remove();
+    };
+  }, [currentTrack]);
+
   const styles = styling(theme);
   const {top} = insets;
 
@@ -278,7 +295,7 @@ const TrackScreen = ({route, navigation}: Props) => {
         snapTo="65"
         ref={bottomSheetRef}
         backGroundColor={Colors[theme].secondary}>
-        <View style={{paddingBottom: 65}}>
+        <View style={{paddingBottom: 135}}>
           <RenderItem
             currentQueue={currentQueue}
             currentActiveTrack={currentActiveTrack}
@@ -302,6 +319,7 @@ const TrackScreen = ({route, navigation}: Props) => {
             thumbTintColor={Colors[theme].primary}
             onSlidingComplete={async value => {
               await TrackPlayer.seekTo(value);
+              await TrackPlayer.play();
             }}
             thumbImage={icon}
             minimumTrackTintColor={Colors[theme].primary}
@@ -334,16 +352,26 @@ const TrackScreen = ({route, navigation}: Props) => {
                 }
               />
             ) : isDownloading || loading ? (
-              <CustomButton
-                customButtonStyle={styles.btn}
-                icon={
-                  <MaterialIcon
-                    name={'weather-cloudy-clock'}
-                    size={40}
-                    color={Colors[theme].primary}
-                  />
-                }
-              />
+              // <CustomButton
+              //   customButtonStyle={styles.btn}
+              //   icon={
+              //     <MaterialIcon
+              //       name={'weather-cloudy-clock'}
+              //       size={40}
+              //       color={Colors[theme].primary}
+              //     />
+              //   }
+              // />
+              <View style={styles.progressBarContainer}>
+                <Progress.Bar
+                  progress={downloadProgress / 100}
+                  color={Colors[theme].primary}
+                  borderWidth={2}
+                />
+                <Text style={{color: Colors[theme].primary}}>
+                  {downloadProgress < 100 ? 'Dwonloading...' : 'Downloaded'}
+                </Text>
+              </View>
             ) : (
               <CustomButton
                 customButtonStyle={styles.btn}
@@ -387,15 +415,15 @@ const TrackScreen = ({route, navigation}: Props) => {
             onPress={togglePlayingMode}
             icon={
               playbackState.state === State.Playing ? (
-                <Entypo
-                  name={`controller-paus`}
+                <MaterialIcons
+                  name={`pause-circle`}
                   size={65}
                   style={{elevation: 2}}
                   color={Colors[theme].primary}
                 />
               ) : playbackState.state === State.Paused ? (
-                <Entypo
-                  name={`controller-play`}
+                <MaterialIcons
+                  name={`play-circle`}
                   size={65}
                   style={{elevation: 2}}
                   color={Colors[theme].primary}
@@ -446,7 +474,7 @@ const TrackScreen = ({route, navigation}: Props) => {
         </View>
       </View>
 
-      <DownloadModal
+      {/* <DownloadModal
         isModalVisible={isModalVisible}
         onClosePress={() => setModalVisible(false)}
         contentId={currentTrack?.id}
@@ -460,7 +488,7 @@ const TrackScreen = ({route, navigation}: Props) => {
             );
           }
         }}
-      />
+      /> */}
       <Toast />
     </ScrollView>
   );
@@ -566,6 +594,10 @@ const styling = (theme: Theme) =>
     suffelIcon: {
       width: 30,
       height: 30,
+    },
+    progressBarContainer: {
+      alignItems: 'center',
+      height: 40,
     },
   });
 

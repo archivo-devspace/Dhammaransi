@@ -275,10 +275,12 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
 
   const handleNextTrack = async () => {
     await TrackPlayer.skipToNext();
+    await TrackPlayer.play();
   };
 
   const handlePrevTrack = async () => {
     await TrackPlayer.skipToPrevious();
+    await TrackPlayer.play();
   };
 
   const contextValue: TrackContextType = {
