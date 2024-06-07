@@ -21,7 +21,13 @@ import {BottomSheetMethods} from '../components/commons/bottomSheet';
 import RenderItem from '../components/commons/RenderItem';
 import BottomSheet from '../components/commons/bottomSheet';
 import {CustomButton} from '../components/utils';
-import {Entypo, FontAwesome, Ionicons, MaterialIcon} from '../utils/common';
+import {
+  Entypo,
+  FontAwesome,
+  Ionicons,
+  MaterialIcon,
+  MaterialIcons,
+} from '../utils/common';
 import {Colors} from '../theme';
 import TrackPlayer, {
   Capability,
@@ -40,6 +46,7 @@ import Container from '../components/commons/Container';
 import LoadingSpinner from '../components/utils/LoadingSpinner';
 import DownloadModal from '../components/commons/DownloadModal';
 import Toast from 'react-native-toast-message';
+import * as Progress from 'react-native-progress'; // Import Progress
 
 type Props = {
   route: RouteProp<MainStackParamList, 'Track'>;
@@ -172,7 +179,7 @@ const TrackPopupScreen = ({navigation}: Props) => {
               title={t('UTILS.CHOOSEALBLUM')}
               customButtonStyle={styles.chooseFromBtn}
               customButtonTextStyle={styles.chooseFrom}
-              onPress={() => navigation.navigate('Audios', {item: null})}
+              onPress={() => navigation.navigate('AudioCategories')}
               icon={
                 <FontAwesome
                   name="music"
@@ -248,16 +255,16 @@ const TrackPopupScreen = ({navigation}: Props) => {
                 }
               />
             ) : isDownloading || loading ? (
-              <CustomButton
-                customButtonStyle={styles.btn}
-                icon={
-                  <MaterialIcon
-                    name={'weather-cloudy-clock'}
-                    size={40}
-                    color={Colors[theme].primary}
-                  />
-                }
-              />
+              <View style={styles.progressBarContainer}>
+                <Progress.Bar
+                  progress={downloadProgress / 100}
+                  color={Colors[theme].primary}
+                  borderWidth={2}
+                />
+                <Text style={{color: Colors[theme].primary}}>
+                  {downloadProgress < 100 ? 'Dwonloading...' : 'Downloaded'}
+                </Text>
+              </View>
             ) : (
               <CustomButton
                 customButtonStyle={styles.btn}
@@ -302,15 +309,15 @@ const TrackPopupScreen = ({navigation}: Props) => {
             onPress={togglePlayingMode}
             icon={
               playbackState.state === State.Playing ? (
-                <Entypo
-                  name={`controller-paus`}
+                <MaterialIcons
+                  name={`pause-circle`}
                   size={65}
                   style={{elevation: 2}}
                   color={Colors[theme].primary}
                 />
               ) : playbackState.state === State.Paused ? (
-                <Entypo
-                  name={`controller-play`}
+                <MaterialIcons
+                  name={`play-circle`}
                   size={65}
                   style={{elevation: 2}}
                   color={Colors[theme].primary}
@@ -360,7 +367,7 @@ const TrackPopupScreen = ({navigation}: Props) => {
           />
         </View>
       </View>
-      <DownloadModal
+      {/* <DownloadModal
         isModalVisible={isModalVisible}
         onClosePress={() => setModalVisible(false)}
         contentId={currentTrack?.id}
@@ -374,7 +381,7 @@ const TrackPopupScreen = ({navigation}: Props) => {
             );
           }
         }}
-      />
+      /> */}
       <Toast />
     </Container>
   );
@@ -438,7 +445,7 @@ const styling = (theme: Theme) =>
       flex: 1,
       alignItems: 'center',
       width: '100%',
-      paddingBottom: 135,
+      // paddingBottom: 135,
     },
     trackContainer: {
       paddingHorizontal: '10%',
@@ -475,4 +482,21 @@ const styling = (theme: Theme) =>
       paddingHorizontal: 20,
       paddingVertical: 10,
     },
+    progressBarContainer: {
+      alignItems: 'center',
+      height: 40,
+    },
   });
+
+export const showToast = (type: any, text1: string, text2: string) => {
+  Toast.show({
+    type: type,
+    text1: text1,
+    text2: text2,
+
+    position: 'top',
+    topOffset: 50,
+    visibilityTime: 4000,
+    autoHide: true,
+  });
+};

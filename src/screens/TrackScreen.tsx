@@ -238,10 +238,12 @@ const TrackScreen = ({route, navigation}: Props) => {
   };
 
   return (
-    <ScrollView style={styles.mainContainer}>
-      <StatusBar translucent backgroundColor={'red'} />
+    <ScrollView
+      style={[styles.mainContainer]}
+      showsVerticalScrollIndicator={false}>
+      <StatusBar translucent />
 
-      <View style={{flex: 1.5, paddingTop: top}}>
+      <View style={{flex: 1, paddingTop: top}}>
         <View style={styles.imgContainer}>
           <View
             style={[
@@ -265,15 +267,14 @@ const TrackScreen = ({route, navigation}: Props) => {
               justifyContent: 'center',
               paddingHorizontal: 20,
               gap: 5,
-
-              height: 120,
+              height: 135,
             }}>
             {!currentTrack ? (
               <CustomButton
                 title={t('UTILS.CHOOSEALBLUM')}
                 customButtonStyle={styles.chooseFromBtn}
                 customButtonTextStyle={styles.chooseFrom}
-                onPress={() => navigation.navigate('Audios', {item: null})}
+                onPress={() => navigation.navigate('AudioCategories')}
                 icon={
                   <FontAwesome
                     name="music"
@@ -295,7 +296,8 @@ const TrackScreen = ({route, navigation}: Props) => {
         snapTo="65"
         ref={bottomSheetRef}
         backGroundColor={Colors[theme].secondary}>
-        <View style={{paddingBottom: 135}}>
+        <View
+          style={{paddingBottom: height > 800 ? height * 0.1 : height * 0.17}}>
           <RenderItem
             currentQueue={currentQueue}
             currentActiveTrack={currentActiveTrack}
@@ -304,7 +306,12 @@ const TrackScreen = ({route, navigation}: Props) => {
           />
         </View>
       </BottomSheet>
-      <View style={styles.contentContainer}>
+      <View
+        style={[
+          styles.contentContainer,
+          // {paddingBottom: height > 800 ? height * 0.2 : height * 0.1},
+          {bottom: 0},
+        ]}>
         <View style={styles.trackContainer}>
           <Slider
             style={{
@@ -352,16 +359,6 @@ const TrackScreen = ({route, navigation}: Props) => {
                 }
               />
             ) : isDownloading || loading ? (
-              // <CustomButton
-              //   customButtonStyle={styles.btn}
-              //   icon={
-              //     <MaterialIcon
-              //       name={'weather-cloudy-clock'}
-              //       size={40}
-              //       color={Colors[theme].primary}
-              //     />
-              //   }
-              // />
               <View style={styles.progressBarContainer}>
                 <Progress.Bar
                   progress={downloadProgress / 100}
@@ -472,6 +469,7 @@ const TrackScreen = ({route, navigation}: Props) => {
             }
           />
         </View>
+        <View style={{height: 90}} />
       </View>
 
       {/* <DownloadModal
@@ -532,6 +530,7 @@ const styling = (theme: Theme) =>
     },
     titleText: {
       fontSize: 20,
+
       // width: '80%',
 
       height: 50,
@@ -549,10 +548,10 @@ const styling = (theme: Theme) =>
       paddingHorizontal: 20,
     },
     contentContainer: {
-      flex: 1,
       alignItems: 'center',
       width: '100%',
-      paddingBottom: 135,
+      flex: 1,
+      // paddingBottom: '25%',
     },
     trackContainer: {
       paddingHorizontal: '10%',

@@ -42,6 +42,7 @@ const BottomSheet = forwardRef<BottomSheetMethods, Props>(
 
     const {height} = Dimensions.get('screen');
     const closeHeight = height;
+
     const percentage = parseFloat(snapTo.replace('%', '')) / 100;
     const openHeight = height - height * percentage;
     const topAnimation = useSharedValue(closeHeight);
@@ -211,7 +212,7 @@ const styling = (theme: Theme) =>
 
       borderTopLeftRadius: 16,
       borderTopRightRadius: 16,
-
+      backgroundColor: 'green',
       zIndex: 100,
       paddingBottom: 4,
       borderColor: Colors[theme].secondary_dark,

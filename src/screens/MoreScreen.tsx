@@ -62,7 +62,7 @@ const MoreScreen = ({navigation}: Props) => {
     {
       id: 6,
       name: 'MENUS.DOWNLOADAUDOIS',
-      icon: 'cog',
+      icon: 'download',
       link: 'Downloaded',
     },
   ];
