@@ -42,6 +42,7 @@ import {TrackProvider} from './src/contexts/TrackContext';
 import TrackPlayer, {Capability} from 'react-native-track-player';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import i18next from 'i18next';
+import SplashScreen from 'react-native-splash-screen';
 
 const App = () => {
   const [storeLanguages, setStoreLanguages] = useState<string | null>('');
@@ -65,6 +66,13 @@ const App = () => {
       });
     };
     setUpPlayer();
+  }, []);
+
+  useEffect(() => {
+    const hideSplashScreen = setTimeout(() => {
+      SplashScreen.hide();
+    }, 3000);
+    return () => clearTimeout(hideSplashScreen);
   }, []);
 
   return (
