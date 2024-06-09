@@ -458,8 +458,12 @@ const TrackScreen = ({route, navigation}: Props) => {
             }
           />
           <CustomButton
-            customButtonStyle={styles.btn}
+            customButtonStyle={[
+              styles.btn,
+              currentQueue.length === 0 && {opacity: 0.5},
+            ]}
             onPress={expandHandler}
+            disabled={currentQueue.length === 0}
             icon={
               <MaterialIcon
                 name={`playlist-music`}

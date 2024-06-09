@@ -11,6 +11,7 @@ import {
 } from 'react';
 import TrackPlayer, {
   Capability,
+  RepeatMode,
   State,
   Track,
   usePlaybackState,
@@ -53,6 +54,7 @@ export interface TrackContextType {
   setRepeatMode: (repeatMode: string) => void;
   repeatMode: string;
   getCurrentQueue: () => Promise<Track[]>;
+  getActiveTrack: () => Promise<any>;
   onDownloadPress: () => void;
   onAlreadyDownloadPress: () => void;
   setDownloadingTrackIds: Dispatch<any>;
@@ -65,6 +67,8 @@ export interface TrackContextType {
   isModalVisible: boolean;
   setModalVisible: Dispatch<SetStateAction<boolean>>;
   deleteTrackById: (id: any) => void;
+  setInitialQueue: any;
+  setInitialTrack: any;
 }
 
 const TrackContext = createContext<TrackContextType | undefined>(undefined);
@@ -82,6 +86,8 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
   const [currentTrack, setCurrentTrack] = useState<any>(null);
   const playbackState = usePlaybackState();
   const [repeatMode, setRepeatMode] = useState('shuffle-disabled');
+  const [initialQueue, setInitialQueue] = useState<any>(null);
+  const [initialTrack, setInitialTrack] = useState<any>(null);
 
   // useLayoutEffect(() => {
   //   const getAllTracks = () => {
@@ -214,25 +220,79 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     }
   };
 
-  const changeRepeatMode = () => {
+  console.log('repeat mode', repeatMode);
+
+  const changeRepeatMode = async () => {
     if (repeatMode === 'shuffle-disabled') {
+      setInitialQueue(getCurrentQueue);
+      setInitialTrack(getActiveTrack);
       setRepeatMode('shuffle');
+
       handleShuffleTracks();
     }
     if (repeatMode === 'shuffle') {
       setRepeatMode('track');
+      await TrackPlayer.setRepeatMode(RepeatMode.Track);
     }
     if (repeatMode === 'track') {
       setRepeatMode('repeat');
+      await TrackPlayer.setRepeatMode(RepeatMode.Queue);
     }
     if (repeatMode === 'repeat') {
       setRepeatMode('shuffle-disabled');
+      await TrackPlayer.removeUpcomingTracks();
+      await TrackPlayer.setRepeatMode(RepeatMode.Off);
+
+      const activeIndex = await TrackPlayer.getActiveTrackIndex();
+
+      const currentTrackIndex = initialQueue._j.findIndex((item: any) => {
+        return item.title === currentTrack?.title;
+      });
+
+      if (currentTrackIndex === activeIndex) {
+        console.log('equal');
+        const upcomingQueue = initialQueue._j.slice(currentTrackIndex + 1);
+        await TrackPlayer.add(upcomingQueue);
+      } else {
+        console.log('not equal');
+        const upcomingQueue = initialQueue._j;
+        await TrackPlayer.add(upcomingQueue);
+      }
+
+      // console.log('upcoming>>', upcomingQueue);
+
+      // console.log('heheheh');
+      // const hello = initialTrack._j;
+      // const harhar = initialQueue._j;
+      // const initialPlaylist = [...harhar];
+      // console.log('hello', hello);
+      // console.log('harhar', harhar);
+      // console.log('initialPlaylist', initialPlaylist);
+
+      // await TrackPlayer.add(harhar);
     }
   };
 
   const getCurrentQueue = async () => {
     return await TrackPlayer.getQueue();
   };
+
+  console.log('ac>>', initialTrack);
+  console.log('acd>>', initialQueue);
+
+  const getActiveTrack = async () => {
+    return await TrackPlayer.getActiveTrack();
+  };
+
+  // const handleInitialQueue = async () => {
+  //   const currentTrackIndex = initialQueue.findIndex((item: any) => {
+  //     return item.title === currentTrack?.title;
+  //   });
+
+  //   const upcomingQueue = initialQueue.slice(currentTrackIndex + 1);
+  //   await TrackPlayer.removeUpcomingTracks();
+  //   await TrackPlayer.add(upcomingQueue);
+  // };
 
   const handleShuffleTracks = async () => {
     const currentQueue = await getCurrentQueue();
@@ -298,6 +358,7 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     setRepeatMode,
     repeatMode,
     getCurrentQueue,
+    getActiveTrack,
     onDownloadPress,
     onAlreadyDownloadPress,
     setDownloadingTrackIds,
@@ -310,6 +371,8 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     isModalVisible,
     setModalVisible,
     deleteTrackById,
+    setInitialQueue,
+    setInitialTrack,
   };
 
   return (

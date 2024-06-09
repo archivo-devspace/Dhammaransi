@@ -5,11 +5,8 @@ import {
   StyleSheet,
   Platform,
   TouchableOpacity,
-  TouchableOpacityComponent,
 } from 'react-native';
 import React, {ReactNode} from 'react';
-import {TouchableWithoutFeedback} from 'react-native';
-import {TouchableOpacityBase} from 'react-native';
 
 interface ButtonPorps {
   onPress?: () => void;
@@ -19,6 +16,7 @@ interface ButtonPorps {
   customButtonTextStyle?: object;
   children?: ReactNode;
   gap?: number;
+  disabled?: boolean;
 }
 
 const CustomButton = ({
@@ -29,18 +27,25 @@ const CustomButton = ({
   customButtonTextStyle,
   children,
   gap = 0,
+  disabled,
 }: ButtonPorps) => {
   return (
     <>
       {children ? (
         <TouchableOpacity
           onPress={onPress}
-          style={customButtonStyle ? customButtonStyle : styles.button}>
+          disabled={disabled}
+          style={
+            customButtonStyle
+              ? customButtonStyle
+              : [styles.button, disabled ? {opacity: 0} : {opacity: 1}]
+          }>
           <View style={{flexDirection: 'row'}}>{children}</View>
         </TouchableOpacity>
       ) : (
         <TouchableOpacity
           onPress={onPress}
+          disabled={disabled}
           style={customButtonStyle ? customButtonStyle : styles.button}>
           <View
             style={{flexDirection: 'row', gap: gap, justifyContent: 'center'}}>
