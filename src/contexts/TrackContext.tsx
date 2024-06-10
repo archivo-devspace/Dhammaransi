@@ -22,6 +22,7 @@ import {
   sendDownloadedDataToLocalDir,
 } from '../api_services/downloadService';
 import {showToast} from '../screens/TrackScreen';
+import {DeviceEventEmitter} from 'react-native';
 
 export interface TrackProps {
   id: number;
@@ -67,8 +68,7 @@ export interface TrackContextType {
   isModalVisible: boolean;
   setModalVisible: Dispatch<SetStateAction<boolean>>;
   deleteTrackById: (id: any) => void;
-  setInitialQueue: any;
-  setInitialTrack: any;
+  downloadProgress: number;
 }
 
 const TrackContext = createContext<TrackContextType | undefined>(undefined);
@@ -87,7 +87,7 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
   const playbackState = usePlaybackState();
   const [repeatMode, setRepeatMode] = useState('shuffle-disabled');
   const [initialQueue, setInitialQueue] = useState<any>(null);
-  const [initialTrack, setInitialTrack] = useState<any>(null);
+  const [downloadProgress, setDownloadProgress] = useState(0);
 
   // useLayoutEffect(() => {
   //   const getAllTracks = () => {
@@ -110,7 +110,7 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
       (element: any) => element === currentTrack.id,
     );
 
-    console.log('find', find);
+    // console.log('find', find);
     if (find !== undefined) {
       setLoading(true);
     } else {
@@ -122,7 +122,7 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     }
   }, [currentTrack, downloadingTrackIds]);
 
-  console.log('downloading...', downloadingTrackIds);
+  // console.log('downloading...', downloadingTrackIds);
 
   const deleteTrackById = async (id: any) => {
     const remainTracks = downloadingTrackIds.filter((item: any) => {
@@ -165,7 +165,7 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     showToast(
       'success',
       'Already downloaded',
-      'This content is already downloaded 👋',
+      'This content is already downloaded',
     );
   };
 
@@ -205,6 +205,24 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     getCurrentTrack();
   }, [playbackState]);
 
+  useEffect(() => {
+    const listener = DeviceEventEmitter.addListener(
+      'downloadProgress',
+      data => {
+        if (data.contentId === currentTrack?.id) {
+          const progress = parseInt(data.progressValue);
+          setDownloadProgress(progress);
+        }
+      },
+    );
+
+    return () => {
+      listener.remove();
+
+      // setDownloadProgress(0);
+    };
+  }, [currentTrack, isDownloading, downloadProgress]);
+
   const repeatIcon = () => {
     if (repeatMode === 'shuffle-disabled') {
       return 'shuffle-disabled';
@@ -225,7 +243,7 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
   const changeRepeatMode = async () => {
     if (repeatMode === 'shuffle-disabled') {
       setInitialQueue(getCurrentQueue);
-      setInitialTrack(getActiveTrack);
+
       setRepeatMode('shuffle');
 
       handleShuffleTracks();
@@ -240,36 +258,16 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     }
     if (repeatMode === 'repeat') {
       setRepeatMode('shuffle-disabled');
-      await TrackPlayer.removeUpcomingTracks();
+
       await TrackPlayer.setRepeatMode(RepeatMode.Off);
 
-      const activeIndex = await TrackPlayer.getActiveTrackIndex();
+      const activeTrack = await TrackPlayer.getActiveTrack();
 
-      const currentTrackIndex = initialQueue._j.findIndex((item: any) => {
-        return item.title === currentTrack?.title;
-      });
-
-      if (currentTrackIndex === activeIndex) {
-        console.log('equal');
-        const upcomingQueue = initialQueue._j.slice(currentTrackIndex + 1);
-        await TrackPlayer.add(upcomingQueue);
-      } else {
-        console.log('not equal');
-        const upcomingQueue = initialQueue._j;
-        await TrackPlayer.add(upcomingQueue);
-      }
-
-      // console.log('upcoming>>', upcomingQueue);
-
-      // console.log('heheheh');
-      // const hello = initialTrack._j;
-      // const harhar = initialQueue._j;
-      // const initialPlaylist = [...harhar];
-      // console.log('hello', hello);
-      // console.log('harhar', harhar);
-      // console.log('initialPlaylist', initialPlaylist);
-
-      // await TrackPlayer.add(harhar);
+      const removeActiveTrackQueue = initialQueue._j.filter(
+        (track: Track) => track.title !== activeTrack?.title,
+      );
+      await TrackPlayer.removeUpcomingTracks();
+      await TrackPlayer.add(removeActiveTrackQueue);
     }
   };
 
@@ -277,22 +275,9 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     return await TrackPlayer.getQueue();
   };
 
-  console.log('ac>>', initialTrack);
-  console.log('acd>>', initialQueue);
-
   const getActiveTrack = async () => {
     return await TrackPlayer.getActiveTrack();
   };
-
-  // const handleInitialQueue = async () => {
-  //   const currentTrackIndex = initialQueue.findIndex((item: any) => {
-  //     return item.title === currentTrack?.title;
-  //   });
-
-  //   const upcomingQueue = initialQueue.slice(currentTrackIndex + 1);
-  //   await TrackPlayer.removeUpcomingTracks();
-  //   await TrackPlayer.add(upcomingQueue);
-  // };
 
   const handleShuffleTracks = async () => {
     const currentQueue = await getCurrentQueue();
@@ -371,8 +356,7 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     isModalVisible,
     setModalVisible,
     deleteTrackById,
-    setInitialQueue,
-    setInitialTrack,
+    downloadProgress,
   };
 
   return (

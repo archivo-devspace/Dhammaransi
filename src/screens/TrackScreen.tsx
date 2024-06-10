@@ -86,6 +86,7 @@ const TrackScreen = ({route, navigation}: Props) => {
     setLoading,
     isModalVisible,
     setModalVisible,
+    downloadProgress,
   } = useTrackContext();
 
   const [currentActiveTrack, setCurrentActiveTrack] = useState<Track | null>(
@@ -98,7 +99,7 @@ const TrackScreen = ({route, navigation}: Props) => {
   // const [isAlreadyDownload, setAlreadyDownload] = useState(false);
   // const [isDownloading, setDownloading] = useState(false);
   const [icon, setIcon] = useState();
-  const [downloadProgress, setDownloadProgress] = useState(0);
+  // const [downloadProgress, setDownloadProgress] = useState(0);
   // const [downloadingTrackIds, setDownloadingTrackIds] = useState<any>([]);
   // const [loading, setLoading] = useState(false);
 
@@ -167,26 +168,28 @@ const TrackScreen = ({route, navigation}: Props) => {
   //   );
   // };
 
+  // console.log('downloading content', isDownloading);
+
   useEffect(() => {
     MaterialIcon.getImageSource('circle', 20, Colors[theme].primary).then(
       setIcon,
     );
   }, []);
 
-  useEffect(() => {
-    const listener = DeviceEventEmitter.addListener(
-      'downloadProgress',
-      data => {
-        if (data.contentId === currentTrack?.id) {
-          setDownloadProgress(parseInt(data.progressValue));
-        }
-      },
-    );
+  // useEffect(() => {
+  //   const listener = DeviceEventEmitter.addListener(
+  //     'downloadProgress',
+  //     data => {
+  //       if (data.contentId === currentTrack?.id) {
+  //         setDownloadProgress(parseInt(data.progressValue));
+  //       }
+  //     },
+  //   );
 
-    return () => {
-      listener.remove();
-    };
-  }, [currentTrack]);
+  //   return () => {
+  //     listener.remove();
+  //   };
+  // }, [currentTrack]);
 
   const styles = styling(theme);
   const {top} = insets;
@@ -367,6 +370,7 @@ const TrackScreen = ({route, navigation}: Props) => {
                 />
                 <Text style={{color: Colors[theme].primary}}>
                   {downloadProgress < 100 ? 'Dwonloading...' : 'Downloaded'}
+                  {downloadProgress}
                 </Text>
               </View>
             ) : (

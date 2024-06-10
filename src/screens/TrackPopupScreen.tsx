@@ -81,6 +81,7 @@ const TrackPopupScreen = ({navigation}: Props) => {
     setLoading,
     isModalVisible,
     setModalVisible,
+    downloadProgress,
   } = useTrackContext();
 
   const [currentActiveTrack, setCurrentActiveTrack] = useState<Track | null>(
@@ -90,28 +91,12 @@ const TrackPopupScreen = ({navigation}: Props) => {
   const [currentTrackId, setCurrentTrackId] = useState<number | null>(null);
 
   const [icon, setIcon] = useState();
-  const [downloadProgress, setDownloadProgress] = useState(0);
 
   useEffect(() => {
     MaterialIcon.getImageSource('circle', 20, Colors[theme].primary).then(
       setIcon,
     );
   }, []);
-
-  useEffect(() => {
-    const listener = DeviceEventEmitter.addListener(
-      'downloadProgress',
-      data => {
-        if (data.contentId === currentTrack?.id) {
-          setDownloadProgress(parseInt(data.progressValue));
-        }
-      },
-    );
-
-    return () => {
-      listener.remove();
-    };
-  }, [currentTrack]);
 
   const styles = styling(theme);
   const {top} = insets;
