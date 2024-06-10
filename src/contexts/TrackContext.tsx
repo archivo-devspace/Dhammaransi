@@ -243,7 +243,8 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
   const changeRepeatMode = async () => {
     if (repeatMode === 'shuffle-disabled') {
       setInitialQueue(getCurrentQueue);
-
+      const currentQueue = await getCurrentQueue();
+      setInitialQueue(currentQueue);
       setRepeatMode('shuffle');
 
       handleShuffleTracks();
@@ -261,13 +262,39 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
 
       await TrackPlayer.setRepeatMode(RepeatMode.Off);
 
-      const activeTrack = await TrackPlayer.getActiveTrack();
+      // const activeTrack = await TrackPlayer.getActiveTrack();
 
-      const removeActiveTrackQueue = initialQueue._j.filter(
-        (track: Track) => track.title !== activeTrack?.title,
+      // const removeActiveTrackQueue = initialQueue._j.filter(
+      //   (track: Track) => track.title !== activeTrack?.title,
+      // );
+      // await TrackPlayer.removeUpcomingTracks();
+      // await TrackPlayer.add(removeActiveTrackQueue);
+      const currentTrack = await TrackPlayer.getActiveTrack();
+      const currentTrackIndex = initialQueue.findIndex((item: any) => {
+        return item.title === currentTrack?.title;
+      });
+
+      const upcomingQueue = initialQueue.slice(currentTrackIndex);
+      const previousQueue = initialQueue.splice(0, currentTrackIndex);
+
+      const remainingQueue = [...previousQueue, ...upcomingQueue];
+
+      console.log('remainingQueue', remainingQueue);
+
+      const seekValue = await TrackPlayer.getProgress();
+      console.log('seekValue', seekValue);
+
+      const activeIndex = remainingQueue.findIndex(
+        (track: any) => track.id === currentTrack?.id,
       );
+
+      console.log('actTrackIndex', activeIndex);
+
       await TrackPlayer.removeUpcomingTracks();
-      await TrackPlayer.add(removeActiveTrackQueue);
+      await TrackPlayer.setQueue(remainingQueue);
+      await TrackPlayer.skip(activeIndex);
+      await TrackPlayer.seekTo(seekValue.position);
+      await TrackPlayer.play();
     }
   };
 
