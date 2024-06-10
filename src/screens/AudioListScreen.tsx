@@ -27,17 +27,8 @@ const Audios = ({navigation, route}: Props) => {
   console.log('route', route.params);
   const {theme} = useThemeContext();
   const {t} = useTranslation();
-  const {
-    trackLists,
-    handlePlay,
-    currentTrack,
-    setTrackLists,
-    setRepeatMode,
-    getCurrentQueue,
-    getActiveTrack,
-    setInitialQueue,
-    setInitialTrack,
-  } = useTrackContext();
+  const {trackLists, handlePlay, currentTrack, setTrackLists, setRepeatMode} =
+    useTrackContext();
   const playbackState = usePlaybackState();
   const styles = styling(theme);
 
