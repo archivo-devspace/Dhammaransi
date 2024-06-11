@@ -511,7 +511,8 @@ const styling = (theme: Theme) =>
     imgContainer: {
       alignItems: 'center',
       gap: 1,
-      paddingVertical: 30,
+      paddingBottom: 30,
+      paddingTop: 15,
     },
     imageShadow: {
       borderRadius: 20,

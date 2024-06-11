@@ -262,39 +262,7 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
 
       await TrackPlayer.setRepeatMode(RepeatMode.Off);
 
-      // const activeTrack = await TrackPlayer.getActiveTrack();
-
-      // const removeActiveTrackQueue = initialQueue._j.filter(
-      //   (track: Track) => track.title !== activeTrack?.title,
-      // );
-      // await TrackPlayer.removeUpcomingTracks();
-      // await TrackPlayer.add(removeActiveTrackQueue);
-      const currentTrack = await TrackPlayer.getActiveTrack();
-      const currentTrackIndex = initialQueue.findIndex((item: any) => {
-        return item.title === currentTrack?.title;
-      });
-
-      const upcomingQueue = initialQueue.slice(currentTrackIndex);
-      const previousQueue = initialQueue.splice(0, currentTrackIndex);
-
-      const remainingQueue = [...previousQueue, ...upcomingQueue];
-
-      console.log('remainingQueue', remainingQueue);
-
-      const seekValue = await TrackPlayer.getProgress();
-      console.log('seekValue', seekValue);
-
-      const activeIndex = remainingQueue.findIndex(
-        (track: any) => track.id === currentTrack?.id,
-      );
-
-      console.log('actTrackIndex', activeIndex);
-
-      await TrackPlayer.removeUpcomingTracks();
-      await TrackPlayer.setQueue(remainingQueue);
-      await TrackPlayer.skip(activeIndex);
-      await TrackPlayer.seekTo(seekValue.position);
-      await TrackPlayer.play();
+      handleUnShuffleTracks();
     }
   };
 
@@ -304,6 +272,32 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
 
   const getActiveTrack = async () => {
     return await TrackPlayer.getActiveTrack();
+  };
+
+  const handleUnShuffleTracks = async () => {
+    const currentQueue = await getCurrentQueue();
+    const currentTrack = await TrackPlayer.getActiveTrack();
+
+    const currentTrackIndex = currentQueue.findIndex(item => {
+      return item.title === currentTrack?.title;
+    });
+
+    const previousTrackIndexArray =
+      currentTrackIndex > 0
+        ? Array.from({length: currentTrackIndex}, (_, i) => i)
+        : [];
+
+    const activeIndex = initialQueue.findIndex(
+      (track: any) => track.id === currentTrack?.id,
+    );
+
+    await TrackPlayer.remove(previousTrackIndexArray);
+    await TrackPlayer.removeUpcomingTracks();
+    await TrackPlayer.add(initialQueue);
+
+    await TrackPlayer.move(0, activeIndex);
+    await TrackPlayer.remove(activeIndex + 1);
+    await TrackPlayer.play();
   };
 
   const handleShuffleTracks = async () => {
