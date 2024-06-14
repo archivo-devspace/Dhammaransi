@@ -33,9 +33,9 @@
       "FAILED": "Download Failed",
       "FAILED_TEXT": "The content failed to download",
       "NODOWNLOADDATA": "No Downloaded data found!",
-      "YES": "Yes",
-      "NO": "No",
-      "DELETE": "Are you sure you want to delete this track?"
+      "YES_DELETE": "Yes",
+      "NO_DELETE": "No",
+      "DELETE_TITLE": "Are you sure you want to delete this track?"
     }
   }
 }

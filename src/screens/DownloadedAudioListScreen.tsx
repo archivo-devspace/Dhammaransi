@@ -29,6 +29,7 @@ import {AntDesign, truncateText} from '../utils/common';
 import {useTrackContext} from '../contexts/TrackContext';
 import {useTranslation} from 'react-i18next';
 import {NavigationMainBottomTabScreenProps} from '../navigations/BottomNavigation';
+import ConfirmModal from '../components/commons/ConfirmModal';
 
 type Props = {
   navigation: NavigationMainBottomTabScreenProps['navigation'];
@@ -217,31 +218,16 @@ const OfflineDownloadGrid = ({navigation}: Props) => {
           />
         )}
       </Container>
-
-      <Modal
-        transparent={true}
+      <ConfirmModal
+        title={t('UTILS.DELETE_TITLE')}
+        confirmText={t('UTILS.YES_DELETE')}
+        cancelText={t('UTILS.NO_DELETE')}
         animationType="fade"
-        visible={isModalVisible}
-        onRequestClose={() => setModalVisible(false)}>
-        <StatusBar backgroundColor={'rgba(0, 0, 0, 0.5)'} />
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalText}>{t('UTILS.DELETE')}</Text>
-            <View style={styles.modalActions}>
-              <TouchableOpacity
-                onPress={handleDeletion}
-                style={styles.confirmButton}>
-                <Text style={styles.buttonText}>{t('UTILS.YES')}</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={handleCancelDeletion}
-                style={styles.cancelButton}>
-                <Text style={styles.buttonText}>{t('UTILS.NO')}</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
+        handleConfirm={handleDeletion}
+        handleCancel={handleCancelDeletion}
+        isModalVisible={isModalVisible}
+        setModalVisible={setModalVisible}
+      />
     </>
   );
 };
