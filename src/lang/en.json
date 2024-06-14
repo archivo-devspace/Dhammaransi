@@ -32,7 +32,10 @@
       "SUCCESS_TEXT": "The content downloaded successfully",
       "FAILED": "Download Failed",
       "FAILED_TEXT": "The content failed to download",
-      "NODOWNLOADDATA": "No Downloaded data found!"
+      "NODOWNLOADDATA": "No Downloaded data found!",
+      "YES": "Yes",
+      "NO": "No",
+      "DELETE": "Are you sure you want to delete this track?"
     }
   }
 }
