@@ -180,6 +180,7 @@ const TrackPopupScreen = ({navigation}: Props) => {
               title={t('UTILS.CHOOSEALBLUM')}
               customButtonStyle={styles.chooseFromBtn}
               customButtonTextStyle={styles.chooseFrom}
+              gap={10}
               onPress={() => navigation.navigate('AudioCategories')}
               icon={
                 <FontAwesome

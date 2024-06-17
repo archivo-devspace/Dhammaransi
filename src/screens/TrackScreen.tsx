@@ -277,6 +277,7 @@ const TrackScreen = ({route, navigation}: Props) => {
                 title={t('UTILS.CHOOSEALBLUM')}
                 customButtonStyle={styles.chooseFromBtn}
                 customButtonTextStyle={styles.chooseFrom}
+                gap={10}
                 onPress={() => navigation.navigate('AudioCategories')}
                 icon={
                   <FontAwesome
@@ -598,7 +599,6 @@ const styling = (theme: Theme) =>
       paddingHorizontal: 20,
       paddingVertical: 10,
     },
-
     suffelIcon: {
       width: 30,
       height: 30,
