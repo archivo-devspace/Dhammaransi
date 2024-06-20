@@ -22,6 +22,7 @@ import BottomTapNavigator from './BottomNavigation';
 import TrackPopupScreen from '../screens/TrackPopupScreen';
 import OfflineDownloadGrid from '../screens/DownloadedAudioListScreen';
 import AudioCategoryListScreen from '../screens/AudioCategoryListScreen';
+import PaintingScreen from '../screens/PaintingScreen';
 
 export interface MovieProps {
   id: number;
@@ -54,6 +55,9 @@ export type MainStackParamList = {
   Languages: undefined;
   Downloaded: undefined;
   TrackBottom: undefined;
+  PaintingScreen: {
+    id: number;
+  };
 };
 
 export type NavigationMainStackScreenProps = {
@@ -87,6 +91,7 @@ const StackNavigation = () => {
       <Stack.Screen name="Languages" component={LanguageScreen} />
       <Stack.Screen name="Setting" component={SettingScreen} />
       <Stack.Screen name="Downloaded" component={OfflineDownloadGrid} />
+      <Stack.Screen name="PaintingScreen" component={PaintingScreen} />
     </Stack.Navigator>
   );
 };

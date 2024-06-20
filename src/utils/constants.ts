@@ -231,3 +231,24 @@ export const youtubeVideos = [
     description: 'An overview of state management techniques in React Native.',
   },
 ];
+
+export const singlePaintingDetils = {
+  id: 1,
+  title: 'Painting Title',
+  video: {
+    id: 1,
+    videoId: 'p3vaaD9pn9I',
+    title: 'ဗုဒ္ဓဝင်ပန်းချီကားအ‌ကြောင်းတရားတော်',
+    description: 'An overview of state management techniques in React Native.',
+  },
+  music: {
+    id: 1,
+    url: 'https://www.bensound.com/bensound-music/bensound-dance.mp3',
+    title: 'အသံတရားတော်',
+    artist: 'Benjamin Tissot',
+    album: "Bensound's Electronica",
+    date: '2014-05-20T07:00:00+00:00', // RFC 3339
+    artwork: 'https://www.bensound.com/bensound-img/dance.jpg',
+    categoryId: 1,
+  },
+};

@@ -2,7 +2,6 @@ import {
   Image,
   Platform,
   Pressable,
-  StatusBar,
   StyleSheet,
   Text,
   View,
@@ -13,11 +12,18 @@ import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Colors} from '../theme';
 import {ebooks} from '../utils/constants';
-
-import Header from '../components/commons/Header';
 import Container from '../components/commons/Container';
+import {
+  MainStackParamList,
+  NavigationMainStackScreenProps,
+} from '../navigations/StackNavigation';
+import {RouteProp} from '@react-navigation/native';
 
-const PaintingsScreen = () => {
+type Props = {
+  navigation: NavigationMainStackScreenProps['navigation'];
+};
+
+const PaintingsScreen = ({navigation}: Props) => {
   const {theme} = useThemeContext();
   const {width, height} = useWindowDimensions();
   const styles = styling(theme);
@@ -29,7 +35,11 @@ const PaintingsScreen = () => {
         {ebooks?.map(ebook => (
           <React.Fragment key={ebook.id}>
             <View style={styles.contentContainer}>
-              <Pressable style={styles.contentContainer}>
+              <Pressable
+                style={styles.contentContainer}
+                onPress={() =>
+                  navigation.navigate('PaintingScreen', {id: ebook.id})
+                }>
                 <View
                   style={[
                     styles.img,
