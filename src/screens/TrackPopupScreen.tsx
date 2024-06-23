@@ -18,9 +18,9 @@ import {
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Slider from '@react-native-community/slider';
-import {BottomSheetMethods} from '../components/commons/bottomSheet';
+import {BottomSheetMethods} from '../components/commons/BottomSheet';
 import RenderItem from '../components/commons/RenderItem';
-import BottomSheet from '../components/commons/bottomSheet';
+import BottomSheet from '../components/commons/BottomSheet';
 import {CustomButton} from '../components/utils';
 import {
   Entypo,
@@ -48,6 +48,10 @@ import LoadingSpinner from '../components/utils/LoadingSpinner';
 import DownloadModal from '../components/commons/DownloadModal';
 import Toast from 'react-native-toast-message';
 import * as Progress from 'react-native-progress'; // Import Progress
+import FolderListsBottomSheet, {
+  FolderListsBottomSheetMethods,
+} from '../components/commons/FolderListsBottomSheet';
+import FolderManagement from '../components/commons/FolderManagement';
 
 type Props = {
   route: RouteProp<MainStackParamList, 'Track'>;
@@ -102,6 +106,7 @@ const TrackPopupScreen = ({navigation}: Props) => {
   const {top} = insets;
 
   const bottomSheetRef = useRef<BottomSheetMethods>(null);
+  const folderListsbottomSheetRef = useRef<FolderListsBottomSheetMethods>(null);
 
   useLayoutEffect(() => {
     const getCurrentTrack = async () => {
@@ -130,6 +135,10 @@ const TrackPopupScreen = ({navigation}: Props) => {
 
   const expandHandler = () => {
     bottomSheetRef.current?.expand();
+  };
+
+  const expandFolderListsHandler = () => {
+    folderListsbottomSheetRef.current?.expand();
   };
 
   const getTrackDuration = (progress: any) => {
@@ -210,6 +219,12 @@ const TrackPopupScreen = ({navigation}: Props) => {
           getCurrentActiveTrack={getCurrentActiveTrack}
         />
       </BottomSheet>
+      <FolderListsBottomSheet
+        snapTo="80"
+        ref={folderListsbottomSheetRef}
+        backGroundColor={Colors[theme].secondary}
+      />
+
       <View style={styles.contentContainer}>
         <View style={styles.trackContainer}>
           <Slider
@@ -270,7 +285,8 @@ const TrackPopupScreen = ({navigation}: Props) => {
             ) : (
               <CustomButton
                 customButtonStyle={styles.btn}
-                onPress={onDownloadPress}
+                // onPress={onDownloadPress}
+                onPress={expandFolderListsHandler}
                 icon={
                   <MaterialIcon
                     name={`cloud-download`}
@@ -373,6 +389,7 @@ const TrackPopupScreen = ({navigation}: Props) => {
           />
         </View>
       </View>
+
       {/* <DownloadModal
         isModalVisible={isModalVisible}
         onClosePress={() => setModalVisible(false)}

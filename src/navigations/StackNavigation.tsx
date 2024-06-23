@@ -20,9 +20,11 @@ import LanguageScreen from '../screens/LanguagesScreen';
 import SettingScreen from '../screens/SettingScreen';
 import BottomTapNavigator from './BottomNavigation';
 import TrackPopupScreen from '../screens/TrackPopupScreen';
-import OfflineDownloadGrid from '../screens/DownloadedAudioListScreen';
+// import OfflineDownloadGrid from '../screens/DownloadedAudioListScreen';
 import AudioCategoryListScreen from '../screens/AudioCategoryListScreen';
 import PaintingScreen from '../screens/PaintingScreen';
+import FolderListScreen from './../screens/FolderListScreen';
+import FolderDetailScreen from '../screens/FolderDetailScreen';
 
 export interface MovieProps {
   id: number;
@@ -53,10 +55,14 @@ export type MainStackParamList = {
 
   Setting: undefined;
   Languages: undefined;
-  Downloaded: undefined;
+  // Downloaded: undefined;
   TrackBottom: undefined;
   PaintingScreen: {
     id: number;
+  };
+  FolderList: undefined;
+  FolderDetail: {
+    folderName: string;
   };
 };
 
@@ -90,8 +96,9 @@ const StackNavigation = () => {
       <Stack.Screen name="Missionary" component={MissionaryScreen} />
       <Stack.Screen name="Languages" component={LanguageScreen} />
       <Stack.Screen name="Setting" component={SettingScreen} />
-      <Stack.Screen name="Downloaded" component={OfflineDownloadGrid} />
+      {/* <Stack.Screen name="Downloaded" component={OfflineDownloadGrid} /> */}
       <Stack.Screen name="PaintingScreen" component={PaintingScreen} />
+      <Stack.Screen name="FolderDetail" component={FolderDetailScreen} />
     </Stack.Navigator>
   );
 };

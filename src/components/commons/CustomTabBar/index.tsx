@@ -95,7 +95,7 @@ const styling = (theme: Theme) =>
       flexDirection: 'row',
       alignItems: 'center',
       padding: 10,
-      paddingHorizontal: 24,
+      paddingHorizontal: 20,
       borderRadius: 20,
       gap: 12,
     },

@@ -12,6 +12,7 @@ import {SafeAreaView} from 'react-native';
 import TrackScreen from '../screens/TrackScreen';
 import HomeScreen from '../screens/HomeScreen';
 import MoreScreen from '../screens/MoreScreen';
+import FolderListScreen from '../screens/FolderListScreen';
 
 export type NavigationMainBottomTabScreenProps = {
   navigation: BottomTabNavigationProp<MainStackParamList>;
@@ -36,6 +37,12 @@ const TabArr: TabBar[] = [
     label: 'Play',
     component: TrackScreen,
     icon: 'play-circle',
+  },
+  {
+    route: 'FolderList',
+    label: 'Downloaded',
+    component: FolderListScreen,
+    icon: 'download',
   },
   {
     route: 'MoreStack',
