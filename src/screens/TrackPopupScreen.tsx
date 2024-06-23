@@ -18,9 +18,9 @@ import {
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Slider from '@react-native-community/slider';
-import {BottomSheetMethods} from '../components/commons/bottomSheet';
+import {BottomSheetMethods} from '../components/commons/BottomSheet';
 import RenderItem from '../components/commons/RenderItem';
-import BottomSheet from '../components/commons/bottomSheet';
+import BottomSheet from '../components/commons/BottomSheet';
 import {CustomButton} from '../components/utils';
 import {
   Entypo,
