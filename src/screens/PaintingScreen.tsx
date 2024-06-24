@@ -46,25 +46,7 @@ const PaintingScreen = ({route}: Props) => {
   const [paintingDetils, setPaintingDetails] =
     useState<SinglePaintingDetialsProps>();
   const progress = useProgress();
-  const {
-    repeatIcon,
-    changeRepeatMode,
-    togglePlayingMode,
-
-    currentTrack,
-    onDownloadPress,
-    onAlreadyDownloadPress,
-    setDownloadingTrackIds,
-    isAlreadyDownload,
-    setAlreadyDownload,
-    isDownloading,
-    setDownloading,
-    loading,
-    setLoading,
-    isModalVisible,
-    setModalVisible,
-    downloadProgress,
-  } = useTrackContext();
+  const {togglePlayingMode} = useTrackContext();
   const scrollA = useRef(new Animated.Value(0)).current;
 
   const customHeight = height * 0.3;
@@ -130,7 +112,7 @@ const PaintingScreen = ({route}: Props) => {
           <Animated.View
             style={[
               {
-                width: '100%',
+                width,
                 transform: [
                   {
                     translateY: scrollA.interpolate({
@@ -149,8 +131,8 @@ const PaintingScreen = ({route}: Props) => {
               {height: customHeight - 16},
             ]}>
             <Image
-              source={require('../assets/marguerite.jpg')}
-              //   style={{width: '100%', height: customHeight - 16}}
+              source={{uri: paintingDetils?.imageUrl}}
+              style={{width: '100%', height: customHeight}}
             />
           </Animated.View>
         </View>
@@ -194,11 +176,7 @@ const PaintingScreen = ({route}: Props) => {
                 borderColor: Colors[theme]?.text,
               }}
             />
-            {/* <View
-              style={[
-                {width: width * 0.96, height: height * 0.08},
-                styles.musicContainer,
-              ]}></View> */}
+            {/* Music  */}
             <View style={[{width: width * 0.98}, styles.musicContainer]}>
               <Text
                 style={{
@@ -273,6 +251,17 @@ const PaintingScreen = ({route}: Props) => {
                 }
               />
             </View>
+            {/* Description Text  */}
+            <View style={{width, padding: 10}}>
+              <Text
+                style={{
+                  textAlign: 'justify',
+                  letterSpacing: 3,
+                  color: Colors[theme]?.text,
+                }}>
+                {paintingDetils?.desc}
+              </Text>
+            </View>
           </View>
         </View>
       </Animated.ScrollView>
@@ -302,8 +291,9 @@ const styling = (theme: Theme) =>
       overflow: 'visible',
     },
     paintingTitle: {
+      marginTop: 5,
       textAlign: 'center',
-      fontSize: 25,
+      fontSize: 20,
       color: Colors[theme]?.text,
     },
     musicContainer: {

@@ -1,6 +1,7 @@
 export interface SinglePaintingDetialsProps {
   id: number;
   title: string;
+  imageUrl: string;
   video: {
     id: number;
     videoId: string;
@@ -17,4 +18,5 @@ export interface SinglePaintingDetialsProps {
     artwork: string;
     categoryId: number;
   };
+  desc: string;
 }

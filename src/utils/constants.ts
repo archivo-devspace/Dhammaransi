@@ -234,7 +234,9 @@ export const youtubeVideos = [
 
 export const singlePaintingDetils = {
   id: 1,
-  title: 'Painting Title',
+  title: 'ပန်းချီသုဝဏ္ဏသာမ',
+  imageUrl:
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDHzjQ7J9v3Jg1c_RYUzMoF5AQdzuM1IKfONp4NLMt8GOmLwO3qemtk8uZ0RIsZ9Dbu-0&usqp=CAU',
   video: {
     id: 1,
     videoId: 'p3vaaD9pn9I',
@@ -251,4 +253,29 @@ export const singlePaintingDetils = {
     artwork: 'https://www.bensound.com/bensound-img/dance.jpg',
     categoryId: 1,
   },
+  desc: `Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+          Perspiciatis fuga, atque soluta exercitationem accusantium dolore
+          autem maxime neque, sapiente, eligendi corrupti enim consequuntur
+          suscipit. Perferendis recusandae officiis, impedit quam rem
+          expedita? Eum mollitia maxime itaque illo odit, voluptatum, cum
+          corporis excepturi quibusdam atque dolores inventore, veniam
+          ducimus error ea soluta reiciendis cumque at magnam eligendi
+          provident qui numquam debitis. Accusantium sunt dolor fugit
+          quaerat, sed, repudiandae fuga eligendi esse incidunt placeat
+          assumenda maiores necessitatibus. Quod perspiciatis fugit nam
+          tempore incidunt id vero odit harum suscipit quaerat. Eligendi sed
+          animi atque error, autem accusamus libero accusantium ab
+          laboriosam, iure ullam ducimus, voluptatem temporibus. Quo,
+          reiciendis. Maxime deserunt eaque enim ea vel deleniti reiciendis,
+          ex recusandae eos sapiente et! Nostrum repudiandae vitae error
+          sapiente minus, labore eligendi optio assumenda pariatur
+          reiciendis corrupti non dicta magni alias reprehenderit dolore
+          est. Quaerat non a aliquid cum, velit dolor deleniti doloribus
+          excepturi labore nemo. Dolor, voluptatum deserunt, autem itaque
+          nulla, fugiat vero sed vitae odit inventore mollitia
+          necessitatibus saepe harum! Dolor fugiat ipsam necessitatibus eius
+          tempora esse suscipit aliquam debitis magnam non, sapiente unde
+          accusantium minus dicta modi voluptates. Maiores nesciunt
+          voluptates impedit totam veritatis voluptate fugit, fuga quidem
+          assumenda nemo rerum, eum ipsam quibusdam!`,
 };
