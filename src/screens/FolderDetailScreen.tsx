@@ -1,43 +1,59 @@
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
-  StyleSheet,
-  Text,
   View,
-  Image,
-  DeviceEventEmitter,
-  Platform,
-  useWindowDimensions,
+  Text,
+  StyleSheet,
   FlatList,
-  TouchableOpacity,
-  Modal,
-  SafeAreaView,
-  StatusBar,
+  Image,
+  Platform,
+  DeviceEventEmitter,
+  useWindowDimensions,
 } from 'react-native';
-import React, {useEffect, useState, useCallback, useRef} from 'react';
-import {useIsFocused} from '@react-navigation/core';
 import RNFetchBlob from 'rn-fetch-blob';
 import {
   deleteContentFromLocalDir,
   fetchDownloadedDataFromLocalDir,
 } from '../api_services/downloadService';
-import Container from '../components/commons/Container';
-import LoadingSpinner from '../components/utils/LoadingSpinner';
+import {CustomButton} from '../components/utils';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import {truncateText} from '../utils/common';
+import {useTrackContext} from '../contexts/TrackContext';
+import {NavigationMainBottomTabScreenProps} from '../navigations/BottomNavigation';
 import {Colors} from '../theme';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
+import Container from '../components/commons/Container';
 import {Swipeable} from 'react-native-gesture-handler';
-import {CustomButton} from '../components/utils';
-import {AntDesign, truncateText} from '../utils/common';
-import {useTrackContext} from '../contexts/TrackContext';
 import {useTranslation} from 'react-i18next';
-import {NavigationMainBottomTabScreenProps} from '../navigations/BottomNavigation';
+import {useIsFocused} from '@react-navigation/native';
+import LoadingSpinner from '../components/utils/LoadingSpinner';
 import ConfirmModal from '../components/commons/ConfirmModal';
 
 type Props = {
+  route: any;
   navigation: NavigationMainBottomTabScreenProps['navigation'];
 };
 
-const OfflineDownloadGrid = ({navigation}: Props) => {
-  const {deleteTrackById, currentTrack, handlePlay, setTrackLists} =
-    useTrackContext();
+type TrackItem = {
+  id: number;
+  title: string;
+  artist: string;
+  artwork: string;
+  downloadDate: string;
+  isAudio: boolean;
+  selectedFolder: string;
+  url: string;
+};
+
+const FolderDetailScreen = ({route, navigation}: Props) => {
+  const {folderName} = route.params;
+
+  const {
+    deleteTrackById,
+    currentTrack,
+    handlePlay,
+    setTrackLists,
+    selectedFolder,
+  } = useTrackContext();
   const {t} = useTranslation();
   const [tracks, setTracks] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -51,36 +67,36 @@ const OfflineDownloadGrid = ({navigation}: Props) => {
   const styles = createStyles(theme);
 
   const fetchDownloadedData = useCallback(async () => {
-    setIsLoading(true);
     try {
-      await fetchDownloadedDataFromLocalDir(async items => {
-        const sortedItems = items.sort(
-          (a: any, b: any) =>
-            new Date(b.downloadDate).getTime() -
-            new Date(a.downloadDate).getTime(),
-        );
-        const updatedItems = await Promise.all(
-          sortedItems.map(async (item: any) => {
-            const fileExists = await RNFetchBlob.fs.exists(item.artwork);
-            return {
-              ...item,
-              artwork: fileExists
-                ? Platform.OS === 'android'
-                  ? `file://${item.artwork}`
-                  : item.artwork
-                : '',
-            };
-          }),
-        );
-        setTracks(updatedItems);
-        setTrackLists(updatedItems);
-      });
+      await fetchDownloadedDataFromLocalDir(
+        async items => {
+          const sortedItems = items.sort(
+            (a: any, b: any) =>
+              new Date(b.downloadDate).getTime() -
+              new Date(a.downloadDate).getTime(),
+          );
+          const updatedItems = await Promise.all(
+            sortedItems.map(async (item: any) => {
+              const fileExists = await RNFetchBlob.fs.exists(item.artwork);
+              return {
+                ...item,
+                artwork: fileExists
+                  ? Platform.OS === 'android'
+                    ? `file://${item.artwork}`
+                    : item.artwork
+                  : '',
+              };
+            }),
+          );
+          setTracks(updatedItems);
+          setTrackLists(updatedItems);
+        },
+        folderName, // Pass the folderName to fetch data from the specific folder
+      );
     } catch (error) {
       console.error('Error fetching data:', error);
-    } finally {
-      setIsLoading(false);
     }
-  }, [setTrackLists]);
+  }, [folderName]);
 
   const handlePlayAudio = (item: any) => {
     if (!currentTrack || currentTrack.id !== item.id) {
@@ -93,10 +109,10 @@ const OfflineDownloadGrid = ({navigation}: Props) => {
     setSelectedTrackId(id);
     setModalVisible(true);
   };
-
+  console.log('setDeletion', folderName);
   const handleDeletion = async () => {
     if (selectedTrackId) {
-      await deleteContentFromLocalDir(selectedTrackId);
+      await deleteContentFromLocalDir(selectedTrackId, folderName);
       deleteTrackById(selectedTrackId);
       fetchDownloadedData();
       setModalVisible(false);
@@ -132,11 +148,7 @@ const OfflineDownloadGrid = ({navigation}: Props) => {
   const renderTrackItem = ({item}: {item: any}) => (
     <Swipeable
       ref={swipeableRef}
-      // onSwipeableRightOpen={() => confirmDeletion(item.id)}
-      // onSwipeableOpenStartDrag={() => confirmDeletion(item.id)}
       onSwipeableWillOpen={() => confirmDeletion(item.id)}
-      // onSwipeableCloseStartDrag={() => confirmDeletion(item.id)}
-      // onSwipeableCloseStartDrag={() => confirmDeletion(item.id)}
       renderLeftActions={() => (
         <View style={styles.leftDeleteContainer}>
           <View style={styles.deleteButton}>
@@ -182,7 +194,7 @@ const OfflineDownloadGrid = ({navigation}: Props) => {
 
   return (
     <>
-      <Container title={t('TITLES.DOWNLOADAUDOIS')}>
+      <Container title={folderName}>
         {isLoading ? (
           <View style={styles.loadingContainer}>
             <LoadingSpinner
@@ -231,8 +243,6 @@ const OfflineDownloadGrid = ({navigation}: Props) => {
     </>
   );
 };
-
-export default OfflineDownloadGrid;
 
 const createStyles = (theme: Theme) =>
   StyleSheet.create({
@@ -355,3 +365,5 @@ const createStyles = (theme: Theme) =>
       fontSize: 16,
     },
   });
+
+export default FolderDetailScreen;

@@ -53,6 +53,9 @@ import {
   sendDownloadedDataToLocalDir,
 } from '../api_services/downloadService';
 import * as Progress from 'react-native-progress'; // Import Progress
+import FolderListsBottomSheet, {
+  FolderListsBottomSheetMethods,
+} from '../components/commons/FolderListsBottomSheet';
 
 type Props = {
   route: RouteProp<MainStackParamList, 'Track'>;
@@ -195,6 +198,7 @@ const TrackScreen = ({route, navigation}: Props) => {
   const {top} = insets;
 
   const bottomSheetRef = useRef<BottomSheetMethods>(null);
+  const folderListsbottomSheetRef = useRef<FolderListsBottomSheetMethods>(null);
 
   useLayoutEffect(() => {
     const getCurrentTrack = async () => {
@@ -223,6 +227,10 @@ const TrackScreen = ({route, navigation}: Props) => {
 
   const expandHandler = () => {
     bottomSheetRef.current?.expand();
+  };
+
+  const expandFolderListsHandler = () => {
+    folderListsbottomSheetRef.current?.expand();
   };
 
   const getTrackDuration = (progress: any) => {
@@ -310,6 +318,11 @@ const TrackScreen = ({route, navigation}: Props) => {
           />
         </View>
       </BottomSheet>
+      <FolderListsBottomSheet
+        snapTo="80"
+        ref={folderListsbottomSheetRef}
+        backGroundColor={Colors[theme].secondary}
+      />
       <View
         style={[
           styles.contentContainer,
@@ -369,15 +382,17 @@ const TrackScreen = ({route, navigation}: Props) => {
                   color={Colors[theme].primary}
                   borderWidth={2}
                 />
-                <Text style={{color: Colors[theme].primary}}>
-                  {downloadProgress < 100 ? 'Dwonloading...' : 'Downloaded'}
-                  {downloadProgress}
+                <Text
+                  style={{color: Colors[theme].primary, paddingVertical: 5}}>
+                  {downloadProgress < 100
+                    ? `${t('UTILS.DOWNLOADING')}`
+                    : `${t('UTILS.DOWNLOADED')}`}
                 </Text>
               </View>
             ) : (
               <CustomButton
                 customButtonStyle={styles.btn}
-                onPress={onDownloadPress}
+                onPress={expandFolderListsHandler}
                 icon={
                   <MaterialIcon
                     name={`cloud-download`}

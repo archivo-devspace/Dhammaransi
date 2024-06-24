@@ -22,7 +22,8 @@ import {
   sendDownloadedDataToLocalDir,
 } from '../api_services/downloadService';
 import {showToast} from '../screens/TrackScreen';
-import {DeviceEventEmitter} from 'react-native';
+import {Alert, DeviceEventEmitter, Platform} from 'react-native';
+import RNFetchBlob from 'rn-fetch-blob';
 
 export interface TrackProps {
   id: number;
@@ -69,6 +70,11 @@ export interface TrackContextType {
   setModalVisible: Dispatch<SetStateAction<boolean>>;
   deleteTrackById: (id: any) => void;
   downloadProgress: number;
+  selectedFolder: string | null;
+  setSelectedFolder: Dispatch<SetStateAction<string | null>>;
+  loadFolders: () => void;
+  createFolder: any;
+  folders: string[];
 }
 
 const TrackContext = createContext<TrackContextType | undefined>(undefined);
@@ -89,12 +95,66 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
   const [initialQueue, setInitialQueue] = useState<any>(null);
   const [downloadProgress, setDownloadProgress] = useState(0);
 
+  const [selectedFolder, setSelectedFolder] = useState<string | null>(null);
+  const [folders, setFolders] = useState<string[]>([]);
+
   // useLayoutEffect(() => {
   //   const getAllTracks = () => {
   //     setTrackLists(tracks);
   //   };
   //   getAllTracks();
   // }, []);
+
+  const loadFolders = async () => {
+    const {dirs} = RNFetchBlob.fs;
+    const dirToSave = Platform.OS === 'ios' ? dirs.DocumentDir : dirs.CacheDir;
+    const path = `${dirToSave}/downloads`;
+
+    try {
+      const exists = await RNFetchBlob.fs.ls(path);
+      if (!exists) {
+        await RNFetchBlob.fs.mkdir(path);
+      }
+      const files = await RNFetchBlob.fs.ls(path);
+      const directories = await Promise.all(
+        files.map(async file => {
+          const fullPath = `${path}/${file}`;
+          const isDir = await RNFetchBlob.fs.isDir(fullPath);
+          return isDir ? file : null;
+        }),
+      );
+      setFolders(directories.filter(Boolean) as string[]);
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Error', 'Failed to load folders!');
+    }
+  };
+
+  const createFolder = async (folderName: string) => {
+    if (!folderName) {
+      Alert.alert('Error', 'Folder name cannot be empty!');
+      return;
+    }
+
+    const {dirs} = RNFetchBlob.fs;
+    const dirToSave = Platform.OS === 'ios' ? dirs.DocumentDir : dirs.CacheDir;
+    const folderPath = `${dirToSave}/downloads/${folderName}`;
+
+    try {
+      const exists = await RNFetchBlob.fs.isDir(folderPath);
+      if (!exists) {
+        await RNFetchBlob.fs.mkdir(folderPath);
+        loadFolders();
+        Alert.alert('Success', 'Folder created successfully!');
+        //  setFolderName('');
+      } else {
+        Alert.alert('Error', 'Folder already exists!');
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Error', 'Failed to create folder!');
+    }
+  };
 
   useLayoutEffect(() => {
     fetchDownloadedDataFromLocalDir(item => {
@@ -131,7 +191,7 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     setDownloadingTrackIds(remainTracks);
   };
 
-  const onDownloadPress = () => {
+  const onDownloadPress = async () => {
     const find = downloadingTrackIds.find(
       (element: any) => element === currentTrack.id,
     );
@@ -155,6 +215,7 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
         currentTrack.title,
         currentTrack.artwork,
         true,
+        selectedFolder,
       );
     } else {
       setModalVisible(true); // Show the modal with current progress if already downloading
@@ -241,15 +302,12 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
   console.log('repeat mode', repeatMode);
 
   const changeRepeatMode = async () => {
-    if (repeatMode === 'shuffle-disabled') {
-      setInitialQueue(getCurrentQueue);
-      const currentQueue = await getCurrentQueue();
-      setInitialQueue(currentQueue);
-      setRepeatMode('shuffle');
-
-      handleShuffleTracks();
-    }
     if (repeatMode === 'shuffle') {
+      setRepeatMode('shuffle-disabled');
+      // await TrackPlayer.setRepeatMode(RepeatMode.Off);
+      handleUnShuffleTracks();
+    }
+    if (repeatMode === 'shuffle-disabled') {
       setRepeatMode('track');
       await TrackPlayer.setRepeatMode(RepeatMode.Track);
     }
@@ -258,11 +316,17 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
       await TrackPlayer.setRepeatMode(RepeatMode.Queue);
     }
     if (repeatMode === 'repeat') {
-      setRepeatMode('shuffle-disabled');
+      // setRepeatMode('shuffle-disabled');
 
       await TrackPlayer.setRepeatMode(RepeatMode.Off);
 
-      handleUnShuffleTracks();
+      // handleUnShuffleTracks();
+      setInitialQueue(getCurrentQueue);
+      const currentQueue = await getCurrentQueue();
+      setInitialQueue(currentQueue);
+      setRepeatMode('shuffle');
+
+      handleShuffleTracks();
     }
   };
 
@@ -297,7 +361,7 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
 
     await TrackPlayer.move(0, activeIndex);
     await TrackPlayer.remove(activeIndex + 1);
-    await TrackPlayer.play();
+    // await TrackPlayer.play();
   };
 
   const handleShuffleTracks = async () => {
@@ -328,7 +392,7 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     await TrackPlayer.remove(previousTrackIndexArray);
     await TrackPlayer.removeUpcomingTracks();
     await TrackPlayer.add(remainingQueue);
-    await TrackPlayer.play();
+    // await TrackPlayer.play();
   };
 
   const togglePlayingMode = async () => {
@@ -378,6 +442,11 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     setModalVisible,
     deleteTrackById,
     downloadProgress,
+    selectedFolder,
+    setSelectedFolder,
+    loadFolders,
+    createFolder,
+    folders,
   };
 
   return (
