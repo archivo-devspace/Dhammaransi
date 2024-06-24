@@ -15,6 +15,7 @@ import {NavigationMainBottomTabScreenProps} from '../navigations/BottomNavigatio
 import {MaterialIcons} from '../utils/common';
 import Container from '../components/commons/Container';
 import {CustomButton} from '../components/utils';
+import {useTranslation} from 'react-i18next';
 
 type Props = {
   navigation: NavigationMainBottomTabScreenProps['navigation'];
@@ -23,6 +24,7 @@ type Props = {
 const FolderListScreen = ({navigation}: Props) => {
   const {folders, loadFolders, createFolder} = useTrackContext();
   const [folderName, setFolderName] = useState('');
+  const {t} = useTranslation();
 
   const {theme} = useThemeContext();
   const styles = createStyles(theme);
@@ -50,19 +52,19 @@ const FolderListScreen = ({navigation}: Props) => {
   );
 
   return (
-    <Container title={'Download Management'}>
+    <Container title={t('UTILS.DOWNLOAD_MANAGED')}>
       <View style={styles.formcontainer}>
-        <Text style={styles.label}>Enter Folder Name:</Text>
         <TextInput
           style={styles.input}
           value={folderName}
           onChangeText={setFolderName}
-          placeholder="Folder Name"
+          placeholder={t('UTILS.FOLDER_NAME')}
+          placeholderTextColor={Colors[theme].text}
         />
         <CustomButton
           customButtonStyle={styles.createButton}
           customButtonTextStyle={styles.textButton}
-          title="Create Folder"
+          title={t('UTILS.CREATE')}
           onPress={handleCreateFolder}
         />
       </View>
@@ -119,7 +121,7 @@ const createStyles = (theme: Theme) =>
       color: Colors[theme].text,
     },
     input: {
-      height: 40,
+      height: 50,
       borderColor: Colors[theme].primary,
       borderWidth: 1,
       marginBottom: 16,

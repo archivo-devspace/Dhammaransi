@@ -416,8 +416,8 @@ export const fetchDownloadedDataFromLocalDir = async (
     if (Array.isArray(localDownloads)) {
       sendData(localDownloads);
     }
-  } catch (e) {
-    console.error('Error reading file:', e);
+  } catch (e:any) {
+    // console.error('Error reading file:', e);
     sendData([]); // Send an empty array in case of an error
   }
 };

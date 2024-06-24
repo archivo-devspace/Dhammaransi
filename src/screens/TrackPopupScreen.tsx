@@ -278,8 +278,11 @@ const TrackPopupScreen = ({navigation}: Props) => {
                   color={Colors[theme].primary}
                   borderWidth={2}
                 />
-                <Text style={{color: Colors[theme].primary}}>
-                  {downloadProgress < 100 ? 'Dwonloading...' : 'Downloaded'}
+                <Text
+                  style={{color: Colors[theme].primary, paddingVertical: 10}}>
+                  {downloadProgress < 100
+                    ? `${t('UTILS.DOWNLOADING')}`
+                    : `${t('UTILS.DOWNLOADED')}`}
                 </Text>
               </View>
             ) : (

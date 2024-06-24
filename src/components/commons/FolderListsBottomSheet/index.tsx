@@ -235,17 +235,17 @@ const FolderListsBottomSheet = forwardRef<FolderListsBottomSheetMethods, Props>(
               </CustomButton>
             </View>
             <View style={styles.container}>
-              <Text style={styles.label}>Enter Folder Name:</Text>
               <TextInput
                 style={styles.input}
                 value={folderName}
                 onChangeText={setFolderName}
-                placeholder="Folder Name"
+                placeholder={t('UTILS.FOLDER_NAME')}
+                placeholderTextColor={Colors[theme].text}
               />
               <CustomButton
                 customButtonStyle={styles.createButton}
                 customButtonTextStyle={styles.textButton}
-                title="Create Folder"
+                title={t('UTILS.CREATE')}
                 onPress={handleCreateFolder}
               />
             </View>
@@ -328,7 +328,7 @@ const styling = (theme: Theme) =>
       color: Colors[theme].text,
     },
     input: {
-      height: 40,
+      height: 50,
       borderColor: Colors[theme].primary,
       borderWidth: 1,
       marginBottom: 16,
