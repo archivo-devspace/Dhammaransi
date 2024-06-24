@@ -109,11 +109,14 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     const {dirs} = RNFetchBlob.fs;
     const dirToSave = Platform.OS === 'ios' ? dirs.DocumentDir : dirs.CacheDir;
     const path = `${dirToSave}/downloads`;
+    const defaultFolderPath = `${dirToSave}/downloads/Downloads`;
 
     try {
-      const exists = await RNFetchBlob.fs.ls(path);
+      const exists = await RNFetchBlob.fs.isDir(path);
+      console.log('exists', exists);
       if (!exists) {
         await RNFetchBlob.fs.mkdir(path);
+        await RNFetchBlob.fs.mkdir(defaultFolderPath);
       }
       const files = await RNFetchBlob.fs.ls(path);
       const directories = await Promise.all(
