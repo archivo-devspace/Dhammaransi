@@ -25,6 +25,7 @@ import AudioCategoryListScreen from '../screens/AudioCategoryListScreen';
 import PaintingScreen from '../screens/PaintingScreen';
 import FolderListScreen from './../screens/FolderListScreen';
 import FolderDetailScreen from '../screens/FolderDetailScreen';
+import MissionDetailScreen from '../screens/MissionDetailScreen';
 
 export interface MovieProps {
   id: number;
@@ -64,6 +65,9 @@ export type MainStackParamList = {
   FolderDetail: {
     folderName: string;
   };
+  MissionDetail: {
+    id: number;
+  };
 };
 
 export type NavigationMainStackScreenProps = {
@@ -99,6 +103,7 @@ const StackNavigation = () => {
       {/* <Stack.Screen name="Downloaded" component={OfflineDownloadGrid} /> */}
       <Stack.Screen name="PaintingScreen" component={PaintingScreen} />
       <Stack.Screen name="FolderDetail" component={FolderDetailScreen} />
+      <Stack.Screen name="MissionDetail" component={MissionDetailScreen} />
     </Stack.Navigator>
   );
 };
