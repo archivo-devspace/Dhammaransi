@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, useWindowDimensions} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {Theme, useThemeContext} from '../../../contexts/ThemeContext';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -17,14 +17,14 @@ const Header = ({title}: HeaderProps) => {
   const insets = useSafeAreaInsets();
   const {t} = useTranslation();
   const navigation = useNavigation();
-  const {width} = useWindowDimensions();
   const {top} = insets;
   const styles = styling(theme);
+  const customMarginTop = top + 10;
 
   return (
     <View
       style={{
-        marginTop: top,
+        marginTop: customMarginTop,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',

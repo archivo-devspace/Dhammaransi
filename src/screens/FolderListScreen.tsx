@@ -5,7 +5,6 @@ import {
   TouchableOpacity,
   StyleSheet,
   FlatList,
-  Platform,
   TextInput,
 } from 'react-native';
 import {useTrackContext} from '../contexts/TrackContext';
@@ -199,7 +198,8 @@ const createStyles = (theme: Theme) =>
       borderColor: Colors[theme].primary,
       borderWidth: 1,
       marginBottom: 16,
-      paddingHorizontal: 8,
+      paddingHorizontal: 15,
+      borderRadius: 5,
     },
     createButton: {
       backgroundColor: Colors[theme].primary,
