@@ -47,10 +47,10 @@ export const menus = [
 ];
 
 export const images = [
-  'https://www.epidemicsound.com/blog/content/images/size/w2000/2023/09/using-pinterest-header.webp',
-  'https://www.epidemicsound.com/blog/content/images/2023/09/using-pinterest-on-a-laptop.webp',
-  'https://www.epidemicsound.com/blog/content/images/2023/09/using-pinterest-on-a-laptop.webp',
-  'https://www.epidemicsound.com/blog/content/images/2023/09/using-pinterest-on-a-laptop.webp',
+  'https://images.pexels.com/photos/1402787/pexels-photo-1402787.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+  'https://images.pexels.com/photos/1183099/pexels-photo-1183099.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+  'https://images.pexels.com/photos/6919947/pexels-photo-6919947.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+  'https://images.pexels.com/photos/1435075/pexels-photo-1435075.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
 ];
 
 export const BANNER_H = 320;

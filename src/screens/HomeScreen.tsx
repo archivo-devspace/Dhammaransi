@@ -2,7 +2,6 @@ import React, {useRef} from 'react';
 import {
   View,
   Text,
-  StatusBar,
   StyleSheet,
   TouchableOpacity,
   Animated,
@@ -20,7 +19,7 @@ import {Movies} from '../components/commons/Movies';
 import ImageSlider from '../components/commons/ImageSlider';
 import Audios from '../components/commons/Audio';
 import TopNavigation from '../components/commons/TopNavigation';
-import {useNavigation} from '@react-navigation/native';
+
 import {useTranslation} from 'react-i18next';
 
 type Props = {
