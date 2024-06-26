@@ -173,8 +173,9 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
       console.log('Folder exists:', exists, 'at path:', folderPath);
       if (exists) {
         console.log('Deleting folder:', folderPath);
-        await RNFetchBlob.fs.unlink(folderPath);
-        await deleteAllDownloadDataFromLocal(folderName); // Ensure this function is correctly defined
+
+        await deleteAllDownloadDataFromLocal(folderName);
+        await RNFetchBlob.fs.unlink(`/${folderPath}`); // Ensure this function is correctly defined
         await loadFolders(); // Reload the folder list after deletion
         Alert.alert('Success', 'Folder deleted successfully!');
       } else {
