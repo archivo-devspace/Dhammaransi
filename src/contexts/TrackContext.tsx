@@ -18,6 +18,7 @@ import TrackPlayer, {
 } from 'react-native-track-player';
 
 import {
+  deleteAllDownloadDataFromLocal,
   fetchDownloadedDataFromLocalDir,
   sendDownloadedDataToLocalDir,
 } from '../api_services/downloadService';
@@ -74,6 +75,7 @@ export interface TrackContextType {
   setSelectedFolder: Dispatch<SetStateAction<string | null>>;
   loadFolders: () => void;
   createFolder: any;
+  deleteFolder: any;
   folders: string[];
 }
 
@@ -159,6 +161,31 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     }
   };
 
+  const deleteFolder = async (folderName: string) => {
+    const {dirs} = RNFetchBlob.fs;
+    const dirToSave = Platform.OS === 'ios' ? dirs.DocumentDir : dirs.CacheDir;
+    const folderPath = `${dirToSave}/downloads/${folderName}`;
+    console.log('folderPath', folderPath);
+    console.log('folderName', folderName);
+
+    try {
+      const exists = await RNFetchBlob.fs.isDir(folderPath);
+      console.log('Folder exists:', exists, 'at path:', folderPath);
+      if (exists) {
+        console.log('Deleting folder:', folderPath);
+        await RNFetchBlob.fs.unlink(folderPath);
+        await deleteAllDownloadDataFromLocal(folderName); // Ensure this function is correctly defined
+        await loadFolders(); // Reload the folder list after deletion
+        Alert.alert('Success', 'Folder deleted successfully!');
+      } else {
+        Alert.alert('Error', 'Folder does not exist!');
+      }
+    } catch (error) {
+      console.error('Failed to delete folder:', error);
+      Alert.alert('Error', 'Failed to delete folder!');
+    }
+  };
+
   useLayoutEffect(() => {
     fetchDownloadedDataFromLocalDir(item => {
       if (item?.length > 0) {
@@ -220,6 +247,7 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
         true,
         selectedFolder,
       );
+      setSelectedFolder(null);
     } else {
       setModalVisible(true); // Show the modal with current progress if already downloading
     }
@@ -449,6 +477,7 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     setSelectedFolder,
     loadFolders,
     createFolder,
+    deleteFolder,
     folders,
   };
 

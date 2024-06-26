@@ -59,7 +59,7 @@ const FolderDetailScreen = ({route, navigation}: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedTrackId, setSelectedTrackId] = useState(null);
-  const swipeableRef = useRef<Swipeable | null>(null);
+  const swipeableRefs = useRef<Swipeable[]>([]);
 
   const isFocused = useIsFocused();
   const {theme} = useThemeContext();
@@ -98,6 +98,8 @@ const FolderDetailScreen = ({route, navigation}: Props) => {
     }
   }, [folderName]);
 
+  console.log('track', tracks);
+
   const handlePlayAudio = (item: any) => {
     if (!currentTrack || currentTrack.id !== item.id) {
       handlePlay(item.id);
@@ -122,9 +124,7 @@ const FolderDetailScreen = ({route, navigation}: Props) => {
 
   const handleCancelDeletion = () => {
     setModalVisible(false);
-    if (swipeableRef.current) {
-      swipeableRef.current.close();
-    }
+    swipeableRefs.current.forEach(ref => ref?.close());
   };
 
   useEffect(() => {
@@ -145,9 +145,11 @@ const FolderDetailScreen = ({route, navigation}: Props) => {
     };
   }, [fetchDownloadedData]);
 
-  const renderTrackItem = ({item}: {item: any}) => (
+  const renderTrackItem = ({item, index}: {item: any; index: number}) => (
     <Swipeable
-      ref={swipeableRef}
+      ref={ref => {
+        swipeableRefs.current[index] = ref as any;
+      }}
       onSwipeableWillOpen={() => confirmDeletion(item.id)}
       renderLeftActions={() => (
         <View style={styles.leftDeleteContainer}>

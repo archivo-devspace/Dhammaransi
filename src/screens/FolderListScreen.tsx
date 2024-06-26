@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   View,
   Text,
@@ -12,19 +12,26 @@ import {useTrackContext} from '../contexts/TrackContext';
 import {Colors} from '../theme';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {NavigationMainBottomTabScreenProps} from '../navigations/BottomNavigation';
-import {MaterialIcons} from '../utils/common';
+import {AntDesign, MaterialIcons} from '../utils/common';
 import Container from '../components/commons/Container';
 import {CustomButton} from '../components/utils';
 import {useTranslation} from 'react-i18next';
+import {Swipeable} from 'react-native-gesture-handler';
+import ConfirmModal from '../components/commons/ConfirmModal';
 
 type Props = {
   navigation: NavigationMainBottomTabScreenProps['navigation'];
 };
 
 const FolderListScreen = ({navigation}: Props) => {
-  const {folders, loadFolders, createFolder} = useTrackContext();
+  const {folders, loadFolders, createFolder, deleteFolder} = useTrackContext();
   const [folderName, setFolderName] = useState('');
   const {t} = useTranslation();
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [selectedFolderName, setSelectedFolderName] = useState<string | null>(
+    null,
+  );
+  const swipeableRefs = useRef<Swipeable[]>([]);
 
   const {theme} = useThemeContext();
   const styles = createStyles(theme);
@@ -42,14 +49,75 @@ const FolderListScreen = ({navigation}: Props) => {
     setFolderName('');
   };
 
-  const renderFolderItem = ({item}: {item: string}) => (
-    <TouchableOpacity
-      style={styles.folderItem}
-      onPress={() => handleFolderPress(item)}>
-      <MaterialIcons name="folder" size={24} color={Colors[theme].text} />
-      <Text style={styles.folderName}>{item.split('/').pop()}</Text>
-    </TouchableOpacity>
-  );
+  const confirmDeletion = (folderName: string) => {
+    setSelectedFolderName(folderName);
+    setModalVisible(true);
+  };
+  console.log('setDeletion', folderName);
+
+  const handleDeletion = async () => {
+    console.log('selectedFolderName', selectedFolderName);
+    if (selectedFolderName) {
+      swipeableRefs.current.forEach(ref => ref?.close());
+      await deleteFolder(selectedFolderName);
+      setModalVisible(false);
+      setSelectedFolderName(null);
+    }
+  };
+
+  const handleCancelDeletion = () => {
+    setModalVisible(false);
+    swipeableRefs.current.forEach(ref => ref?.close());
+  };
+
+  const renderFolderItem = ({item, index}: {item: string; index: number}) => {
+    console.log('renderFolderItem', item);
+    return (
+      <Swipeable
+        // ref={swipeableRef}
+        ref={ref => {
+          swipeableRefs.current[index] = ref as any;
+        }}
+        onSwipeableWillOpen={() => confirmDeletion(item)}
+        renderLeftActions={() => (
+          <View style={styles.leftDeleteContainer}>
+            <View style={styles.deleteButton}>
+              <AntDesign name="delete" size={30} color="white" />
+            </View>
+          </View>
+        )}
+        renderRightActions={() => (
+          <View style={styles.deleteContainer}>
+            <View style={styles.deleteButton}>
+              <AntDesign name="delete" size={30} color="white" />
+            </View>
+          </View>
+        )}>
+        <View style={styles.trackItem}>
+          {/* <CustomButton
+          onPress={() => handlePlayAudio(item)}
+          customButtonStyle={styles.playButton}>
+          <AntDesign
+            name="caretright"
+            size={30}
+            color={Colors[theme].primary}
+          />
+        </CustomButton> */}
+          <TouchableOpacity
+            style={{
+              width: '100%',
+
+              flexDirection: 'row',
+              paddingVertical: 20,
+            }}
+            onPress={() => handleFolderPress(item)}>
+            <MaterialIcons name="folder" size={24} color={Colors[theme].text} />
+            <Text style={styles.folderName}>{item.split('/').pop()}</Text>
+          </TouchableOpacity>
+        </View>
+      </Swipeable>
+    );
+  };
 
   return (
     <Container title={t('UTILS.DOWNLOAD_MANAGED')}>
@@ -78,6 +146,16 @@ const FolderListScreen = ({navigation}: Props) => {
           showsVerticalScrollIndicator={false}
         />
       </View>
+      <ConfirmModal
+        title={t('UTILS.DELETE_TITLE')}
+        confirmText={t('UTILS.YES_DELETE')}
+        cancelText={t('UTILS.NO_DELETE')}
+        animationType="fade"
+        handleConfirm={handleDeletion}
+        handleCancel={handleCancelDeletion}
+        isModalVisible={isModalVisible}
+        setModalVisible={setModalVisible}
+      />
     </Container>
   );
 };
@@ -97,14 +175,10 @@ const createStyles = (theme: Theme) =>
       flexDirection: 'row',
       alignItems: 'center',
       padding: 24,
+      width: '100%',
       backgroundColor: Colors[theme].secondary,
       marginBottom: 8,
       borderRadius: 8,
-      shadowColor: '#000',
-      shadowOffset: {width: 0, height: 2},
-      shadowOpacity: 0.2,
-      shadowRadius: 2,
-      elevation: 3,
     },
     folderName: {
       fontSize: 16,
@@ -138,6 +212,43 @@ const createStyles = (theme: Theme) =>
       fontSize: 20,
       fontWeight: '500',
       color: Colors[theme].text,
+    },
+    trackItem: {
+      flexDirection: 'row',
+
+      alignItems: 'center',
+
+      backgroundColor: Colors[theme].secondary,
+      borderBottomWidth: 1,
+      borderBottomColor: Colors[theme].secondary_dark,
+    },
+    deleteContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'flex-end',
+      backgroundColor: Colors[theme].danger,
+      // borderRadius: 16,
+      // borderLeftWidth: 2,
+      // borderRightWidth: 2,
+      // borderLeftColor: Colors[theme].danger,
+      // borderRightColor: Colors[theme].danger,
+    },
+    leftDeleteContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'flex-start',
+      backgroundColor: Colors[theme].danger,
+      // borderRadius: 16,
+      // borderLeftWidth: 2,
+      // borderRightWidth: 2,
+      // borderLeftColor: Colors[theme].danger,
+      // borderRightColor: Colors[theme].danger,
+    },
+    deleteButton: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: 70,
+      height: '100%',
     },
   });
 
