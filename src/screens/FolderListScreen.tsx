@@ -5,7 +5,6 @@ import {
   TouchableOpacity,
   StyleSheet,
   FlatList,
-  Platform,
   TextInput,
 } from 'react-native';
 import {useTrackContext} from '../contexts/TrackContext';
@@ -42,14 +41,16 @@ const FolderListScreen = ({navigation}: Props) => {
     setFolderName('');
   };
 
-  const renderFolderItem = ({item}: {item: string}) => (
-    <TouchableOpacity
-      style={styles.folderItem}
-      onPress={() => handleFolderPress(item)}>
-      <MaterialIcons name="folder" size={24} color={Colors[theme].text} />
-      <Text style={styles.folderName}>{item.split('/').pop()}</Text>
-    </TouchableOpacity>
-  );
+  const renderFolderItem = ({item}: {item: string}) => {
+    return (
+      <TouchableOpacity
+        style={styles.folderItem}
+        onPress={() => handleFolderPress(item)}>
+        <MaterialIcons name="folder" size={24} color={Colors[theme].text} />
+        <Text style={styles.folderName}>{item}</Text>
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <Container title={t('UTILS.DOWNLOAD_MANAGED')}>
@@ -105,6 +106,8 @@ const createStyles = (theme: Theme) =>
       shadowOpacity: 0.2,
       shadowRadius: 2,
       elevation: 3,
+      borderWidth: 1,
+      borderColor: Colors[theme]?.secondary_light,
     },
     folderName: {
       fontSize: 16,
@@ -125,7 +128,8 @@ const createStyles = (theme: Theme) =>
       borderColor: Colors[theme].primary,
       borderWidth: 1,
       marginBottom: 16,
-      paddingHorizontal: 8,
+      paddingHorizontal: 15,
+      borderRadius: 5,
     },
     createButton: {
       backgroundColor: Colors[theme].primary,
