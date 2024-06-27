@@ -161,10 +161,16 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     }
   };
 
+  console.log('downloadingTrackIds', downloadingTrackIds);
+
   const deleteFolder = async (folderName: string) => {
     const {dirs} = RNFetchBlob.fs;
     const dirToSave = Platform.OS === 'ios' ? dirs.DocumentDir : dirs.CacheDir;
     const folderPath = `${dirToSave}/downloads/${folderName}`;
+
+    const jsonFile = `${dirs.CacheDir}/downloads/${folderName}/.file.json`;
+    console.log('jsonFile', jsonFile);
+
     console.log('folderPath', folderPath);
     console.log('folderName', folderName);
 
@@ -174,9 +180,35 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
       if (exists) {
         console.log('Deleting folder:', folderPath);
 
+        const fileExists = await RNFetchBlob.fs.exists(jsonFile);
+        if (fileExists) {
+          // Read and parse the JSON file
+          const jsonContent = await RNFetchBlob.fs.readFile(jsonFile, 'utf8');
+          const objectArray = JSON.parse(jsonContent);
+
+          // Extract IDs from the objects in the JSON file
+          const jsonFileIds = objectArray.map((obj: any) => obj.id);
+
+          // Filter out IDs in downloadingTrackIds that match the IDs from the JSON file
+          const updatedDownloadingTrackIds = downloadingTrackIds.filter(
+            (id: any) => !jsonFileIds.includes(id),
+          );
+
+          // Update the state with the filtered IDs
+          setDownloadingTrackIds(updatedDownloadingTrackIds);
+
+          console.log(
+            'Updated downloadingTrackIds:',
+            updatedDownloadingTrackIds,
+          );
+        } else {
+          console.log('JSON file does not exist at path:', jsonFile);
+        }
+
         await deleteAllDownloadDataFromLocal(folderName);
         await RNFetchBlob.fs.unlink(`/${folderPath}`); // Ensure this function is correctly defined
         await loadFolders(); // Reload the folder list after deletion
+        // setDownloadingTrackIds([]);
         Alert.alert('Success', 'Folder deleted successfully!');
       } else {
         Alert.alert('Error', 'Folder does not exist!');
