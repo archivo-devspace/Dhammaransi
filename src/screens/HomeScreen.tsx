@@ -8,6 +8,7 @@ import {
   useWindowDimensions,
   Platform,
   SafeAreaView,
+  StatusBar,
 } from 'react-native';
 
 import {NavigationMainStackScreenProps} from '../navigations/StackNavigation';
@@ -43,14 +44,14 @@ const HomeScreen = ({navigation}: Props) => {
 
   return (
     <View style={styles.mainContainer}>
-      {/* <StatusBar
+      <StatusBar
         translucent
         barStyle={'default'}
         backgroundColor={'transparent'}
-      /> */}
-      <SafeAreaView>
+      />
+     
         <TopNavigation title={t('TITLES.HOME')} scrollA={scrollA} />
-      </SafeAreaView>
+      
       <Animated.ScrollView
         onScroll={Animated.event(
           [{nativeEvent: {contentOffset: {y: scrollA}}}],

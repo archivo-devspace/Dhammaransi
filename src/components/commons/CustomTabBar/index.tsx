@@ -88,8 +88,12 @@ export default CustomTabBar;
 const styling = (theme: Theme) =>
   StyleSheet.create({
     container: {
+      
       justifyContent: 'center',
       alignItems: 'center',
+     
+      height: 75,
+      width: '100%'
     },
     btn: {
       flexDirection: 'row',

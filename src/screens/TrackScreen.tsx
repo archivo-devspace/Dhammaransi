@@ -175,10 +175,12 @@ const TrackScreen = ({route, navigation}: Props) => {
 
   useEffect(() => {
     MaterialIcon.getImageSource('circle', 20, Colors[theme].primary).then(
-      setIcon,
+      (source) => {
+        setIcon(source);
+      },
     );
   }, []);
-
+  
   // useEffect(() => {
   //   const listener = DeviceEventEmitter.addListener(
   //     'downloadProgress',
@@ -336,7 +338,7 @@ const TrackScreen = ({route, navigation}: Props) => {
 
               height: 30,
             }}
-            trackImage={icon}
+            
             value={progress.position}
             minimumValue={0}
             maximumValue={progress.duration}

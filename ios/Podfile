@@ -39,6 +39,9 @@ target 'DhammaransiApp' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
+  pod 'FirebaseCoreInternal', :modular_headers => true
+  pod 'GoogleUtilities', :modular_headers => true
+
   target 'DhammaransiAppTests' do
     inherit! :complete
     # Pods for testing

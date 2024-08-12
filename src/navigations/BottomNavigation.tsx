@@ -58,12 +58,12 @@ const BottomTapNavigator = () => {
   const {theme} = useThemeContext();
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    
       <Tab.Navigator
         screenOptions={{
           headerShown: false,
           tabBarStyle: {
-            height: 65,
+            height: 75,
             paddingHorizontal: 10,
             borderTopWidth: 1,
             borderLeftWidth: 1,
@@ -75,6 +75,7 @@ const BottomTapNavigator = () => {
             borderColor: Colors[theme]?.secondary_dark,
             borderTopRightRadius: 16,
             borderTopLeftRadius: 16,
+            borderTopColor: Colors[theme]?.secondary_dark,
             backgroundColor: Colors[theme]?.secondary,
           },
         }}>
@@ -92,7 +93,7 @@ const BottomTapNavigator = () => {
           />
         ))}
       </Tab.Navigator>
-    </SafeAreaView>
+    
   );
 };
 

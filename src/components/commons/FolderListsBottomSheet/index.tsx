@@ -224,7 +224,7 @@ const FolderListsBottomSheet = forwardRef<FolderListsBottomSheetMethods, Props>(
               {backgroundColor: backGroundColor},
             ]}>
             <View style={styles.lineContainer}>
-              <Text style={styles.playlists}>{t('UTILS.PLAYLIST')}</Text>
+              <Text style={styles.playlists}>{t('UTILS.DOWNLOAD_MANAGED')}</Text>
 
               <CustomButton customButtonStyle={styles.icon} onPress={close}>
                 <Entypo

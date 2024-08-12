@@ -168,11 +168,11 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     const dirToSave = Platform.OS === 'ios' ? dirs.DocumentDir : dirs.CacheDir;
     const folderPath = `${dirToSave}/downloads/${folderName}`;
 
-    const jsonFile = `${dirs.CacheDir}/downloads/${folderName}/.file.json`;
-    console.log('jsonFile', jsonFile);
+    const jsonFile = Platform.OS === 'ios' ? `${dirs.DocumentDir}/downloads/${folderName}/.file.json` : `${dirs.CacheDir}/downloads/${folderName}/.file.json`;
+    // console.log('jsonFile', jsonFile);
 
-    console.log('folderPath', folderPath);
-    console.log('folderName', folderName);
+    // console.log('folderPath', folderPath);
+    // console.log('folderName', folderName);
 
     try {
       const exists = await RNFetchBlob.fs.isDir(folderPath);
@@ -197,10 +197,10 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
           // Update the state with the filtered IDs
           setDownloadingTrackIds(updatedDownloadingTrackIds);
 
-          console.log(
-            'Updated downloadingTrackIds:',
-            updatedDownloadingTrackIds,
-          );
+          // console.log(
+          //   'Updated downloadingTrackIds:',
+          //   updatedDownloadingTrackIds,
+          // );
         } else {
           console.log('JSON file does not exist at path:', jsonFile);
         }
@@ -243,7 +243,7 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     if (!find) {
       setDownloading(false);
     }
-  }, [currentTrack, downloadingTrackIds]);
+  }, [currentTrack, downloadingTrackIds, deleteFolder]);
 
   // console.log('downloading...', downloadingTrackIds);
 
