@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, useWindowDimensions, View} from 'react-native';
 import React from 'react';
 import {Theme, useThemeContext} from '../../../contexts/ThemeContext';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -14,6 +14,8 @@ interface HeaderProps {
 
 const Header = ({title}: HeaderProps) => {
   const {theme} = useThemeContext();
+  const {height} = useWindowDimensions();
+
   const insets = useSafeAreaInsets();
   const {t} = useTranslation();
   const navigation = useNavigation();
@@ -35,7 +37,7 @@ const Header = ({title}: HeaderProps) => {
         icon={
           <AntDesign
             name={'arrowleft'}
-            size={30}
+            size={height * 0.03}
             color={Colors[theme].primary}
           />
         }

@@ -57,8 +57,6 @@ import FolderListsBottomSheet, {
   FolderListsBottomSheetMethods,
 } from '../components/commons/FolderListsBottomSheet';
 
-import useResponsive from '../hooks/useResponsive';
-
 type Props = {
   route: RouteProp<MainStackParamList, 'Track'>;
   navigation: NavigationMainBottomTabScreenProps['navigation'];
@@ -256,14 +254,18 @@ const TrackScreen = ({route, navigation}: Props) => {
 
   return (
     <View style={[styles.mainContainer]}>
-      <StatusBar translucent />
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle={theme === 'dark' ? 'light-content' : 'dark-content'}
+      />
 
       <View style={{flex: 4}}>
         <View style={styles.imgContainer}>
           <View
             style={[
               styles.imageShadow,
-              {flex: 4.5, width: width, height: '100%'},
+              {flex: 4, width: width, height: '100%'},
             ]}>
             <Image
               source={
@@ -279,7 +281,7 @@ const TrackScreen = ({route, navigation}: Props) => {
             style={{
               justifyContent: 'center',
               alignItems: 'center',
-              flex: 1.5,
+              flex: 2,
               width: width,
               paddingTop: 15,
             }}>
@@ -522,7 +524,7 @@ const TrackScreen = ({route, navigation}: Props) => {
       /> */}
       <Toast />
       <BottomSheet
-        snapTo="65"
+        snapTo="70"
         ref={bottomSheetRef}
         backGroundColor={Colors[theme].secondary}>
         <View
@@ -536,7 +538,7 @@ const TrackScreen = ({route, navigation}: Props) => {
         </View>
       </BottomSheet>
       <FolderListsBottomSheet
-        snapTo="80"
+        snapTo="70"
         ref={folderListsbottomSheetRef}
         backGroundColor={Colors[theme].secondary}
       />
@@ -578,6 +580,8 @@ const styling = (theme: Theme) =>
       width: '100%',
       height: '100%',
       alignSelf: 'center',
+      borderBottomRightRadius: 20,
+      borderBottomLeftRadius: 20,
     },
     titleText: {
       // width: '80%',

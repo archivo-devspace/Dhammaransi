@@ -1,3 +1,532 @@
+// import React, {
+//   useCallback,
+//   useEffect,
+//   useLayoutEffect,
+//   useRef,
+//   useState,
+// } from 'react';
+// import {
+//   DeviceEventEmitter,
+//   Image,
+//   Platform,
+//   ScrollView,
+//   StatusBar,
+//   StyleSheet,
+//   Text,
+//   useWindowDimensions,
+//   View,
+// } from 'react-native';
+// import {useSafeAreaInsets} from 'react-native-safe-area-context';
+// import Slider from '@react-native-community/slider';
+// import {BottomSheetMethods} from '../components/commons/BottomSheet';
+// import RenderItem from '../components/commons/RenderItem';
+// import BottomSheet from '../components/commons/BottomSheet';
+// import {CustomButton} from '../components/utils';
+// import {
+//   Entypo,
+//   FontAwesome,
+//   Ionicons,
+//   MaterialIcon,
+//   MaterialIcons,
+// } from '../utils/common';
+// import {Colors} from '../theme';
+// import TrackPlayer, {
+//   Capability,
+//   State,
+//   Track,
+//   usePlaybackState,
+//   useProgress,
+// } from 'react-native-track-player';
+// import {RouteProp} from '@react-navigation/native';
+// import {MainStackParamList} from '../navigations/StackNavigation';
+// import {NavigationMainBottomTabScreenProps} from '../navigations/BottomNavigation';
+// import {useTrackContext} from '../contexts/TrackContext';
+// import {Theme, useThemeContext} from '../contexts/ThemeContext';
+// import {useTranslation} from 'react-i18next';
+// import Container from '../components/commons/Container';
+// import LoadingSpinner from '../components/utils/LoadingSpinner';
+// import DownloadModal from '../components/commons/DownloadModal';
+// import Toast from 'react-native-toast-message';
+// import * as Progress from 'react-native-progress'; // Import Progress
+// import FolderListsBottomSheet, {
+//   FolderListsBottomSheetMethods,
+// } from '../components/commons/FolderListsBottomSheet';
+// import FolderManagement from '../components/commons/FolderManagement';
+
+// type Props = {
+//   route: RouteProp<MainStackParamList, 'Track'>;
+//   navigation: NavigationMainBottomTabScreenProps['navigation'];
+// };
+
+// const TrackPopupScreen = ({navigation}: Props) => {
+//   const insets = useSafeAreaInsets();
+//   const {t} = useTranslation();
+//   const {theme} = useThemeContext();
+//   const [currentQueue, setCurrentQueue] = useState<Track[]>([]);
+//   const {getCurrentQueue} = useTrackContext();
+//   const {width, height} = useWindowDimensions();
+//   const progress = useProgress();
+//   const playbackState = usePlaybackState();
+//   const {
+//     repeatIcon,
+//     changeRepeatMode,
+//     togglePlayingMode,
+//     handleNextTrack,
+//     handlePrevTrack,
+//     currentTrack,
+//     onDownloadPress,
+//     onAlreadyDownloadPress,
+//     setDownloadingTrackIds,
+//     isAlreadyDownload,
+//     setAlreadyDownload,
+//     isDownloading,
+//     setDownloading,
+//     loading,
+//     setLoading,
+//     isModalVisible,
+//     setModalVisible,
+//     downloadProgress,
+//   } = useTrackContext();
+
+//   const [currentActiveTrack, setCurrentActiveTrack] = useState<Track | null>(
+//     null,
+//   );
+
+//   const [currentTrackId, setCurrentTrackId] = useState<number | null>(null);
+
+//   const [icon, setIcon] = useState();
+
+//   useEffect(() => {
+//     MaterialIcon.getImageSource('circle', 20, Colors[theme].primary).then(
+//       setIcon,
+//     );
+//   }, []);
+
+//   const styles = styling(theme);
+//   const {top} = insets;
+
+//   const bottomSheetRef = useRef<BottomSheetMethods>(null);
+//   const folderListsbottomSheetRef = useRef<FolderListsBottomSheetMethods>(null);
+
+//   useLayoutEffect(() => {
+//     const getCurrentTrack = async () => {
+//       const current = await TrackPlayer.getActiveTrack();
+
+//       current && setCurrentActiveTrack(current);
+//     };
+//     getCurrentTrack();
+//   }, [currentTrackId, currentTrack]);
+
+//   useEffect(() => {
+//     const getQueue = async () => {
+//       const queue = await getCurrentQueue();
+//       setCurrentQueue(queue);
+//     };
+
+//     getQueue();
+//   }, [currentQueue]);
+
+//   const getCurrentActiveTrack = useCallback(
+//     async (id: number) => {
+//       setCurrentTrackId(id);
+//     },
+//     [currentTrackId],
+//   );
+
+//   const expandHandler = () => {
+//     bottomSheetRef.current?.expand();
+//   };
+
+//   const expandFolderListsHandler = () => {
+//     folderListsbottomSheetRef.current?.expand();
+//   };
+
+//   const getTrackDuration = (progress: any) => {
+//     const durationInSeconds = progress.duration - progress.position;
+
+//     if (durationInSeconds <= 0) {
+//       return '00:00';
+//     } else {
+//       const minutes = Math.floor(durationInSeconds / 60);
+//       const seconds = Math.floor(durationInSeconds % 60);
+
+//       return `${minutes.toString().padStart(2, '0')}:${seconds
+//         .toString()
+//         .padStart(2, '0')}`;
+//     }
+//   };
+
+//   return (
+//     <Container title="">
+//       <View style={styles.imgContainer}>
+//         <View
+//           style={[
+//             styles.imageShadow,
+//             {width: width / 1.2, height: height / 2.75},
+//           ]}>
+//           <Image
+//             source={
+//               currentTrack
+//                 ? {uri: currentTrack?.artwork}
+//                 : require('../assets/marguerite.jpg')
+//             }
+//             resizeMode="cover"
+//             style={styles.img}
+//           />
+//         </View>
+//         <View
+//           style={{
+//             marginTop: 30,
+
+//             justifyContent: 'center',
+//             paddingHorizontal: 20,
+//             gap: 5,
+
+//             height: 120,
+//           }}>
+//           {!currentTrack ? (
+//             <CustomButton
+//               title={t('UTILS.CHOOSEALBLUM')}
+//               customButtonStyle={styles.chooseFromBtn}
+//               customButtonTextStyle={styles.chooseFrom}
+//               gap={10}
+//               onPress={() => navigation.navigate('AudioCategories')}
+//               icon={
+//                 <FontAwesome
+//                   name="music"
+//                   size={15}
+//                   color={Colors[theme].primary}
+//                 />
+//               }
+//             />
+//           ) : (
+//             <>
+//               <Text style={styles.titleText}>{currentTrack?.title}</Text>
+//               <Text style={styles.artistText}>{currentTrack?.artist}</Text>
+//             </>
+//           )}
+//         </View>
+//       </View>
+
+//       <BottomSheet
+//         snapTo="65"
+//         ref={bottomSheetRef}
+//         backGroundColor={Colors[theme].secondary}>
+//         <RenderItem
+//           currentQueue={currentQueue}
+//           currentActiveTrack={currentActiveTrack}
+//           setCurrentActiveTrack={setCurrentActiveTrack}
+//           getCurrentActiveTrack={getCurrentActiveTrack}
+//         />
+//       </BottomSheet>
+//       <FolderListsBottomSheet
+//         snapTo="80"
+//         ref={folderListsbottomSheetRef}
+//         backGroundColor={Colors[theme].secondary}
+//       />
+
+//       <View style={styles.contentContainer}>
+//         <View style={styles.trackContainer}>
+//           <Slider
+//             style={{
+//               width: '100%',
+
+//               height: 30,
+//             }}
+//             trackImage={icon}
+//             value={progress.position}
+//             minimumValue={0}
+//             maximumValue={progress.duration}
+//             thumbTintColor={Colors[theme].primary}
+//             onSlidingComplete={async value => {
+//               await TrackPlayer.seekTo(value);
+//             }}
+//             thumbImage={icon}
+//             minimumTrackTintColor={Colors[theme].primary}
+//             maximumTrackTintColor={Colors[theme].text}
+//           />
+//           <View style={styles.trackDuration}>
+//             <Text style={styles.durationText}>
+//               {new Date(progress.position * 1000).toISOString().substr(14, 5)}
+//             </Text>
+//             <Text style={styles.durationText}>
+//               {getTrackDuration(progress)}
+//             </Text>
+//           </View>
+//         </View>
+//         {currentTrack && (
+//           <View
+//             style={{
+//               marginBottom: 16,
+//             }}>
+//             {isAlreadyDownload ? (
+//               <CustomButton
+//                 customButtonStyle={styles.btn}
+//                 onPress={onAlreadyDownloadPress}
+//                 icon={
+//                   <Ionicons
+//                     name={`cloud-done-sharp`}
+//                     size={40}
+//                     color={Colors[theme].primary}
+//                   />
+//                 }
+//               />
+//             ) : isDownloading || loading ? (
+//               <View style={styles.progressBarContainer}>
+//                 <Progress.Bar
+//                   progress={downloadProgress / 100}
+//                   color={Colors[theme].primary}
+//                   borderWidth={2}
+//                 />
+//                 <Text
+//                   style={{color: Colors[theme].primary, paddingVertical: 10}}>
+//                   {downloadProgress < 100
+//                     ? `${t('UTILS.DOWNLOADING')}`
+//                     : `${t('UTILS.DOWNLOADED')}`}
+//                 </Text>
+//               </View>
+//             ) : (
+//               <CustomButton
+//                 customButtonStyle={styles.btn}
+//                 // onPress={onDownloadPress}
+//                 onPress={expandFolderListsHandler}
+//                 icon={
+//                   <MaterialIcon
+//                     name={`cloud-download`}
+//                     size={40}
+//                     color={Colors[theme].primary}
+//                   />
+//                 }
+//               />
+//             )}
+//           </View>
+//         )}
+//         <View style={styles.buttonContainer}>
+//           <CustomButton
+//             customButtonStyle={styles.btn}
+//             icon={
+//               <MaterialIcon
+//                 name={`${repeatIcon()}`}
+//                 size={30}
+//                 color={Colors[theme].primary}
+//               />
+//             }
+//             onPress={changeRepeatMode}
+//           />
+//           <CustomButton
+//             onPress={handlePrevTrack}
+//             customButtonStyle={[styles.btn]}
+//             icon={
+//               <Entypo
+//                 name={`controller-jump-to-start`}
+//                 size={35}
+//                 color={Colors[theme].primary}
+//               />
+//             }
+//           />
+
+//           <CustomButton
+//             customButtonStyle={styles.btn}
+//             onPress={togglePlayingMode}
+//             icon={
+//               playbackState.state === State.Playing ? (
+//                 <MaterialIcons
+//                   name={`pause-circle`}
+//                   size={65}
+//                   style={{elevation: 2}}
+//                   color={Colors[theme].primary}
+//                 />
+//               ) : playbackState.state === State.Paused ? (
+//                 <MaterialIcons
+//                   name={`play-circle`}
+//                   size={65}
+//                   style={{elevation: 2}}
+//                   color={Colors[theme].primary}
+//                 />
+//               ) : playbackState.state === State.Ready ||
+//                 playbackState.state === State.Buffering ? (
+//                 <LoadingSpinner
+//                   durationMs={1500}
+//                   bgColor={Colors[theme].secondary_dark}
+//                   color={Colors[theme].primary}
+//                   loaderSize={65}
+//                   loadingText="connecting"
+//                   loadingTextColor={Colors[theme].primary}
+//                   loadingTextSize={6}
+//                 />
+//               ) : (
+//                 <Entypo
+//                   name={`controller-stop`}
+//                   size={65}
+//                   style={{elevation: 2}}
+//                   color={Colors[theme].primary}
+//                 />
+//               )
+//             }
+//           />
+//           <CustomButton
+//             onPress={handleNextTrack}
+//             customButtonStyle={styles.btn}
+//             icon={
+//               <Entypo
+//                 name={`controller-next`}
+//                 size={35}
+//                 color={Colors[theme].primary}
+//               />
+//             }
+//           />
+//           <CustomButton
+//             customButtonStyle={[
+//               styles.btn,
+//               currentQueue.length === 0 && {opacity: 0.5},
+//             ]}
+//             onPress={expandHandler}
+//             disabled={currentQueue.length === 0}
+//             icon={
+//               <MaterialIcon
+//                 name={`playlist-music`}
+//                 size={30}
+//                 color={Colors[theme].primary}
+//               />
+//             }
+//           />
+//         </View>
+//       </View>
+
+//       {/* <DownloadModal
+//         isModalVisible={isModalVisible}
+//         onClosePress={() => setModalVisible(false)}
+//         contentId={currentTrack?.id}
+//         downloadProgress={downloadProgress}
+//         onDownloadFinished={(track: any) => {
+//           if (track) {
+//             setAlreadyDownload(true);
+//             setDownloading(false);
+//             setDownloadingTrackIds((prevIds: any) =>
+//               prevIds.filter((id: any) => id !== track.id),
+//             );
+//           }
+//         }}
+//       /> */}
+//       <Toast />
+//     </Container>
+//   );
+// };
+
+// export default TrackPopupScreen;
+
+// const styling = (theme: Theme) =>
+//   StyleSheet.create({
+//     mainContainer: {
+//       flex: 1,
+//       backgroundColor: Colors[theme].secondary,
+//     },
+//     imgContainer: {
+//       alignItems: 'center',
+//       gap: 1,
+//       paddingBottom: 30,
+//     },
+//     imageShadow: {
+//       borderRadius: 20,
+//       shadowColor: Colors[theme].primary_dark,
+//       ...Platform.select({
+//         ios: {
+//           shadowOffset: {
+//             width: 0,
+//             height: 2,
+//           },
+//           shadowOpacity: 0.3,
+//           shadowRadius: 5,
+//         },
+//         android: {
+//           elevation: 7,
+//         },
+//       }),
+//     },
+//     img: {
+//       width: '98%',
+//       height: '100%',
+//       alignSelf: 'center',
+//       borderRadius: 20,
+//     },
+//     titleText: {
+//       fontSize: 20,
+//       // width: '80%',
+
+//       height: 50,
+//       fontWeight: 'bold',
+//       textAlign: 'center',
+//       color: Colors[theme].primary,
+//     },
+//     artistText: {
+//       fontSize: 16,
+//       // width: '80%',
+
+//       height: 70,
+//       color: Colors[theme].primary,
+//       textAlign: 'center',
+//       paddingHorizontal: 20,
+//     },
+//     contentContainer: {
+//       flex: 1,
+//       alignItems: 'center',
+//       width: '100%',
+//       // paddingBottom: 135,
+//     },
+//     trackContainer: {
+//       paddingHorizontal: '10%',
+//       width: '100%',
+//       height: 60,
+//     },
+//     trackDuration: {
+//       flexDirection: 'row',
+//       justifyContent: 'space-between',
+//       paddingHorizontal: '4%',
+//     },
+//     durationText: {
+//       color: Colors[theme].primary,
+//       fontSize: 14,
+//       fontWeight: 'bold',
+//     },
+//     btn: {
+//       backgroundColor: 'transparent',
+//     },
+//     buttonContainer: {
+//       justifyContent: 'center',
+//       width: '100%',
+//       flexDirection: 'row',
+//       alignItems: 'center',
+//       gap: 20,
+//     },
+//     chooseFrom: {
+//       color: Colors[theme].primary_light,
+//       fontSize: 14,
+//     },
+//     chooseFromBtn: {
+//       backgroundColor: Colors[theme].text,
+//       borderRadius: 10,
+//       paddingHorizontal: 20,
+//       paddingVertical: 10,
+//     },
+//     progressBarContainer: {
+//       alignItems: 'center',
+//       height: 40,
+//     },
+//   });
+
+// export const showToast = (type: any, text1: string, text2: string) => {
+//   Toast.show({
+//     type: type,
+//     text1: text1,
+//     text2: text2,
+
+//     position: 'top',
+//     topOffset: 50,
+//     visibilityTime: 4000,
+//     autoHide: true,
+//   });
+// };
+
 import React, {
   useCallback,
   useEffect,
@@ -6,13 +535,16 @@ import React, {
   useState,
 } from 'react';
 import {
+  Animated,
   DeviceEventEmitter,
   Image,
   Platform,
+  SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
   Text,
+  TouchableOpacity,
   useWindowDimensions,
   View,
 } from 'react-native';
@@ -23,6 +555,7 @@ import RenderItem from '../components/commons/RenderItem';
 import BottomSheet from '../components/commons/BottomSheet';
 import {CustomButton} from '../components/utils';
 import {
+  AntDesign,
   Entypo,
   FontAwesome,
   Ionicons,
@@ -43,22 +576,24 @@ import {NavigationMainBottomTabScreenProps} from '../navigations/BottomNavigatio
 import {useTrackContext} from '../contexts/TrackContext';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {useTranslation} from 'react-i18next';
-import Container from '../components/commons/Container';
 import LoadingSpinner from '../components/utils/LoadingSpinner';
-import DownloadModal from '../components/commons/DownloadModal';
 import Toast from 'react-native-toast-message';
+import DownloadModal from '../components/commons/DownloadModal';
+import {
+  fetchDownloadedDataFromLocalDir,
+  sendDownloadedDataToLocalDir,
+} from '../api_services/downloadService';
 import * as Progress from 'react-native-progress'; // Import Progress
 import FolderListsBottomSheet, {
   FolderListsBottomSheetMethods,
 } from '../components/commons/FolderListsBottomSheet';
-import FolderManagement from '../components/commons/FolderManagement';
 
 type Props = {
   route: RouteProp<MainStackParamList, 'Track'>;
   navigation: NavigationMainBottomTabScreenProps['navigation'];
 };
 
-const TrackPopupScreen = ({navigation}: Props) => {
+const TrackPopupScreen = ({route, navigation}: Props) => {
   const insets = useSafeAreaInsets();
   const {t} = useTranslation();
   const {theme} = useThemeContext();
@@ -88,19 +623,111 @@ const TrackPopupScreen = ({navigation}: Props) => {
     downloadProgress,
   } = useTrackContext();
 
+  // console.log('orientation', orientation);
+
   const [currentActiveTrack, setCurrentActiveTrack] = useState<Track | null>(
     null,
   );
 
   const [currentTrackId, setCurrentTrackId] = useState<number | null>(null);
 
+  // const [isModalVisible, setModalVisible] = useState(false);
+  // const [isAlreadyDownload, setAlreadyDownload] = useState(false);
+  // const [isDownloading, setDownloading] = useState(false);
   const [icon, setIcon] = useState();
+  // const [downloadProgress, setDownloadProgress] = useState(0);
+  // const [downloadingTrackIds, setDownloadingTrackIds] = useState<any>([]);
+  // const [loading, setLoading] = useState(false);
+
+  // useLayoutEffect(() => {
+  //   fetchDownloadedDataFromLocalDir(item => {
+  //     if (item?.length > 0) {
+  //       const track = item.find(
+  //         (obj: any) => obj?.contentId === currentTrack.id,
+  //       );
+  //       setAlreadyDownload(!!track);
+  //     } else {
+  //       setAlreadyDownload(false);
+  //     }
+  //   });
+
+  //   const find = downloadingTrackIds.find(
+  //     (element: any) => element === currentTrack.id,
+  //   );
+
+  //   console.log('find', find);
+  //   if (find !== undefined) {
+  //     setLoading(true);
+  //   } else {
+  //     setLoading(false);
+  //   }
+  //   // Reset the downloading state if the current track changes
+  //   if (!find) {
+  //     setDownloading(false);
+  //   }
+  // }, [currentTrack, downloadingTrackIds]);
+
+  // const onDownloadPress = () => {
+  //   const find = downloadingTrackIds.find(
+  //     (element: any) => element === currentTrack.id,
+  //   );
+  //   if (!find) {
+  //     setModalVisible(true);
+  //     setDownloading(true);
+  //     setDownloadingTrackIds((prevIds: any) => [...prevIds, currentTrack.id]);
+
+  //     sendDownloadedDataToLocalDir(
+  //       err => {
+  //         if (err) {
+  //           setDownloading(false);
+  //           setDownloadingTrackIds((prevIds: any) =>
+  //             prevIds.filter((id: any) => id !== currentTrack.id),
+  //           );
+  //         }
+  //       },
+  //       currentTrack.id,
+  //       currentTrack.url,
+  //       currentTrack.artist,
+  //       currentTrack.title,
+  //       currentTrack.artwork,
+  //       true,
+  //     );
+  //   } else {
+  //     setModalVisible(true); // Show the modal with current progress if already downloading
+  //   }
+  // };
+  // const onAlreadyDownloadPress = () => {
+  //   showToast(
+  //     'success',
+  //     'Already downloaded',
+  //     'This content is already downloaded 👋',
+  //   );
+  // };
+
+  // console.log('downloading content', isDownloading);
 
   useEffect(() => {
     MaterialIcon.getImageSource('circle', 20, Colors[theme].primary).then(
-      setIcon,
+      source => {
+        setIcon(source);
+      },
     );
   }, []);
+
+  // useEffect(() => {
+  //   const listener = DeviceEventEmitter.addListener(
+  //     'downloadProgress',
+  //     data => {
+  //       if (data.contentId === currentTrack?.id) {
+  //         setDownloadProgress(parseInt(data.progressValue));
+  //       }
+  //     },
+  //   );
+
+  //   return () => {
+  //     listener.remove();
+  //   };
+  // }, [currentTrack]);
 
   const styles = styling(theme);
   const {top} = insets;
@@ -156,105 +783,132 @@ const TrackPopupScreen = ({navigation}: Props) => {
     }
   };
 
+  const customMarginTop = top + 10;
+
   return (
-    <Container title="">
-      <View style={styles.imgContainer}>
-        <View
-          style={[
-            styles.imageShadow,
-            {width: width / 1.2, height: height / 2.75},
-          ]}>
-          <Image
-            source={
-              currentTrack
-                ? {uri: currentTrack?.artwork}
-                : require('../assets/marguerite.jpg')
-            }
-            resizeMode="cover"
-            style={styles.img}
-          />
-        </View>
-        <View
-          style={{
-            marginTop: 30,
-
-            justifyContent: 'center',
-            paddingHorizontal: 20,
-            gap: 5,
-
-            height: 120,
-          }}>
-          {!currentTrack ? (
-            <CustomButton
-              title={t('UTILS.CHOOSEALBLUM')}
-              customButtonStyle={styles.chooseFromBtn}
-              customButtonTextStyle={styles.chooseFrom}
-              gap={10}
-              onPress={() => navigation.navigate('AudioCategories')}
-              icon={
-                <FontAwesome
-                  name="music"
-                  size={15}
-                  color={Colors[theme].primary}
-                />
-              }
+    <View style={[styles.mainContainer]}>
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle={theme === 'dark' ? 'light-content' : 'dark-content'}
+      />
+      <SafeAreaView style={[styles.safeAreaView, {marginTop: customMarginTop}]}>
+        <CustomButton
+          onPress={() => navigation.goBack()}
+          icon={
+            <AntDesign
+              name={'arrowleft'}
+              size={height * 0.03}
+              color={Colors[theme].primary}
             />
-          ) : (
-            <>
-              <Text style={styles.titleText}>{currentTrack?.title}</Text>
-              <Text style={styles.artistText}>{currentTrack?.artist}</Text>
-            </>
-          )}
+          }
+          customButtonStyle={styles.btn}
+        />
+      </SafeAreaView>
+      <View style={{flex: 4}}>
+        <View style={styles.imgContainer}>
+          <View
+            style={[
+              styles.imageShadow,
+              {flex: 4, width: width, height: '100%'},
+            ]}>
+            <Image
+              source={
+                currentTrack
+                  ? {uri: currentTrack?.artwork}
+                  : require('../assets/marguerite.jpg')
+              }
+              resizeMode="cover"
+              style={styles.img}
+            />
+          </View>
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              flex: 2,
+              width: width,
+              paddingTop: 15,
+            }}>
+            {!currentTrack ? (
+              <CustomButton
+                title={t('UTILS.CHOOSEALBLUM')}
+                customButtonStyle={[styles.chooseFromBtn, {width: width * 0.6}]}
+                customButtonTextStyle={[
+                  styles.chooseFrom,
+                  {fontSize: height * 0.02},
+                ]}
+                gap={10}
+                onPress={() => navigation.navigate('AudioCategories')}
+                icon={
+                  <FontAwesome
+                    name="music"
+                    size={height * 0.03}
+                    color={Colors[theme].primary}
+                  />
+                }
+              />
+            ) : (
+              <>
+                <Text
+                  style={[
+                    styles.titleText,
+                    {fontSize: height * 0.03, flex: 2.5},
+                  ]}>
+                  {currentTrack?.title}
+                </Text>
+                <Text
+                  style={[
+                    styles.artistText,
+                    {fontSize: height * 0.025, flex: 3.5},
+                  ]}>
+                  {currentTrack?.artist}
+                </Text>
+              </>
+            )}
+          </View>
         </View>
       </View>
 
-      <BottomSheet
-        snapTo="65"
-        ref={bottomSheetRef}
-        backGroundColor={Colors[theme].secondary}>
-        <RenderItem
-          currentQueue={currentQueue}
-          currentActiveTrack={currentActiveTrack}
-          setCurrentActiveTrack={setCurrentActiveTrack}
-          getCurrentActiveTrack={getCurrentActiveTrack}
-        />
-      </BottomSheet>
-      <FolderListsBottomSheet
-        snapTo="80"
-        ref={folderListsbottomSheetRef}
-        backGroundColor={Colors[theme].secondary}
-      />
-
-      <View style={styles.contentContainer}>
+      <View
+        style={[
+          styles.contentContainer,
+          // {paddingBottom: height > 800 ? height * 0.2 : height * 0.1},
+          {
+            height: height * 0.2,
+            width: width,
+            paddingVertical: 10,
+            paddingBottom: 20,
+          },
+        ]}>
         <View style={styles.trackContainer}>
           <Slider
             style={{
-              width: '100%',
-
-              height: 30,
+              height: height * 0.03,
+              width: width * 0.8,
             }}
-            trackImage={icon}
             value={progress.position}
             minimumValue={0}
             maximumValue={progress.duration}
             thumbTintColor={Colors[theme].primary}
             onSlidingComplete={async value => {
               await TrackPlayer.seekTo(value);
+              await TrackPlayer.play();
             }}
             thumbImage={icon}
             minimumTrackTintColor={Colors[theme].primary}
             maximumTrackTintColor={Colors[theme].text}
           />
           <View style={styles.trackDuration}>
-            <Text style={styles.durationText}>
+            <Text style={[styles.durationText, {fontSize: height * 0.02}]}>
               {new Date(progress.position * 1000).toISOString().substr(14, 5)}
             </Text>
-            <Text style={styles.durationText}>
+            <Text style={[styles.durationText, {fontSize: height * 0.02}]}>
               {getTrackDuration(progress)}
             </Text>
           </View>
         </View>
-        {currentTrack && (
+        {currentTrack ? (
           <View
             style={{
               marginBottom: 16,
@@ -266,7 +920,7 @@ const TrackPopupScreen = ({navigation}: Props) => {
                 icon={
                   <Ionicons
                     name={`cloud-done-sharp`}
-                    size={40}
+                    size={height * 0.04}
                     color={Colors[theme].primary}
                   />
                 }
@@ -279,7 +933,7 @@ const TrackPopupScreen = ({navigation}: Props) => {
                   borderWidth={2}
                 />
                 <Text
-                  style={{color: Colors[theme].primary, paddingVertical: 10}}>
+                  style={{color: Colors[theme].primary, paddingVertical: 5}}>
                   {downloadProgress < 100
                     ? `${t('UTILS.DOWNLOADING')}`
                     : `${t('UTILS.DOWNLOADED')}`}
@@ -288,26 +942,31 @@ const TrackPopupScreen = ({navigation}: Props) => {
             ) : (
               <CustomButton
                 customButtonStyle={styles.btn}
-                // onPress={onDownloadPress}
                 onPress={expandFolderListsHandler}
                 icon={
                   <MaterialIcon
                     name={`cloud-download`}
-                    size={40}
+                    size={height * 0.04}
                     color={Colors[theme].primary}
                   />
                 }
               />
             )}
           </View>
+        ) : (
+          <View style={{height: height * 0.04}}></View>
         )}
-        <View style={styles.buttonContainer}>
+        <View
+          style={[
+            styles.buttonContainer,
+            {height: height * 0.08, width: width * 0.9, gap: height * 0.03},
+          ]}>
           <CustomButton
             customButtonStyle={styles.btn}
             icon={
               <MaterialIcon
                 name={`${repeatIcon()}`}
-                size={30}
+                size={height * 0.04}
                 color={Colors[theme].primary}
               />
             }
@@ -319,12 +978,11 @@ const TrackPopupScreen = ({navigation}: Props) => {
             icon={
               <Entypo
                 name={`controller-jump-to-start`}
-                size={35}
+                size={height * 0.04}
                 color={Colors[theme].primary}
               />
             }
           />
-
           <CustomButton
             customButtonStyle={styles.btn}
             onPress={togglePlayingMode}
@@ -332,14 +990,14 @@ const TrackPopupScreen = ({navigation}: Props) => {
               playbackState.state === State.Playing ? (
                 <MaterialIcons
                   name={`pause-circle`}
-                  size={65}
+                  size={height * 0.08}
                   style={{elevation: 2}}
                   color={Colors[theme].primary}
                 />
               ) : playbackState.state === State.Paused ? (
                 <MaterialIcons
                   name={`play-circle`}
-                  size={65}
+                  size={height * 0.08}
                   style={{elevation: 2}}
                   color={Colors[theme].primary}
                 />
@@ -349,7 +1007,7 @@ const TrackPopupScreen = ({navigation}: Props) => {
                   durationMs={1500}
                   bgColor={Colors[theme].secondary_dark}
                   color={Colors[theme].primary}
-                  loaderSize={65}
+                  loaderSize={height * 0.08}
                   loadingText="connecting"
                   loadingTextColor={Colors[theme].primary}
                   loadingTextSize={6}
@@ -357,7 +1015,7 @@ const TrackPopupScreen = ({navigation}: Props) => {
               ) : (
                 <Entypo
                   name={`controller-stop`}
-                  size={65}
+                  size={height * 0.08}
                   style={{elevation: 2}}
                   color={Colors[theme].primary}
                 />
@@ -370,7 +1028,7 @@ const TrackPopupScreen = ({navigation}: Props) => {
             icon={
               <Entypo
                 name={`controller-next`}
-                size={35}
+                size={height * 0.04}
                 color={Colors[theme].primary}
               />
             }
@@ -385,12 +1043,13 @@ const TrackPopupScreen = ({navigation}: Props) => {
             icon={
               <MaterialIcon
                 name={`playlist-music`}
-                size={30}
+                size={height * 0.04}
                 color={Colors[theme].primary}
               />
             }
           />
         </View>
+        {/* <View style={{height: 90}} /> */}
       </View>
 
       {/* <DownloadModal
@@ -409,7 +1068,26 @@ const TrackPopupScreen = ({navigation}: Props) => {
         }}
       /> */}
       <Toast />
-    </Container>
+      <BottomSheet
+        snapTo="70"
+        ref={bottomSheetRef}
+        backGroundColor={Colors[theme].secondary}>
+        <View
+          style={{paddingBottom: height > 800 ? height * 0.1 : height * 0.17}}>
+          <RenderItem
+            currentQueue={currentQueue}
+            currentActiveTrack={currentActiveTrack}
+            setCurrentActiveTrack={setCurrentActiveTrack}
+            getCurrentActiveTrack={getCurrentActiveTrack}
+          />
+        </View>
+      </BottomSheet>
+      <FolderListsBottomSheet
+        snapTo="70"
+        ref={folderListsbottomSheetRef}
+        backGroundColor={Colors[theme].secondary}
+      />
+    </View>
   );
 };
 
@@ -420,11 +1098,11 @@ const styling = (theme: Theme) =>
     mainContainer: {
       flex: 1,
       backgroundColor: Colors[theme].secondary,
+      paddingBottom: 65,
     },
     imgContainer: {
       alignItems: 'center',
-      gap: 1,
-      paddingBottom: 30,
+      flex: 1,
     },
     imageShadow: {
       borderRadius: 20,
@@ -444,34 +1122,36 @@ const styling = (theme: Theme) =>
       }),
     },
     img: {
-      width: '98%',
+      width: '100%',
       height: '100%',
       alignSelf: 'center',
-      borderRadius: 20,
+      borderBottomRightRadius: 20,
+      borderBottomLeftRadius: 20,
     },
     titleText: {
-      fontSize: 20,
       // width: '80%',
 
-      height: 50,
+      // height: 50,
       fontWeight: 'bold',
       textAlign: 'center',
       color: Colors[theme].primary,
     },
     artistText: {
-      fontSize: 16,
+      // fontSize: 16,
       // width: '80%',
 
-      height: 70,
+      // height: 70,
       color: Colors[theme].primary,
       textAlign: 'center',
       paddingHorizontal: 20,
     },
     contentContainer: {
-      flex: 1,
       alignItems: 'center',
-      width: '100%',
-      // paddingBottom: 135,
+      justifyContent: 'space-around',
+      bottom: 0,
+      flex: 2,
+
+      // paddingBottom: '25%',
     },
     trackContainer: {
       paddingHorizontal: '10%',
@@ -485,22 +1165,23 @@ const styling = (theme: Theme) =>
     },
     durationText: {
       color: Colors[theme].primary,
-      fontSize: 14,
+
       fontWeight: 'bold',
     },
     btn: {
       backgroundColor: 'transparent',
+      alignSelf: 'center',
     },
     buttonContainer: {
       justifyContent: 'center',
-      width: '100%',
+      alignContent: 'center',
+
       flexDirection: 'row',
       alignItems: 'center',
-      gap: 20,
     },
     chooseFrom: {
       color: Colors[theme].primary_light,
-      fontSize: 14,
+      // fontSize: 14,
     },
     chooseFromBtn: {
       backgroundColor: Colors[theme].text,
@@ -508,9 +1189,23 @@ const styling = (theme: Theme) =>
       paddingHorizontal: 20,
       paddingVertical: 10,
     },
+    suffelIcon: {
+      width: 30,
+      height: 30,
+    },
     progressBarContainer: {
       alignItems: 'center',
       height: 40,
+    },
+    safeAreaView: {
+      position: 'absolute',
+      top: 0,
+      zIndex: 20,
+      width: '100%',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingHorizontal: 10,
     },
   });
 
