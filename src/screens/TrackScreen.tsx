@@ -56,10 +56,8 @@ import * as Progress from 'react-native-progress'; // Import Progress
 import FolderListsBottomSheet, {
   FolderListsBottomSheetMethods,
 } from '../components/commons/FolderListsBottomSheet';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
+
+import useResponsive from '../hooks/useResponsive';
 
 type Props = {
   route: RouteProp<MainStackParamList, 'Track'>;
@@ -95,6 +93,8 @@ const TrackScreen = ({route, navigation}: Props) => {
     setModalVisible,
     downloadProgress,
   } = useTrackContext();
+
+  // console.log('orientation', orientation);
 
   const [currentActiveTrack, setCurrentActiveTrack] = useState<Track | null>(
     null,
@@ -255,17 +255,15 @@ const TrackScreen = ({route, navigation}: Props) => {
   };
 
   return (
-    <ScrollView
-      style={[styles.mainContainer]}
-      showsVerticalScrollIndicator={false}>
+    <View style={[styles.mainContainer]}>
       <StatusBar translucent />
 
-      <View style={{flex: 1, paddingTop: top}}>
+      <View style={{flex: 4}}>
         <View style={styles.imgContainer}>
           <View
             style={[
               styles.imageShadow,
-              {width: width / 1.2, height: height / 2.75},
+              {flex: 4.5, width: width, height: '100%'},
             ]}>
             <Image
               source={
@@ -279,67 +277,68 @@ const TrackScreen = ({route, navigation}: Props) => {
           </View>
           <View
             style={{
-              marginTop: 30,
-
               justifyContent: 'center',
-              paddingHorizontal: 20,
-              gap: 5,
-              height: 135,
+              alignItems: 'center',
+              flex: 1.5,
+              width: width,
+              paddingTop: 15,
             }}>
             {!currentTrack ? (
               <CustomButton
                 title={t('UTILS.CHOOSEALBLUM')}
-                customButtonStyle={styles.chooseFromBtn}
-                customButtonTextStyle={styles.chooseFrom}
+                customButtonStyle={[styles.chooseFromBtn, {width: width * 0.6}]}
+                customButtonTextStyle={[
+                  styles.chooseFrom,
+                  {fontSize: height * 0.02},
+                ]}
                 gap={10}
                 onPress={() => navigation.navigate('AudioCategories')}
                 icon={
                   <FontAwesome
                     name="music"
-                    size={15}
+                    size={height * 0.03}
                     color={Colors[theme].primary}
                   />
                 }
               />
             ) : (
               <>
-                <Text style={styles.titleText}>{currentTrack?.title}</Text>
-                <Text style={styles.artistText}>{currentTrack?.artist}</Text>
+                <Text
+                  style={[
+                    styles.titleText,
+                    {fontSize: height * 0.03, flex: 2.5},
+                  ]}>
+                  {currentTrack?.title}
+                </Text>
+                <Text
+                  style={[
+                    styles.artistText,
+                    {fontSize: height * 0.025, flex: 3.5},
+                  ]}>
+                  {currentTrack?.artist}
+                </Text>
               </>
             )}
           </View>
         </View>
       </View>
-      <BottomSheet
-        snapTo="65"
-        ref={bottomSheetRef}
-        backGroundColor={Colors[theme].secondary}>
-        <View
-          style={{paddingBottom: height > 800 ? height * 0.1 : height * 0.17}}>
-          <RenderItem
-            currentQueue={currentQueue}
-            currentActiveTrack={currentActiveTrack}
-            setCurrentActiveTrack={setCurrentActiveTrack}
-            getCurrentActiveTrack={getCurrentActiveTrack}
-          />
-        </View>
-      </BottomSheet>
-      <FolderListsBottomSheet
-        snapTo="80"
-        ref={folderListsbottomSheetRef}
-        backGroundColor={Colors[theme].secondary}
-      />
+
       <View
         style={[
           styles.contentContainer,
           // {paddingBottom: height > 800 ? height * 0.2 : height * 0.1},
-          {bottom: 0},
+          {
+            height: height * 0.2,
+            width: width,
+            paddingVertical: 10,
+            paddingBottom: 20,
+          },
         ]}>
         <View style={styles.trackContainer}>
           <Slider
             style={{
-              height: hp('3%'),
-              width: wp('80%'),
+              height: height * 0.03,
+              width: width * 0.8,
             }}
             value={progress.position}
             minimumValue={0}
@@ -354,15 +353,15 @@ const TrackScreen = ({route, navigation}: Props) => {
             maximumTrackTintColor={Colors[theme].text}
           />
           <View style={styles.trackDuration}>
-            <Text style={styles.durationText}>
+            <Text style={[styles.durationText, {fontSize: height * 0.02}]}>
               {new Date(progress.position * 1000).toISOString().substr(14, 5)}
             </Text>
-            <Text style={styles.durationText}>
+            <Text style={[styles.durationText, {fontSize: height * 0.02}]}>
               {getTrackDuration(progress)}
             </Text>
           </View>
         </View>
-        {currentTrack && (
+        {currentTrack ? (
           <View
             style={{
               marginBottom: 16,
@@ -374,7 +373,7 @@ const TrackScreen = ({route, navigation}: Props) => {
                 icon={
                   <Ionicons
                     name={`cloud-done-sharp`}
-                    size={hp('4%')}
+                    size={height * 0.04}
                     color={Colors[theme].primary}
                   />
                 }
@@ -400,21 +399,27 @@ const TrackScreen = ({route, navigation}: Props) => {
                 icon={
                   <MaterialIcon
                     name={`cloud-download`}
-                    size={hp('4%')}
+                    size={height * 0.04}
                     color={Colors[theme].primary}
                   />
                 }
               />
             )}
           </View>
+        ) : (
+          <View style={{height: height * 0.04}}></View>
         )}
-        <View style={styles.buttonContainer}>
+        <View
+          style={[
+            styles.buttonContainer,
+            {height: height * 0.08, width: width * 0.9, gap: height * 0.03},
+          ]}>
           <CustomButton
             customButtonStyle={styles.btn}
             icon={
               <MaterialIcon
                 name={`${repeatIcon()}`}
-                size={hp('4%')}
+                size={height * 0.04}
                 color={Colors[theme].primary}
               />
             }
@@ -426,7 +431,7 @@ const TrackScreen = ({route, navigation}: Props) => {
             icon={
               <Entypo
                 name={`controller-jump-to-start`}
-                size={hp('4%')}
+                size={height * 0.04}
                 color={Colors[theme].primary}
               />
             }
@@ -438,14 +443,14 @@ const TrackScreen = ({route, navigation}: Props) => {
               playbackState.state === State.Playing ? (
                 <MaterialIcons
                   name={`pause-circle`}
-                  size={hp('8%')}
+                  size={height * 0.08}
                   style={{elevation: 2}}
                   color={Colors[theme].primary}
                 />
               ) : playbackState.state === State.Paused ? (
                 <MaterialIcons
                   name={`play-circle`}
-                  size={hp('8%')}
+                  size={height * 0.08}
                   style={{elevation: 2}}
                   color={Colors[theme].primary}
                 />
@@ -455,7 +460,7 @@ const TrackScreen = ({route, navigation}: Props) => {
                   durationMs={1500}
                   bgColor={Colors[theme].secondary_dark}
                   color={Colors[theme].primary}
-                  loaderSize={hp('8%')}
+                  loaderSize={height * 0.08}
                   loadingText="connecting"
                   loadingTextColor={Colors[theme].primary}
                   loadingTextSize={6}
@@ -463,7 +468,7 @@ const TrackScreen = ({route, navigation}: Props) => {
               ) : (
                 <Entypo
                   name={`controller-stop`}
-                  size={hp('8%')}
+                  size={height * 0.08}
                   style={{elevation: 2}}
                   color={Colors[theme].primary}
                 />
@@ -476,7 +481,7 @@ const TrackScreen = ({route, navigation}: Props) => {
             icon={
               <Entypo
                 name={`controller-next`}
-                size={hp('4%')}
+                size={height * 0.04}
                 color={Colors[theme].primary}
               />
             }
@@ -491,7 +496,7 @@ const TrackScreen = ({route, navigation}: Props) => {
             icon={
               <MaterialIcon
                 name={`playlist-music`}
-                size={hp('4%')}
+                size={height * 0.04}
                 color={Colors[theme].primary}
               />
             }
@@ -516,7 +521,26 @@ const TrackScreen = ({route, navigation}: Props) => {
         }}
       /> */}
       <Toast />
-    </ScrollView>
+      <BottomSheet
+        snapTo="65"
+        ref={bottomSheetRef}
+        backGroundColor={Colors[theme].secondary}>
+        <View
+          style={{paddingBottom: height > 800 ? height * 0.1 : height * 0.17}}>
+          <RenderItem
+            currentQueue={currentQueue}
+            currentActiveTrack={currentActiveTrack}
+            setCurrentActiveTrack={setCurrentActiveTrack}
+            getCurrentActiveTrack={getCurrentActiveTrack}
+          />
+        </View>
+      </BottomSheet>
+      <FolderListsBottomSheet
+        snapTo="80"
+        ref={folderListsbottomSheetRef}
+        backGroundColor={Colors[theme].secondary}
+      />
+    </View>
   );
 };
 
@@ -527,12 +551,11 @@ const styling = (theme: Theme) =>
     mainContainer: {
       flex: 1,
       backgroundColor: Colors[theme].secondary,
+      paddingBottom: 65,
     },
     imgContainer: {
       alignItems: 'center',
-      gap: 1,
-      paddingBottom: 30,
-      paddingTop: 15,
+      flex: 1,
     },
     imageShadow: {
       borderRadius: 20,
@@ -552,26 +575,23 @@ const styling = (theme: Theme) =>
       }),
     },
     img: {
-      width: '98%',
+      width: '100%',
       height: '100%',
       alignSelf: 'center',
-      borderRadius: 20,
     },
     titleText: {
-      fontSize: 20,
-
       // width: '80%',
 
-      height: 50,
+      // height: 50,
       fontWeight: 'bold',
       textAlign: 'center',
       color: Colors[theme].primary,
     },
     artistText: {
-      fontSize: 16,
+      // fontSize: 16,
       // width: '80%',
 
-      height: 70,
+      // height: 70,
       color: Colors[theme].primary,
       textAlign: 'center',
       paddingHorizontal: 20,
@@ -579,11 +599,9 @@ const styling = (theme: Theme) =>
     contentContainer: {
       alignItems: 'center',
       justifyContent: 'space-around',
-      height: hp('20%'),
-      width: wp('100%'),
-      flex: 1,
+      bottom: 0,
+      flex: 2,
 
-      backgroundColor: 'red',
       // paddingBottom: '25%',
     },
     trackContainer: {
@@ -598,7 +616,7 @@ const styling = (theme: Theme) =>
     },
     durationText: {
       color: Colors[theme].primary,
-      fontSize: hp('2%'),
+
       fontWeight: 'bold',
     },
     btn: {
@@ -608,16 +626,13 @@ const styling = (theme: Theme) =>
     buttonContainer: {
       justifyContent: 'center',
       alignContent: 'center',
-      height: hp('8%'),
-      width: wp('90%'),
+
       flexDirection: 'row',
       alignItems: 'center',
-      gap: hp('3%'),
-      backgroundColor: 'blue',
     },
     chooseFrom: {
       color: Colors[theme].primary_light,
-      fontSize: 14,
+      // fontSize: 14,
     },
     chooseFromBtn: {
       backgroundColor: Colors[theme].text,
