@@ -56,6 +56,10 @@ import * as Progress from 'react-native-progress'; // Import Progress
 import FolderListsBottomSheet, {
   FolderListsBottomSheetMethods,
 } from '../components/commons/FolderListsBottomSheet';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 type Props = {
   route: RouteProp<MainStackParamList, 'Track'>;
@@ -175,12 +179,12 @@ const TrackScreen = ({route, navigation}: Props) => {
 
   useEffect(() => {
     MaterialIcon.getImageSource('circle', 20, Colors[theme].primary).then(
-      (source) => {
+      source => {
         setIcon(source);
       },
     );
   }, []);
-  
+
   // useEffect(() => {
   //   const listener = DeviceEventEmitter.addListener(
   //     'downloadProgress',
@@ -334,11 +338,9 @@ const TrackScreen = ({route, navigation}: Props) => {
         <View style={styles.trackContainer}>
           <Slider
             style={{
-              width: '100%',
-
-              height: 30,
+              height: hp('3%'),
+              width: wp('80%'),
             }}
-            
             value={progress.position}
             minimumValue={0}
             maximumValue={progress.duration}
@@ -372,7 +374,7 @@ const TrackScreen = ({route, navigation}: Props) => {
                 icon={
                   <Ionicons
                     name={`cloud-done-sharp`}
-                    size={40}
+                    size={hp('4%')}
                     color={Colors[theme].primary}
                   />
                 }
@@ -398,7 +400,7 @@ const TrackScreen = ({route, navigation}: Props) => {
                 icon={
                   <MaterialIcon
                     name={`cloud-download`}
-                    size={40}
+                    size={hp('4%')}
                     color={Colors[theme].primary}
                   />
                 }
@@ -412,7 +414,7 @@ const TrackScreen = ({route, navigation}: Props) => {
             icon={
               <MaterialIcon
                 name={`${repeatIcon()}`}
-                size={30}
+                size={hp('4%')}
                 color={Colors[theme].primary}
               />
             }
@@ -424,7 +426,7 @@ const TrackScreen = ({route, navigation}: Props) => {
             icon={
               <Entypo
                 name={`controller-jump-to-start`}
-                size={35}
+                size={hp('4%')}
                 color={Colors[theme].primary}
               />
             }
@@ -436,14 +438,14 @@ const TrackScreen = ({route, navigation}: Props) => {
               playbackState.state === State.Playing ? (
                 <MaterialIcons
                   name={`pause-circle`}
-                  size={65}
+                  size={hp('8%')}
                   style={{elevation: 2}}
                   color={Colors[theme].primary}
                 />
               ) : playbackState.state === State.Paused ? (
                 <MaterialIcons
                   name={`play-circle`}
-                  size={65}
+                  size={hp('8%')}
                   style={{elevation: 2}}
                   color={Colors[theme].primary}
                 />
@@ -453,7 +455,7 @@ const TrackScreen = ({route, navigation}: Props) => {
                   durationMs={1500}
                   bgColor={Colors[theme].secondary_dark}
                   color={Colors[theme].primary}
-                  loaderSize={65}
+                  loaderSize={hp('8%')}
                   loadingText="connecting"
                   loadingTextColor={Colors[theme].primary}
                   loadingTextSize={6}
@@ -461,7 +463,7 @@ const TrackScreen = ({route, navigation}: Props) => {
               ) : (
                 <Entypo
                   name={`controller-stop`}
-                  size={65}
+                  size={hp('8%')}
                   style={{elevation: 2}}
                   color={Colors[theme].primary}
                 />
@@ -474,7 +476,7 @@ const TrackScreen = ({route, navigation}: Props) => {
             icon={
               <Entypo
                 name={`controller-next`}
-                size={35}
+                size={hp('4%')}
                 color={Colors[theme].primary}
               />
             }
@@ -489,13 +491,13 @@ const TrackScreen = ({route, navigation}: Props) => {
             icon={
               <MaterialIcon
                 name={`playlist-music`}
-                size={30}
+                size={hp('4%')}
                 color={Colors[theme].primary}
               />
             }
           />
         </View>
-        <View style={{height: 90}} />
+        {/* <View style={{height: 90}} /> */}
       </View>
 
       {/* <DownloadModal
@@ -576,8 +578,12 @@ const styling = (theme: Theme) =>
     },
     contentContainer: {
       alignItems: 'center',
-      width: '100%',
+      justifyContent: 'space-around',
+      height: hp('20%'),
+      width: wp('100%'),
       flex: 1,
+
+      backgroundColor: 'red',
       // paddingBottom: '25%',
     },
     trackContainer: {
@@ -592,7 +598,7 @@ const styling = (theme: Theme) =>
     },
     durationText: {
       color: Colors[theme].primary,
-      fontSize: 14,
+      fontSize: hp('2%'),
       fontWeight: 'bold',
     },
     btn: {
@@ -601,10 +607,13 @@ const styling = (theme: Theme) =>
     },
     buttonContainer: {
       justifyContent: 'center',
-      width: '100%',
+      alignContent: 'center',
+      height: hp('8%'),
+      width: wp('90%'),
       flexDirection: 'row',
       alignItems: 'center',
-      gap: 20,
+      gap: hp('3%'),
+      backgroundColor: 'blue',
     },
     chooseFrom: {
       color: Colors[theme].primary_light,

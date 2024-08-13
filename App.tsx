@@ -43,6 +43,7 @@ import TrackPlayer, {Capability} from 'react-native-track-player';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import i18next from 'i18next';
 import SplashScreen from 'react-native-splash-screen';
+import Orientation from 'react-native-orientation-locker';
 
 const App = () => {
   const [storeLanguages, setStoreLanguages] = useState<string | null>('');
@@ -73,6 +74,10 @@ const App = () => {
       SplashScreen.hide();
     }, 1500);
     return () => clearTimeout(hideSplashScreen);
+  }, []);
+
+  useEffect(() => {
+    Orientation.lockToPortrait(); // Lock the app to portrait mode
   }, []);
 
   return (
