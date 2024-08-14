@@ -1,6 +1,6 @@
 // // CustomTabBar.js
 
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, useWindowDimensions, View} from 'react-native';
 import React, {useRef} from 'react';
 import Animated, {
   Easing,
@@ -20,6 +20,7 @@ interface CustomTabBarProps {
 const CustomTabBar = ({rest, item}: CustomTabBarProps) => {
   const {onPress, accessibilityState} = rest;
   const focused = accessibilityState.selected;
+  const {height} = useWindowDimensions();
 
   const {theme} = useThemeContext();
   const styles = styling(theme);
@@ -67,13 +68,13 @@ const CustomTabBar = ({rest, item}: CustomTabBarProps) => {
         ]}>
         <FontAwesome
           name={item.icon}
-          size={focused ? 20 : 40}
+          size={focused ? height * 0.025: height * 0.05}
           color={focused ? Colors[theme].primary : 'gray'}
         />
 
         <Animated.View style={textStyle}>
           {focused && (
-            <Text style={{color: Colors[theme].text, fontWeight: '500'}}>
+            <Text style={{color: Colors[theme].text, fontWeight: '500', fontSize: height * 0.018}}>
               {item.label}
             </Text>
           )}
@@ -88,19 +89,18 @@ export default CustomTabBar;
 const styling = (theme: Theme) =>
   StyleSheet.create({
     container: {
-      
       justifyContent: 'center',
       alignItems: 'center',
-     
       height: 75,
-      width: '100%'
+      width: '100%',
+    
     },
     btn: {
       flexDirection: 'row',
       alignItems: 'center',
       padding: 10,
-      paddingHorizontal: 20,
+      paddingHorizontal: 14,
       borderRadius: 20,
-      gap: 12,
+      gap: 8,
     },
   });

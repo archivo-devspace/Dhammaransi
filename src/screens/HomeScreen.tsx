@@ -91,7 +91,7 @@ const HomeScreen = ({navigation}: Props) => {
             backgroundColor: Colors[theme]?.secondary,
             borderTopRightRadius: 16,
             borderTopLeftRadius: 16,
-            paddingBottom: 60,
+            paddingBottom: 75,
             borderColor: Colors[theme]?.secondary_dark,
             borderTopWidth: 1,
             borderLeftWidth: 1,
@@ -109,13 +109,13 @@ const HomeScreen = ({navigation}: Props) => {
                 onPress={() => navigation.navigate(menu.link as any)}>
                 <FontAwesome
                   name={menu.icon}
-                  size={30}
+                  size={height * 0.03}
                   color={Colors[theme].primary}
                 />
                 <Text
                   style={{
                     color: Colors[theme].text,
-                    fontSize: 14,
+                    fontSize: height * 0.018,
                     opacity: 0.8,
                   }}>
                   {t(menu.name)}
@@ -142,10 +142,9 @@ const styling = (theme: Theme) =>
       width: '100%',
       flexDirection: 'row',
       justifyContent: 'center',
-
       flexWrap: 'wrap',
-      gap: 10,
-      columnGap: 10,
+      gap: 14,
+      columnGap: 14,
       marginVertical: 20,
     },
     menu: {
@@ -154,13 +153,13 @@ const styling = (theme: Theme) =>
       width: '45%',
       ...Platform.select({
         ios: {
-          shadowColor: '#52006A',
+          shadowColor: Colors[theme].text,
           shadowOffset: {
             width: 0,
-            height: 2,
+            height: 5,
           },
-          shadowOpacity: 0.3,
-          shadowRadius: 5,
+          shadowOpacity: 0.4,
+          shadowRadius: 4,
         },
         android: {
           elevation: 10,

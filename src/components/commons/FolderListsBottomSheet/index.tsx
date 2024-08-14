@@ -63,6 +63,7 @@ const FolderListsBottomSheet = forwardRef<FolderListsBottomSheetMethods, Props>(
     const styles = styling(theme);
 
     const [folderName, setFolderName] = useState('');
+    const [isDownloadReady, setIsDownloadReady] = useState(false);
     // const [folders, setFolders] = useState<string[]>([]);
     // const [selectedFolder, setSelectedFolder] = useState<string | null>(null);
 
@@ -198,15 +199,17 @@ const FolderListsBottomSheet = forwardRef<FolderListsBottomSheetMethods, Props>(
       const folderName = item.split('/').pop();
       if (folderName) {
         setSelectedFolder(folderName);
+        setIsDownloadReady(true);
       }
     };
-
+    
     useEffect(() => {
-      if (selectedFolder) {
+      if (isDownloadReady) {
         onDownloadPress();
         close();
+        setIsDownloadReady(false); // Reset the state
       }
-    }, [selectedFolder]);
+    }, [isDownloadReady]);
 
     return (
       <>

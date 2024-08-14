@@ -56,9 +56,9 @@ const styling = (
 ) =>
   StyleSheet.create({
     container: {
-      paddingTop: top - 6,
+      paddingTop: top - 25,
       marginBottom: isFloating ? -TOPNAVI_H - top : 0,
-      height: TOPNAVI_H + top,
+      height: TOPNAVI_H + top - 5,
       justifyContent: 'center',
       borderBottomLeftRadius: 10,
       borderBottomRightRadius: 10,
@@ -79,12 +79,12 @@ const styling = (
     },
     title: {
       textAlign: 'center',
-      fontWeight: '600',
+      fontWeight: '500',
       fontVariant: ['small-caps'],
-      paddingTop: 5,
+      paddingTop: 30,
       fontSize: 18,
-      paddingHorizontal: 20,
-      lineHeight: 22,
+      alignSelf: 'center',
+      lineHeight: 25,
       opacity: isTransparent ? 0.1 : 0.7,
       color: isTransparent ? 'transparent' : Colors[theme].text,
     },

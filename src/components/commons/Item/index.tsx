@@ -87,8 +87,8 @@ const Item = ({
             style={{
               width: width,
               height: height * 0.8,
-              // borderBottomLeftRadius: 20,
-              // borderBottomRightRadius: 20,
+              borderBottomLeftRadius: 20,
+              borderBottomRightRadius: 20,
             }}
             resizeMode="cover"
           />
@@ -98,7 +98,7 @@ const Item = ({
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <Text style={styles.text}>
+            <Text style={[styles.text, {fontSize: height * 0.07}]}>
               {truncateText(item?.name, truncateIndex)}
             </Text>
           </View>
@@ -118,27 +118,27 @@ const styling = (theme: Theme) =>
       overflow: 'hidden',
       transformOrigin: 'bottom',
       position: 'relative',
+     
+    },
+    imageContainer: {
+      flex : 1,
       ...Platform.select({
         ios: {
-          shadowColor: '#52006A',
+          shadowColor: Colors[theme].text,
           shadowOffset: {
             width: 0,
-            height: 2,
+            height: 3,
           },
-          shadowOpacity: 0.3,
-          shadowRadius: 5,
+          shadowOpacity: 0.4,
+          shadowRadius: 4,
         },
         android: {
           elevation: 7,
         },
       }),
     },
-    imageContainer: {
-      flex: 0,
-    },
     text: {
       color: Colors[theme].text,
-      textAlign: 'center',
-      fontSize: 14,
+      textAlign: 'center',   
     },
   });

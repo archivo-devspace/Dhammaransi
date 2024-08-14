@@ -49,6 +49,12 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+    <string>UIInterfaceOrientationPortrait</string>
+    <string>UIInterfaceOrientationPortraitUpsideDown</string>
+	</array>
+
 	<!-- React Native Vector Icons configuration -->
 	<key>UIAppFonts</key>
 	<array>
@@ -68,5 +74,6 @@
 		<string>Octicons.ttf</string>
 		<string>Zocial.ttf</string>
 	</array>
+	
 </dict>
 </plist>

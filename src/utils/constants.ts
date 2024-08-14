@@ -75,8 +75,8 @@ export const tracks = [
   {
     id: 1,
     url: 'https://www.bensound.com/bensound-music/bensound-happyrock.mp3',
-    title: 'Happy Rock',
-    artist: 'Benjamin Tissot',
+    title: 'Happy Rock Happy Rock Happy Rock Happy Rock Happy Rock Happy Rock',
+    artist: 'Benjamin Tissot Benjamin Tissot Benjamin Tissot Benjamin TissotBenjamin Tissot issotBenjamin Tissot issotBenjamin Tissot issotBenjamin Tissot issotBenjamin Tissot issotBenjamin Tissot hello',
     album: "Bensound's rock",
     date: '2014-05-20T07:00:00+00:00', // RFC 3339
     artwork: 'https://www.bensound.com/bensound-img/happyrock.jpg', // Load artwork from the network
@@ -96,7 +96,7 @@ export const tracks = [
     id: 3,
     url: 'https://www.bensound.com/bensound-music/bensound-actionable.mp3',
     title: 'Actionable',
-    artist: 'Benjamin Tissot',
+    artist: 'Benjamin Tissot Benjamin Tissot Benjamin Tissot Benjamin Tissot Benjamin Tissot',
     album: "Bensound's rock",
     date: '2014-05-20T07:00:00+00:00', // RFC 3339
     artwork: 'https://www.bensound.com/bensound-img/actionable.jpg',

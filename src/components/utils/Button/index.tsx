@@ -48,7 +48,7 @@ const CustomButton = ({
           disabled={disabled}
           style={customButtonStyle ? customButtonStyle : styles.button}>
           <View
-            style={{flexDirection: 'row', gap: gap, justifyContent: 'center'}}>
+            style={{flexDirection: 'row', gap: gap, justifyContent: 'center', alignItems:'center'}}>
             <View>{icon}</View>
             <Text
               style={

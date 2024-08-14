@@ -30,6 +30,7 @@ import {
   Ionicons,
   MaterialIcon,
   MaterialIcons,
+  truncateText,
 } from '../utils/common';
 import {Colors} from '../theme';
 import TrackPlayer, {
@@ -100,80 +101,10 @@ const TrackScreen = ({route, navigation}: Props) => {
 
   const [currentTrackId, setCurrentTrackId] = useState<number | null>(null);
 
-  // const [isModalVisible, setModalVisible] = useState(false);
-  // const [isAlreadyDownload, setAlreadyDownload] = useState(false);
-  // const [isDownloading, setDownloading] = useState(false);
+
   const [icon, setIcon] = useState();
-  // const [downloadProgress, setDownloadProgress] = useState(0);
-  // const [downloadingTrackIds, setDownloadingTrackIds] = useState<any>([]);
-  // const [loading, setLoading] = useState(false);
 
-  // useLayoutEffect(() => {
-  //   fetchDownloadedDataFromLocalDir(item => {
-  //     if (item?.length > 0) {
-  //       const track = item.find(
-  //         (obj: any) => obj?.contentId === currentTrack.id,
-  //       );
-  //       setAlreadyDownload(!!track);
-  //     } else {
-  //       setAlreadyDownload(false);
-  //     }
-  //   });
-
-  //   const find = downloadingTrackIds.find(
-  //     (element: any) => element === currentTrack.id,
-  //   );
-
-  //   console.log('find', find);
-  //   if (find !== undefined) {
-  //     setLoading(true);
-  //   } else {
-  //     setLoading(false);
-  //   }
-  //   // Reset the downloading state if the current track changes
-  //   if (!find) {
-  //     setDownloading(false);
-  //   }
-  // }, [currentTrack, downloadingTrackIds]);
-
-  // const onDownloadPress = () => {
-  //   const find = downloadingTrackIds.find(
-  //     (element: any) => element === currentTrack.id,
-  //   );
-  //   if (!find) {
-  //     setModalVisible(true);
-  //     setDownloading(true);
-  //     setDownloadingTrackIds((prevIds: any) => [...prevIds, currentTrack.id]);
-
-  //     sendDownloadedDataToLocalDir(
-  //       err => {
-  //         if (err) {
-  //           setDownloading(false);
-  //           setDownloadingTrackIds((prevIds: any) =>
-  //             prevIds.filter((id: any) => id !== currentTrack.id),
-  //           );
-  //         }
-  //       },
-  //       currentTrack.id,
-  //       currentTrack.url,
-  //       currentTrack.artist,
-  //       currentTrack.title,
-  //       currentTrack.artwork,
-  //       true,
-  //     );
-  //   } else {
-  //     setModalVisible(true); // Show the modal with current progress if already downloading
-  //   }
-  // };
-  // const onAlreadyDownloadPress = () => {
-  //   showToast(
-  //     'success',
-  //     'Already downloaded',
-  //     'This content is already downloaded 👋',
-  //   );
-  // };
-
-  // console.log('downloading content', isDownloading);
+ 
 
   useEffect(() => {
     MaterialIcon.getImageSource('circle', 20, Colors[theme].primary).then(
@@ -182,21 +113,6 @@ const TrackScreen = ({route, navigation}: Props) => {
       },
     );
   }, []);
-
-  // useEffect(() => {
-  //   const listener = DeviceEventEmitter.addListener(
-  //     'downloadProgress',
-  //     data => {
-  //       if (data.contentId === currentTrack?.id) {
-  //         setDownloadProgress(parseInt(data.progressValue));
-  //       }
-  //     },
-  //   );
-
-  //   return () => {
-  //     listener.remove();
-  //   };
-  // }, [currentTrack]);
 
   const styles = styling(theme);
   const {top} = insets;
@@ -279,46 +195,50 @@ const TrackScreen = ({route, navigation}: Props) => {
           </View>
           <View
             style={{
-              justifyContent: 'center',
-              alignItems: 'center',
               flex: 2,
               width: width,
-              paddingTop: 15,
             }}>
             {!currentTrack ? (
-              <CustomButton
+             <View style={{justifyContent: 'center', alignItems:'center', height: '100%'}}>
+               <CustomButton
                 title={t('UTILS.CHOOSEALBLUM')}
-                customButtonStyle={[styles.chooseFromBtn, {width: width * 0.6}]}
+                customButtonStyle={[styles.chooseFromBtn, {width: width * 0.7}]}
                 customButtonTextStyle={[
                   styles.chooseFrom,
-                  {fontSize: height * 0.02},
+                  {fontSize: height * 0.018},
                 ]}
                 gap={10}
                 onPress={() => navigation.navigate('AudioCategories')}
                 icon={
                   <FontAwesome
                     name="music"
-                    size={height * 0.03}
+                    size={height * 0.02}
                     color={Colors[theme].primary}
                   />
                 }
               />
+              </View>
             ) : (
               <>
+               <View style={{flex: 2.5 , justifyContent: 'flex-end' , paddingHorizontal: 5}}>
                 <Text
                   style={[
                     styles.titleText,
-                    {fontSize: height * 0.03, flex: 2.5},
+                    {fontSize: height * 0.03},
                   ]}>
-                  {currentTrack?.title}
+                     {truncateText(currentTrack?.title, 50)}
+                 
                 </Text>
-                <Text
+                </View>
+               <View style={{flex: 3.5, justifyContent: 'center', paddingHorizontal: 5}}>
+               <Text
                   style={[
                     styles.artistText,
-                    {fontSize: height * 0.025, flex: 3.5},
+                    {fontSize: height * 0.025, },
                   ]}>
-                  {currentTrack?.artist}
+                     {truncateText(currentTrack?.artist, 90)}
                 </Text>
+               </View>
               </>
             )}
           </View>
@@ -636,6 +556,7 @@ const styling = (theme: Theme) =>
     },
     chooseFrom: {
       color: Colors[theme].primary_light,
+      
       // fontSize: 14,
     },
     chooseFromBtn: {
