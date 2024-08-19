@@ -30,21 +30,24 @@ const Header = ({title}: HeaderProps) => {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        marginBottom: 30,
+        marginBottom: 10,
+        height: height * 0.047,
+
       }}>
       <CustomButton
         onPress={() => navigation.goBack()}
         icon={
           <AntDesign
             name={'arrowleft'}
-            size={height * 0.03}
+            size={height * 0.04}
             color={Colors[theme].primary}
           />
         }
+        gap={5}
         customButtonStyle={styles.btn}
       />
 
-      <Text style={[styles.headerText]}>{t(title)}</Text>
+      <Text style={[styles.headerText, {fontSize: height * 0.025}]}>{t(title)}</Text>
     </View>
   );
 };
@@ -55,12 +58,11 @@ const styling = (theme: Theme) =>
   StyleSheet.create({
     btn: {
       backgroundColor: Colors[theme].secondary,
-      left: 20,
+      left: 16,
       position: 'absolute',
     },
     headerText: {
       fontWeight: 'bold',
-      fontSize: 25,
       color: Colors[theme].text,
-    },
+    }
   });

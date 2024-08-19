@@ -151,9 +151,10 @@ const styling = (theme: Theme) =>
       backgroundColor: Colors[theme].secondary_light,
       borderRadius: 10,
       width: '45%',
+      shadowColor: Colors[theme].text,
       ...Platform.select({
         ios: {
-          shadowColor: Colors[theme].text,
+         
           shadowOffset: {
             width: 0,
             height: 5,
@@ -162,7 +163,7 @@ const styling = (theme: Theme) =>
           shadowRadius: 4,
         },
         android: {
-          elevation: 10,
+          elevation: 3,
         },
       }),
       padding: 5,

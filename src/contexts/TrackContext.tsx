@@ -22,9 +22,9 @@ import {
   fetchDownloadedDataFromLocalDir,
   sendDownloadedDataToLocalDir,
 } from '../api_services/downloadService';
-import {showToast} from '../screens/TrackScreen';
 import {Alert, DeviceEventEmitter, Platform} from 'react-native';
 import RNFetchBlob from 'rn-fetch-blob';
+import { createChannel, displayNotification } from '../api_services/notificationService';
 
 export interface TrackProps {
   id: number;
@@ -286,12 +286,12 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     }
   };
 
-  const onAlreadyDownloadPress = () => {
-    showToast(
-      'success',
-      'Already downloaded',
-      'This content is already downloaded',
-    );
+  const onAlreadyDownloadPress = async() => {
+    const channelId = await createChannel({channelId:'alreadyDownloaded', channelName:
+      'Already Downloaded'
+    });
+
+    await displayNotification({channelId:channelId,title:"Already Downloaded !", body:"This content is already downloaded."})
   };
 
   const handlePlay = useCallback(
@@ -341,10 +341,20 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
       },
     );
 
+    const downloaedListener = DeviceEventEmitter.addListener(
+      'downloadDone',
+      data => {
+        if (data.contentId === currentTrack?.id) {
+          setDownloadProgress(100);
+        }
+      },
+    )
+    console.log("listener", listener)
+
     return () => {
       listener.remove();
-
-      // setDownloadProgress(0);
+      downloaedListener.remove();
+      // setDownloadProgress(100)
     };
   }, [currentTrack, isDownloading, downloadProgress]);
 

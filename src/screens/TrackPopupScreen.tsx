@@ -6,25 +6,21 @@ import React, {
   useState,
 } from 'react';
 import {
-  Animated,
-  DeviceEventEmitter,
   Image,
   Platform,
   SafeAreaView,
-  ScrollView,
   StatusBar,
   StyleSheet,
   Text,
-  TouchableOpacity,
   useWindowDimensions,
   View,
 } from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Slider from '@react-native-community/slider';
-import {BottomSheetMethods} from '../components/commons/BottomSheet';
+import { BottomSheetMethods } from '../components/commons/BottomSheet';
 import RenderItem from '../components/commons/RenderItem';
 import BottomSheet from '../components/commons/BottomSheet';
-import {CustomButton} from '../components/utils';
+import { CustomButton } from '../components/utils';
 import {
   AntDesign,
   Entypo,
@@ -34,27 +30,20 @@ import {
   MaterialIcons,
   truncateText,
 } from '../utils/common';
-import {Colors} from '../theme';
+import { Colors } from '../theme';
 import TrackPlayer, {
-  Capability,
   State,
   Track,
   usePlaybackState,
   useProgress,
 } from 'react-native-track-player';
-import {RouteProp} from '@react-navigation/native';
-import {MainStackParamList} from '../navigations/StackNavigation';
-import {NavigationMainBottomTabScreenProps} from '../navigations/BottomNavigation';
-import {useTrackContext} from '../contexts/TrackContext';
-import {Theme, useThemeContext} from '../contexts/ThemeContext';
-import {useTranslation} from 'react-i18next';
+import { RouteProp } from '@react-navigation/native';
+import { MainStackParamList } from '../navigations/StackNavigation';
+import { NavigationMainBottomTabScreenProps } from '../navigations/BottomNavigation';
+import { useTrackContext } from '../contexts/TrackContext';
+import { Theme, useThemeContext } from '../contexts/ThemeContext';
+import { useTranslation } from 'react-i18next';
 import LoadingSpinner from '../components/utils/LoadingSpinner';
-import Toast from 'react-native-toast-message';
-import DownloadModal from '../components/commons/DownloadModal';
-import {
-  fetchDownloadedDataFromLocalDir,
-  sendDownloadedDataToLocalDir,
-} from '../api_services/downloadService';
 import * as Progress from 'react-native-progress'; // Import Progress
 import FolderListsBottomSheet, {
   FolderListsBottomSheetMethods,
@@ -65,13 +54,13 @@ type Props = {
   navigation: NavigationMainBottomTabScreenProps['navigation'];
 };
 
-const TrackPopupScreen = ({route, navigation}: Props) => {
+const TrackPopupScreen = ({ route, navigation }: Props) => {
   const insets = useSafeAreaInsets();
-  const {t} = useTranslation();
-  const {theme} = useThemeContext();
+  const { t } = useTranslation();
+  const { theme } = useThemeContext();
   const [currentQueue, setCurrentQueue] = useState<Track[]>([]);
-  const {getCurrentQueue} = useTrackContext();
-  const {width, height} = useWindowDimensions();
+  const { getCurrentQueue } = useTrackContext();
+  const { width, height } = useWindowDimensions();
   const progress = useProgress();
   const playbackState = usePlaybackState();
   const {
@@ -102,9 +91,12 @@ const TrackPopupScreen = ({route, navigation}: Props) => {
 
   const [currentTrackId, setCurrentTrackId] = useState<number | null>(null);
 
-  
+
   const [icon, setIcon] = useState();
-  
+
+  const [alreadyDownloadDisable, setAlreadyDownloadDisable] = useState<boolean>(false);
+
+
 
   useEffect(() => {
     MaterialIcon.getImageSource('circle', 20, Colors[theme].primary).then(
@@ -117,7 +109,7 @@ const TrackPopupScreen = ({route, navigation}: Props) => {
 
 
   const styles = styling(theme);
-  const {top} = insets;
+  const { top } = insets;
 
   const bottomSheetRef = useRef<BottomSheetMethods>(null);
   const folderListsbottomSheetRef = useRef<FolderListsBottomSheetMethods>(null);
@@ -170,6 +162,19 @@ const TrackPopupScreen = ({route, navigation}: Props) => {
     }
   };
 
+  const handleAlreadyDownloaded = async () => {
+    try {
+      setAlreadyDownloadDisable(true);
+      onAlreadyDownloadPress()
+      setTimeout(() => {
+        setAlreadyDownloadDisable(false);
+      }, 10000);
+    } catch (error) {
+      console.error('Error displaying notification:', error);
+      setAlreadyDownloadDisable(false);
+    }
+  }
+
   const customMarginTop = top + 10;
 
   return (
@@ -179,30 +184,30 @@ const TrackPopupScreen = ({route, navigation}: Props) => {
         backgroundColor="transparent"
         barStyle={theme === 'dark' ? 'light-content' : 'dark-content'}
       />
-      <SafeAreaView style={[styles.safeAreaView, {marginTop: customMarginTop}]}>
+      <SafeAreaView style={[styles.safeAreaView, { marginTop: customMarginTop }]}>
         <CustomButton
           onPress={() => navigation.goBack()}
           icon={
             <AntDesign
               name={'arrowleft'}
-              size={height * 0.03}
+              size={height * 0.04}
               color={Colors[theme].primary}
             />
           }
           customButtonStyle={styles.btn}
         />
       </SafeAreaView>
-      <View style={{flex: 4}}>
+      <View style={{ flex: 4 }}>
         <View style={styles.imgContainer}>
           <View
             style={[
               styles.imageShadow,
-              {flex: 4, width: width, height: '100%'},
+              { flex: 4, width: width, height: '100%' },
             ]}>
             <Image
               source={
                 currentTrack
-                  ? {uri: currentTrack?.artwork}
+                  ? { uri: currentTrack?.artwork }
                   : require('../assets/marguerite.jpg')
               }
               resizeMode="cover"
@@ -215,46 +220,46 @@ const TrackPopupScreen = ({route, navigation}: Props) => {
               width: width,
             }}>
             {!currentTrack ? (
-               <View style={{justifyContent: 'center', alignItems:'center', height: '100%'}}>
-               <CustomButton
-                title={t('UTILS.CHOOSEALBLUM')}
-                customButtonStyle={[styles.chooseFromBtn, {width: width * 0.7}]}
-                customButtonTextStyle={[
-                  styles.chooseFrom,
-                  {fontSize: height * 0.018},
-                ]}
-                gap={10}
-                onPress={() => navigation.navigate('AudioCategories')}
-                icon={
-                  <FontAwesome
-                    name="music"
-                    size={height * 0.02}
-                    color={Colors[theme].primary}
-                  />
-                }
-              />
+              <View style={{ justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                <CustomButton
+                  title={t('UTILS.CHOOSEALBLUM')}
+                  customButtonStyle={[styles.chooseFromBtn, { width: width * 0.7 }]}
+                  customButtonTextStyle={[
+                    styles.chooseFrom,
+                    { fontSize: height * 0.018 },
+                  ]}
+                  gap={10}
+                  onPress={() => navigation.navigate('AudioCategories')}
+                  icon={
+                    <FontAwesome
+                      name="music"
+                      size={height * 0.02}
+                      color={Colors[theme].primary}
+                    />
+                  }
+                />
               </View>
             ) : (
               <>
-                <View style={{flex: 2.5 , justifyContent: 'flex-end' , paddingHorizontal: 5}}>
-                <Text
-                  style={[
-                    styles.titleText,
-                    {fontSize: height * 0.03},
-                  ]}>
-                     {truncateText(currentTrack?.title, 50)}
-                 
-                </Text>
+                <View style={{ flex: 2.5, justifyContent: 'flex-end', paddingHorizontal: 5 }}>
+                  <Text
+                    style={[
+                      styles.titleText,
+                      { fontSize: height * 0.03 },
+                    ]}>
+                    {truncateText(currentTrack?.title, 50)}
+
+                  </Text>
                 </View>
-               <View style={{flex: 3.5, justifyContent: 'center', paddingHorizontal: 5}}>
-               <Text
-                  style={[
-                    styles.artistText,
-                    {fontSize: height * 0.025, },
-                  ]}>
-                     {truncateText(currentTrack?.artist, 90)}
-                </Text>
-               </View>
+                <View style={{ flex: 3.5, justifyContent: 'center', paddingHorizontal: 5 }}>
+                  <Text
+                    style={[
+                      styles.artistText,
+                      { fontSize: height * 0.025, },
+                    ]}>
+                    {truncateText(currentTrack?.artist, 90)}
+                  </Text>
+                </View>
               </>
             )}
           </View>
@@ -290,10 +295,10 @@ const TrackPopupScreen = ({route, navigation}: Props) => {
             maximumTrackTintColor={Colors[theme].text}
           />
           <View style={styles.trackDuration}>
-            <Text style={[styles.durationText, {fontSize: height * 0.02}]}>
+            <Text style={[styles.durationText, { fontSize: height * 0.02 }]}>
               {new Date(progress.position * 1000).toISOString().substr(14, 5)}
             </Text>
-            <Text style={[styles.durationText, {fontSize: height * 0.02}]}>
+            <Text style={[styles.durationText, { fontSize: height * 0.02 }]}>
               {getTrackDuration(progress)}
             </Text>
           </View>
@@ -306,7 +311,8 @@ const TrackPopupScreen = ({route, navigation}: Props) => {
             {isAlreadyDownload ? (
               <CustomButton
                 customButtonStyle={styles.btn}
-                onPress={onAlreadyDownloadPress}
+                disabled={alreadyDownloadDisable}
+                onPress={handleAlreadyDownloaded}
                 icon={
                   <Ionicons
                     name={`cloud-done-sharp`}
@@ -323,7 +329,7 @@ const TrackPopupScreen = ({route, navigation}: Props) => {
                   borderWidth={2}
                 />
                 <Text
-                  style={{color: Colors[theme].primary, paddingVertical: 5}}>
+                  style={{ color: Colors[theme].primary, paddingVertical: 5 }}>
                   {downloadProgress < 100
                     ? `${t('UTILS.DOWNLOADING')}`
                     : `${t('UTILS.DOWNLOADED')}`}
@@ -344,12 +350,12 @@ const TrackPopupScreen = ({route, navigation}: Props) => {
             )}
           </View>
         ) : (
-          <View style={{height: height * 0.04}}></View>
+          <View style={{ height: height * 0.04 }}></View>
         )}
         <View
           style={[
             styles.buttonContainer,
-            {height: height * 0.08, width: width * 0.9, gap: height * 0.03},
+            { height: height * 0.08, width: width * 0.9, gap: height * 0.03 },
           ]}>
           <CustomButton
             customButtonStyle={styles.btn}
@@ -381,14 +387,14 @@ const TrackPopupScreen = ({route, navigation}: Props) => {
                 <MaterialIcons
                   name={`pause-circle`}
                   size={height * 0.08}
-                  style={{elevation: 2}}
+                  style={{ elevation: 2 }}
                   color={Colors[theme].primary}
                 />
               ) : playbackState.state === State.Paused ? (
                 <MaterialIcons
                   name={`play-circle`}
                   size={height * 0.08}
-                  style={{elevation: 2}}
+                  style={{ elevation: 2 }}
                   color={Colors[theme].primary}
                 />
               ) : playbackState.state === State.Ready ||
@@ -406,7 +412,7 @@ const TrackPopupScreen = ({route, navigation}: Props) => {
                 <Entypo
                   name={`controller-stop`}
                   size={height * 0.08}
-                  style={{elevation: 2}}
+                  style={{ elevation: 2 }}
                   color={Colors[theme].primary}
                 />
               )
@@ -426,7 +432,7 @@ const TrackPopupScreen = ({route, navigation}: Props) => {
           <CustomButton
             customButtonStyle={[
               styles.btn,
-              currentQueue.length === 0 && {opacity: 0.5},
+              currentQueue.length === 0 && { opacity: 0.5 },
             ]}
             onPress={expandHandler}
             disabled={currentQueue.length === 0}
@@ -457,13 +463,12 @@ const TrackPopupScreen = ({route, navigation}: Props) => {
           }
         }}
       /> */}
-      <Toast />
       <BottomSheet
         snapTo="70"
         ref={bottomSheetRef}
         backGroundColor={Colors[theme].secondary}>
         <View
-          style={{paddingBottom: height > 800 ? height * 0.1 : height * 0.17}}>
+          style={{ paddingBottom: height > 800 ? height * 0.1 : height * 0.17 }}>
           <RenderItem
             currentQueue={currentQueue}
             currentActiveTrack={currentActiveTrack}
@@ -496,18 +501,18 @@ const styling = (theme: Theme) =>
     },
     imageShadow: {
       borderRadius: 20,
-      shadowColor: Colors[theme].primary_dark,
+      shadowColor: Colors[theme].text,
       ...Platform.select({
         ios: {
           shadowOffset: {
             width: 0,
-            height: 2,
+            height: 4,
           },
-          shadowOpacity: 0.3,
-          shadowRadius: 5,
+          shadowOpacity: 0.35,
+          shadowRadius: 4,
         },
         android: {
-          elevation: 7,
+          elevation: 4,
         },
       }),
     },
@@ -578,6 +583,20 @@ const styling = (theme: Theme) =>
       borderRadius: 10,
       paddingHorizontal: 20,
       paddingVertical: 10,
+      shadowColor: Colors[theme].text,
+      ...Platform.select({
+        ios: {
+          shadowOffset: {
+            width: 0,
+            height: 2,
+          },
+          shadowOpacity: 0.3,
+          shadowRadius: 3,
+        },
+        android: {
+          elevation: 4,
+        },
+      }),
     },
     suffelIcon: {
       width: 30,
@@ -599,15 +618,3 @@ const styling = (theme: Theme) =>
     },
   });
 
-export const showToast = (type: any, text1: string, text2: string) => {
-  Toast.show({
-    type: type,
-    text1: text1,
-    text2: text2,
-
-    position: 'top',
-    topOffset: 50,
-    visibilityTime: 4000,
-    autoHide: true,
-  });
-};

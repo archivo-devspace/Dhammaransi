@@ -6,15 +6,11 @@ import React, {
   useState,
 } from 'react';
 import {
-  Animated,
-  DeviceEventEmitter,
   Image,
   Platform,
-  ScrollView,
   StatusBar,
   StyleSheet,
   Text,
-  TouchableOpacity,
   useWindowDimensions,
   View,
 } from 'react-native';
@@ -34,7 +30,6 @@ import {
 } from '../utils/common';
 import {Colors} from '../theme';
 import TrackPlayer, {
-  Capability,
   State,
   Track,
   usePlaybackState,
@@ -47,12 +42,6 @@ import {useTrackContext} from '../contexts/TrackContext';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {useTranslation} from 'react-i18next';
 import LoadingSpinner from '../components/utils/LoadingSpinner';
-import Toast from 'react-native-toast-message';
-import DownloadModal from '../components/commons/DownloadModal';
-import {
-  fetchDownloadedDataFromLocalDir,
-  sendDownloadedDataToLocalDir,
-} from '../api_services/downloadService';
 import * as Progress from 'react-native-progress'; // Import Progress
 import FolderListsBottomSheet, {
   FolderListsBottomSheetMethods,
@@ -104,6 +93,8 @@ const TrackScreen = ({route, navigation}: Props) => {
 
   const [icon, setIcon] = useState();
 
+  const [alreadyDownloadDisable, setAlreadyDownloadDisable] = useState<boolean>(false);
+
  
 
   useEffect(() => {
@@ -138,6 +129,7 @@ const TrackScreen = ({route, navigation}: Props) => {
     getQueue();
   }, [currentQueue]);
 
+
   const getCurrentActiveTrack = useCallback(
     async (id: number) => {
       setCurrentTrackId(id);
@@ -167,6 +159,19 @@ const TrackScreen = ({route, navigation}: Props) => {
         .padStart(2, '0')}`;
     }
   };
+
+  const handleAlreadyDownloaded = async() => {
+    try{
+      setAlreadyDownloadDisable(true);
+        onAlreadyDownloadPress()
+       setTimeout(() => {
+        setAlreadyDownloadDisable(false);
+      }, 10000);
+    }catch(error){
+      console.error('Error displaying notification:', error);
+      setAlreadyDownloadDisable(false);
+    }
+  }
 
   return (
     <View style={[styles.mainContainer]}>
@@ -202,7 +207,7 @@ const TrackScreen = ({route, navigation}: Props) => {
              <View style={{justifyContent: 'center', alignItems:'center', height: '100%'}}>
                <CustomButton
                 title={t('UTILS.CHOOSEALBLUM')}
-                customButtonStyle={[styles.chooseFromBtn, {width: width * 0.7}]}
+                customButtonStyle={[styles.chooseFromBtn, {width: width * 0.7, height: height * 0.065}]}
                 customButtonTextStyle={[
                   styles.chooseFrom,
                   {fontSize: height * 0.018},
@@ -291,7 +296,8 @@ const TrackScreen = ({route, navigation}: Props) => {
             {isAlreadyDownload ? (
               <CustomButton
                 customButtonStyle={styles.btn}
-                onPress={onAlreadyDownloadPress}
+                onPress={handleAlreadyDownloaded}
+                disabled={alreadyDownloadDisable}
                 icon={
                   <Ionicons
                     name={`cloud-done-sharp`}
@@ -442,7 +448,6 @@ const TrackScreen = ({route, navigation}: Props) => {
           }
         }}
       /> */}
-      <Toast />
       <BottomSheet
         snapTo="70"
         ref={bottomSheetRef}
@@ -481,15 +486,15 @@ const styling = (theme: Theme) =>
     },
     imageShadow: {
       borderRadius: 20,
-      shadowColor: Colors[theme].primary_dark,
+      shadowColor: Colors[theme].text,
       ...Platform.select({
         ios: {
           shadowOffset: {
             width: 0,
-            height: 2,
+            height: 4,
           },
-          shadowOpacity: 0.3,
-          shadowRadius: 5,
+          shadowOpacity: 0.35,
+          shadowRadius: 4,
         },
         android: {
           elevation: 7,
@@ -555,15 +560,30 @@ const styling = (theme: Theme) =>
       alignItems: 'center',
     },
     chooseFrom: {
-      color: Colors[theme].primary_light,
+      color: Colors[theme].text,
       
       // fontSize: 14,
     },
     chooseFromBtn: {
-      backgroundColor: Colors[theme].text,
+      backgroundColor: Colors[theme].secondary,
       borderRadius: 10,
+      justifyContent: 'center',
       paddingHorizontal: 20,
       paddingVertical: 10,
+      shadowColor: Colors[theme].text,
+      ...Platform.select({
+        ios: {
+          shadowOffset: {
+            width: 0,
+            height: 2,
+          },
+          shadowOpacity: 0.3,
+          shadowRadius: 3,
+        },
+        android: {
+          elevation: 4,
+        },
+      }),
     },
     suffelIcon: {
       width: 30,
@@ -575,15 +595,4 @@ const styling = (theme: Theme) =>
     },
   });
 
-export const showToast = (type: any, text1: string, text2: string) => {
-  Toast.show({
-    type: type,
-    text1: text1,
-    text2: text2,
 
-    position: 'top',
-    topOffset: 50,
-    visibilityTime: 4000,
-    autoHide: true,
-  });
-};

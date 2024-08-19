@@ -43,9 +43,20 @@ import TrackPlayer, {Capability} from 'react-native-track-player';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import i18next from 'i18next';
 import SplashScreen from 'react-native-splash-screen';
+import notifee from '@notifee/react-native';
+
 
 const App = () => {
   const [storeLanguages, setStoreLanguages] = useState<string | null>('');
+
+  useEffect(() => {
+    const hideSplashScreen = setTimeout(() => {
+      SplashScreen.hide();
+    }, 1500);
+    
+    return () => clearTimeout(hideSplashScreen);
+  }, []);
+
   useEffect(() => {
     const setUpPlayer = async () => {
       await TrackPlayer.setupPlayer();
@@ -65,15 +76,14 @@ const App = () => {
         ],
       });
     };
+    const notifeePermission = async()=>{
+      await notifee.requestPermission();
+    }
+    notifeePermission();
     setUpPlayer();
   }, []);
 
-  useEffect(() => {
-    const hideSplashScreen = setTimeout(() => {
-      SplashScreen.hide();
-    }, 1500);
-    return () => clearTimeout(hideSplashScreen);
-  }, []);
+
 
   return (
     <GestureHandlerRootView>
