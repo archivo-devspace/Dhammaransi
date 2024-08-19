@@ -146,7 +146,7 @@ const FolderListScreen = ({navigation}: Props) => {
         />
       </View>
       <ConfirmModal
-        title={t('UTILS.DELETE_TITLE')}
+        title={t('UTILS.DELETE_FOLDER')}
         confirmText={t('UTILS.YES_DELETE')}
         cancelText={t('UTILS.NO_DELETE')}
         animationType="fade"
@@ -196,6 +196,7 @@ const createStyles = (theme: Theme) =>
     input: {
       height: 50,
       borderColor: Colors[theme].primary,
+      color: Colors[theme].text,
       borderWidth: 1,
       marginBottom: 16,
       paddingHorizontal: 15,

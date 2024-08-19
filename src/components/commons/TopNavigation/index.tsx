@@ -42,7 +42,7 @@ const TopNavigation = (props: any) => {
         translucent
       />
       <View style={styles.container}>
-        <Text style={styles.title}>{title}</Text>
+        <Text style={[styles.title,{fontSize: height * 0.0175}]}>{title}</Text>
       </View>
     </>
   );
@@ -79,10 +79,8 @@ const styling = (
     },
     title: {
       textAlign: 'center',
-      fontWeight: '500',
-      fontVariant: ['small-caps'],
-      paddingTop: 30,
-      fontSize: 18,
+      fontWeight: '700',
+      paddingTop: 16,
       alignSelf: 'center',
       lineHeight: 25,
       opacity: isTransparent ? 0.1 : 0.7,

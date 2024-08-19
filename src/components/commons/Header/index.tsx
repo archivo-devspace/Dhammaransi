@@ -21,7 +21,7 @@ const Header = ({title}: HeaderProps) => {
   const navigation = useNavigation();
   const {top} = insets;
   const styles = styling(theme);
-  const customMarginTop = top + 10;
+  const customMarginTop = top ;
 
   return (
     <View
