@@ -291,7 +291,7 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
       'Already Downloaded'
     });
 
-    await displayNotification({channelId:channelId,title:"Already Downloaded !", body:"This content is already downloaded."})
+    await displayNotification({channelId:channelId,title:"Already Downloaded !", body:"This content is already downloaded.",})
   };
 
   const handlePlay = useCallback(

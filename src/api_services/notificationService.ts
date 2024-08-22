@@ -19,10 +19,16 @@ export const displayNotification = async({title,body,channelId}:Notification) =>
     android: {
       channelId: channelId,
       smallIcon: 'ic_notification', 
+      sound: 'downloadedalert',
+      timestamp: Date.now(),
       pressAction: {
         id: 'default',
       },
     },
+    ios: {
+      sound: 'downloadedalert.wav',
+      
+    }
   });
 }
 
@@ -32,6 +38,7 @@ export const createChannel = async({channelId,channelName}:CreateChannel) =>  {
     id: channelId,
     name: channelName,
     importance: AndroidImportance.HIGH,
+    sound: 'downloadedalert'
   });
-  return channelId;
+  return createdChannel;
 }
