@@ -50,7 +50,7 @@ const HomeScreen = ({navigation}: Props) => {
         backgroundColor={'transparent'}
       />
      
-        <TopNavigation title={t('TITLES.HOME')} scrollA={scrollA} />
+        <TopNavigation title={t('TITLES.HOME')} scrollA={scrollA}/>
       
       <Animated.ScrollView
         onScroll={Animated.event(

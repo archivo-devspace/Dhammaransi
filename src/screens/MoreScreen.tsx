@@ -5,6 +5,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  useWindowDimensions,
   View,
 } from 'react-native';
 import React from 'react';
@@ -24,6 +25,7 @@ type Props = {
 const MoreScreen = ({navigation}: Props) => {
   const insets = useSafeAreaInsets();
   const {theme} = useThemeContext();
+  const {height} = useWindowDimensions();
   const {t} = useTranslation();
   const styles = styling(theme);
   const {top} = insets;
@@ -65,7 +67,7 @@ const MoreScreen = ({navigation}: Props) => {
       <StatusBar translucent backgroundColor="transparent" />
       {/* <SafeAreaView /> */}
       <View style={{marginTop: top}}>
-        <Text style={styles.headerText}>{t('TITLES.MORE')}</Text>
+        <Text style={[styles.headerText, {fontSize: height * 0.025}]}>{t('TITLES.MORE')}</Text>
       </View>
       <ScrollView style={styles.optionContainer}>
         {menuOptions.map(menu => (
@@ -118,7 +120,6 @@ const styling = (theme: Theme) =>
     headerText: {
       textAlign: 'center',
       fontWeight: 'bold',
-      fontSize: 25,
       color: Colors[theme].text,
     },
     optionContainer: {

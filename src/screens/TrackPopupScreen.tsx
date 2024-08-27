@@ -175,7 +175,7 @@ const TrackPopupScreen = ({ route, navigation }: Props) => {
     }
   }
 
-  const customMarginTop = top + 10;
+  const customMarginTop = top ;
 
   return (
     <View style={[styles.mainContainer]}>
