@@ -14,6 +14,7 @@ import {ebooks, youtubeVideos} from '../utils/constants';
 import Container from '../components/commons/Container';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import {truncateText} from '../utils/common';
+import Orientation from 'react-native-orientation-locker';
 
 const MovieListScreen = () => {
   const {theme} = useThemeContext();
@@ -21,12 +22,24 @@ const MovieListScreen = () => {
   const styles = styling(theme);
   const [playing, setPlaying] = useState(false);
 
+  // Unlock orientation for fullscreen and return to portrait on exit
+  const handleFullscreenChange = useCallback((isFullscreen: boolean) => {
+    if (isFullscreen) {
+      Orientation.unlockAllOrientations(); // Allow landscape for fullscreen
+    } else {
+      Orientation.lockToPortrait(); // Lock back to portrait when not fullscreen
+    }
+  }, []);
+
   const onStateChange = useCallback((state: string) => {
     if (state === 'ended') {
       setPlaying(false);
-      Alert.alert('video has finished playing!');
+      Alert.alert('Video has finished playing!');
+      // Lock orientation back to portrait when the video ends
+      Orientation.lockToPortrait();
     }
   }, []);
+
   return (
     <Container title="MENUS.MOVIES">
       <ScrollView
@@ -35,29 +48,20 @@ const MovieListScreen = () => {
         {youtubeVideos?.map(video => (
           <React.Fragment key={video.id}>
             <View
-              style={styles.contentContainer}
-              // onPress={() => console.log('hello')}
-            >
-              {/* <View
-                style={[
-                  styles.img,
-                  {
-                    width: width * 0.9,
-                    height: height * 0.18,
-                  },
-                ]}>
-                <Image
-                  style={{width: '100%', height: '100%', borderRadius: 10}}
-                  source={{uri: video.image}}
-                  resizeMode="cover"
-                />
-              </View> */}
+              style={[
+                styles.contentContainer,
+                {
+                  width: width * 0.9, // Adjust player width
+                  height: height * 0.25, // Adjust player height
+                },
+              ]}>
               <YoutubePlayer
                 height={height * 0.25}
                 width={width * 0.9}
                 play={playing}
                 videoId={video.videoId}
                 onChangeState={onStateChange}
+                onFullScreenChange={handleFullscreenChange} // Handle orientation change when fullscreen
               />
             </View>
             <Text style={styles.text}>{video.title}</Text>
@@ -86,6 +90,10 @@ const styling = (theme: Theme) =>
       gap: 20,
       justifyContent: 'space-between',
       marginBottom: 10,
+      borderRadius: 20, // Set border radius here
+      overflow: 'hidden',
+      borderWidth: 1.5,
+      borderColor: Colors[theme].text,
     },
     text: {
       fontWeight: 'bold',
@@ -93,27 +101,10 @@ const styling = (theme: Theme) =>
       fontSize: 18,
       textAlign: 'center',
     },
-    img: {
-      borderRadius: 100,
-      ...Platform.select({
-        ios: {
-          shadowOffset: {
-            width: 0,
-            height: 2,
-          },
-          shadowOpacity: 0.3,
-          shadowRadius: 5,
-        },
-        android: {
-          elevation: 4,
-        },
-      }),
-    },
     divider: {
       width: '100%',
       height: 1,
       backgroundColor: Colors[theme].secondary_dark,
       marginVertical: 30,
     },
-    btn: {},
   });
