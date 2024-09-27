@@ -80,12 +80,6 @@
 	<string>audio</string>
 	<string>fetch</string>
 	</array>
-	<key>UIAppFonts</key>
-<array>
-  <string>walone-bold.ttf</string>
-  <string>walone-regular.ttf</string>
-   <string>walone-thin.ttf</string>
-</array>
 	<array>
   <string>fb</string>
 </array>
