@@ -80,6 +80,9 @@
 	<string>audio</string>
 	<string>fetch</string>
 	</array>
+	<array>
+  <string>fb</string>
+</array>
 	
 </dict>
 </plist>

@@ -1,4 +1,7 @@
 import {
+  Alert,
+  Image,
+  Linking,
   Platform,
   Pressable,
   SafeAreaView,
@@ -9,26 +12,48 @@ import {
   View,
 } from 'react-native';
 import React from 'react';
-import {StatusBar} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {Colors} from '../theme';
-import {Theme, useThemeContext} from '../contexts/ThemeContext';
-import {FontAwesome} from '../utils/common';
-import {NavigationMainStackScreenProps} from '../navigations/StackNavigation';
-import {CustomButton} from '../components/utils';
-import {useTranslation} from 'react-i18next';
+import { StatusBar } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Colors } from '../theme';
+import { Theme, useThemeContext } from '../contexts/ThemeContext';
+import { Entypo, FontAwesome, FontAwesomePro } from '../utils/common';
+import { NavigationMainStackScreenProps } from '../navigations/StackNavigation';
+import { CustomButton } from '../components/utils';
+import { useTranslation } from 'react-i18next';
+import Fontisto from 'react-native-vector-icons/Fontisto';
 
 type Props = {
   navigation: NavigationMainStackScreenProps['navigation'];
 };
 
-const MoreScreen = ({navigation}: Props) => {
+const MoreScreen = ({ navigation }: Props) => {
   const insets = useSafeAreaInsets();
-  const {theme} = useThemeContext();
-  const {height} = useWindowDimensions();
-  const {t} = useTranslation();
+  const { theme } = useThemeContext();
+  const { height } = useWindowDimensions();
+  const { t } = useTranslation();
   const styles = styling(theme);
-  const {top} = insets;
+  const { top } = insets;
+
+  const openFacebook = async () => {
+    const url = 'https://www.facebook.com/profile.php?id=61563675035436'; // URL scheme for Facebook app
+
+    // Check if the Facebook app is installed
+    const supported = await Linking.canOpenURL(url);
+
+    if (supported) {
+      await Linking.openURL(url);
+    } else {
+      // If the app is not installed, you can open the web version
+      Alert.alert(
+        'Facebook App Not Installed',
+        'Opening Facebook in your browser instead.',
+        [
+          { text: 'Cancel', style: 'cancel' },
+          { text: 'Open', onPress: () => Linking.openURL('https://www.facebook.com/') },
+        ]
+      );
+    }
+  };
 
   const menuOptions = [
     {
@@ -37,18 +62,18 @@ const MoreScreen = ({navigation}: Props) => {
       icon: 'user-circle',
       link: 'Biography',
     },
-    {
-      id: 2,
-      name: 'MENUS.MEDITATION_TIMETABLE',
-      icon: 'calendar-alt',
-      link: 'Timetable',
-    },
-    {
-      id: 3,
-      name: 'MENUS.JOURNEY',
-      icon: 'place-of-worship',
-      link: 'Missionary',
-    },
+    // {
+    //   id: 2,
+    //   name: 'MENUS.MEDITATION_TIMETABLE',
+    //   icon: 'calendar-alt',
+    //   link: 'Timetable',
+    // },
+    // {
+    //   id: 3,
+    //   name: 'MENUS.JOURNEY',
+    //   icon: 'place-of-worship',
+    //   link: 'Missionary',
+    // },
     {
       id: 4,
       name: 'MENUS.CONTACT',
@@ -66,8 +91,8 @@ const MoreScreen = ({navigation}: Props) => {
     <View style={styles.mainContainer}>
       <StatusBar translucent backgroundColor="transparent" />
       {/* <SafeAreaView /> */}
-      <View style={{marginTop: top}}>
-        <Text style={[styles.headerText, {fontSize: height * 0.025}]}>{t('TITLES.MORE')}</Text>
+      <View style={{ marginTop: top }}>
+        <Text style={[styles.headerText, { fontSize: height * 0.025 }]}>{t('TITLES.MORE')}</Text>
       </View>
       <ScrollView style={styles.optionContainer}>
         {menuOptions.map(menu => (
@@ -90,7 +115,7 @@ const MoreScreen = ({navigation}: Props) => {
                     color={Colors[theme].primary}
                   />
 
-                  <Text style={{color: Colors[theme].text, fontSize: 14}}>
+                  <Text style={{ color: Colors[theme].text, fontSize: 14 }}>
                     {t(menu.name)}
                   </Text>
                 </View>
@@ -104,7 +129,29 @@ const MoreScreen = ({navigation}: Props) => {
             {menuOptions.length !== menu.id && <View style={styles.divider} />}
           </React.Fragment>
         ))}
+
       </ScrollView>
+      <View style={styles.powerContainer}>
+
+        <FontAwesomePro
+          name="facebook"
+          size={20}
+          style={styles.icon}
+          color={Colors[theme].primary}
+          onPress={openFacebook}
+        />
+
+        <Text style={styles.power}>POWER BY ARCHIVO</Text>
+        <View style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'flex-start', gap: 10, paddingTop: 5 }}>
+
+          <Text style={styles.power}>archivodevspace@gmail.com</Text>
+        </View>
+        <View style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'flex-start', gap: 10, }}>
+
+          <Text style={styles.power}>+ 959781-448-621</Text>
+        </View>
+
+      </View>
     </View>
   );
 };
@@ -116,6 +163,47 @@ const styling = (theme: Theme) =>
     mainContainer: {
       flex: 1,
       backgroundColor: Colors[theme]?.secondary,
+    },
+    powerContainer: {
+      marginTop: 100,
+      justifyContent: 'center',
+      alignSelf: 'center',
+
+      bottom: 100
+    },
+    img: {
+      width: 50,
+      height: 50,
+      alignSelf: 'center',
+
+    },
+    icon: {
+      ...Platform.select({
+        ios: {
+          alignSelf: 'center',
+          shadowColor: Colors[theme].text,
+          shadowOffset: { width: 0, height: 5 },
+          shadowOpacity: 0.1,
+          shadowRadius: 2,
+        },
+        android: {
+          shadowColor: 'red',
+          alignSelf: 'center',
+          elevation: 10,
+        }
+      })
+
+      // iOS shadow properties
+
+      // Android shadow properties
+
+    },
+    power: {
+      color: Colors[theme].text,
+      fontSize: 12,
+      fontWeight: '600',
+      textAlign: 'center',
+      paddingTop: 10
     },
     headerText: {
       textAlign: 'center',

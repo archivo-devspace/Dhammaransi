@@ -212,7 +212,7 @@ const createStyles = (theme: Theme) =>
     textButton: {
       fontSize: 20,
       fontWeight: '500',
-      color: Colors[theme].text,
+      color: Colors[theme].black,
     },
     trackItem: {
       flexDirection: 'row',
