@@ -1,5 +1,3 @@
-
-
 import React, {useEffect, useState} from 'react';
 import {ThemeProvider} from './src/contexts/ThemeContext';
 import AppNavigation from './src/navigations/AppNavigation';
@@ -8,14 +6,14 @@ import {TrackProvider} from './src/contexts/TrackContext';
 import TrackPlayer, {Capability} from 'react-native-track-player';
 import SplashScreen from 'react-native-splash-screen';
 import notifee from '@notifee/react-native';
+import {QueryClient, QueryClientProvider} from 'react-query';
 
 const NOTIFICATION = [
   Capability.Play,
   Capability.Pause,
   Capability.SkipToNext,
   Capability.SkipToPrevious,
-]
-
+];
 
 const App = () => {
   const [storeLanguages, setStoreLanguages] = useState<string | null>('');
@@ -24,7 +22,7 @@ const App = () => {
     const hideSplashScreen = setTimeout(() => {
       SplashScreen.hide();
     }, 1500);
-    
+
     return () => clearTimeout(hideSplashScreen);
   }, []);
 
@@ -32,28 +30,30 @@ const App = () => {
     const setUpPlayer = async () => {
       await TrackPlayer.setupPlayer();
       await TrackPlayer.updateOptions({
-        capabilities:NOTIFICATION,
+        capabilities: NOTIFICATION,
 
         compactCapabilities: NOTIFICATION,
 
-        notificationCapabilities: NOTIFICATION
+        notificationCapabilities: NOTIFICATION,
       });
     };
-    const notifeePermission = async()=>{
+    const notifeePermission = async () => {
       await notifee.requestPermission();
-    }
+    };
     notifeePermission();
     setUpPlayer();
   }, []);
 
-
+  const queryClient = new QueryClient();
 
   return (
     <GestureHandlerRootView>
       <ThemeProvider>
-        <TrackProvider>
-          <AppNavigation />
-        </TrackProvider>
+        <QueryClientProvider client={queryClient}>
+          <TrackProvider>
+            <AppNavigation />
+          </TrackProvider>
+        </QueryClientProvider>
       </ThemeProvider>
     </GestureHandlerRootView>
   );
