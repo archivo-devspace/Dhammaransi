@@ -1,5 +1,5 @@
 import {useQuery} from 'react-query';
-import {fetchPaintings, fetchSinglePainting} from '../Paginations';
+import {fetchPaintings, fetchSinglePainting} from '../services/PaintingService';
 import {
   ApiRes,
   ApiWithPaginations,

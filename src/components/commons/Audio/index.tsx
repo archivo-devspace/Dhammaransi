@@ -9,14 +9,12 @@ import Item from '../Item';
 import {remToPx} from '../../../utils/common';
 import {Theme, useThemeContext} from '../../../contexts/ThemeContext';
 import {Colors} from '../../../theme';
-import {
-  MovieProps,
-  NavigationMainStackScreenProps,
-} from '../../../navigations/StackNavigation';
+import {NavigationMainStackScreenProps} from '../../../navigations/StackNavigation';
 import {useTranslation} from 'react-i18next';
+import {Album} from '../../../types/apiRes';
 
 type Props = {
-  data: MovieProps[];
+  data?: Album[];
   navigation: NavigationMainStackScreenProps['navigation'];
 };
 
@@ -40,9 +38,14 @@ export const Audios = ({data, navigation}: Props) => {
     },
   });
 
-  const handleClick = (item: MovieProps) => {
+  const handleClick = (item: Album) => {
     navigation.navigate('Audios', {item});
   };
+
+  const audios = data?.map(item => ({
+    ...item,
+    description: item.title,
+  }));
 
   const styles = styling(theme);
 
@@ -53,7 +56,7 @@ export const Audios = ({data, navigation}: Props) => {
       </Text>
       <Animated.FlatList
         onScroll={onScroll}
-        data={data}
+        data={audios}
         keyExtractor={(item: any) => item.id.toString()}
         renderItem={({item, index}) => {
           return (

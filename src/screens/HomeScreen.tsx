@@ -24,6 +24,7 @@ import TopNavigation from '../components/commons/TopNavigation';
 import {useTranslation} from 'react-i18next';
 import {useGetPaintings} from '../api_services/lib/queryhooks/usePainting';
 import LoadingSpinner from '../components/utils/LoadingSpinner';
+import {useGetAlbums} from '../api_services/lib/queryhooks/useAudio';
 
 type Props = {
   navigation: NavigationMainStackScreenProps['navigation'];
@@ -45,12 +46,14 @@ const HomeScreen = ({navigation}: Props) => {
   //api call with react query
   const {
     data: paintings,
-    isError: isPaintingError,
+
     isLoading: isPaintingLoading,
-    isFetched: isPaintingFetched,
   } = useGetPaintings();
 
+  const {data: albums, isLoading: isAlbumsLoading} = useGetAlbums();
+
   console.log('paintings', paintings);
+  console.log('albums', albums);
 
   return (
     <View style={styles.mainContainer}>
@@ -151,7 +154,24 @@ const HomeScreen = ({navigation}: Props) => {
               navigation={navigation}
             />
           )}
-          <Audios data={movies} navigation={navigation} />
+          {isAlbumsLoading ? (
+            <View style={styles.loadingContainer}>
+              <LoadingSpinner
+                durationMs={1500}
+                loaderSize={50}
+                bgColor={Colors[theme].secondary_dark}
+                color={Colors[theme].primary_light}
+                loadingText={t('UTILS.LOADING')}
+                loadingTextColor={Colors[theme].primary}
+                loadingTextSize={4}
+              />
+            </View>
+          ) : (
+            <Audios
+              data={albums?.data?.results?.data}
+              navigation={navigation}
+            />
+          )}
         </View>
       </Animated.ScrollView>
     </View>

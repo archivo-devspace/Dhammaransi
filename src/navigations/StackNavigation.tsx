@@ -4,13 +4,11 @@ import {
   createNativeStackNavigator,
   NativeStackNavigationProp,
 } from '@react-navigation/native-stack';
-import HomeScreen from '../screens/HomeScreen';
 import MovieScreen from '../screens/MovieScreen';
 import Audios from '../screens/AudioListScreen';
 import MovieListScreen from '../screens/MovieListScreen';
 import PaintingsScreen from '../screens/PaintingListScreen';
 import PdfListScreen from '../screens/PdfListScreen';
-import TrackScreen from '../screens/TrackScreen';
 import MoreScreen from '../screens/MoreScreen';
 import BiographyScreen from '../screens/BiographyScreen';
 import ContactScreen from '../screens/ContactScreen';
@@ -23,10 +21,9 @@ import TrackPopupScreen from '../screens/TrackPopupScreen';
 // import OfflineDownloadGrid from '../screens/DownloadedAudioListScreen';
 import AudioCategoryListScreen from '../screens/AudioCategoryListScreen';
 import PaintingScreen from '../screens/PaintingScreen';
-import FolderListScreen from './../screens/FolderListScreen';
 import FolderDetailScreen from '../screens/FolderDetailScreen';
 import MissionDetailScreen from '../screens/MissionDetailScreen';
-import {PaintingApiRes} from '../types/apiRes';
+import {Album, PaintingApiRes} from '../types/apiRes';
 
 export interface MovieProps {
   id: number;
@@ -42,7 +39,7 @@ export type MainStackParamList = {
     item: PaintingApiRes;
   };
   Audios: {
-    item?: MovieProps | null;
+    item?: Album;
     id: number;
   };
   AudioCategories: undefined;

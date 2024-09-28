@@ -27,6 +27,7 @@ export interface ApiWithPaginations<T> {
   };
 }
 
+//#region Painting
 export interface PaintingApiRes {
   id: number;
   description: string;
@@ -44,3 +45,17 @@ export interface SinglePaintingApiRes {
   created_at: string;
   updated_at: string;
 }
+//#endregion
+
+//#region Audio
+export interface Album {
+  id: number;
+  title: string;
+  status: string;
+  user_id: number;
+  draft: number;
+  trash: number;
+  created_at: string;
+  updated_at: string;
+}
+//#endregion
