@@ -16,6 +16,7 @@ import Animated, {
 import {Colors} from '../../../theme';
 import {Theme, useThemeContext} from '../../../contexts/ThemeContext';
 import {truncateText} from '../../../utils/common';
+import SkeletonView from '../Skeleton';
 
 type Props = {
   item: any;
@@ -27,6 +28,7 @@ type Props = {
   fullWidth: number;
   truncateIndex: number;
   handleClick: (item: any) => void;
+  isLoading?: boolean;
 };
 
 const Item = ({
@@ -39,6 +41,7 @@ const Item = ({
   fullWidth,
   truncateIndex,
   handleClick,
+  isLoading,
 }: Props) => {
   const {theme} = useThemeContext();
   const animatedStyle = useAnimatedStyle(() => {
@@ -80,18 +83,9 @@ const Item = ({
         {width: width, height: height, marginHorizontal: marginHorizontal},
         animatedStyle,
       ]}>
-      <TouchableOpacity onPress={() => handleClick(item)}>
+      {isLoading ? (
         <View style={styles.imageContainer}>
-          <Image
-            source={require('../../../assets/marguerite.jpg')}
-            style={{
-              width: width,
-              height: height * 0.8,
-              borderBottomLeftRadius: 20,
-              borderBottomRightRadius: 20,
-            }}
-            resizeMode="cover"
-          />
+          <SkeletonView width={width} height={height * 0.8} borderRadius={20} />
           <View
             style={{
               height: height * 0.2,
@@ -99,11 +93,36 @@ const Item = ({
               alignItems: 'center',
             }}>
             <Text style={[styles.text, {fontSize: height * 0.07}]}>
-              {truncateText(item?.description, truncateIndex)}
+              Loading ...
             </Text>
           </View>
         </View>
-      </TouchableOpacity>
+      ) : (
+        <TouchableOpacity onPress={() => handleClick(item)}>
+          <View style={styles.imageContainer}>
+            <Image
+              source={require('../../../assets/marguerite.jpg')}
+              style={{
+                width: width,
+                height: height * 0.8,
+                borderBottomLeftRadius: 20,
+                borderBottomRightRadius: 20,
+              }}
+              resizeMode="cover"
+            />
+            <View
+              style={{
+                height: height * 0.2,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Text style={[styles.text, {fontSize: height * 0.07}]}>
+                {truncateText(item?.description, truncateIndex)}
+              </Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+      )}
     </Animated.View>
   );
 };

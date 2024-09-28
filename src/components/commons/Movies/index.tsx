@@ -19,9 +19,10 @@ import {PaintingApiRes} from '../../../types/apiRes';
 type Props = {
   data?: PaintingApiRes[];
   navigation: NavigationMainStackScreenProps['navigation'];
+  isLoading?: boolean;
 };
 
-export const Movies = ({data, navigation}: Props) => {
+export const Movies = ({data, navigation, isLoading}: Props) => {
   const {width, height} = useWindowDimensions();
   const {theme} = useThemeContext();
   const {t} = useTranslation();
@@ -52,42 +53,82 @@ export const Movies = ({data, navigation}: Props) => {
       <Text style={[styles.text, {fontSize: height * 0.02}]}>
         {t('TITLES.TOP_PICTURES')}
       </Text>
-      <Animated.FlatList
-        onScroll={onScroll}
-        data={data}
-        keyExtractor={(item: any) => item.id.toString()}
-        renderItem={({item, index}) => {
-          return (
-            <Item
-              item={item}
-              index={index}
-              height={ITEM_HEIGHT}
-              width={ITEM_WIDTH}
-              marginHorizontal={MARGIN_HORIZONTAL}
-              x={x}
-              fullWidth={ITEM_FULL_WIDTH}
-              truncateIndex={truncateIndex}
-              handleClick={handleClick}
-            />
-          );
-        }}
-        ListHeaderComponent={<View />}
-        ListHeaderComponentStyle={{width: SPACER}}
-        ListFooterComponent={<View />}
-        ListFooterComponentStyle={{width: SPACER}}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        scrollEventThrottle={16}
-        decelerationRate={'fast'}
-        snapToInterval={ITEM_FULL_WIDTH}
-        initialScrollIndex={1}
-        getItemLayout={(data, index) => ({
-          length: ITEM_FULL_WIDTH,
-          offset: ITEM_FULL_WIDTH * index,
-          index,
-        })}
-        style={styles.flatListStyle}
-      />
+      {isLoading ? (
+        <Animated.FlatList
+          onScroll={onScroll}
+          data={[1, 2, 3]}
+          keyExtractor={(item: any) => item.toString()}
+          renderItem={({item, index}) => {
+            return (
+              <Item
+                item={item}
+                index={index}
+                height={ITEM_HEIGHT}
+                width={ITEM_WIDTH}
+                marginHorizontal={MARGIN_HORIZONTAL}
+                x={x}
+                fullWidth={ITEM_FULL_WIDTH}
+                truncateIndex={truncateIndex}
+                handleClick={handleClick}
+                isLoading={isLoading}
+              />
+            );
+          }}
+          ListHeaderComponent={<View />}
+          ListHeaderComponentStyle={{width: SPACER}}
+          ListFooterComponent={<View />}
+          ListFooterComponentStyle={{width: SPACER}}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          scrollEventThrottle={16}
+          decelerationRate={'fast'}
+          snapToInterval={ITEM_FULL_WIDTH}
+          initialScrollIndex={1}
+          getItemLayout={(data, index) => ({
+            length: ITEM_FULL_WIDTH,
+            offset: ITEM_FULL_WIDTH * index,
+            index,
+          })}
+          style={styles.flatListStyle}
+        />
+      ) : (
+        <Animated.FlatList
+          onScroll={onScroll}
+          data={data}
+          keyExtractor={(item: any) => item.id.toString()}
+          renderItem={({item, index}) => {
+            return (
+              <Item
+                item={item}
+                index={index}
+                height={ITEM_HEIGHT}
+                width={ITEM_WIDTH}
+                marginHorizontal={MARGIN_HORIZONTAL}
+                x={x}
+                fullWidth={ITEM_FULL_WIDTH}
+                truncateIndex={truncateIndex}
+                handleClick={handleClick}
+              />
+            );
+          }}
+          ListHeaderComponent={<View />}
+          ListHeaderComponentStyle={{width: SPACER}}
+          ListFooterComponent={<View />}
+          ListFooterComponentStyle={{width: SPACER}}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          scrollEventThrottle={16}
+          decelerationRate={'fast'}
+          snapToInterval={ITEM_FULL_WIDTH}
+          initialScrollIndex={1}
+          getItemLayout={(data, index) => ({
+            length: ITEM_FULL_WIDTH,
+            offset: ITEM_FULL_WIDTH * index,
+            index,
+          })}
+          style={styles.flatListStyle}
+        />
+      )}
     </View>
   );
 };

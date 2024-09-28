@@ -50,6 +50,8 @@ const HomeScreen = ({navigation}: Props) => {
     isLoading: isPaintingLoading,
   } = useGetPaintings();
 
+  console.log('isPaintingLoading', isPaintingLoading);
+
   const {data: albums, isLoading: isAlbumsLoading} = useGetAlbums();
 
   return (
@@ -133,42 +135,18 @@ const HomeScreen = ({navigation}: Props) => {
               </TouchableOpacity>
             ))}
           </View>
-          {isPaintingLoading ? (
-            <View style={styles.loadingContainer}>
-              <LoadingSpinner
-                durationMs={1500}
-                loaderSize={50}
-                bgColor={Colors[theme].secondary_dark}
-                color={Colors[theme].primary_light}
-                loadingText={t('UTILS.LOADING')}
-                loadingTextColor={Colors[theme].primary}
-                loadingTextSize={4}
-              />
-            </View>
-          ) : (
-            <Movies
-              data={paintings?.data.results.data}
-              navigation={navigation}
-            />
-          )}
-          {isAlbumsLoading ? (
-            <View style={styles.loadingContainer}>
-              <LoadingSpinner
-                durationMs={1500}
-                loaderSize={50}
-                bgColor={Colors[theme].secondary_dark}
-                color={Colors[theme].primary_light}
-                loadingText={t('UTILS.LOADING')}
-                loadingTextColor={Colors[theme].primary}
-                loadingTextSize={4}
-              />
-            </View>
-          ) : (
-            <Audios
-              data={albums?.data?.results?.data}
-              navigation={navigation}
-            />
-          )}
+
+          <Movies
+            data={paintings?.data.results.data}
+            navigation={navigation}
+            isLoading={isPaintingLoading}
+          />
+
+          <Audios
+            data={albums?.data?.results?.data}
+            navigation={navigation}
+            isLoading={isAlbumsLoading}
+          />
         </View>
       </Animated.ScrollView>
     </View>
