@@ -59,3 +59,15 @@ export interface Album {
   updated_at: string;
 }
 //#endregion
+
+//#region Books
+export interface BookApiRes {
+  id: number;
+  name: string;
+  author: string;
+  description: string;
+  cover_photo: string;
+  file: string;
+  mime_type: string;
+  size: number;
+}
