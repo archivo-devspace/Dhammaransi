@@ -2,6 +2,7 @@ const commonColor = {
   success: '#00C88C',
   warnning: '#8000C8',
   danger: '#C8001A',
+  black: '#000'
 };
 
 const light = {
@@ -16,7 +17,7 @@ const light = {
 };
 
 const dark = {
-  primary: '#73560a',
+  primary: '#deab0d',
   primary_light: '#deab0d',
   primary_dark: '#5c4405',
   secondary: '#242526',

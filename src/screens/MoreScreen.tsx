@@ -1,4 +1,7 @@
 import {
+  Alert,
+  Image,
+  Linking,
   Platform,
   Pressable,
   SafeAreaView,
@@ -13,7 +16,7 @@ import {StatusBar} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Colors} from '../theme';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
-import {FontAwesome} from '../utils/common';
+import {Entypo, FontAwesome, FontAwesomePro} from '../utils/common';
 import {NavigationMainStackScreenProps} from '../navigations/StackNavigation';
 import {CustomButton} from '../components/utils';
 import {useTranslation} from 'react-i18next';
@@ -30,6 +33,35 @@ const MoreScreen = ({navigation}: Props) => {
   const styles = styling(theme);
   const {top} = insets;
 
+  const openFacebook = async () => {
+    const facebookAppUrl =
+      Platform.select({
+        ios: 'fb://profile/61563675035436', // iOS app deep link
+        android:
+          'fb://facewebmodal/f?href=https://www.facebook.com/61563675035436', // Android deep link
+      }) || 'https://www.facebook.com/profile.php?id=61563675035436'; // Fallback to web URL
+
+    const facebookWebUrl =
+      'https://www.facebook.com/profile.php?id=61563675035436';
+
+    try {
+      // Open the Facebook app or fallback to the web URL
+      await Linking.openURL(facebookAppUrl);
+    } catch (error) {
+      console.log('Error opening Facebook app:', error);
+
+      // Fallback to the web URL if the app is not installed
+      Alert.alert(
+        'Facebook App Not Installed',
+        'Opening Facebook in your browser instead.',
+        [
+          {text: 'Cancel', style: 'cancel'},
+          {text: 'Open', onPress: () => Linking.openURL(facebookWebUrl)},
+        ],
+      );
+    }
+  };
+
   const menuOptions = [
     {
       id: 1,
@@ -37,18 +69,18 @@ const MoreScreen = ({navigation}: Props) => {
       icon: 'user-circle',
       link: 'Biography',
     },
-    {
-      id: 2,
-      name: 'MENUS.MEDITATION_TIMETABLE',
-      icon: 'calendar-alt',
-      link: 'Timetable',
-    },
-    {
-      id: 3,
-      name: 'MENUS.JOURNEY',
-      icon: 'place-of-worship',
-      link: 'Missionary',
-    },
+    // {
+    //   id: 2,
+    //   name: 'MENUS.MEDITATION_TIMETABLE',
+    //   icon: 'calendar-alt',
+    //   link: 'Timetable',
+    // },
+    // {
+    //   id: 3,
+    //   name: 'MENUS.JOURNEY',
+    //   icon: 'place-of-worship',
+    //   link: 'Missionary',
+    // },
     {
       id: 4,
       name: 'MENUS.CONTACT',
@@ -67,7 +99,9 @@ const MoreScreen = ({navigation}: Props) => {
       <StatusBar translucent backgroundColor="transparent" />
       {/* <SafeAreaView /> */}
       <View style={{marginTop: top}}>
-        <Text style={[styles.headerText, {fontSize: height * 0.025}]}>{t('TITLES.MORE')}</Text>
+        <Text style={[styles.headerText, {fontSize: height * 0.025}]}>
+          {t('TITLES.MORE')}
+        </Text>
       </View>
       <ScrollView style={styles.optionContainer}>
         {menuOptions.map(menu => (
@@ -105,6 +139,36 @@ const MoreScreen = ({navigation}: Props) => {
           </React.Fragment>
         ))}
       </ScrollView>
+      <View style={styles.powerContainer}>
+        <FontAwesomePro
+          name="facebook"
+          size={20}
+          style={styles.icon}
+          color={Colors[theme].primary}
+          onPress={openFacebook}
+        />
+
+        <Text style={styles.power}>POWER BY ARCHIVO</Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignSelf: 'center',
+            justifyContent: 'flex-start',
+            gap: 10,
+            paddingTop: 5,
+          }}>
+          <Text style={styles.power}>archivodevspace@gmail.com</Text>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignSelf: 'center',
+            justifyContent: 'flex-start',
+            gap: 10,
+          }}>
+          <Text style={styles.power}>+ 959781-448-621</Text>
+        </View>
+      </View>
     </View>
   );
 };
@@ -116,6 +180,45 @@ const styling = (theme: Theme) =>
     mainContainer: {
       flex: 1,
       backgroundColor: Colors[theme]?.secondary,
+    },
+    powerContainer: {
+      marginTop: 100,
+      justifyContent: 'center',
+      alignSelf: 'center',
+
+      bottom: 100,
+    },
+    img: {
+      width: 50,
+      height: 50,
+      alignSelf: 'center',
+    },
+    icon: {
+      ...Platform.select({
+        ios: {
+          alignSelf: 'center',
+          shadowColor: Colors[theme].text,
+          shadowOffset: {width: 0, height: 5},
+          shadowOpacity: 0.1,
+          shadowRadius: 2,
+        },
+        android: {
+          shadowColor: 'red',
+          alignSelf: 'center',
+          elevation: 10,
+        },
+      }),
+
+      // iOS shadow properties
+
+      // Android shadow properties
+    },
+    power: {
+      color: Colors[theme].text,
+      fontSize: 12,
+      fontWeight: '600',
+      textAlign: 'center',
+      paddingTop: 10,
     },
     headerText: {
       textAlign: 'center',
