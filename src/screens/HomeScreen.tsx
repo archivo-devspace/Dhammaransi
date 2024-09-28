@@ -52,9 +52,6 @@ const HomeScreen = ({navigation}: Props) => {
 
   const {data: albums, isLoading: isAlbumsLoading} = useGetAlbums();
 
-  console.log('paintings', paintings);
-  console.log('albums', albums);
-
   return (
     <View style={styles.mainContainer}>
       <StatusBar

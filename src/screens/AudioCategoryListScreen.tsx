@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import {FlatList, Image, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {AntDesign, truncateText} from '../utils/common';
@@ -7,6 +8,7 @@ import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {trackCategories} from '../utils/constants';
 import {Colors} from '../theme';
 import {NavigationMainStackScreenProps} from '../navigations/StackNavigation';
+import {useGetAlbums} from '../api_services/lib/queryhooks/useAudio';
 
 type Props = {
   navigation: NavigationMainStackScreenProps['navigation'];
@@ -15,6 +17,7 @@ type Props = {
 const AudioCategoryListScreen = ({navigation}: Props) => {
   const {theme} = useThemeContext();
   const styles = styling(theme);
+  const {data: albums, isLoading: isAlbumsLoading} = useGetAlbums();
 
   const handleNavigate = (id: number) => {
     navigation.navigate('Audios', {id});
@@ -22,7 +25,7 @@ const AudioCategoryListScreen = ({navigation}: Props) => {
   return (
     <Container title="TITLES.AUDIOCATEGORIES">
       <FlatList
-        data={trackCategories}
+        data={albums?.data.results.data}
         showsVerticalScrollIndicator={false}
         renderItem={({item}) => (
           <React.Fragment key={item.id}>
@@ -38,16 +41,18 @@ const AudioCategoryListScreen = ({navigation}: Props) => {
                       alignItems: 'center',
                     }}>
                     <Image
-                      source={{uri: item.artwork}}
+                      source={{
+                        uri: 'https://upload.wikimedia.org/wikipedia/commons/4/44/Paticcasamuppada_Burmese.jpg',
+                      }}
                       resizeMode="cover"
                       style={styles.img}
                     />
                     <View style={{width: '70%', gap: 10}}>
                       <Text style={styles.title}>
-                        {truncateText(item.name, 45)}
+                        {truncateText(item.title, 45)}
                       </Text>
                       <Text style={styles.desc}>
-                        {truncateText(item.desc, 30)}
+                        {truncateText(item.status, 30)}
                       </Text>
                     </View>
                   </View>

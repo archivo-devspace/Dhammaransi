@@ -22,7 +22,8 @@ type Props = {
   route: RouteProp<MainStackParamList, 'Audios'>;
 };
 
-const Audios = ({navigation}: Props) => {
+const Audios = ({navigation, route}: Props) => {
+  console.log('route', route?.params?.item);
   const {theme} = useThemeContext();
   const {trackLists, handlePlay, currentTrack, setTrackLists, setRepeatMode} =
     useTrackContext();
