@@ -24,7 +24,10 @@ import {
 } from '../api_services/downloadService';
 import {Alert, DeviceEventEmitter, Platform} from 'react-native';
 import RNFetchBlob from 'rn-fetch-blob';
-import { createChannel, displayNotification } from '../api_services/notificationService';
+import {
+  createChannel,
+  displayNotification,
+} from '../api_services/notificationService';
 
 export interface TrackProps {
   id: number;
@@ -161,14 +164,15 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     }
   };
 
-  console.log('downloadingTrackIds', downloadingTrackIds);
-
   const deleteFolder = async (folderName: string) => {
     const {dirs} = RNFetchBlob.fs;
     const dirToSave = Platform.OS === 'ios' ? dirs.DocumentDir : dirs.CacheDir;
     const folderPath = `${dirToSave}/downloads/${folderName}`;
 
-    const jsonFile = Platform.OS === 'ios' ? `${dirs.DocumentDir}/downloads/${folderName}/.file.json` : `${dirs.CacheDir}/downloads/${folderName}/.file.json`;
+    const jsonFile =
+      Platform.OS === 'ios'
+        ? `${dirs.DocumentDir}/downloads/${folderName}/.file.json`
+        : `${dirs.CacheDir}/downloads/${folderName}/.file.json`;
     // console.log('jsonFile', jsonFile);
 
     // console.log('folderPath', folderPath);
@@ -286,12 +290,17 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     }
   };
 
-  const onAlreadyDownloadPress = async() => {
-    const channelId = await createChannel({channelId:'alreadyDownloaded', channelName:
-      'Already Downloaded'
+  const onAlreadyDownloadPress = async () => {
+    const channelId = await createChannel({
+      channelId: 'alreadyDownloaded',
+      channelName: 'Already Downloaded',
     });
 
-    await displayNotification({channelId:channelId,title:"Already Downloaded !", body:"This content is already downloaded.",})
+    await displayNotification({
+      channelId: channelId,
+      title: 'Already Downloaded !',
+      body: 'This content is already downloaded.',
+    });
   };
 
   const handlePlay = useCallback(
@@ -348,8 +357,8 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
           setDownloadProgress(100);
         }
       },
-    )
-    console.log("listener", listener)
+    );
+    console.log('listener', listener);
 
     return () => {
       listener.remove();
@@ -372,8 +381,6 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
       return 'repeat';
     }
   };
-
-  console.log('repeat mode', repeatMode);
 
   const changeRepeatMode = async () => {
     if (repeatMode === 'shuffle') {

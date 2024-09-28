@@ -26,3 +26,11 @@ export interface ApiWithPaginations<T> {
     };
   };
 }
+
+export interface PaintingApiRes {
+  id: number;
+  description: string;
+  category: string;
+  created_at: string;
+  updated_at: string;
+}

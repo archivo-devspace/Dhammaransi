@@ -1,5 +1,5 @@
-import { Platform, DeviceEventEmitter } from 'react-native';
-import RNFetchBlob, { RNFetchBlobConfig } from 'rn-fetch-blob';
+import {Platform, DeviceEventEmitter} from 'react-native';
+import RNFetchBlob, {RNFetchBlobConfig} from 'rn-fetch-blob';
 
 type Callback = (err: any) => void;
 type ProgressCallback = (progress: number) => void;
@@ -26,7 +26,7 @@ export const sendDownloadedDataToLocalDir = async (
   selectedFolder: string | null,
   onProgress?: ProgressCallback,
 ) => {
-  const { dirs } = RNFetchBlob.fs;
+  const {dirs} = RNFetchBlob.fs;
   const dirToSave = Platform.OS === 'ios' ? dirs.DocumentDir : dirs.CacheDir;
   const path = `${dirToSave}/.file.json`;
   const secondPath = `${dirToSave}/downloads/${selectedFolder}/.file.json`;
@@ -188,12 +188,10 @@ export const fetchDownloadedDataFromLocalDir = async (
   const fetchPath = folderName
     ? `${trackFolder}/downloads/${folderName}/.file.json`
     : `${trackFolder}/.file.json`;
-    
 
   try {
     const exists = await RNFetchBlob.fs.exists(fetchPath);
     if (!exists) {
-      console.log(`File does not exist at path: ${fetchPath}`);
       sendData([]); // Send an empty array if the file doesn't exist
       return;
     }
@@ -203,14 +201,17 @@ export const fetchDownloadedDataFromLocalDir = async (
     if (Array.isArray(localDownloads)) {
       sendData(localDownloads);
     }
-  } catch (e:any) {
+  } catch (e: any) {
     // console.error('Error reading file:', e);
     sendData([]); // Send an empty array in case of an error
   }
 };
 
-export const deleteContentFromLocalDir = async (downloadedId: any, selectedFolder: string) => {
-  const { dirs } = RNFetchBlob.fs;
+export const deleteContentFromLocalDir = async (
+  downloadedId: any,
+  selectedFolder: string,
+) => {
+  const {dirs} = RNFetchBlob.fs;
   const cacheDir = dirs.CacheDir;
   const documentDir = dirs.DocumentDir;
 
@@ -223,7 +224,7 @@ export const deleteContentFromLocalDir = async (downloadedId: any, selectedFolde
     // Ensure that the file exists before attempting to read
     const [localDownloadsExists, secondDownloadsExists] = await Promise.all([
       RNFetchBlob.fs.exists(jsonFilePath),
-      RNFetchBlob.fs.exists(folderJsonFilePath)
+      RNFetchBlob.fs.exists(folderJsonFilePath),
     ]);
 
     if (localDownloadsExists) {
@@ -233,13 +234,10 @@ export const deleteContentFromLocalDir = async (downloadedId: any, selectedFolde
     if (secondDownloadsExists) {
       await updateJsonFile(folderJsonFilePath, downloadedId);
     }
-
   } catch (e) {
     console.error('Failed to delete content', e);
   }
 };
-
-
 
 const updateJsonFile = async (filePath: string, downloadedId: any) => {
   try {
@@ -271,9 +269,10 @@ const updateJsonFile = async (filePath: string, downloadedId: any) => {
 //   }
 // };
 
-
-export const deleteAllDownloadDataFromLocal = async (selectedFolder: string | null) => {
-  const { dirs } = RNFetchBlob.fs;
+export const deleteAllDownloadDataFromLocal = async (
+  selectedFolder: string | null,
+) => {
+  const {dirs} = RNFetchBlob.fs;
   const cacheDir = dirs.CacheDir;
   const documentDir = dirs.DocumentDir;
 
@@ -285,7 +284,11 @@ export const deleteAllDownloadDataFromLocal = async (selectedFolder: string | nu
   try {
     if (selectedFolder) {
       // Clear .file.json in the selected folder
-      await RNFetchBlob.fs.writeFile(folderJsonFilePath, JSON.stringify([]), 'utf8');
+      await RNFetchBlob.fs.writeFile(
+        folderJsonFilePath,
+        JSON.stringify([]),
+        'utf8',
+      );
 
       // Delete all files in the selected folder
       const folderPath = `${baseDir}/downloads/${selectedFolder}`;
@@ -303,23 +306,30 @@ export const deleteAllDownloadDataFromLocal = async (selectedFolder: string | nu
 const deleteAllFilesInFolder = async (folderPath: string) => {
   try {
     const files = await RNFetchBlob.fs.ls(folderPath);
-    await Promise.all(files.map(async (file) => {
-      const filePath = `${folderPath}/${file}`;
-      await RNFetchBlob.fs.unlink(filePath);
-    }));
+    await Promise.all(
+      files.map(async file => {
+        const filePath = `${folderPath}/${file}`;
+        await RNFetchBlob.fs.unlink(filePath);
+      }),
+    );
   } catch (e) {
     console.error('Failed to delete files in folder', e);
   }
 };
 
 // Updates the main JSON file to remove entries related to the selectedFolder
-const updateJsonFileForAllDelete = async (filePath: string, selectedFolder: string | null) => {
+const updateJsonFileForAllDelete = async (
+  filePath: string,
+  selectedFolder: string | null,
+) => {
   try {
     const fileContent = await RNFetchBlob.fs.readFile(filePath, 'utf8');
     let jsonObj = JSON.parse(fileContent);
 
     if (selectedFolder) {
-      jsonObj = jsonObj.filter((item: any) => item.selectedFolder !== selectedFolder);
+      jsonObj = jsonObj.filter(
+        (item: any) => item.selectedFolder !== selectedFolder,
+      );
     }
 
     await RNFetchBlob.fs.writeFile(filePath, JSON.stringify(jsonObj), 'utf8');

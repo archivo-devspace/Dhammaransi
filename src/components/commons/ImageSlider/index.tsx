@@ -1,15 +1,13 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
 import {
   View,
   Image,
   StyleSheet,
-  SafeAreaView,
   ScrollView,
-  Dimensions,
   Text,
   useWindowDimensions,
 } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 import {Theme, useThemeContext} from '../../../contexts/ThemeContext';
 import {Colors} from '../../../theme';
 
@@ -78,7 +76,7 @@ const ImageSlider = ({images}: {images: any}) => {
       </ScrollView>
       <View style={styles.pagination}>
         {images.map((i: any, k: any) => (
-          <Text key={k} style={k == active ? styles.activeDot : styles.dot}>
+          <Text key={k} style={k === active ? styles.activeDot : styles.dot}>
             .
           </Text>
         ))}

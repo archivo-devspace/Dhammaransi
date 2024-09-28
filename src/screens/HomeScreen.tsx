@@ -1,4 +1,5 @@
-import React, {useRef} from 'react';
+/* eslint-disable react-native/no-inline-styles */
+import React, {useEffect, useLayoutEffect, useRef} from 'react';
 import {
   View,
   Text,
@@ -7,7 +8,6 @@ import {
   Animated,
   useWindowDimensions,
   Platform,
-  SafeAreaView,
   StatusBar,
 } from 'react-native';
 
@@ -22,6 +22,8 @@ import Audios from '../components/commons/Audio';
 import TopNavigation from '../components/commons/TopNavigation';
 
 import {useTranslation} from 'react-i18next';
+import {useGetPaintings} from '../api_services/lib/queryhooks/usePaginations';
+import {fetchPaintings} from '../api_services/lib/Paginations';
 
 type Props = {
   navigation: NavigationMainStackScreenProps['navigation'];
@@ -39,8 +41,26 @@ const HomeScreen = ({navigation}: Props) => {
   const BANNER_H = height * 0.4;
 
   const styles = styling(theme);
-  const platformIsIOS = Platform.OS === 'ios';
-  const platformIsAndroid = Platform.OS === 'android';
+
+  //api call with react query
+  const {
+    data: paintings,
+    isError: isPaintingError,
+    isLoading: isPaintingLoading,
+    isFetched: isPaintingFetched,
+  } = useGetPaintings();
+
+  // useLayoutEffect(() => {
+  //   fetchPaintings()
+  //     .then(data => {
+  //       console.log('paintings', data);
+  //     })
+  //     .catch(error => {
+  //       console.error('Error fetching paintings:', error);
+  //     });
+  // }, []);
+
+  console.log('paintings', paintings);
 
   return (
     <View style={styles.mainContainer}>
@@ -49,9 +69,9 @@ const HomeScreen = ({navigation}: Props) => {
         barStyle={'default'}
         backgroundColor={'transparent'}
       />
-     
-        <TopNavigation title={t('TITLES.HOME')} scrollA={scrollA}/>
-      
+
+      <TopNavigation title={t('TITLES.HOME')} scrollA={scrollA} />
+
       <Animated.ScrollView
         onScroll={Animated.event(
           [{nativeEvent: {contentOffset: {y: scrollA}}}],
@@ -124,7 +144,7 @@ const HomeScreen = ({navigation}: Props) => {
             ))}
           </View>
 
-          <Movies data={movies} navigation={navigation} />
+          <Movies data={paintings?.data.results.data} navigation={navigation} />
           <Audios data={movies} navigation={navigation} />
         </View>
       </Animated.ScrollView>
@@ -154,7 +174,6 @@ const styling = (theme: Theme) =>
       shadowColor: Colors[theme].text,
       ...Platform.select({
         ios: {
-         
           shadowOffset: {
             width: 0,
             height: 5,

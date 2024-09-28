@@ -1,13 +1,4 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableWithoutFeedback,
-  Dimensions,
-  Platform,
-  useWindowDimensions,
-  ScrollView,
-} from 'react-native';
+import {View, Text, StyleSheet, useWindowDimensions} from 'react-native';
 import React from 'react';
 
 import Animated, {
@@ -23,9 +14,10 @@ import {
   NavigationMainStackScreenProps,
 } from '../../../navigations/StackNavigation';
 import {useTranslation} from 'react-i18next';
+import {PaintingApiRes} from '../../../types/apiRes';
 
 type Props = {
-  data: MovieProps[];
+  data?: PaintingApiRes[];
   navigation: NavigationMainStackScreenProps['navigation'];
 };
 
@@ -49,8 +41,7 @@ export const Movies = ({data, navigation}: Props) => {
     },
   });
 
-  const handleClick = (item: MovieProps) => {
-    console.log('hello');
+  const handleClick = (item: PaintingApiRes) => {
     navigation.navigate('Movie', {item});
   };
 
@@ -58,7 +49,9 @@ export const Movies = ({data, navigation}: Props) => {
 
   return (
     <View style={[styles.mainContainer, {height: height - height * 0.69}]}>
-      <Text style={[styles.text,{fontSize: height * 0.02}]}>{t('TITLES.TOP_PICTURES')}</Text>
+      <Text style={[styles.text, {fontSize: height * 0.02}]}>
+        {t('TITLES.TOP_PICTURES')}
+      </Text>
       <Animated.FlatList
         onScroll={onScroll}
         data={data}

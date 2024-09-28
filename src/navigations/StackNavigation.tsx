@@ -26,6 +26,7 @@ import PaintingScreen from '../screens/PaintingScreen';
 import FolderListScreen from './../screens/FolderListScreen';
 import FolderDetailScreen from '../screens/FolderDetailScreen';
 import MissionDetailScreen from '../screens/MissionDetailScreen';
+import {PaintingApiRes} from '../types/apiRes';
 
 export interface MovieProps {
   id: number;
@@ -38,7 +39,7 @@ export type MainStackParamList = {
   Home: undefined;
   MovieLists: undefined;
   Movie: {
-    item: MovieProps;
+    item: PaintingApiRes;
   };
   Audios: {
     item?: MovieProps | null;

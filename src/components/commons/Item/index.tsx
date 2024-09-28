@@ -99,7 +99,7 @@ const Item = ({
               alignItems: 'center',
             }}>
             <Text style={[styles.text, {fontSize: height * 0.07}]}>
-              {truncateText(item?.name, truncateIndex)}
+              {truncateText(item?.description, truncateIndex)}
             </Text>
           </View>
         </View>
@@ -118,10 +118,9 @@ const styling = (theme: Theme) =>
       overflow: 'hidden',
       transformOrigin: 'bottom',
       position: 'relative',
-     
     },
     imageContainer: {
-      flex : 1,
+      flex: 1,
       ...Platform.select({
         ios: {
           shadowColor: Colors[theme].text,
@@ -139,6 +138,6 @@ const styling = (theme: Theme) =>
     },
     text: {
       color: Colors[theme].text,
-      textAlign: 'center',   
+      textAlign: 'center',
     },
   });

@@ -1,13 +1,4 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableWithoutFeedback,
-  Dimensions,
-  Platform,
-  useWindowDimensions,
-  ScrollView,
-} from 'react-native';
+import {View, Text, StyleSheet, useWindowDimensions} from 'react-native';
 import React from 'react';
 
 import Animated, {
@@ -57,7 +48,9 @@ export const Audios = ({data, navigation}: Props) => {
 
   return (
     <View style={[styles.mainContainer, {height: height - height * 0.74}]}>
-      <Text style={[styles.text,{fontSize: height * 0.02}]}>{t('TITLES.TOP_AUDIOS')}</Text>
+      <Text style={[styles.text, {fontSize: height * 0.02}]}>
+        {t('TITLES.TOP_AUDIOS')}
+      </Text>
       <Animated.FlatList
         onScroll={onScroll}
         data={data}
