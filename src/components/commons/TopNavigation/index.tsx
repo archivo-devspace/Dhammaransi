@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+/* eslint-disable react-native/no-inline-styles */
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -6,25 +7,23 @@ import {
   useWindowDimensions,
   StyleSheet,
 } from 'react-native';
-import { useSafeArea, useSafeAreaInsets } from 'react-native-safe-area-context';
-import { TOPNAVI_H } from '../../../utils/constants';
-import { Colors } from '../../../theme';
-import { Theme, useThemeContext } from '../../../contexts/ThemeContext';
-import { CustomButton } from '../../utils';
-import { AntDesign } from '../../../utils/common';
-import { useNavigation } from '@react-navigation/native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {TOPNAVI_H} from '../../../utils/constants';
+import {Colors} from '../../../theme';
+import {Theme, useThemeContext} from '../../../contexts/ThemeContext';
+import {CustomButton} from '../../utils';
+import {AntDesign} from '../../../utils/common';
+import {useNavigation} from '@react-navigation/native';
 
 const TopNavigation = (props: any) => {
-  const { top } = useSafeAreaInsets();
+  const {top} = useSafeAreaInsets();
   const navigation = useNavigation();
-  const { height,width } = useWindowDimensions();
-  const { theme , languages} = useThemeContext();
-  const { title, scrollA, backBtn = false } = props;
+  const {height, width} = useWindowDimensions();
+  const {theme, languages} = useThemeContext();
+  const {title, scrollA, backBtn = false} = props;
   const BANNER_H = height * 0.4;
   const isFloating = !!scrollA;
   const [isTransparent, setTransparent] = useState(isFloating);
-
-  console.log("w", width)
 
   useEffect(() => {
     if (!scrollA) {
@@ -48,37 +47,46 @@ const TopNavigation = (props: any) => {
         translucent
       />
       <View style={styles.container}>
-        {
-          isTransparent ? (
-            backBtn && <CustomButton
-              onPress={() => navigation.goBack()}
-              icon={
-                <AntDesign
-                  name={'arrowleft'}
-                  size={height * 0.04}
-                  color={Colors[theme].primary}
-                />
-              }
-              gap={5}
-              customButtonStyle={styles.btn}
-            />
-          ) : (
-            backBtn && <CustomButton
-              onPress={() => navigation.goBack()}
-              icon={
-                <AntDesign
-                  name={'arrowleft'}
-                  size={height * 0.04}
-                  color={Colors[theme].primary}
-                />
-              }
-              gap={5}
-              customButtonStyle={styles.btn}
-            />
-          )
-        }
+        {isTransparent
+          ? backBtn && (
+              <CustomButton
+                onPress={() => navigation.goBack()}
+                icon={
+                  <AntDesign
+                    name={'arrowleft'}
+                    size={height * 0.04}
+                    color={Colors[theme].primary}
+                  />
+                }
+                gap={5}
+                customButtonStyle={styles.btn}
+              />
+            )
+          : backBtn && (
+              <CustomButton
+                onPress={() => navigation.goBack()}
+                icon={
+                  <AntDesign
+                    name={'arrowleft'}
+                    size={height * 0.04}
+                    color={Colors[theme].primary}
+                  />
+                }
+                gap={5}
+                customButtonStyle={styles.btn}
+              />
+            )}
 
-        <Text style={[styles.title, { left: backBtn && languages === 'mm' && width < 400 ? 16 : 0, fontSize: height * 0.02 }]}>{title}</Text>
+        <Text
+          style={[
+            styles.title,
+            {
+              left: backBtn && languages === 'mm' && width < 400 ? 16 : 0,
+              fontSize: height * 0.02,
+            },
+          ]}>
+          {title}
+        </Text>
       </View>
     </>
   );
@@ -93,7 +101,7 @@ const styling = (
   StyleSheet.create({
     container: {
       paddingTop: top - 10,
-      marginBottom: isFloating ? - TOPNAVI_H - top : 0,
+      marginBottom: isFloating ? -TOPNAVI_H - top : 0,
       height: TOPNAVI_H + top,
       justifyContent: 'center',
       borderBottomLeftRadius: 10,
@@ -114,11 +122,10 @@ const styling = (
       zIndex: 100,
     },
     btn: {
-
       left: 4,
       position: 'absolute',
       paddingTop: top - 10,
-      zIndex: 1
+      zIndex: 1,
     },
     title: {
       textAlign: 'center',

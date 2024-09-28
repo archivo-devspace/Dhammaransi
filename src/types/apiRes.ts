@@ -34,3 +34,13 @@ export interface PaintingApiRes {
   created_at: string;
   updated_at: string;
 }
+
+export interface SinglePaintingApiRes {
+  id: number;
+  gallery_id: number;
+  file: string;
+  mime_type: string;
+  size: number;
+  created_at: string;
+  updated_at: string;
+}

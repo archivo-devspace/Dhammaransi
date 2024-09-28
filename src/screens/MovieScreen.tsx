@@ -5,6 +5,7 @@ import {
   NavigationMainStackScreenProps,
 } from '../navigations/StackNavigation';
 import {RouteProp} from '@react-navigation/native';
+import {useGetSinglePainting} from '../api_services/lib/queryhooks/usePainting';
 
 interface MovieScreenProps {
   navigation: NavigationMainStackScreenProps['navigation'];
@@ -14,6 +15,8 @@ interface MovieScreenProps {
 const MovieScreen = ({navigation, route}: MovieScreenProps) => {
   const item = route.params.item;
   console.log('item', item);
+  const {data, isLoading, isError} = useGetSinglePainting(item.id.toString());
+  console.log('single painting', data);
   return (
     <View>
       <Text>MovieScreen</Text>

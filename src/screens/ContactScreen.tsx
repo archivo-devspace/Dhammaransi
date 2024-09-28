@@ -6,7 +6,6 @@ import {useThemeContext} from '../contexts/ThemeContext';
 
 const ContactScreen = () => {
   const {theme} = useThemeContext();
-  console.log('loading...');
   return (
     <View
       style={{

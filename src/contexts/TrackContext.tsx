@@ -118,7 +118,6 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
 
     try {
       const exists = await RNFetchBlob.fs.isDir(path);
-      console.log('exists', exists);
       if (!exists) {
         await RNFetchBlob.fs.mkdir(path);
         await RNFetchBlob.fs.mkdir(defaultFolderPath);
@@ -358,7 +357,6 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
         }
       },
     );
-    console.log('listener', listener);
 
     return () => {
       listener.remove();

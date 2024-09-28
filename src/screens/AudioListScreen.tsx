@@ -1,6 +1,6 @@
-import {StyleSheet, Text, View, StatusBar, Image} from 'react-native';
+/* eslint-disable react-native/no-inline-styles */
+import {StyleSheet, Text, View, Image} from 'react-native';
 import React, {useEffect} from 'react';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {Colors} from '../theme';
 import {AntDesign, truncateText} from '../utils/common';
@@ -12,7 +12,6 @@ import {
 import {useTrackContext} from '../contexts/TrackContext';
 import {FlatList} from 'react-native';
 import {State, usePlaybackState} from 'react-native-track-player';
-import {useTranslation} from 'react-i18next';
 
 import Container from '../components/commons/Container';
 import {tracks} from '../utils/constants';
@@ -23,10 +22,8 @@ type Props = {
   route: RouteProp<MainStackParamList, 'Audios'>;
 };
 
-const Audios = ({navigation, route}: Props) => {
-  console.log('route', route.params);
+const Audios = ({navigation}: Props) => {
   const {theme} = useThemeContext();
-  const {t} = useTranslation();
   const {trackLists, handlePlay, currentTrack, setTrackLists, setRepeatMode} =
     useTrackContext();
   const playbackState = usePlaybackState();

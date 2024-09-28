@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect, useLayoutEffect, useRef} from 'react';
+import React, {useRef} from 'react';
 import {
   View,
   Text,
@@ -22,8 +22,8 @@ import Audios from '../components/commons/Audio';
 import TopNavigation from '../components/commons/TopNavigation';
 
 import {useTranslation} from 'react-i18next';
-import {useGetPaintings} from '../api_services/lib/queryhooks/usePaginations';
-import {fetchPaintings} from '../api_services/lib/Paginations';
+import {useGetPaintings} from '../api_services/lib/queryhooks/usePainting';
+import LoadingSpinner from '../components/utils/LoadingSpinner';
 
 type Props = {
   navigation: NavigationMainStackScreenProps['navigation'];
@@ -49,16 +49,6 @@ const HomeScreen = ({navigation}: Props) => {
     isLoading: isPaintingLoading,
     isFetched: isPaintingFetched,
   } = useGetPaintings();
-
-  // useLayoutEffect(() => {
-  //   fetchPaintings()
-  //     .then(data => {
-  //       console.log('paintings', data);
-  //     })
-  //     .catch(error => {
-  //       console.error('Error fetching paintings:', error);
-  //     });
-  // }, []);
 
   console.log('paintings', paintings);
 
@@ -143,8 +133,24 @@ const HomeScreen = ({navigation}: Props) => {
               </TouchableOpacity>
             ))}
           </View>
-
-          <Movies data={paintings?.data.results.data} navigation={navigation} />
+          {isPaintingLoading ? (
+            <View style={styles.loadingContainer}>
+              <LoadingSpinner
+                durationMs={1500}
+                loaderSize={50}
+                bgColor={Colors[theme].secondary_dark}
+                color={Colors[theme].primary_light}
+                loadingText={t('UTILS.LOADING')}
+                loadingTextColor={Colors[theme].primary}
+                loadingTextSize={4}
+              />
+            </View>
+          ) : (
+            <Movies
+              data={paintings?.data.results.data}
+              navigation={navigation}
+            />
+          )}
           <Audios data={movies} navigation={navigation} />
         </View>
       </Animated.ScrollView>
@@ -157,6 +163,12 @@ const styling = (theme: Theme) =>
     mainContainer: {
       flex: 1,
       backgroundColor: Colors[theme]?.secondary,
+    },
+    loadingContainer: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      flex: 1,
+      gap: 20,
     },
     menuContainer: {
       width: '100%',
