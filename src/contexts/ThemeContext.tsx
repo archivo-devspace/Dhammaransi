@@ -8,7 +8,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import {Appearance, useColorScheme} from 'react-native';
+import {Appearance} from 'react-native';
 import {get, save} from '../utils/storage';
 import i18next from 'i18next';
 

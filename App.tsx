@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {ThemeProvider} from './src/contexts/ThemeContext';
 import AppNavigation from './src/navigations/AppNavigation';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
@@ -16,8 +16,6 @@ const NOTIFICATION = [
 ];
 
 const App = () => {
-  const [storeLanguages, setStoreLanguages] = useState<string | null>('');
-
   useEffect(() => {
     const hideSplashScreen = setTimeout(() => {
       SplashScreen.hide();
