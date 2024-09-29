@@ -54,11 +54,11 @@ const MovieListScreen = () => {
                 styles.contentContainer,
                 {
                   width: width * 0.9,
-                  height: width < 500 ? height * 0.25 : height * 0.3,
+                  height: width < 500 ? 200 : height * 0.3,
                 },
               ]}>
               <YoutubePlayer
-                height={width < 500 ? height * 0.25 : height * 0.3}
+                height={width < 500 ? 200 : height * 0.3}
                 width={width * 0.9}
                 play={playing}
                 videoId={video.videoId}
