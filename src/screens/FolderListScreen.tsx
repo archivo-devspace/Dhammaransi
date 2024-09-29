@@ -105,12 +105,17 @@ const FolderListScreen = ({navigation}: Props) => {
           <TouchableOpacity
             style={{
               width: '100%',
-
+              gap: 20,
               flexDirection: 'row',
               paddingVertical: 20,
+              alignItems: 'center',
             }}
             onPress={() => handleFolderPress(item)}>
-            <MaterialIcons name="folder" size={24} color={Colors[theme].text} />
+            <MaterialIcons
+              name="folder"
+              size={24}
+              color={Colors[theme].primary}
+            />
             <Text style={styles.folderName}>{item.split('/').pop()}</Text>
           </TouchableOpacity>
         </View>
@@ -182,7 +187,6 @@ const createStyles = (theme: Theme) =>
     folderName: {
       fontSize: 16,
       color: Colors[theme].text,
-      marginLeft: 8,
     },
     formcontainer: {
       justifyContent: 'center',

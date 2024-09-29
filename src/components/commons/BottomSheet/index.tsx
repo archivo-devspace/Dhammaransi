@@ -181,7 +181,7 @@ const BottomSheet = forwardRef<BottomSheetMethods, Props>(
                 <Entypo
                   name="circle-with-cross"
                   size={25}
-                  color={Colors[theme].text}
+                  color={Colors[theme].black}
                 />
               </CustomButton>
             </View>

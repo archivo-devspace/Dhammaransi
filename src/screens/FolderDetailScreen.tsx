@@ -27,6 +27,7 @@ import {useTranslation} from 'react-i18next';
 import {useIsFocused} from '@react-navigation/native';
 import LoadingSpinner from '../components/utils/LoadingSpinner';
 import ConfirmModal from '../components/commons/ConfirmModal';
+import TrackPlayer from 'react-native-track-player';
 
 type Props = {
   route: any;
@@ -100,10 +101,12 @@ const FolderDetailScreen = ({route, navigation}: Props) => {
 
   console.log('track', tracks);
 
-  const handlePlayAudio = (item: any) => {
-    if (!currentTrack || currentTrack.id !== item.id) {
-      handlePlay(item.id);
-    }
+  const handlePlayAudio = async (item: any) => {
+    // if (!currentTrack) {
+    await TrackPlayer.reset();
+    console.log('puse');
+    handlePlay(item.id);
+    // }
     navigation.navigate('TrackBottom');
   };
 

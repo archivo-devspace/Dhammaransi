@@ -191,7 +191,7 @@ const styling = (theme: Theme) =>
     },
     textContainer: {},
     text: {
-      color: Colors[theme].primary_dark,
+      color: Colors[theme].primary,
       fontWeight: 'bold',
     },
     inactiveText: {

@@ -1,6 +1,12 @@
 // // CustomTabBar.js
 
-import {StyleSheet, Text, TouchableOpacity, useWindowDimensions, View} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import React, {useRef} from 'react';
 import Animated, {
   Easing,
@@ -64,17 +70,23 @@ const CustomTabBar = ({rest, item}: CustomTabBarProps) => {
             backgroundColor: focused
               ? Colors[theme].secondary_dark
               : 'transparent',
+            paddingVertical: focused ? 10 : 0,
           },
         ]}>
         <FontAwesome
           name={item.icon}
-          size={focused ? height * 0.025: height * 0.05}
+          size={focused ? height * 0.025 : height * 0.05}
           color={focused ? Colors[theme].primary : 'gray'}
         />
 
         <Animated.View style={textStyle}>
           {focused && (
-            <Text style={{color: Colors[theme].text, fontWeight: '500', fontSize: height * 0.018}}>
+            <Text
+              style={{
+                color: Colors[theme].text,
+                fontWeight: '500',
+                fontSize: height * 0.018,
+              }}>
               {item.label}
             </Text>
           )}
@@ -93,12 +105,11 @@ const styling = (theme: Theme) =>
       alignItems: 'center',
       height: 75,
       width: '100%',
-    
     },
     btn: {
       flexDirection: 'row',
       alignItems: 'center',
-      padding: 10,
+
       paddingHorizontal: 14,
       borderRadius: 20,
       gap: 8,

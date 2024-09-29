@@ -90,7 +90,7 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     [],
   );
   const [isModalVisible, setModalVisible] = useState(false);
-  const [isAlreadyDownload, setAlreadyDownload] = useState(false);
+  const [isAlreadyDownload, setAlreadyDownload] = useState(true);
   const [downloadingTrackIds, setDownloadingTrackIds] = useState<any>([]);
   const [loading, setLoading] = useState(false);
   const [isDownloading, setDownloading] = useState(false);
@@ -257,35 +257,84 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     setDownloadingTrackIds(remainTracks);
   };
 
-  const onDownloadPress = async () => {
-    const find = downloadingTrackIds.find(
-      (element: any) => element === currentTrack.id,
-    );
-    if (!find) {
-      setModalVisible(true);
-      setDownloading(true);
-      setDownloadingTrackIds((prevIds: any) => [...prevIds, currentTrack.id]);
+  // const onDownloadPress = async () => {
+  //   const find = downloadingTrackIds.find(
+  //     (element: any) => element === currentTrack.id,
+  //   );
 
-      sendDownloadedDataToLocalDir(
+  //   if (!find) {
+  //     setModalVisible(true);
+  //     setDownloading(true);
+  //     setDownloadingTrackIds((prevIds: any) => [...prevIds, currentTrack.id]);
+
+  //     await sendDownloadedDataToLocalDir(
+  //       err => {
+  //         if (err) {
+  //           setDownloading(false);
+  //           setDownloadingTrackIds((prevIds: any) =>
+  //             prevIds.filter((id: any) => id !== currentTrack.id),
+  //           );
+  //         }
+  //       },
+  //       currentTrack.id,
+  //       currentTrack.url,
+  //       currentTrack.artist,
+  //       currentTrack.title,
+  //       currentTrack.artwork,
+  //       true,
+  //       selectedFolder,
+  //     );
+  //     setSelectedFolder(null);
+  //     setDownloading(false);
+  //   } else {
+  //     setModalVisible(true); // Show the modal with current progress if already downloading
+  //   }
+  // };
+
+  const onDownloadPress = async () => {
+    // Check if the track is currently downloading
+    const find = downloadingTrackIds.find(
+      (element: any) => element === currentTrack?.id,
+    );
+
+    // Check if the track is already downloaded
+    const alreadyExists = await new Promise(resolve => {
+      fetchDownloadedDataFromLocalDir(item => {
+        const track = item?.find((obj: any) => obj?.id === currentTrack?.id);
+        resolve(!!track); // Resolve the promise with true/false based on whether the track exists
+      });
+    });
+
+    // If the track is not being downloaded and does not already exist, start the download
+    if (!find && !alreadyExists) {
+      setDownloading(true); // Set the downloading state
+      setDownloadingTrackIds((prevIds: any) => [...prevIds, currentTrack?.id]); // Add the track to the downloading list
+
+      // Start the download process
+      await sendDownloadedDataToLocalDir(
         err => {
           if (err) {
+            // Handle download error and remove track from downloading list
             setDownloading(false);
             setDownloadingTrackIds((prevIds: any) =>
-              prevIds.filter((id: any) => id !== currentTrack.id),
+              prevIds.filter((id: any) => id !== currentTrack?.id),
             );
           }
         },
-        currentTrack.id,
-        currentTrack.url,
-        currentTrack.artist,
-        currentTrack.title,
-        currentTrack.artwork,
-        true,
+        currentTrack?.id,
+        currentTrack?.url,
+        currentTrack?.artist,
+        currentTrack?.title,
+        currentTrack?.artwork,
+        true, // Assuming this is for audio
         selectedFolder,
       );
+
+      // Reset states after download completes
       setSelectedFolder(null);
+      setDownloading(false);
     } else {
-      setModalVisible(true); // Show the modal with current progress if already downloading
+      onAlreadyDownloadPress();
     }
   };
 

@@ -11,7 +11,7 @@ import {
 } from '../navigations/StackNavigation';
 import {useTrackContext} from '../contexts/TrackContext';
 import {FlatList} from 'react-native';
-import {State, usePlaybackState} from 'react-native-track-player';
+import TrackPlayer, {State, usePlaybackState} from 'react-native-track-player';
 
 import Container from '../components/commons/Container';
 import {tracks} from '../utils/constants';
@@ -39,9 +39,10 @@ const Audios = ({navigation, route}: Props) => {
 
   const handlePlayAudio = async (item: any) => {
     // togglePlayingMode();
-    if (currentTrack === null || currentTrack.id !== item.id) {
-      handlePlay(item.id);
-    }
+    // if (currentTrack === null) {
+    await TrackPlayer.reset();
+    handlePlay(item.id);
+    // }
     setRepeatMode('shuffle-disabled');
 
     navigation.navigate('Track');

@@ -90,12 +90,10 @@ const TrackScreen = ({route, navigation}: Props) => {
 
   const [currentTrackId, setCurrentTrackId] = useState<number | null>(null);
 
-
   const [icon, setIcon] = useState();
 
-  const [alreadyDownloadDisable, setAlreadyDownloadDisable] = useState<boolean>(false);
-
- 
+  const [alreadyDownloadDisable, setAlreadyDownloadDisable] =
+    useState<boolean>(false);
 
   useEffect(() => {
     MaterialIcon.getImageSource('circle', 20, Colors[theme].primary).then(
@@ -129,7 +127,6 @@ const TrackScreen = ({route, navigation}: Props) => {
     getQueue();
   }, [currentQueue]);
 
-
   const getCurrentActiveTrack = useCallback(
     async (id: number) => {
       setCurrentTrackId(id);
@@ -160,18 +157,18 @@ const TrackScreen = ({route, navigation}: Props) => {
     }
   };
 
-  const handleAlreadyDownloaded = async() => {
-    try{
+  const handleAlreadyDownloaded = async () => {
+    try {
       setAlreadyDownloadDisable(true);
-        onAlreadyDownloadPress()
-       setTimeout(() => {
+      onAlreadyDownloadPress();
+      setTimeout(() => {
         setAlreadyDownloadDisable(false);
       }, 10000);
-    }catch(error){
+    } catch (error) {
       console.error('Error displaying notification:', error);
       setAlreadyDownloadDisable(false);
     }
-  }
+  };
 
   return (
     <View style={[styles.mainContainer]}>
@@ -204,46 +201,55 @@ const TrackScreen = ({route, navigation}: Props) => {
               width: width,
             }}>
             {!currentTrack ? (
-             <View style={{justifyContent: 'center', alignItems:'center', height: '100%'}}>
-               <CustomButton
-                title={t('UTILS.CHOOSEALBLUM')}
-                customButtonStyle={[styles.chooseFromBtn, {width: width * 0.7, height: height * 0.065}]}
-                customButtonTextStyle={[
-                  styles.chooseFrom,
-                  {fontSize: height * 0.018},
-                ]}
-                gap={10}
-                onPress={() => navigation.navigate('AudioCategories')}
-                icon={
-                  <FontAwesome
-                    name="music"
-                    size={height * 0.02}
-                    color={Colors[theme].primary}
-                  />
-                }
-              />
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: '100%',
+                }}>
+                <CustomButton
+                  title={t('UTILS.CHOOSEALBLUM')}
+                  customButtonStyle={[
+                    styles.chooseFromBtn,
+                    {width: width * 0.7, height: height * 0.065},
+                  ]}
+                  customButtonTextStyle={[
+                    styles.chooseFrom,
+                    {fontSize: height * 0.018},
+                  ]}
+                  gap={10}
+                  onPress={() => navigation.navigate('AudioCategories')}
+                  icon={
+                    <FontAwesome
+                      name="music"
+                      size={height * 0.02}
+                      color={Colors[theme].primary}
+                    />
+                  }
+                />
               </View>
             ) : (
               <>
-               <View style={{flex: 2.5 , justifyContent: 'flex-end' , paddingHorizontal: 5}}>
-                <Text
-                  style={[
-                    styles.titleText,
-                    {fontSize: height * 0.03},
-                  ]}>
-                     {truncateText(currentTrack?.title, 50)}
-                 
-                </Text>
+                <View
+                  style={{
+                    flex: 2.5,
+                    justifyContent: 'flex-end',
+                    paddingHorizontal: 5,
+                  }}>
+                  <Text style={[styles.titleText, {fontSize: height * 0.03}]}>
+                    {truncateText(currentTrack?.title, 50)}
+                  </Text>
                 </View>
-               <View style={{flex: 3.5, justifyContent: 'center', paddingHorizontal: 5}}>
-               <Text
-                  style={[
-                    styles.artistText,
-                    {fontSize: height * 0.025, },
-                  ]}>
-                     {truncateText(currentTrack?.artist, 90)}
-                </Text>
-               </View>
+                <View
+                  style={{
+                    flex: 3.5,
+                    justifyContent: 'center',
+                    paddingHorizontal: 5,
+                  }}>
+                  <Text style={[styles.artistText, {fontSize: height * 0.025}]}>
+                    {truncateText(currentTrack?.artist, 80)}
+                  </Text>
+                </View>
               </>
             )}
           </View>
@@ -324,6 +330,7 @@ const TrackScreen = ({route, navigation}: Props) => {
               <CustomButton
                 customButtonStyle={styles.btn}
                 onPress={expandFolderListsHandler}
+                disabled={isAlreadyDownload}
                 icon={
                   <MaterialIcon
                     name={`cloud-download`}
@@ -561,7 +568,7 @@ const styling = (theme: Theme) =>
     },
     chooseFrom: {
       color: Colors[theme].text,
-      
+
       // fontSize: 14,
     },
     chooseFromBtn: {
@@ -594,5 +601,3 @@ const styling = (theme: Theme) =>
       height: 40,
     },
   });
-
-

@@ -22,6 +22,8 @@ const MovieListScreen = () => {
   const styles = styling(theme);
   const [playing, setPlaying] = useState(false);
 
+  console.log('height', width);
+
   // Unlock orientation for fullscreen and return to portrait on exit
   const handleFullscreenChange = useCallback((isFullscreen: boolean) => {
     if (isFullscreen) {
@@ -51,12 +53,12 @@ const MovieListScreen = () => {
               style={[
                 styles.contentContainer,
                 {
-                  width: width * 0.9, // Adjust player width
-                  height: 190, // Adjust player height
+                  width: width * 0.9,
+                  height: width < 500 ? height * 0.25 : height * 0.3,
                 },
               ]}>
               <YoutubePlayer
-                height={190}
+                height={width < 500 ? height * 0.25 : height * 0.3}
                 width={width * 0.9}
                 play={playing}
                 videoId={video.videoId}
@@ -86,9 +88,7 @@ const styling = (theme: Theme) =>
       paddingHorizontal: 20,
     },
     contentContainer: {
-      alignItems: 'center',
-      gap: 20,
-      justifyContent: 'space-between',
+      alignSelf: 'center',
       marginBottom: 10,
       borderRadius: 20, // Set border radius here
       overflow: 'hidden',

@@ -202,7 +202,7 @@ const FolderListsBottomSheet = forwardRef<FolderListsBottomSheetMethods, Props>(
         setIsDownloadReady(true);
       }
     };
-    
+
     useEffect(() => {
       if (isDownloadReady) {
         onDownloadPress();
@@ -227,13 +227,15 @@ const FolderListsBottomSheet = forwardRef<FolderListsBottomSheetMethods, Props>(
               {backgroundColor: backGroundColor},
             ]}>
             <View style={styles.lineContainer}>
-              <Text style={styles.playlists}>{t('UTILS.DOWNLOAD_MANAGED')}</Text>
+              <Text style={styles.playlists}>
+                {t('UTILS.DOWNLOAD_MANAGED')}
+              </Text>
 
               <CustomButton customButtonStyle={styles.icon} onPress={close}>
                 <Entypo
                   name="circle-with-cross"
                   size={25}
-                  color={Colors[theme].text}
+                  color={Colors[theme].black}
                 />
               </CustomButton>
             </View>
@@ -363,6 +365,6 @@ const styling = (theme: Theme) =>
     textButton: {
       fontSize: 20,
       fontWeight: '500',
-      color: Colors[theme].text,
+      color: Colors[theme].black,
     },
   });
