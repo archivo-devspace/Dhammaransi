@@ -279,3 +279,6 @@ export const singlePaintingDetils = {
           voluptates impedit totam veritatis voluptate fugit, fuga quidem
           assumenda nemo rerum, eum ipsam quibusdam!`,
 };
+
+
+export const fallBackImageUrl = 'https://upload.wikimedia.org/wikipedia/commons/4/44/Paticcasamuppada_Burmese.jpg'
