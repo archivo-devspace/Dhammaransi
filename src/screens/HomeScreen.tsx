@@ -127,8 +127,9 @@ const HomeScreen = ({navigation}: Props) => {
                 <Text
                   style={{
                     color: Colors[theme].text,
-                    fontSize: height * 0.018,
-                    opacity: 0.8,
+                    fontSize: height * 0.019,
+                    fontWeight: '600',
+                    // opacity: 0.8,
                   }}>
                   {t(menu.name)}
                 </Text>
@@ -189,7 +190,7 @@ const styling = (theme: Theme) =>
           shadowRadius: 4,
         },
         android: {
-          elevation: 3,
+          elevation: 2,
         },
       }),
       padding: 5,

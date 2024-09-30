@@ -48,21 +48,21 @@ const Item = ({
     const customHeight = interpolate(
       x.value,
       [(index - 1) * fullWidth, index * fullWidth, (index + 1) * fullWidth],
-      [height - 50, height, height - 50],
+      [height - 40, height, height - 40],
       Extrapolation.CLAMP,
     );
 
     const marginTop = interpolate(
       x.value,
       [(index - 1) * fullWidth, index * fullWidth, (index + 1) * fullWidth],
-      [25, 0, 25],
+      [16, 0, 16],
       Extrapolation.CLAMP,
     );
 
     const opacity = interpolate(
       x.value,
       [(index - 1) * fullWidth, index * fullWidth, (index + 1) * fullWidth],
-      [0.3, 1, 0.3], // Change opacity from 0 to 1 and back to 0
+      [1, 1, 1], // Change opacity from 0 to 1 and back to 0
       Extrapolation.CLAMP,
     );
 
@@ -112,11 +112,13 @@ const Item = ({
             />
             <View
               style={{
+                width: '100%',
+                paddingHorizontal: 4,
                 height: height * 0.2,
                 justifyContent: 'center',
                 alignItems: 'center',
               }}>
-              <Text style={[styles.text, {fontSize: height * 0.07}]}>
+              <Text style={[styles.text, {fontSize: height * 0.09}]}>
                 {truncateText(item?.description, truncateIndex)}
               </Text>
             </View>
@@ -158,5 +160,6 @@ const styling = (theme: Theme) =>
     text: {
       color: Colors[theme].text,
       textAlign: 'center',
+      fontWeight: '500',
     },
   });

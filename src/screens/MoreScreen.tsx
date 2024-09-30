@@ -16,7 +16,14 @@ import {StatusBar} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Colors} from '../theme';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
-import {Entypo, FontAwesome, FontAwesomePro} from '../utils/common';
+import {
+  Entypo,
+  FontAwesome,
+  FontAwesomePro,
+  MaterialIcon,
+  MaterialIcons,
+  Zocial,
+} from '../utils/common';
 import {NavigationMainStackScreenProps} from '../navigations/StackNavigation';
 import {CustomButton} from '../components/utils';
 import {useTranslation} from 'react-i18next';
@@ -45,12 +52,9 @@ const MoreScreen = ({navigation}: Props) => {
       'https://www.facebook.com/profile.php?id=61563675035436';
 
     try {
-      // Open the Facebook app or fallback to the web URL
       await Linking.openURL(facebookAppUrl);
     } catch (error) {
       console.log('Error opening Facebook app:', error);
-
-      // Fallback to the web URL if the app is not installed
       Alert.alert(
         'Facebook App Not Installed',
         'Opening Facebook in your browser instead.',
@@ -62,6 +66,36 @@ const MoreScreen = ({navigation}: Props) => {
     }
   };
 
+  const makePhoneCall = async () => {
+    const phoneNumber = 'tel:+959781448621';
+    try {
+      await Linking.openURL(phoneNumber);
+    } catch (error) {
+      console.log('Error making a phone call:', error);
+      Alert.alert('Unable to make a phone call');
+    }
+  };
+
+  const sendEmail = async () => {
+    const email = 'mailto:archivodevspace@gmail.com';
+    try {
+      await Linking.openURL(email);
+    } catch (error) {
+      console.log('Error opening email:', error);
+      Alert.alert('Unable to send an email');
+    }
+  };
+
+  const openWebsite = async () => {
+    const websiteUrl = 'https://www.yourwebsite.com';
+    try {
+      await Linking.openURL(websiteUrl);
+    } catch (error) {
+      console.log('Error opening website:', error);
+      Alert.alert('Unable to open website');
+    }
+  };
+
   const menuOptions = [
     {
       id: 1,
@@ -69,18 +103,6 @@ const MoreScreen = ({navigation}: Props) => {
       icon: 'user-circle',
       link: 'Biography',
     },
-    // {
-    //   id: 2,
-    //   name: 'MENUS.MEDITATION_TIMETABLE',
-    //   icon: 'calendar-alt',
-    //   link: 'Timetable',
-    // },
-    // {
-    //   id: 3,
-    //   name: 'MENUS.JOURNEY',
-    //   icon: 'place-of-worship',
-    //   link: 'Missionary',
-    // },
     {
       id: 4,
       name: 'MENUS.CONTACT',
@@ -94,11 +116,11 @@ const MoreScreen = ({navigation}: Props) => {
       link: 'Setting',
     },
   ];
+
   return (
     <View style={styles.mainContainer}>
       <StatusBar translucent backgroundColor="transparent" />
-      {/* <SafeAreaView /> */}
-      <View style={{marginTop: top}}>
+      <View style={{marginTop: top + 10}}>
         <Text style={[styles.headerText, {fontSize: height * 0.025}]}>
           {t('TITLES.MORE')}
         </Text>
@@ -123,8 +145,12 @@ const MoreScreen = ({navigation}: Props) => {
                     size={25}
                     color={Colors[theme].primary}
                   />
-
-                  <Text style={{color: Colors[theme].text, fontSize: 14}}>
+                  <Text
+                    style={{
+                      color: Colors[theme].text,
+                      fontSize: height * 0.02,
+                      fontWeight: '600',
+                    }}>
                     {t(menu.name)}
                   </Text>
                 </View>
@@ -140,33 +166,62 @@ const MoreScreen = ({navigation}: Props) => {
         ))}
       </ScrollView>
       <View style={styles.powerContainer}>
-        <FontAwesomePro
-          name="facebook"
-          size={20}
-          style={styles.icon}
-          color={Colors[theme].primary}
-          onPress={openFacebook}
+        <Image
+          key={'logo'}
+          source={require('../assets/power.png')}
+          style={{
+            width: 50,
+            height: 50,
+            resizeMode: 'contain',
+            alignSelf: 'center',
+          }}
         />
-
-        <Text style={styles.power}>POWER BY ARCHIVO</Text>
+        <Text style={styles.power}>Powered by ARCHIVO</Text>
+        <Text
+          style={{
+            fontSize: 12,
+            fontWeight: '500',
+            color: Colors[theme].text,
+            opacity: 0.8,
+          }}>
+          Connecting minds, creating features
+        </Text>
         <View
           style={{
             flexDirection: 'row',
             alignSelf: 'center',
             justifyContent: 'flex-start',
-            gap: 10,
-            paddingTop: 5,
+            gap: 20,
+            paddingTop: 10,
           }}>
-          <Text style={styles.power}>archivodevspace@gmail.com</Text>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignSelf: 'center',
-            justifyContent: 'flex-start',
-            gap: 10,
-          }}>
-          <Text style={styles.power}>+ 959781-448-621</Text>
+          <MaterialIcons
+            name="local-phone"
+            size={20}
+            style={styles.icon}
+            color={Colors[theme].text}
+            onPress={makePhoneCall}
+          />
+          <FontAwesomePro
+            name="facebook"
+            size={20}
+            style={styles.icon}
+            color={Colors[theme].text}
+            onPress={openFacebook}
+          />
+          <Zocial
+            name="email"
+            size={20}
+            style={styles.icon}
+            color={Colors[theme].text}
+            onPress={sendEmail}
+          />
+          <MaterialIcon
+            name="web"
+            size={20}
+            style={styles.icon}
+            color={Colors[theme].text}
+            onPress={openWebsite}
+          />
         </View>
       </View>
     </View>
@@ -185,13 +240,7 @@ const styling = (theme: Theme) =>
       marginTop: 100,
       justifyContent: 'center',
       alignSelf: 'center',
-
       bottom: 100,
-    },
-    img: {
-      width: 50,
-      height: 50,
-      alignSelf: 'center',
     },
     icon: {
       ...Platform.select({
@@ -203,22 +252,16 @@ const styling = (theme: Theme) =>
           shadowRadius: 2,
         },
         android: {
-          shadowColor: 'red',
           alignSelf: 'center',
           elevation: 10,
         },
       }),
-
-      // iOS shadow properties
-
-      // Android shadow properties
     },
     power: {
       color: Colors[theme].text,
-      fontSize: 12,
-      fontWeight: '600',
+      fontSize: 14,
+      fontWeight: '500',
       textAlign: 'center',
-      paddingTop: 10,
     },
     headerText: {
       textAlign: 'center',

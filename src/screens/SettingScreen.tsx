@@ -1,5 +1,11 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import Switch from '../components/utils/Switch/Switch';
 import {save} from '../utils/storage';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
@@ -12,6 +18,7 @@ const SettingScreen = () => {
   const {t} = useTranslation();
   const [isEnabled, setIsEnabled] = useState<boolean>(false);
   const [burmeseLanguages, setBurmeseLanguages] = useState<boolean>(false);
+  const {height} = useWindowDimensions();
 
   const styles = styling(theme);
 
@@ -50,7 +57,14 @@ const SettingScreen = () => {
     <Container title="MENUS.SETTING">
       <ScrollView style={styles.optionContainer}>
         <View style={styles.contentContainer}>
-          <Text style={styles.text}>{t('UTILS.DARK_MODE_ON')}</Text>
+          <Text
+            style={{
+              color: Colors[theme].text,
+              fontSize: height * 0.02,
+              fontWeight: '600',
+            }}>
+            {t('UTILS.DARK_MODE_ON')}
+          </Text>
           <Switch
             value={isEnabled}
             handleSwitch={toggleSwitch}

@@ -10,7 +10,7 @@ const light = {
   primary_light: '#e3b627',
   primary_dark: '#916d09',
   secondary: '#E0E0E0',
-  secondary_light: '#F5F5F5',
+  secondary_light: '#f7f7f7',
  secondary_dark: '#BDBDBD',
   text: '#272727',
   ...commonColor
@@ -23,7 +23,7 @@ const dark = {
   secondary: '#242526',
   secondary_light: '#3a3b3c',
   secondary_dark: '#18191a',
-  text: '#9b9c9e',
+  text: '#ffffff',
   ...commonColor
 };
 

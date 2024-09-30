@@ -32,7 +32,7 @@ export const Movies = ({data, navigation, isLoading}: Props) => {
   const ITEM_FULL_WIDTH = ITEM_WIDTH + MARGIN_HORIZONTAL * 2;
   const SPACER = (width - ITEM_FULL_WIDTH) / 2;
 
-  const truncateIndex = 26;
+  const truncateIndex = 40;
 
   const x = useSharedValue(0);
 
@@ -50,7 +50,7 @@ export const Movies = ({data, navigation, isLoading}: Props) => {
 
   return (
     <View style={[styles.mainContainer, {height: height - height * 0.69}]}>
-      <Text style={[styles.text, {fontSize: height * 0.02}]}>
+      <Text style={[styles.text, {fontSize: height * 0.021}]}>
         {t('TITLES.TOP_PICTURES')}
       </Text>
       {isLoading ? (
@@ -143,8 +143,7 @@ const styling = (theme: Theme) =>
       color: Colors[theme].text,
       marginHorizontal: 10,
       marginBottom: remToPx(0.8),
-      fontWeight: '500',
-      opacity: 0.7,
+      fontWeight: '600',
       textAlign: 'center',
     },
     flatListStyle: {

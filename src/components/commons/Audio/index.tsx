@@ -29,7 +29,7 @@ export const Audios = ({data, navigation, isLoading}: Props) => {
   const MARGIN_HORIZONTAL = 10;
   const ITEM_FULL_WIDTH = ITEM_WIDTH + MARGIN_HORIZONTAL * 2;
   const SPACER = (width - ITEM_FULL_WIDTH) / 2;
-  const truncateIndex = 14;
+  const truncateIndex = 20;
 
   const x = useSharedValue(0);
 
@@ -52,7 +52,7 @@ export const Audios = ({data, navigation, isLoading}: Props) => {
 
   return (
     <View style={[styles.mainContainer, {height: height - height * 0.74}]}>
-      <Text style={[styles.text, {fontSize: height * 0.02}]}>
+      <Text style={[styles.text, {fontSize: height * 0.021}]}>
         {t('TITLES.TOP_AUDIOS')}
       </Text>
       {isLoading ? (
@@ -143,10 +143,9 @@ const styling = (theme: Theme) =>
     },
     text: {
       color: Colors[theme].text,
-      marginHorizontal: 10,
+      marginHorizontal: 5,
       marginBottom: remToPx(0.8),
-      fontWeight: '500',
-      opacity: 0.7,
+      fontWeight: '600',
       textAlign: 'center',
     },
     flatListStyle: {

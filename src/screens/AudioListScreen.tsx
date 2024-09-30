@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import {StyleSheet, Text, View, Image} from 'react-native';
+import {StyleSheet, Text, View, Image, useWindowDimensions} from 'react-native';
 import React, {useEffect} from 'react';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {Colors} from '../theme';
@@ -29,6 +29,7 @@ const Audios = ({navigation, route}: Props) => {
     useTrackContext();
   const playbackState = usePlaybackState();
   const styles = styling(theme);
+  const {height} = useWindowDimensions();
 
   useEffect(() => {
     const fetchAudioList = async () => {
@@ -72,11 +73,11 @@ const Audios = ({navigation, route}: Props) => {
                       style={styles.img}
                     />
                     <View style={{width: '70%', gap: 10}}>
-                      <Text style={styles.title}>
+                      <Text style={[styles.title, {fontSize: height * 0.02}]}>
                         {truncateText(item.title, 45)}
                       </Text>
-                      <Text style={styles.desc}>
-                        {truncateText(item.artist, 30)}
+                      <Text style={[styles.desc, {fontSize: height * 0.017}]}>
+                        {truncateText(item.artist, 25)}
                       </Text>
                     </View>
                   </View>
@@ -132,11 +133,12 @@ const styling = (theme: Theme) =>
       backgroundColor: Colors[theme].secondary,
     },
     title: {
-      fontSize: 16,
+      // fontSize: 16,
       color: Colors[theme].text,
+      fontWeight: '600',
     },
     desc: {
-      fontSize: 12,
+      // fontSize: 12,
       color: Colors[theme].text,
     },
     divider: {

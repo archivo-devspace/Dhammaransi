@@ -1,5 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
-import {FlatList, Image, StyleSheet, Text, View} from 'react-native';
+import {
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import React from 'react';
 import {AntDesign, truncateText} from '../utils/common';
 import {CustomButton} from '../components/utils';
@@ -20,6 +27,7 @@ const AudioCategoryListScreen = ({navigation}: Props) => {
   const styles = styling(theme);
   const {t} = useTranslation();
   const {data: albums, isLoading: isAlbumsLoading} = useGetAlbums();
+  const {height} = useWindowDimensions();
 
   const handleNavigate = (id: number) => {
     navigation.navigate('Audios', {id});
@@ -63,10 +71,10 @@ const AudioCategoryListScreen = ({navigation}: Props) => {
                         style={styles.img}
                       />
                       <View style={{width: '70%', gap: 10}}>
-                        <Text style={styles.title}>
+                        <Text style={[styles.title, {fontSize: height * 0.02}]}>
                           {truncateText(item.title, 45)}
                         </Text>
-                        <Text style={styles.desc}>
+                        <Text style={[styles.desc, {fontSize: height * 0.017}]}>
                           {truncateText(item.status, 30)}
                         </Text>
                       </View>
@@ -125,11 +133,12 @@ const styling = (theme: Theme) =>
       backgroundColor: Colors[theme].secondary,
     },
     title: {
-      fontSize: 16,
+      // fontSize: 16,
       color: Colors[theme].text,
+      fontWeight: '600',
     },
     desc: {
-      fontSize: 12,
+      // fontSize: 12,
       color: Colors[theme].text,
     },
     divider: {
