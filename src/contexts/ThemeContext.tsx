@@ -42,8 +42,9 @@ export const ThemeProvider: React.FC<{children: ReactNode}> = ({children}) => {
       const savedTheme = await get('Theme');
       const saveLanguage = await get('LANGUAGE');
 
-      const systemTheme = Appearance.getColorScheme();
-      setTheme(savedTheme || systemTheme);
+      // const systemTheme = Appearance.getColorScheme();
+      // setTheme(savedTheme || systemTheme);
+      setTheme(savedTheme || 'light');
       setLanguages(saveLanguage || 'mm');
 
       setThemeLoading(false);
