@@ -4,6 +4,7 @@ import Container from '../components/commons/Container';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {Colors} from '../theme';
 import {ScrollView} from 'react-native-gesture-handler';
+import { useGetBiography } from '../api_services/lib/queryhooks/useBiography';
 
 const BiographyScreen = () => {
   const {theme} = useThemeContext();
@@ -11,6 +12,10 @@ const BiographyScreen = () => {
   const customImageWidth = width * 0.4;
   const customImageHeight = width * 0.5;
   const styles = styling(theme);
+
+  const {data:biography, isLoading:isBiographyLoading}=useGetBiography();
+
+  console.log('biography', biography)
 
   interface TextContentProps {
     item: {

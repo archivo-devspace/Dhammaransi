@@ -71,3 +71,10 @@ export interface BookApiRes {
   mime_type: string;
   size: number;
 }
+//#endregion 
+
+//#region Biography
+export interface BiographyApiRes{
+  id:number;
+  description:string;
+}
