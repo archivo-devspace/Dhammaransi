@@ -1,88 +1,46 @@
-import {Image, StyleSheet, Text, View, useWindowDimensions} from 'react-native';
+import { StyleSheet, View, useWindowDimensions } from 'react-native';
 import React from 'react';
 import Container from '../components/commons/Container';
-import {Theme, useThemeContext} from '../contexts/ThemeContext';
-import {Colors} from '../theme';
-import {ScrollView} from 'react-native-gesture-handler';
+import { Theme, useThemeContext } from '../contexts/ThemeContext';
+import { Colors } from '../theme';
+import { ScrollView } from 'react-native-gesture-handler';
 import { useGetBiography } from '../api_services/lib/queryhooks/useBiography';
+import RenderHTML from 'react-native-render-html';
 
 const BiographyScreen = () => {
-  const {theme} = useThemeContext();
-  const {width, height} = useWindowDimensions();
+  const { theme } = useThemeContext();
+  const { width, height } = useWindowDimensions();
   const customImageWidth = width * 0.4;
   const customImageHeight = width * 0.5;
   const styles = styling(theme);
 
-  const {data:biography, isLoading:isBiographyLoading}=useGetBiography();
+  const { data: biography, isLoading:isBiographyLoading } = useGetBiography();
 
-  console.log('biography', biography)
-
-  interface TextContentProps {
-    item: {
-      id: number;
-      title: string;
-      desc: string;
-    };
-  }
-
-  const defaultText = [
-    {
-      id: 1,
-      title: 'Where he was born!',
-      desc: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut etperferendis quod dolor saepe voluptatem sint nam excepturi! Officia aliquam nam aut possimus omnis in sequi architecto mollitia deleniti natus fugiat, perspiciatis tempora eum pariatur nesciunt commodi, nihil sint atque numquam cum nostrum id? Id eius fugit, quos expedita repudiandae repellendus aut saepe doloribus perspiciatis asperiores aperiam consequuntur laborum porro architecto consequatur quisquam ipsum error dolores illo nam sequi mollitia officiis consectetur? Doloribus animi sequi saepe voluptas odio! Suscipit, recusandae expedita amet odio voluptate ratione. Eius ab eos esse fugit, facilis in inventore veniam rerum autem cupiditate dolores! Consequatur, iste?',
-    },
-    {
-      id: 2,
-      title: 'Where he was born!',
-      desc: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut etperferendis quod dolor saepe voluptatem sint nam excepturi! Officia aliquam nam aut possimus omnis in sequi architecto mollitia deleniti natus fugiat, perspiciatis tempora eum pariatur nesciunt commodi, nihil sint atque numquam cum nostrum id? Id eius fugit, quos expedita repudiandae repellendus aut saepe doloribus perspiciatis asperiores aperiam consequuntur laborum porro architecto consequatur quisquam ipsum error dolores illo nam sequi mollitia officiis consectetur? Doloribus animi sequi saepe voluptas odio! Suscipit, recusandae expedita amet odio voluptate ratione. Eius ab eos esse fugit, facilis in inventore veniam rerum autem cupiditate dolores! Consequatur, iste?',
-    },
-    {
-      id: 3,
-      title: 'Where he was born!',
-      desc: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut etperferendis quod dolor saepe voluptatem sint nam excepturi! Officia aliquam nam aut possimus omnis in sequi architecto mollitia deleniti natus fugiat, perspiciatis tempora eum pariatur nesciunt commodi, nihil sint atque numquam cum nostrum id? Id eius fugit, quos expedita repudiandae repellendus aut saepe doloribus perspiciatis asperiores aperiam consequuntur laborum porro architecto consequatur quisquam ipsum error dolores illo nam sequi mollitia officiis consectetur? Doloribus animi sequi saepe voluptas odio! Suscipit, recusandae expedita amet odio voluptate ratione. Eius ab eos esse fugit, facilis in inventore veniam rerum autem cupiditate dolores! Consequatur, iste?',
-    },
-    {
-      id: 4,
-      title: 'Where he was born!',
-      desc: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut etperferendis quod dolor saepe voluptatem sint nam excepturi! Officia aliquam nam aut possimus omnis in sequi architecto mollitia deleniti natus fugiat, perspiciatis tempora eum pariatur nesciunt commodi, nihil sint atque numquam cum nostrum id? Id eius fugit, quos expedita repudiandae repellendus aut saepe doloribus perspiciatis asperiores aperiam consequuntur laborum porro architecto consequatur quisquam ipsum error dolores illo nam sequi mollitia officiis consectetur? Doloribus animi sequi saepe voluptas odio! Suscipit, recusandae expedita amet odio voluptate ratione. Eius ab eos esse fugit, facilis in inventore veniam rerum autem cupiditate dolores! Consequatur, iste?',
-    },
-  ];
-
-  const textContent = ({item}: TextContentProps) => {
+  const LoadingSkeleton = () => {
     return (
-      <View style={styles.textContainer} key={item.id}>
-        <Text style={styles.headerText}>{item.title}</Text>
-        <Text style={styles.headerDesc}>{item.desc}</Text>
+      <View style={styles.skeletonContainer}>
+        <View style={styles.title} />
+        <View style={[styles.paragraph,{height:height*0.35}]} />
+        <View style={[styles.paragraph,{height:height*0.10}]} />
+        <View style={[styles.paragraph,{height:height*0.25}]} />
+        <View style={[styles.paragraph,{height:height*0.30}]} />
+        <View style={styles.image} />
+        <View style={styles.paragraph} />
       </View>
     );
   };
 
+
   return (
     <Container title="MENUS.BIOGRAPHY">
-      <ScrollView style={[styles.container, {width: width}]}>
-        <View style={[styles.headerContainer, {width: width * 0.54}]}>
-          <View
-            style={{
-              width: customImageWidth,
-              height: customImageHeight,
-            }}>
-            <Image
-              source={require('../assets/marguerite.jpg')}
-              style={{width: '100%', height: '100%', borderRadius: 25}}
-              resizeMode="cover"
+      <ScrollView style={[styles.container, { width: width }]}>
+        {
+          isBiographyLoading ? <LoadingSkeleton /> :
+            <RenderHTML
+              contentWidth={width * 0.54}
+              source={{ html: biography?.data?.results?.description || '<p>No data available</p>' }}
             />
-          </View>
-          <View style={styles.headerContentContainer}>
-            <Text style={styles.headerText}>Title text</Text>
-            <Text style={styles.headerDesc}>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Reiciendis odit, ea neque omnis accusamus facere nisi mollitia.
-              Tempora laborum nesciunt itaque soluta, minus harum numquam
-              perspiciatis eum maxime amet.
-            </Text>
-          </View>
-        </View>
-        {defaultText?.map(item => textContent({item}))}
+        }
       </ScrollView>
     </Container>
   );
@@ -117,5 +75,30 @@ const styling = (theme: Theme) =>
     textContainer: {
       alignItems: 'center',
       gap: 10,
+    },
+    skeletonContainer: {
+      padding: 16,
+      flex:1,
+     backgroundColor: 'rgba(255, 255, 255, 0.8)'
+    },
+    title: {
+      height: 40,
+      width: '70%',
+      backgroundColor: '#e0e0e0',
+      borderRadius: 4,
+      marginBottom: 16,
+    },
+    paragraph: {
+      width: '100%',
+      backgroundColor: '#e0e0e0',
+      borderRadius: 4,
+      marginBottom: 8,
+    },
+    image: {
+      height: 200,
+      width: '100%',
+      backgroundColor: '#e0e0e0',
+      borderRadius: 4,
+      marginBottom: 16,
     },
   });
