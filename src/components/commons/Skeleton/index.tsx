@@ -6,8 +6,8 @@ import {Colors} from '../../../theme';
 const {width: windowWidth} = Dimensions.get('window');
 
 interface SkeletonViewProps {
-  width: number;
-  height: number;
+  width: number | 'auto'; // Only number or 'auto'
+  height: number | 'auto'; // Only number or 'auto'
   borderRadius?: number;
 }
 
@@ -42,7 +42,15 @@ const SkeletonView: React.FC<SkeletonViewProps> = ({
   const styles = styling(theme);
 
   return (
-    <View style={[styles.skeletonContainer, {width, height, borderRadius}]}>
+    <View
+      style={[
+        styles.skeletonContainer,
+        {
+          width, // Use directly since 'auto' or number are both valid types
+          height,
+          borderRadius,
+        },
+      ]}>
       <Animated.View
         style={[styles.shimmer, {transform: [{translateX: shimmerTranslateX}]}]}
       />
@@ -55,8 +63,8 @@ export default SkeletonView;
 const styling = (theme: Theme) =>
   StyleSheet.create({
     skeletonContainer: {
-      backgroundColor: Colors[theme].text,
-      opacity: 0.4,
+      backgroundColor: Colors[theme].secondary_light,
+      opacity: 1,
       overflow: 'hidden',
     },
     shimmer: {
@@ -65,7 +73,7 @@ const styling = (theme: Theme) =>
       bottom: 0,
       left: 0,
       right: 0,
-      backgroundColor: Colors[theme].secondary, // Lighter color for shimmer effect
+      backgroundColor: Colors[theme].secondary,
       opacity: 0.4,
     },
   });

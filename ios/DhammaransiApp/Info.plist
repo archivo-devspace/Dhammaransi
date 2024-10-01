@@ -83,6 +83,13 @@
 	<array>
   <string>fb</string>
 </array>
+
+ <!-- Permission to access and save files -->
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>This app requires access to your photos to save downloaded files.</string>
+    <key>NSDocumentsUsageDescription</key>
+    <string>This app requires access to your documents to save downloaded files.</string>
+
 	
 </dict>
 </plist>

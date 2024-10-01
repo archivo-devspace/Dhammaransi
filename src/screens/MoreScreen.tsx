@@ -183,6 +183,7 @@ const MoreScreen = ({navigation}: Props) => {
             fontWeight: '500',
             color: Colors[theme].text,
             opacity: 0.8,
+            paddingTop: 10,
           }}>
           Connecting minds, creating features
         </Text>
@@ -191,8 +192,8 @@ const MoreScreen = ({navigation}: Props) => {
             flexDirection: 'row',
             alignSelf: 'center',
             justifyContent: 'flex-start',
-            gap: 20,
-            paddingTop: 10,
+            gap: 26,
+            paddingTop: 20,
           }}>
           <MaterialIcons
             name="local-phone"

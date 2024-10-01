@@ -9,7 +9,7 @@ import {
 import React, {ReactNode} from 'react';
 
 interface ButtonPorps {
-  onPress?: () => void;
+  onPress?: () => any;
   title?: string;
   icon?: ReactNode;
   customButtonStyle?: object;
@@ -48,7 +48,12 @@ const CustomButton = ({
           disabled={disabled}
           style={customButtonStyle ? customButtonStyle : styles.button}>
           <View
-            style={{flexDirection: 'row', gap: gap, justifyContent: 'center', alignItems:'center'}}>
+            style={{
+              flexDirection: 'row',
+              gap: gap,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
             <View>{icon}</View>
             <Text
               style={
