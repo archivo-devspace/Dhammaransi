@@ -1012,7 +1012,7 @@ PODS:
   - react-native-track-player (4.1.1):
     - React-Core
     - SwiftAudioEx (= 1.1.0)
-  - react-native-webview (13.10.2):
+  - react-native-webview (13.12.2):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -1199,6 +1199,8 @@ PODS:
     - RNNotifee/NotifeeCore (= 7.8.2)
   - RNNotifee/NotifeeCore (7.8.2):
     - React-Core
+  - RNPermissions (4.1.5):
+    - React-Core
   - RNReanimated (3.8.1):
     - glog
     - RCT-Folly (= 2022.05.16.00)
@@ -1305,6 +1307,7 @@ DEPENDENCIES:
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "RNNotifee (from `../node_modules/@notifee/react-native`)"
+  - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
@@ -1453,6 +1456,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-gesture-handler"
   RNNotifee:
     :path: "../node_modules/@notifee/react-native"
+  RNPermissions:
+    :path: "../node_modules/react-native-permissions"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -1515,7 +1520,7 @@ SPEC CHECKSUMS:
   react-native-slider: 7a39874fc1fcdfee48e448fa72cce0a8f2c7c5d6
   react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
   react-native-track-player: 82ef1756ffeea61140fea17519ecd6d64ec3cf3e
-  react-native-webview: c461fed0b58be5ee5180c3c3092a1d5dcb214a94
+  react-native-webview: 8600348afad520e40ac629eb7963a514f16cdd17
   React-nativeconfig: b4d4e9901d4cabb57be63053fd2aa6086eb3c85f
   React-NativeModulesApple: cd26e56d56350e123da0c1e3e4c76cb58a05e1ee
   React-perflogger: 5f49905de275bac07ac7ea7f575a70611fa988f2
@@ -1541,6 +1546,7 @@ SPEC CHECKSUMS:
   RNFBApp: 614f1621b49db54ebd258df8c45427370d8d84a2
   RNGestureHandler: bc2cdb2dc42facdf34992ae364b8a728e19a3686
   RNNotifee: 8e2d3df3f0e9ce8f5d1fe4c967431138190b6175
+  RNPermissions: 294531ede5a64d1528463e88fffef05675842042
   RNReanimated: 8a4d86eb951a4a99d8e86266dc71d7735c0c30a9
   RNScreens: b6b64d956af3715adbfe84808694ae82d3fec74f
   RNSVG: a48668fd382115bc89761ce291a81c4ca5f2fd2e
