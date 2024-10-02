@@ -16,14 +16,20 @@ const ImageSlider = ({images}: {images: any}) => {
   const {theme} = useThemeContext();
   const customHeight = height * 0.3;
 
-  const [active, setActive] = useState(0);
+  // Duplicate images for infinite scrolling
+  const infiniteImages = [images[images.length - 1], ...images, images[0]];
+
+  const [active, setActive] = useState(1); // Start from the first actual image
 
   const onScrollChange = ({nativeEvent}: any) => {
-    const slide = Math.round(
-      nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width,
-    );
-    if (slide !== active) {
-      setActive(slide);
+    // Check if scroll has completed by comparing contentOffset with layoutMeasurement
+    const contentOffsetX = nativeEvent.contentOffset.x;
+    const layoutWidth = nativeEvent.layoutMeasurement.width;
+    const currentSlide = Math.round(contentOffsetX / layoutWidth);
+
+    // Only update the active state if it has fully scrolled to the next image
+    if (currentSlide !== active) {
+      setActive(currentSlide);
     }
   };
 
@@ -31,28 +37,60 @@ const ImageSlider = ({images}: {images: any}) => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      const nextIndex = (active + 1) % images.length;
-      setActive(nextIndex);
+      const nextIndex = (active + 1) % infiniteImages.length;
       const scrollToX = nextIndex * width;
-      const step = 100; // Increase for slower animation, decrease for faster
-      const duration = 2000; // Total duration of the animation in milliseconds
-      const steps = Math.floor(duration / step);
-      let currentStep = 0;
-      const timer = setInterval(() => {
+
+      // Add easing effect while scrolling
+      let currentOffset = active * width;
+      const distance = scrollToX - currentOffset;
+      const duration = 1000; // Duration of the animation in milliseconds
+      const frames = 60; // Number of frames for the animation
+      const increment = distance / frames;
+      let frame = 0;
+
+      const smoothScroll = () => {
+        frame += 1;
+        currentOffset += increment;
         scrollViewRef.current?.scrollTo({
-          x: scrollToX,
-          animated: true,
+          x: currentOffset,
+          animated: false, // Disable native animation, using custom steps
         });
-        currentStep++;
-        if (currentStep >= steps) {
-          clearInterval(timer);
-          scrollViewRef.current?.scrollTo({x: scrollToX, animated: true});
+
+        if (frame < frames) {
+          requestAnimationFrame(smoothScroll);
         }
-      }, step);
+      };
+
+      smoothScroll();
+      setActive(nextIndex);
     }, 5000);
 
     return () => clearInterval(interval);
   }, [active]);
+
+  // Adjust active index when reaching duplicated images
+  useEffect(() => {
+    if (active === 0) {
+      // If swiped to the left of the first image, reset to the last image
+      scrollViewRef.current?.scrollTo({
+        x: (infiniteImages.length - 2) * width,
+        animated: false,
+      });
+      setActive(infiniteImages.length - 2);
+    } else if (active === infiniteImages.length - 1) {
+      // If swiped to the right of the last image, reset to the first image
+      scrollViewRef.current?.scrollTo({x: width, animated: false});
+      setActive(1);
+    }
+  }, [active]);
+
+  // Correct the active dot to map it to the real image index
+  const realActiveIndex =
+    active === 0
+      ? images.length - 1
+      : active === infiniteImages.length - 1
+      ? 0
+      : active - 1;
 
   const styles = Styling(theme);
 
@@ -61,12 +99,11 @@ const ImageSlider = ({images}: {images: any}) => {
       <ScrollView
         pagingEnabled
         horizontal
-        scrollEventThrottle={32}
-        onScroll={onScrollChange}
+        onMomentumScrollEnd={onScrollChange} // Use this for updating active after full scroll
         showsHorizontalScrollIndicator={false}
         ref={scrollViewRef}
         style={{width, height: customHeight}}>
-        {images.map((image: any, index: any) => (
+        {infiniteImages.map((image: any, index: any) => (
           <Image
             key={index}
             source={{uri: image}}
@@ -76,7 +113,9 @@ const ImageSlider = ({images}: {images: any}) => {
       </ScrollView>
       <View style={styles.pagination}>
         {images.map((i: any, k: any) => (
-          <Text key={k} style={k === active ? styles.activeDot : styles.dot}>
+          <Text
+            key={k}
+            style={k === realActiveIndex ? styles.activeDot : styles.dot}>
             .
           </Text>
         ))}
@@ -94,11 +133,11 @@ const Styling = (theme: Theme) =>
       alignSelf: 'center',
     },
     dot: {
-      color: Colors[theme].primary_light,
+      color: Colors[theme].text,
       fontSize: 50,
     },
     activeDot: {
-      color: Colors[theme].text,
+      color: Colors[theme].primary,
       fontSize: 50,
     },
   });
