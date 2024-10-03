@@ -8,6 +8,17 @@ import {useGetBiography} from '../api_services/lib/queryhooks/useBiography';
 import RenderHTML from 'react-native-render-html';
 import SkeletonView from '../components/commons/Skeleton';
 
+interface SkeletonConfig {
+  height: number;
+  widthRatio: number;
+  borderRadious: number;
+}
+
+interface SkeletonGroupProps {
+  gap: number;
+  config: SkeletonConfig[];
+}
+
 const BiographyScreen = () => {
   const {theme} = useThemeContext();
   const {width, height} = useWindowDimensions();
@@ -17,22 +28,55 @@ const BiographyScreen = () => {
 
   const {data: biography, isLoading: isBiographyLoading} = useGetBiography();
 
+  const [loading, setLoading] = useState(true);
+
+  const generateSkeletonViews = (config: SkeletonConfig[]): JSX.Element[] => {
+    return config.map(({height, widthRatio, borderRadious}, index) => (
+      <SkeletonView
+        key={index}
+        height={height}
+        width={width * widthRatio}
+        borderRadius={borderRadious}
+      />
+    ));
+  };
+
+  const SkeletonGroup: React.FC<SkeletonGroupProps> = ({gap, config}) => {
+    return (
+      <View style={[styles.group, {gap}]}>{generateSkeletonViews(config)}</View>
+    );
+  };
+
   const LoadingSkeleton = () => {
+    const commonConfig: SkeletonConfig[] = [
+      {height: 7, widthRatio: 0.9, borderRadious: 6},
+      {height: 7, widthRatio: 0.8, borderRadious: 6},
+      {height: 7, widthRatio: 0.7, borderRadious: 6},
+      {height: 7, widthRatio: 0.6, borderRadious: 6},
+    ];
+
+    const autoConfig: SkeletonConfig[] = Array(16).fill({
+      height: 6,
+      widthRatio: 0.9,
+      borderRadious: 6,
+    });
+
     return (
       <View style={styles.skeletonContainer}>
-        <SkeletonView height={40} width={200} borderRadius={5} />
-        <SkeletonView height={height * 0.35} width={'auto'} borderRadius={10} />
-        <SkeletonView height={height * 0.1} width={'auto'} borderRadius={10} />
-        <SkeletonView height={height * 0.25} width={'auto'} borderRadius={10} />
-        <SkeletonView height={height * 0.3} width={'auto'} borderRadius={10} />
-
-        <SkeletonView height={200} width={'auto'} borderRadius={10} />
-        <SkeletonView height={200} width={'auto'} borderRadius={10} />
-
-        {/* <View style={[styles.paragraph, {height: height * 0.35}]} />
-        <View style={[styles.paragraph, {height: height * 0.1}]} />
-        <View style={[styles.paragraph, {height: height * 0.25}]} />
-        <View style={[styles.paragraph, {height: height * 0.3}]} /> */}
+        <SkeletonGroup
+          gap={7}
+          config={[
+            ...commonConfig,
+            ...commonConfig,
+            ...commonConfig,
+            ...commonConfig,
+            ...commonConfig,
+          ]}
+        />
+        <SkeletonGroup gap={6} config={autoConfig.slice(0, 8)} />
+        <SkeletonGroup gap={6} config={autoConfig.slice(0, 6)} />
+        <SkeletonGroup gap={6} config={autoConfig} />
+        <SkeletonGroup gap={6} config={autoConfig.slice(0, 10)} />
       </View>
     );
   };
@@ -88,9 +132,9 @@ const styling = (theme: Theme) =>
       gap: 10,
     },
     skeletonContainer: {
-      padding: 16,
+      padding: 30,
       flex: 1,
-      gap: 6,
+      gap: 35,
       backgroundColor: Colors[theme].secondary,
     },
     title: {
@@ -112,5 +156,8 @@ const styling = (theme: Theme) =>
       backgroundColor: 'blue',
       borderRadius: 4,
       marginBottom: 16,
+    },
+    group: {
+      alignItems: 'center',
     },
   });

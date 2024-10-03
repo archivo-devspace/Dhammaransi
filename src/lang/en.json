@@ -41,7 +41,10 @@
       "CREATE": "Create",
       "DOWNLOAD_MANAGED": "Download Management",
       "DOWNLOADING" : "Downloading ...",
-      "DOWNLOADED" : "Downloaded"
+      "DOWNLOADED" : "Downloaded",
+      "DOWNLOAD_PDF": "Are you sure you want to download this pdf file?",
+      "YES_DOWNLOAD" : "Download",
+      "NO_DOWNLOAD" : "Cancel"
     }
   }
 }

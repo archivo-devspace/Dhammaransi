@@ -19,6 +19,7 @@ interface ModalProps {
   confirmText: string;
   cancelText: string;
   title: string;
+  confirmType?: 'delete' | 'confirm';
 }
 
 const ConfirmModal = ({
@@ -30,6 +31,7 @@ const ConfirmModal = ({
   confirmText,
   cancelText,
   title,
+  confirmType = 'delete',
 }: ModalProps) => {
   const {theme} = useThemeContext();
   const styles = createStyles(theme);
@@ -41,20 +43,58 @@ const ConfirmModal = ({
         animationType={animationType}
         visible={isModalVisible}
         onRequestClose={() => setModalVisible(false)}>
-        <StatusBar backgroundColor={'rgba(0, 0, 0, 0.5)'} />
+        <StatusBar
+          backgroundColor={
+            theme === 'dark' ? 'rgba(0, 0, 0, 0.85)' : 'rgba(0, 0, 0, 0.5)'
+          }
+        />
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.modalText}>{title}</Text>
             <View style={styles.modalActions}>
               <TouchableOpacity
                 onPress={handleConfirm}
-                style={styles.confirmButton}>
-                <Text style={styles.buttonText}>{confirmText}</Text>
+                style={[
+                  styles.confirmButton,
+                  {
+                    backgroundColor:
+                      confirmType === 'delete'
+                        ? Colors[theme].danger
+                        : Colors[theme].primary,
+                  },
+                ]}>
+                <Text
+                  style={[
+                    styles.buttonText,
+                    {
+                      color:
+                        confirmType === 'delete' ? 'white' : Colors[theme].text,
+                    },
+                  ]}>
+                  {confirmText}
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={handleCancel}
-                style={styles.cancelButton}>
-                <Text style={styles.buttonText}>{cancelText}</Text>
+                style={[
+                  styles.cancelButton,
+                  {
+                    backgroundColor:
+                      confirmType === 'delete'
+                        ? Colors[theme].primary
+                        : Colors[theme].secondary_light,
+                  },
+                ]}>
+                <Text
+                  style={[
+                    styles.buttonText,
+                    {
+                      color:
+                        confirmType === 'delete' ? 'white' : Colors[theme].text,
+                    },
+                  ]}>
+                  {cancelText}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -72,7 +112,8 @@ const createStyles = (theme: Theme) =>
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      backgroundColor:
+        theme === 'dark' ? 'rgba(0, 0, 0, 0.85)' : 'rgba(0, 0, 0, 0.5)',
     },
     modalContent: {
       width: '80%',
@@ -94,7 +135,6 @@ const createStyles = (theme: Theme) =>
       width: '100%',
     },
     confirmButton: {
-      backgroundColor: Colors[theme].danger,
       padding: 10,
       borderRadius: 5,
       flex: 1,
@@ -102,7 +142,6 @@ const createStyles = (theme: Theme) =>
       marginRight: 10,
     },
     cancelButton: {
-      backgroundColor: Colors[theme].primary,
       padding: 10,
       borderRadius: 5,
       flex: 1,
@@ -110,7 +149,6 @@ const createStyles = (theme: Theme) =>
       marginLeft: 10,
     },
     buttonText: {
-      color: 'white',
       fontSize: 16,
     },
   });

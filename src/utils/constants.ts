@@ -74,10 +74,10 @@ export const trackCategories = [
 export const tracks = [
   {
     id: 1,
-    url: 'https://www.bensound.com/bensound-music/bensound-happyrock.mp3',
-    title: 'Happy Rock Happy Rock Happy Rock Happy Rock Happy Rock Happy Rock',
-    artist: 'Benjamin Tissot Benjamin Tissot Benjamin Tissot Benjamin TissotBenjamin Tissot issotBenjamin Tissot issotBenjamin Tissot issotBenjamin Tissot issotBenjamin Tissot issotBenjamin Tissot hello',
-    album: "Bensound's rock",
+    url: 'https://dhammaransi.org/storage/media_library/file_example_MP3_2MG.mp3',
+    title: 'Test Track',
+    artist: 'Test Artist',
+    album: "Test Album",
     date: '2014-05-20T07:00:00+00:00', // RFC 3339
     artwork: 'https://www.bensound.com/bensound-img/happyrock.jpg', // Load artwork from the network
     categoryId: 1,
