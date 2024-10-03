@@ -17,7 +17,7 @@ const light = {
 };
 
 const dark = {
-  primary: '#deab0d',
+  primary: '#ffbb32',
   primary_light: '#deab0d',
   primary_dark: '#5c4405',
   secondary: '#242526',

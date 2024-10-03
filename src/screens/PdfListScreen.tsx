@@ -153,7 +153,7 @@ const PdfListScreen = () => {
                           height: '100%',
                           borderRadius: 10,
                         }}
-                        source={{uri: fallBackImageUrl}}
+                        source={{uri: ebook.cover_photo}}
                         resizeMode="cover"
                       />
                     </View>

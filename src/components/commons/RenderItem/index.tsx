@@ -176,7 +176,7 @@ const styling = (theme: Theme) =>
       padding: 10,
     },
     icon: {
-      backgroundColor: Colors[theme].text,
+      backgroundColor: Colors[theme].secondary_dark,
       borderRadius: 15,
       padding: 10,
     },

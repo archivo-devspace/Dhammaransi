@@ -16,6 +16,7 @@ import TrackPlayer, {State, usePlaybackState} from 'react-native-track-player';
 import Container from '../components/commons/Container';
 import {tracks} from '../utils/constants';
 import {RouteProp} from '@react-navigation/native';
+import {useGetSingleAlbum} from '../api_services/lib/queryhooks/useAudio';
 
 type Props = {
   navigation: NavigationMainStackScreenProps['navigation'];
@@ -23,13 +24,18 @@ type Props = {
 };
 
 const Audios = ({navigation, route}: Props) => {
-  console.log('route', route?.params?.item);
   const {theme} = useThemeContext();
   const {trackLists, handlePlay, currentTrack, setTrackLists, setRepeatMode} =
     useTrackContext();
   const playbackState = usePlaybackState();
   const styles = styling(theme);
   const {height} = useWindowDimensions();
+
+  const {data: album, isLoading: isAlbumLoading} = useGetSingleAlbum(
+    route.params.id,
+  );
+
+  console.log('data', album?.data.results);
 
   useEffect(() => {
     const fetchAudioList = async () => {

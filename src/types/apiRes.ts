@@ -58,6 +58,15 @@ export interface Album {
   created_at: string;
   updated_at: string;
 }
+
+export interface Tayar {
+  id: number;
+  album_id: number;
+  name: string;
+  file: string;
+  mime_type: string;
+  size: number;
+}
 //#endregion
 
 //#region Books
