@@ -77,7 +77,7 @@ export const tracks = [
     url: 'https://dhammaransi.org/storage/media_library/file_example_MP3_2MG.mp3',
     title: 'Test Track',
     artist: 'Test Artist',
-    album: "Test Album",
+    album: 'Test Album',
     date: '2014-05-20T07:00:00+00:00', // RFC 3339
     artwork: 'https://www.bensound.com/bensound-img/happyrock.jpg', // Load artwork from the network
     categoryId: 1,
@@ -96,7 +96,8 @@ export const tracks = [
     id: 3,
     url: 'https://www.bensound.com/bensound-music/bensound-actionable.mp3',
     title: 'Actionable',
-    artist: 'Benjamin Tissot Benjamin Tissot Benjamin Tissot Benjamin Tissot Benjamin Tissot',
+    artist:
+      'Benjamin Tissot Benjamin Tissot Benjamin Tissot Benjamin Tissot Benjamin Tissot',
     album: "Bensound's rock",
     date: '2014-05-20T07:00:00+00:00', // RFC 3339
     artwork: 'https://www.bensound.com/bensound-img/actionable.jpg',
@@ -280,5 +281,5 @@ export const singlePaintingDetils = {
           assumenda nemo rerum, eum ipsam quibusdam!`,
 };
 
-
-export const fallBackImageUrl = 'https://upload.wikimedia.org/wikipedia/commons/4/44/Paticcasamuppada_Burmese.jpg'
+export const fallBackImageUrl =
+  'https://upload.wikimedia.org/wikipedia/commons/4/44/Paticcasamuppada_Burmese.jpg';

@@ -12,14 +12,25 @@ import {Colors} from '../../../theme';
 import {NavigationMainStackScreenProps} from '../../../navigations/StackNavigation';
 import {useTranslation} from 'react-i18next';
 import {Album} from '../../../types/apiRes';
+import DataNotFound from '../DataNotFound';
 
 type Props = {
   data?: Album[];
   navigation: NavigationMainStackScreenProps['navigation'];
   isLoading?: boolean;
+  isFetched: boolean;
+  isError: boolean;
+  error: unknown;
 };
 
-export const Audios = ({data, navigation, isLoading}: Props) => {
+export const Audios = ({
+  data,
+  navigation,
+  isLoading,
+  isFetched,
+  isError,
+  error,
+}: Props) => {
   const {width, height} = useWindowDimensions();
   const {theme} = useThemeContext();
   const {t} = useTranslation();
@@ -86,12 +97,17 @@ export const Audios = ({data, navigation, isLoading}: Props) => {
           decelerationRate={'fast'}
           snapToInterval={ITEM_FULL_WIDTH}
           initialScrollIndex={1}
-          getItemLayout={(data, index) => ({
+          getItemLayout={(_, index) => ({
             length: ITEM_FULL_WIDTH,
             offset: ITEM_FULL_WIDTH * index,
             index,
           })}
           style={styles.flatListStyle}
+        />
+      ) : (isFetched && !data?.length) || isError ? (
+        <DataNotFound
+          error={error}
+          customStyle={{width: ITEM_FULL_WIDTH, height: ITEM_HEIGHT}}
         />
       ) : (
         <Animated.FlatList
@@ -123,7 +139,7 @@ export const Audios = ({data, navigation, isLoading}: Props) => {
           decelerationRate={'fast'}
           snapToInterval={ITEM_FULL_WIDTH}
           initialScrollIndex={1}
-          getItemLayout={(data, index) => ({
+          getItemLayout={(_, index) => ({
             length: ITEM_FULL_WIDTH,
             offset: ITEM_FULL_WIDTH * index,
             index,

@@ -9,20 +9,28 @@ import Item from '../Item';
 import {remToPx} from '../../../utils/common';
 import {Theme, useThemeContext} from '../../../contexts/ThemeContext';
 import {Colors} from '../../../theme';
-import {
-  MovieProps,
-  NavigationMainStackScreenProps,
-} from '../../../navigations/StackNavigation';
+import {NavigationMainStackScreenProps} from '../../../navigations/StackNavigation';
 import {useTranslation} from 'react-i18next';
 import {PaintingApiRes} from '../../../types/apiRes';
+import DataNotFound from '../DataNotFound';
 
 type Props = {
   data?: PaintingApiRes[];
   navigation: NavigationMainStackScreenProps['navigation'];
   isLoading?: boolean;
+  isFetched: boolean;
+  isError: boolean;
+  error: unknown;
 };
 
-export const Movies = ({data, navigation, isLoading}: Props) => {
+export const Movies = ({
+  data,
+  navigation,
+  isLoading,
+  isFetched,
+  isError,
+  error,
+}: Props) => {
   const {width, height} = useWindowDimensions();
   const {theme} = useThemeContext();
   const {t} = useTranslation();
@@ -84,12 +92,17 @@ export const Movies = ({data, navigation, isLoading}: Props) => {
           decelerationRate={'fast'}
           snapToInterval={ITEM_FULL_WIDTH}
           initialScrollIndex={1}
-          getItemLayout={(data, index) => ({
+          getItemLayout={(_, index) => ({
             length: ITEM_FULL_WIDTH,
             offset: ITEM_FULL_WIDTH * index,
             index,
           })}
           style={styles.flatListStyle}
+        />
+      ) : (isFetched && !data?.length) || isError ? (
+        <DataNotFound
+          error={error}
+          customStyle={{width: ITEM_FULL_WIDTH, height: ITEM_HEIGHT}}
         />
       ) : (
         <Animated.FlatList
@@ -121,7 +134,7 @@ export const Movies = ({data, navigation, isLoading}: Props) => {
           decelerationRate={'fast'}
           snapToInterval={ITEM_FULL_WIDTH}
           initialScrollIndex={1}
-          getItemLayout={(data, index) => ({
+          getItemLayout={(_, index) => ({
             length: ITEM_FULL_WIDTH,
             offset: ITEM_FULL_WIDTH * index,
             index,

@@ -5,8 +5,7 @@ export const fetchAlbumLists = async () => {
   return res.data;
 };
 
-
-export const fetchSingleAlbum = async (id:number) => {
+export const fetchSingleAlbum = async (id: number) => {
   const res = await axiosInstance.get(`/tayar/album/${id}`);
   return res.data;
 };

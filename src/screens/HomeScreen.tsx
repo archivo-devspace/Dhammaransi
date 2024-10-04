@@ -30,7 +30,6 @@ type Props = {
 };
 
 const HomeScreen = ({navigation}: Props) => {
-  // const navigation = useNavigation();
   const {theme} = useThemeContext();
   const {width, height} = useWindowDimensions();
   const {t} = useTranslation();
@@ -45,13 +44,21 @@ const HomeScreen = ({navigation}: Props) => {
   //api call with react query
   const {
     data: paintings,
-
+    isFetched: isPaintingFetch,
     isLoading: isPaintingLoading,
+    isError: isPaintingError,
+    error: paintingErrorMessage,
   } = useGetPaintings();
 
   console.log('isPaintingLoading', isPaintingLoading);
 
-  const {data: albums, isLoading: isAlbumsLoading} = useGetAlbums();
+  const {
+    data: albums,
+    isFetched: isAlbumsFetched,
+    isLoading: isAlbumsLoading,
+    isError: isAlbumsError,
+    error: albumsErrorMessage,
+  } = useGetAlbums();
 
   return (
     <View style={styles.mainContainer}>
@@ -140,12 +147,18 @@ const HomeScreen = ({navigation}: Props) => {
             data={paintings?.data.results.data}
             navigation={navigation}
             isLoading={isPaintingLoading}
+            isFetched={isPaintingFetch}
+            isError={isPaintingError}
+            error={paintingErrorMessage}
           />
 
           <Audios
+            isFetched={isAlbumsFetched}
             data={albums?.data?.results?.data}
             navigation={navigation}
             isLoading={isAlbumsLoading}
+            isError={isAlbumsError}
+            error={albumsErrorMessage}
           />
         </View>
       </Animated.ScrollView>
