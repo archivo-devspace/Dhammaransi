@@ -61,13 +61,13 @@ const styling = (theme: Theme) =>
         ios: {
           shadowOffset: {
             width: 0,
-            height: 5,
+            height: 3,
           },
-          shadowOpacity: 0.4,
+          shadowOpacity: 0.3,
           shadowRadius: 4,
         },
         android: {
-          elevation: 2,
+          elevation: 5,
         },
       }),
     },

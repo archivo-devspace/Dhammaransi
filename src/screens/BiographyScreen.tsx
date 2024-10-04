@@ -46,14 +46,14 @@ const BiographyScreen = () => {
 
   const LoadingSkeleton = () => {
     const commonConfig: SkeletonConfig[] = [
-      {height: 7, widthRatio: 0.9, borderRadious: 6},
-      {height: 7, widthRatio: 0.8, borderRadious: 6},
-      {height: 7, widthRatio: 0.7, borderRadious: 6},
-      {height: 7, widthRatio: 0.6, borderRadious: 6},
+      {height: 9, widthRatio: 0.9, borderRadious: 6},
+      {height: 9, widthRatio: 0.8, borderRadious: 6},
+      {height: 9, widthRatio: 0.7, borderRadious: 6},
+      {height: 9, widthRatio: 0.6, borderRadious: 6},
     ];
 
     const autoConfig: SkeletonConfig[] = Array(16).fill({
-      height: 6,
+      height: 7,
       widthRatio: 0.9,
       borderRadious: 6,
     });

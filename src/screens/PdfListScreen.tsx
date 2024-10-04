@@ -45,7 +45,7 @@ const PdfListScreen = () => {
   // State for handling refresh control
   const [refreshing, setRefreshing] = useState(false);
 
-  const {data: bookLists, isLoading: isBookLoading, refetch} = useGetBookList();
+  const {data: bookLists, isLoading: isBookLoading, refetch, isError, error} = useGetBookList();
 
   const confirmDownload = (fileUrl: string, fileName: string) => {
     setSelectedPdfFile({fileUrl, fileName});
@@ -54,6 +54,7 @@ const PdfListScreen = () => {
 
   const handleDownload = async () => {
     if (selectedPdfFile) {
+      console.log("download")
       downloadPDF(selectedPdfFile.fileUrl, selectedPdfFile.fileName);
     }
 
@@ -109,11 +110,14 @@ const PdfListScreen = () => {
       ios: PERMISSIONS.IOS.PHOTO_LIBRARY,
     });
 
+    console.log("fileurl", fileUrl)
+
     if (!permission) {
       setAlertTitle('Error');
       setAlertMessage('Platform not supported for file download.');
       setAlertType('error');
       setIsAlertVisible(true);
+      console.log("error")
       return;
     }
 
@@ -123,8 +127,12 @@ const PdfListScreen = () => {
       importance: AndroidImportance.HIGH,
     });
 
+    console.log("complete channel")
+
     const result = await request(permission);
+    console.log("result", result)
     if (result === RESULTS.GRANTED) {
+      console.log("grand")
       const path = Platform.select({
         ios: `${RNFetchBlob.fs.dirs.DocumentDir}/${fileName}.pdf`,
         android: `${RNFetchBlob.fs.dirs.DownloadDir}/${fileName}.pdf`,
@@ -188,6 +196,11 @@ const PdfListScreen = () => {
       setAlertMessage('Please enable permissions in your app settings.');
       setAlertType('warning');
       setIsAlertVisible(true);
+    }else if (result === RESULTS.UNAVAILABLE) {
+      setAlertTitle('Permission Unavaliable');
+      setAlertMessage('Please enable permissions in your app settings.');
+      setAlertType('warning');
+      setIsAlertVisible(true);
     }
   };
 
@@ -199,9 +212,13 @@ const PdfListScreen = () => {
           showsVerticalScrollIndicator={false}
           refreshControl={
             <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-              colors={[Colors[theme].primary]}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+           
+            tintColor={Colors[theme].primary}
+            colors={[Colors[theme].primary]}
+           
+            progressBackgroundColor={Colors[theme].secondary}
             />
           } // Add RefreshControl here
         >
@@ -245,7 +262,9 @@ const PdfListScreen = () => {
                   </View>
                 </View>
               ))
-            : bookLists?.data?.results?.map(ebook => (
+            : isError ? (
+              <><Text>{error.message}</Text></>
+            ) : bookLists?.data?.results?.map(ebook => (
                 <React.Fragment key={ebook.id}>
                   <View style={styles.contentContainer}>
                     <View style={styles.innerContentContainer}>
