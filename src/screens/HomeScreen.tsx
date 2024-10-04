@@ -15,7 +15,7 @@ import {NavigationMainStackScreenProps} from '../navigations/StackNavigation';
 import {FontAwesome} from '../utils/common';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {Colors} from '../theme';
-import {images, menus, movies} from '../utils/constants';
+import {images, menus} from '../utils/constants';
 import {Movies} from '../components/commons/Movies';
 import ImageSlider from '../components/commons/ImageSlider';
 import Audios from '../components/commons/Audio';
@@ -23,7 +23,6 @@ import TopNavigation from '../components/commons/TopNavigation';
 
 import {useTranslation} from 'react-i18next';
 import {useGetPaintings} from '../api_services/lib/queryhooks/usePainting';
-import LoadingSpinner from '../components/utils/LoadingSpinner';
 import {useGetAlbums} from '../api_services/lib/queryhooks/useAudio';
 
 type Props = {

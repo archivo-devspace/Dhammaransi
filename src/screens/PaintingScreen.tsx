@@ -1,6 +1,7 @@
+/* eslint-disable react-native/no-inline-styles */
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
   Image,
-  Platform,
   StyleSheet,
   Text,
   View,
@@ -9,52 +10,47 @@ import {
   Alert,
   StatusBar,
 } from 'react-native';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Theme, useThemeContext } from '../contexts/ThemeContext';
-import { useTranslation } from 'react-i18next';
-import { MainStackParamList } from '../navigations/StackNavigation';
-import { RouteProp, useNavigation } from '@react-navigation/native';
-import { Colors } from '../theme';
-import { SafeAreaView } from 'react-native';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {Theme, useThemeContext} from '../contexts/ThemeContext';
+import {useTranslation} from 'react-i18next';
+import {MainStackParamList} from '../navigations/StackNavigation';
+import {RouteProp} from '@react-navigation/native';
+import {Colors} from '../theme';
 import TopNavigation from '../components/commons/TopNavigation';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import Slider from '@react-native-community/slider';
-import { AntDesign, Entypo, MaterialIcon, MaterialIcons } from '../utils/common';
+import {Entypo, MaterialIcon, MaterialIcons} from '../utils/common';
 import TrackPlayer, {
   State,
   usePlaybackState,
   useProgress,
 } from 'react-native-track-player';
 import LoadingSpinner from '../components/utils/LoadingSpinner';
-import { CustomButton } from '../components/utils';
-import { useTrackContext } from '../contexts/TrackContext';
-import { singlePaintingDetils } from '../utils/constants';
-import { SinglePaintingDetialsProps } from '../types/golbal';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import {CustomButton} from '../components/utils';
+import {useTrackContext} from '../contexts/TrackContext';
+import {singlePaintingDetils} from '../utils/constants';
+import {SinglePaintingDetialsProps} from '../types/golbal';
 
 type Props = {
   route: RouteProp<MainStackParamList, 'PaintingScreen'>;
 };
 
-const PaintingScreen = ({ route }: Props) => {
+const PaintingScreen = ({route}: Props) => {
   console.log('route', route.params);
-  const { theme } = useThemeContext();
-  const insets = useSafeAreaInsets();
-  const navigation = useNavigation();
+  const {theme} = useThemeContext();
   const [icon, setIcon] = useState();
   const playbackState = usePlaybackState();
   const styles = styling(theme);
-  const { t } = useTranslation();
-  const { width, height } = useWindowDimensions();
+  const {t} = useTranslation();
+  const {width, height} = useWindowDimensions();
   const [playing, setPlaying] = useState(false);
   const [paintingDetils, setPaintingDetails] =
     useState<SinglePaintingDetialsProps>();
   const progress = useProgress();
-  const { togglePlayingMode } = useTrackContext();
+  const {togglePlayingMode} = useTrackContext();
   const scrollA = useRef(new Animated.Value(0)).current;
 
   const customHeight = height * 0.3;
-  const { top } = insets;
   const BANNER_H = height * 0.4;
 
   useEffect(() => {
@@ -71,8 +67,8 @@ const PaintingScreen = ({ route }: Props) => {
     getPaintingDetails();
   }, []);
 
-  const getTrackDuration = (progress: any) => {
-    const durationInSeconds = progress.duration - progress.position;
+  const getTrackDuration = (_progress: any) => {
+    const durationInSeconds = _progress.duration - _progress.position;
 
     if (durationInSeconds <= 0) {
       return '00:00';
@@ -106,10 +102,14 @@ const PaintingScreen = ({ route }: Props) => {
         backgroundColor={'transparent'}
       />
 
-      <TopNavigation title={t('TITLES.HOME')} scrollA={scrollA} backBtn={true} />
+      <TopNavigation
+        title={t('TITLES.HOME')}
+        scrollA={scrollA}
+        backBtn={true}
+      />
       <Animated.ScrollView
         onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { y: scrollA } } }],
+          [{nativeEvent: {contentOffset: {y: scrollA}}}],
           {
             useNativeDriver: true,
           },
@@ -133,19 +133,16 @@ const PaintingScreen = ({ route }: Props) => {
                       ],
                     }),
                   },
-                  { scale: 1 },
+                  {scale: 1},
                 ],
               },
-              { height: customHeight - 16 },
+              {height: customHeight - 16},
             ]}>
-            <View style={styles.backBtn}>
-
-            </View>
+            <View style={styles.backBtn} />
             <Image
-              source={{ uri: paintingDetils?.imageUrl }}
-              style={{ width: '100%', height: customHeight }}
+              source={{uri: paintingDetils?.imageUrl}}
+              style={{width: '100%', height: customHeight}}
             />
-
           </Animated.View>
         </View>
         <View
@@ -190,7 +187,7 @@ const PaintingScreen = ({ route }: Props) => {
               }}
             />
             {/* Music  */}
-            <View style={[{ width: width * 0.98 }, styles.musicContainer]}>
+            <View style={[{width: width * 0.98}, styles.musicContainer]}>
               <Text
                 style={{
                   color: Colors[theme]?.text,
@@ -230,16 +227,16 @@ const PaintingScreen = ({ route }: Props) => {
                 icon={
                   playbackState.state === State.Playing ? (
                     <MaterialIcons
-                      name={`pause-circle`}
+                      name={'pause-circle'}
                       size={60}
-                      style={{ elevation: 2 }}
+                      style={{elevation: 2}}
                       color={Colors[theme].primary}
                     />
                   ) : playbackState.state === State.Paused ? (
                     <MaterialIcons
-                      name={`play-circle`}
+                      name={'play-circle'}
                       size={60}
-                      style={{ elevation: 2 }}
+                      style={{elevation: 2}}
                       color={Colors[theme].primary}
                     />
                   ) : playbackState.state === State.Ready ||
@@ -255,9 +252,9 @@ const PaintingScreen = ({ route }: Props) => {
                     />
                   ) : (
                     <Entypo
-                      name={`controller-stop`}
+                      name={'controller-stop'}
                       size={60}
-                      style={{ elevation: 2 }}
+                      style={{elevation: 2}}
                       color={Colors[theme].primary}
                     />
                   )
@@ -265,7 +262,7 @@ const PaintingScreen = ({ route }: Props) => {
               />
             </View>
             {/* Description Text  */}
-            <View style={{ width, padding: 10 }}>
+            <View style={{width, padding: 10}}>
               <Text
                 style={{
                   textAlign: 'justify',
@@ -337,7 +334,7 @@ const styling = (theme: Theme) =>
     backBtn: {
       left: 16,
       position: 'absolute',
-      zIndex: 1
+      zIndex: 1,
     },
   });
 

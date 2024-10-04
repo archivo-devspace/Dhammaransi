@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import {
   Image,
   Platform,
@@ -7,14 +8,12 @@ import {
   useWindowDimensions,
   RefreshControl,
   ScrollView,
-  Alert,
 } from 'react-native';
 import React, {useState, useCallback} from 'react';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {Colors} from '../theme';
 import {CustomButton} from '../components/utils';
 import {Ionicons} from '../utils/common';
-import {fallBackImageUrl} from '../utils/constants';
 import Container from '../components/commons/Container';
 import {useGetBookList} from '../api_services/lib/queryhooks/useBook';
 import SkeletonView from '../components/commons/Skeleton';
@@ -290,7 +289,7 @@ const PdfListScreen = () => {
                       onPress={() => confirmDownload(ebook.file, ebook.name)}
                       icon={
                         <Ionicons
-                          name={`cloud-download-outline`}
+                          name={'cloud-download-outline'}
                           size={30}
                           color={Colors[theme].primary}
                         />

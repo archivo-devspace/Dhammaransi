@@ -1,4 +1,5 @@
-import {StyleSheet, Text, View} from 'react-native';
+/* eslint-disable react-native/no-inline-styles */
+import {Text, View} from 'react-native';
 import React from 'react';
 import LoadingSpinner from '../components/utils/LoadingSpinner';
 import {Colors} from '../theme';
@@ -29,5 +30,3 @@ const ContactScreen = () => {
 };
 
 export default ContactScreen;
-
-const styles = StyleSheet.create({});

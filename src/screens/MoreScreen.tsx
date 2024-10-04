@@ -1,10 +1,9 @@
+/* eslint-disable react-native/no-inline-styles */
 import {
   Alert,
   Image,
   Linking,
   Platform,
-  Pressable,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -17,7 +16,6 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Colors} from '../theme';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {
-  Entypo,
   FontAwesome,
   FontAwesomePro,
   MaterialIcon,

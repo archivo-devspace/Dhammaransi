@@ -80,10 +80,10 @@ export interface BookApiRes {
   mime_type: string;
   size: number;
 }
-//#endregion 
+//#endregion
 
 //#region Biography
-export interface BiographyApiRes{
-  id:number;
-  description:string;
+export interface BiographyApiRes {
+  id: number;
+  description: string;
 }

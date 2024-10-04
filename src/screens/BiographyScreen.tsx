@@ -1,5 +1,6 @@
+/* eslint-disable react/no-unstable-nested-components */
 import {StyleSheet, View, useWindowDimensions} from 'react-native';
-import React, {useState} from 'react';
+import React from 'react';
 import Container from '../components/commons/Container';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {Colors} from '../theme';
@@ -21,14 +22,10 @@ interface SkeletonGroupProps {
 
 const BiographyScreen = () => {
   const {theme} = useThemeContext();
-  const {width, height} = useWindowDimensions();
-  const customImageWidth = width * 0.4;
-  const customImageHeight = width * 0.5;
+  const {width} = useWindowDimensions();
   const styles = styling(theme);
 
   const {data: biography, isLoading: isBiographyLoading} = useGetBiography();
-
-  const [loading, setLoading] = useState(true);
 
   const generateSkeletonViews = (config: SkeletonConfig[]): JSX.Element[] => {
     return config.map(({height, widthRatio, borderRadious}, index) => (
