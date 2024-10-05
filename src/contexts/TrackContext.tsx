@@ -22,12 +22,13 @@ import {
   fetchDownloadedDataFromLocalDir,
   sendDownloadedDataToLocalDir,
 } from '../api_services/downloadService';
-import {Alert, DeviceEventEmitter, Platform} from 'react-native';
+import { Alert, DeviceEventEmitter, Platform } from 'react-native';
 import RNFetchBlob from 'rn-fetch-blob';
 import {
   createChannel,
   displayNotification,
 } from '../api_services/notificationService';
+import CustomAlert from '../components/commons/CustomAlert';
 
 export interface TrackProps {
   id: number;
@@ -84,7 +85,7 @@ export interface TrackContextType {
 
 const TrackContext = createContext<TrackContextType | undefined>(undefined);
 
-export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
+export const TrackProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [trackLists, setTrackLists] = useState<Array<TrackProps>>([]);
   const [playingTrackLists, setPlayingTrackLists] = useState<Array<TrackProps>>(
     [],
@@ -103,6 +104,13 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
   const [selectedFolder, setSelectedFolder] = useState<string | null>(null);
   const [folders, setFolders] = useState<string[]>([]);
 
+  const [isAlertVisible, setIsAlertVisible] = useState(false);
+  const [alertTitle, setAlertTitle] = useState('');
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alerType, setAlertType] = useState<
+    'success' | 'warning' | 'error' | null
+  >(null);
+
   // useLayoutEffect(() => {
   //   const getAllTracks = () => {
   //     setTrackLists(tracks);
@@ -111,7 +119,7 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
   // }, []);
 
   const loadFolders = async () => {
-    const {dirs} = RNFetchBlob.fs;
+    const { dirs } = RNFetchBlob.fs;
     const dirToSave = Platform.OS === 'ios' ? dirs.DocumentDir : dirs.CacheDir;
     const path = `${dirToSave}/downloads`;
     const defaultFolderPath = `${dirToSave}/downloads/Downloads`;
@@ -132,18 +140,24 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
       );
       setFolders(directories.filter(Boolean) as string[]);
     } catch (error) {
-      console.error(error);
-      Alert.alert('Error', 'Failed to load folders!');
+      setAlertTitle('Error');
+      setAlertMessage('Failed to load folders!');
+      setAlertType('error');
+      setIsAlertVisible(true);
+      // Alert.alert('Error', 'Failed to load folders!');
     }
   };
 
   const createFolder = async (folderName: string) => {
     if (!folderName) {
-      Alert.alert('Error', 'Folder name cannot be empty!');
+      setAlertTitle('Warnning');
+      setAlertMessage('Folder name cannot be empty!');
+      setAlertType('warning');
+      setIsAlertVisible(true);
       return;
     }
 
-    const {dirs} = RNFetchBlob.fs;
+    const { dirs } = RNFetchBlob.fs;
     const dirToSave = Platform.OS === 'ios' ? dirs.DocumentDir : dirs.CacheDir;
     const folderPath = `${dirToSave}/downloads/${folderName}`;
 
@@ -152,19 +166,26 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
       if (!exists) {
         await RNFetchBlob.fs.mkdir(folderPath);
         loadFolders();
-        Alert.alert('Success', 'Folder created successfully!');
-        //  setFolderName('');
+        setAlertTitle('Success');
+        setAlertMessage('Folder created successfully!');
+        setAlertType('success');
+        setIsAlertVisible(true);        //  setFolderName('');
       } else {
-        Alert.alert('Error', 'Folder already exists!');
+        setAlertTitle('Warning');
+        setAlertMessage('Folder already exists!');
+        setAlertType('warning');
+        setIsAlertVisible(true);
       }
     } catch (error) {
-      console.error(error);
-      Alert.alert('Error', 'Failed to create folder!');
+      setAlertTitle('Error');
+      setAlertMessage('Failed to create folder!');
+      setAlertType('error');
+      setIsAlertVisible(true);
     }
   };
 
   const deleteFolder = async (folderName: string) => {
-    const {dirs} = RNFetchBlob.fs;
+    const { dirs } = RNFetchBlob.fs;
     const dirToSave = Platform.OS === 'ios' ? dirs.DocumentDir : dirs.CacheDir;
     const folderPath = `${dirToSave}/downloads/${folderName}`;
 
@@ -212,13 +233,25 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
         await RNFetchBlob.fs.unlink(`/${folderPath}`); // Ensure this function is correctly defined
         await loadFolders(); // Reload the folder list after deletion
         // setDownloadingTrackIds([]);
-        Alert.alert('Success', 'Folder deleted successfully!');
+        setAlertTitle('Success');
+        setAlertMessage('Folder deleted successfully!');
+        setAlertType('success');
+        setIsAlertVisible(true);
+        // Alert.alert('Success', 'Folder deleted successfully!');
       } else {
-        Alert.alert('Error', 'Folder does not exist!');
+        setAlertTitle('Error');
+        setAlertMessage('Folder does not exist!');
+        setAlertType('error');
+        setIsAlertVisible(true);
+        // Alert.alert('Error', 'Folder does not exist!');
       }
     } catch (error) {
-      console.error('Failed to delete folder:', error);
-      Alert.alert('Error', 'Failed to delete folder!');
+      // console.error('Failed to delete folder:', error);
+      setAlertTitle('Error');
+      setAlertMessage('Failed to delete folder!');
+      setAlertType('error');
+      setIsAlertVisible(true);
+      // Alert.alert('Error', 'Failed to delete folder!');
     }
   };
 
@@ -476,7 +509,7 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
 
     const previousTrackIndexArray =
       currentTrackIndex > 0
-        ? Array.from({length: currentTrackIndex}, (_, i) => i)
+        ? Array.from({ length: currentTrackIndex }, (_, i) => i)
         : [];
 
     const activeIndex = initialQueue.findIndex(
@@ -505,7 +538,7 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
 
     const previousTrackIndexArray =
       currentTrackIndex > 0
-        ? Array.from({length: currentTrackIndex}, (_, i) => i)
+        ? Array.from({ length: currentTrackIndex }, (_, i) => i)
         : [];
 
     const remainingQueue = [...upcomingQueue, ...previousQueue];
@@ -579,9 +612,20 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
   };
 
   return (
-    <TrackContext.Provider value={contextValue}>
-      {children}
-    </TrackContext.Provider>
+    <>
+      <TrackContext.Provider value={contextValue}>
+        {children}
+
+      </TrackContext.Provider>
+      <CustomAlert
+        visible={isAlertVisible}
+        onClose={() => setIsAlertVisible(false)}
+        title={alertTitle}
+        message={alertMessage}
+        btnText="Ok"
+        type={alerType}
+      />
+    </>
   );
 };
 

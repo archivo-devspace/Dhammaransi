@@ -50,8 +50,8 @@ export const Audios = ({
     },
   });
 
-  const handleClick = (item: Album) => {
-    navigation.navigate('Audios', {item} as any);
+  const handleClick = (id:number) => {
+    navigation.navigate('Audios', {id} );
   };
 
   const audios = data?.map(item => ({
@@ -81,7 +81,7 @@ export const Audios = ({
                 marginHorizontal={MARGIN_HORIZONTAL}
                 x={x}
                 fullWidth={ITEM_FULL_WIDTH}
-                handleClick={handleClick}
+                handleClick={()=>{}}
                 truncateIndex={truncateIndex}
                 isLoading={isLoading}
               />
@@ -124,7 +124,7 @@ export const Audios = ({
                 marginHorizontal={MARGIN_HORIZONTAL}
                 x={x}
                 fullWidth={ITEM_FULL_WIDTH}
-                handleClick={handleClick}
+                handleClick={()=>handleClick(item.id)}
                 truncateIndex={truncateIndex}
               />
             );

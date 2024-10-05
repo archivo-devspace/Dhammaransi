@@ -584,7 +584,7 @@ const styling = (theme: Theme) =>
       // fontSize: 14,
     },
     chooseFromBtn: {
-      backgroundColor: Colors[theme].text,
+      backgroundColor: Colors[theme].secondary,
       borderRadius: 10,
       paddingHorizontal: 20,
       paddingVertical: 10,

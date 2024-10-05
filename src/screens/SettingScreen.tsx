@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -7,18 +7,18 @@ import {
   View,
 } from 'react-native';
 import Switch from '../components/utils/Switch/Switch';
-import {save} from '../utils/storage';
-import {Theme, useThemeContext} from '../contexts/ThemeContext';
-import {Colors} from '../theme';
-import {useTranslation} from 'react-i18next';
+import { save } from '../utils/storage';
+import { Theme, useThemeContext } from '../contexts/ThemeContext';
+import { Colors } from '../theme';
+import { useTranslation } from 'react-i18next';
 import Container from '../components/commons/Container';
 
 const SettingScreen = () => {
-  const {theme, setTheme, languages, setLanguages} = useThemeContext();
-  const {t} = useTranslation();
+  const { theme, setTheme, languages, setLanguages } = useThemeContext();
+  const { t } = useTranslation();
   const [isEnabled, setIsEnabled] = useState<boolean>(false);
   const [burmeseLanguages, setBurmeseLanguages] = useState<boolean>(false);
-  const {height} = useWindowDimensions();
+  const { height } = useWindowDimensions();
 
   const styles = styling(theme);
 
@@ -61,7 +61,7 @@ const SettingScreen = () => {
             style={{
               color: Colors[theme].text,
               fontSize: height * 0.02,
-              fontWeight: '600',
+              fontWeight: '500',
             }}>
             {t('UTILS.DARK_MODE_ON')}
           </Text>
@@ -95,7 +95,10 @@ const SettingScreen = () => {
         </View>
         <View style={styles.divider} />
         <View style={styles.contentContainer}>
-          <Text style={styles.text}>{t('UTILS.LANGUAGES')}</Text>
+          <Text style={[styles.text, {
+            fontSize: height * 0.02,
+            fontWeight: '500',
+          }]}>{t('UTILS.LANGUAGES')}</Text>
           <Switch
             value={burmeseLanguages}
             handleSwitch={toggleSwitchLang}

@@ -61,7 +61,7 @@ const HomeScreen = ({navigation}: Props) => {
     isError: isAlbumsError,
     error: albumsErrorMessage,
     refetch: albumsRefresh,
-  } = useGetAlbums();
+  } = useGetAlbums(1);
 
   const [refreshing, setRefreshing] = useState(false);
 

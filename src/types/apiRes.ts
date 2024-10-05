@@ -61,9 +61,12 @@ export interface Album {
 
 export interface Tayar {
   id: number;
+  url: any;
+  title: string;
+  artist: string;
+  date: string;
+  artwork: any;
   album_id: number;
-  name: string;
-  file: string;
   mime_type: string;
   size: number;
 }

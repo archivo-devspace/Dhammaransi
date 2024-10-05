@@ -50,8 +50,8 @@ export const Movies = ({
     },
   });
 
-  const handleClick = (item: PaintingApiRes) => {
-    navigation.navigate('Movie', {item});
+  const handleClick = (id: number) => {
+    navigation.navigate('Audios', {id});
   };
 
   const styles = styling(theme);
@@ -77,7 +77,7 @@ export const Movies = ({
                 x={x}
                 fullWidth={ITEM_FULL_WIDTH}
                 truncateIndex={truncateIndex}
-                handleClick={handleClick}
+                handleClick={()=>{}}
                 isLoading={isLoading}
               />
             );
@@ -120,7 +120,7 @@ export const Movies = ({
                 x={x}
                 fullWidth={ITEM_FULL_WIDTH}
                 truncateIndex={truncateIndex}
-                handleClick={handleClick}
+                handleClick={()=>handleClick(item.id)}
               />
             );
           }}

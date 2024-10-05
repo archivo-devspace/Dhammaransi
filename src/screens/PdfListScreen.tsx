@@ -9,46 +9,56 @@ import {
   RefreshControl,
   ScrollView,
 } from 'react-native';
-import React, {useState, useCallback} from 'react';
-import {Theme, useThemeContext} from '../contexts/ThemeContext';
-import {Colors} from '../theme';
-import {CustomButton} from '../components/utils';
-import {Ionicons} from '../utils/common';
+import React, { useState, useCallback } from 'react';
+import { Theme, useThemeContext } from '../contexts/ThemeContext';
+import { Colors } from '../theme';
+import { CustomButton } from '../components/utils';
+import { Ionicons } from '../utils/common';
 import Container from '../components/commons/Container';
-import {useGetBookList} from '../api_services/lib/queryhooks/useBook';
+import { useGetBookList } from '../api_services/lib/queryhooks/useBook';
 import SkeletonView from '../components/commons/Skeleton';
-import {PERMISSIONS, request, RESULTS} from 'react-native-permissions';
+import { PERMISSIONS, request, RESULTS } from 'react-native-permissions';
 import RNFetchBlob from 'rn-fetch-blob';
-import notifee, {AndroidImportance} from '@notifee/react-native';
+import notifee, { AndroidImportance } from '@notifee/react-native';
 import CustomAlert from '../components/commons/CustomAlert';
 import ConfirmModal from '../components/commons/ConfirmModal';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
+import DataNotFound from '../components/commons/DataNotFound';
+import LottieView from 'lottie-react-native';
+import NetworkError from '../components/commons/NetworkError';
+
+
+
 
 const PdfListScreen = () => {
-  const {theme} = useThemeContext();
-  const {width, height} = useWindowDimensions();
+  const { theme } = useThemeContext();
+  const { width, height } = useWindowDimensions();
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedPdfFile, setSelectedPdfFile] = useState<{
     fileUrl: string;
     fileName: string;
-  }>({fileUrl: '', fileName: ''});
+  }>({ fileUrl: '', fileName: '' });
   const [isAlertVisible, setIsAlertVisible] = useState(false);
   const [alertTitle, setAlertTitle] = useState('');
   const [alertMessage, setAlertMessage] = useState('');
   const [alerType, setAlertType] = useState<
     'success' | 'warning' | 'error' | null
   >(null);
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   const styles = styling(theme);
+
 
   // State for handling refresh control
   const [refreshing, setRefreshing] = useState(false);
 
-  const {data: bookLists, isLoading: isBookLoading, refetch, isError, error} = useGetBookList();
+  const { data: bookLists, isLoading: isBookLoading, refetch, isFetched, isError, error } = useGetBookList();
+
+  console.log("isloading", isBookLoading)
+
 
   const confirmDownload = (fileUrl: string, fileName: string) => {
-    setSelectedPdfFile({fileUrl, fileName});
+    setSelectedPdfFile({ fileUrl, fileName });
     setModalVisible(true);
   };
 
@@ -153,7 +163,7 @@ const PdfListScreen = () => {
           appendExt: 'pdf',
         })
           .fetch('GET', fileUrl)
-          .progress({interval: 100}, async (received, total) => {
+          .progress({ interval: 100 }, async (received, total) => {
             const progress = Math.round((received / total) * 100);
             currentNotificationId = await displayOrUpdateNotification(
               currentNotificationId,
@@ -196,7 +206,7 @@ const PdfListScreen = () => {
       setAlertMessage('Please enable permissions in your app settings.');
       setAlertType('warning');
       setIsAlertVisible(true);
-    }else if (result === RESULTS.UNAVAILABLE) {
+    } else if (result === RESULTS.UNAVAILABLE) {
       setAlertTitle('Permission Unavaliable');
       setAlertMessage('Please enable permissions in your app settings.');
       setAlertType('warning');
@@ -212,115 +222,115 @@ const PdfListScreen = () => {
           showsVerticalScrollIndicator={false}
           refreshControl={
             <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-           
-            tintColor={Colors[theme].primary}
-            colors={[Colors[theme].primary]}
-           
-            progressBackgroundColor={Colors[theme].secondary}
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              progressViewOffset={-1}
+              tintColor={Colors[theme].primary}
+              colors={[Colors[theme].primary]}
+
+              progressBackgroundColor={Colors[theme].secondary}
             />
           } // Add RefreshControl here
         >
           {isBookLoading
             ? // Loading Skeletons
-              [...Array(3)].map((_, index) => (
-                <View
-                  key={index}
-                  style={[styles.contentContainer, {paddingBottom: 100}]}>
-                  <View style={styles.innerContentContainer}>
+            [...Array(3)].map((_, index) => (
+              <View
+                key={index}
+                style={[styles.contentContainer, { paddingBottom: 100 }]}>
+                <View style={styles.innerContentContainer}>
+                  <SkeletonView
+                    height={height * 0.2}
+                    width={width * 0.3}
+                    borderRadius={10}
+                  />
+                  <View style={{ width: width * 0.6, marginTop: 20, gap: 20 }}>
+                    <SkeletonView height={20} width={150} borderRadius={10} />
                     <SkeletonView
-                      height={height * 0.2}
-                      width={width * 0.3}
-                      borderRadius={10}
-                    />
-                    <View style={{width: width * 0.6, marginTop: 20, gap: 20}}>
-                      <SkeletonView height={20} width={150} borderRadius={10} />
-                      <SkeletonView
-                        height={18}
-                        width={'auto'}
-                        borderRadius={10}
-                      />
-                    </View>
-                  </View>
-                  <View style={{width: '100%', gap: 14}}>
-                    <SkeletonView
-                      height={20}
-                      width={'auto'}
-                      borderRadius={10}
-                    />
-                    <SkeletonView
-                      height={20}
-                      width={'auto'}
-                      borderRadius={10}
-                    />
-                    <SkeletonView
-                      height={20}
+                      height={18}
                       width={'auto'}
                       borderRadius={10}
                     />
                   </View>
                 </View>
-              ))
-            : isError ? (
-              <><Text>{error.message}</Text></>
+                <View style={{ width: '100%', gap: 14 }}>
+                  <SkeletonView
+                    height={20}
+                    width={'auto'}
+                    borderRadius={10}
+                  />
+                  <SkeletonView
+                    height={20}
+                    width={'auto'}
+                    borderRadius={10}
+                  />
+                  <SkeletonView
+                    height={20}
+                    width={'auto'}
+                    borderRadius={10}
+                  />
+                </View>
+              </View>
+            ))
+            : (isFetched && !bookLists?.data?.results?.length) || isError ? (
+              <NetworkError onRefresh={refetch}/>
             ) : bookLists?.data?.results?.map(ebook => (
-                <React.Fragment key={ebook.id}>
-                  <View style={styles.contentContainer}>
-                    <View style={styles.innerContentContainer}>
-                      <View
-                        style={[
-                          styles.img,
-                          {
-                            width: width * 0.3,
-                            height: width * 0.4,
-                          },
-                        ]}>
-                        <Image
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                            borderRadius: 10,
-                          }}
-                          source={
-                            ebook.cover_photo
-                              ? {uri: ebook.cover_photo}
-                              : require('../assets/marguerite.jpg')
-                          }
-                          resizeMode="cover"
-                        />
-                      </View>
-                      <View style={{width: width * 0.6, gap: 20}}>
-                        <Text style={[styles.text, {fontSize: height * 0.025}]}>
-                          {ebook.name}
-                        </Text>
-                        <Text
-                          style={[styles.author, {fontSize: height * 0.022}]}>
-                          {ebook.author}
-                        </Text>
-                      </View>
+              <React.Fragment key={ebook.id}>
+                <View style={styles.contentContainer}>
+                  <View style={styles.innerContentContainer}>
+                    <View
+                      style={[
+                        styles.img,
+                        {
+                          width: width * 0.3,
+                          height: width * 0.4,
+                        },
+                      ]}>
+                      <Image
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          borderRadius: 10,
+                        }}
+                        source={
+                          ebook.cover_photo
+                            ? { uri: ebook.cover_photo }
+                            : require('../assets/marguerite.jpg')
+                        }
+                        resizeMode="cover"
+                      />
                     </View>
-                    <Text
-                      style={[styles.description, {fontSize: height * 0.021}]}>
-                      {ebook.description}
-                    </Text>
-                    <CustomButton
-                      onPress={() => confirmDownload(ebook.file, ebook.name)}
-                      icon={
-                        <Ionicons
-                          name={'cloud-download-outline'}
-                          size={30}
-                          color={Colors[theme].primary}
-                        />
-                      }
-                      customButtonStyle={styles.btn}
-                    />
+                    <View style={{ width: width * 0.6, gap: 20 }}>
+                      <Text style={[styles.text, { fontSize: height * 0.025 }]}>
+                        {ebook.name}
+                      </Text>
+                      <Text
+                        style={[styles.author, { fontSize: height * 0.022 }]}>
+                        {ebook.author}
+                      </Text>
+                    </View>
                   </View>
-                  {bookLists?.data?.results?.length !== ebook?.id && (
-                    <View style={styles.divider} />
-                  )}
-                </React.Fragment>
-              ))}
+                  <Text
+                    style={[styles.description, { fontSize: height * 0.021 }]}>
+                    {ebook.description}
+                  </Text>
+                  <CustomButton
+                    onPress={() => confirmDownload(ebook.file, ebook.name)}
+                    icon={
+                      <Ionicons
+                        name={'cloud-download-outline'}
+                        size={30}
+                        color={Colors[theme].primary_light}
+                      />
+                    }
+                    customButtonStyle={styles.btn}
+                  />
+                </View>
+                {bookLists?.data?.results?.length !== ebook?.id && (
+                  <View style={styles.divider} />
+                )}
+              </React.Fragment>
+            ))}
         </ScrollView>
       </Container>
       <ConfirmModal
@@ -404,9 +414,24 @@ const styling = (theme: Theme) =>
     btn: {
       alignSelf: 'flex-end',
       paddingHorizontal: 50,
+      backgroundColor: Colors[theme].secondary,
       paddingVertical: 10,
-      borderWidth: 1,
-      borderColor: Colors[theme].primary,
+      // borderWidth: 1,
+      // borderColor: Colors[theme].primary,
+      shadowColor: Colors[theme].text,
       borderRadius: 20,
+      ...Platform.select({
+        ios: {
+          shadowOffset: {
+            width: 0,
+            height: 3,
+          },
+          shadowOpacity: 0.2,
+          shadowRadius: 4,
+        },
+        android: {
+          elevation: 4,
+        },
+      }),
     },
   });
