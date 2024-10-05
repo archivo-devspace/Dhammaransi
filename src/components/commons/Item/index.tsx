@@ -27,7 +27,7 @@ type Props = {
   x: SharedValue<number>;
   fullWidth: number;
   truncateIndex: number;
-  handleClick: (item: any) => void;
+  handleClick: (id:number) => void;
   isLoading?: boolean;
 };
 
