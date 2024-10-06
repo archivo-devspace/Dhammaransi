@@ -107,7 +107,7 @@ const ImageSlider = ({images}: {images: any}) => {
           <Image
             key={index}
             source={{uri: image}}
-            style={{width, height: customHeight, resizeMode: 'cover'}}
+            style={{width, height: customHeight, resizeMode: 'stretch'}}
           />
         ))}
       </ScrollView>

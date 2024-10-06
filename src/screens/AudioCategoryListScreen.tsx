@@ -20,7 +20,8 @@ import { useGetAlbums, useGetAlbumsInfinite } from '../api_services/lib/queryhoo
 import { useTranslation } from 'react-i18next';
 import LottieView from 'lottie-react-native';
 import SkeletonView from '../components/commons/Skeleton';
-import NetworkError from '../components/commons/NetworkError';
+import NetworkError from '../components/commons/LottieAnimationView';
+import { networkError } from '../utils/constants';
 
 type Props = {
   navigation: NavigationMainStackScreenProps['navigation'];
@@ -87,7 +88,7 @@ const AudioCategoryListScreen = ({ navigation }: Props) => {
       ))
       ) :
         isError ? (
-          <NetworkError onRefresh={refetch}/>
+          <NetworkError handlePress={refetch} btnType='refresh' lottieFiePath={networkError}/>
         ) : (
           <FlatList
             data={finalAlbumList}

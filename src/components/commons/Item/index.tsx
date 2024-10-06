@@ -147,10 +147,10 @@ const styling = (theme: Theme) =>
           shadowColor: Colors[theme].text,
           shadowOffset: {
             width: 0,
-            height: 3,
+            height: 2,
           },
-          shadowOpacity: 0.4,
-          shadowRadius: 4,
+          shadowOpacity: 0.2,
+          shadowRadius: 2,
         },
         android: {
           elevation: 7,

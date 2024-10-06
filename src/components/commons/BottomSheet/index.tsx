@@ -73,8 +73,15 @@ const BottomSheet = forwardRef<BottomSheetMethods, Props>(
 
     const animationStyle = useAnimatedStyle(() => {
       const top = topAnimation.value;
+
+      // Make it invisible when closed
+      const opacity = top === closeHeight ? 0 : 1;
+      const pointerEvents = top === closeHeight ? 'none' : 'auto';
+
       return {
         top,
+        opacity,
+        pointerEvents,
       };
     });
 
@@ -209,7 +216,6 @@ const styling = (theme: Theme) =>
   StyleSheet.create({
     continer: {
       ...StyleSheet.absoluteFillObject,
-
       borderTopLeftRadius: 16,
       borderTopRightRadius: 16,
       backgroundColor: 'green',
@@ -224,10 +230,6 @@ const styling = (theme: Theme) =>
       justifyContent: 'center',
       paddingVertical: 14,
       flexDirection: 'row',
-    },
-    line: {
-      borderBottomWidth: 1,
-      borderColor: Colors[theme].secondary,
     },
     playlists: {
       color: Colors[theme].text,

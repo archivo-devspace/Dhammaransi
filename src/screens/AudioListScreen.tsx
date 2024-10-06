@@ -16,7 +16,8 @@ import {RouteProp} from '@react-navigation/native';
 import {useGetSingleAlbum} from '../api_services/lib/queryhooks/useAudio';
 import { load } from 'react-native-track-player/lib/src/trackPlayer';
 import SkeletonView from '../components/commons/Skeleton';
-import NetworkError from '../components/commons/NetworkError';
+import NetworkError from '../components/commons/LottieAnimationView';
+import { networkError } from '../utils/constants';
 
 type Props = {
   navigation: NavigationMainStackScreenProps['navigation'];
@@ -81,7 +82,7 @@ const Audios = ({navigation, route}: Props) => {
   if(isError){
     return (
       <Container title="MENUS.AUDIOS">
-        <NetworkError onRefresh={refetch}/>
+        <NetworkError handlePress={refetch} btnType='refresh' lottieFiePath={networkError}/>
       </Container>
     )
   }

@@ -104,8 +104,15 @@ const FolderListsBottomSheet = forwardRef<FolderListsBottomSheetMethods, Props>(
 
     const animationStyle = useAnimatedStyle(() => {
       const top = topAnimation.value;
+
+      // Make it invisible when closed
+      const opacity = top === closeHeight ? 0 : 1;
+      const pointerEvents = top === closeHeight ? 'none' : 'auto';
+
       return {
         top,
+        opacity,
+        pointerEvents,
       };
     });
 

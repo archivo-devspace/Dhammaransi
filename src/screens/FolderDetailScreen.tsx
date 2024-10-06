@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -14,20 +14,24 @@ import {
   deleteContentFromLocalDir,
   fetchDownloadedDataFromLocalDir,
 } from '../api_services/downloadService';
-import {CustomButton} from '../components/utils';
+import { CustomButton } from '../components/utils';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {truncateText} from '../utils/common';
-import {useTrackContext} from '../contexts/TrackContext';
-import {NavigationMainBottomTabScreenProps} from '../navigations/BottomNavigation';
-import {Colors} from '../theme';
-import {Theme, useThemeContext} from '../contexts/ThemeContext';
+import { truncateText } from '../utils/common';
+import { useTrackContext } from '../contexts/TrackContext';
+import { NavigationMainBottomTabScreenProps } from '../navigations/BottomNavigation';
+import { Colors } from '../theme';
+import { Theme, useThemeContext } from '../contexts/ThemeContext';
 import Container from '../components/commons/Container';
-import {Swipeable} from 'react-native-gesture-handler';
-import {useTranslation} from 'react-i18next';
-import {useIsFocused} from '@react-navigation/native';
+import { Swipeable } from 'react-native-gesture-handler';
+import { useTranslation } from 'react-i18next';
+import { useIsFocused } from '@react-navigation/native';
 import LoadingSpinner from '../components/utils/LoadingSpinner';
 import ConfirmModal from '../components/commons/ConfirmModal';
 import TrackPlayer from 'react-native-track-player';
+import DataNotFound from '../components/commons/LottieAnimationView';
+import { emptyData } from '../utils/constants';
+import SkeletonView from '../components/commons/Skeleton';
+
 
 type Props = {
   route: any;
@@ -45,8 +49,8 @@ type TrackItem = {
   url: string;
 };
 
-const FolderDetailScreen = ({route, navigation}: Props) => {
-  const {folderName} = route.params;
+const FolderDetailScreen = ({ route, navigation }: Props) => {
+  const { folderName } = route.params;
 
   const {
     deleteTrackById,
@@ -55,20 +59,23 @@ const FolderDetailScreen = ({route, navigation}: Props) => {
     setTrackLists,
     selectedFolder,
   } = useTrackContext();
-  const {t} = useTranslation();
+  const { t } = useTranslation();
+
   const [tracks, setTracks] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedTrackId, setSelectedTrackId] = useState(null);
   const swipeableRefs = useRef<Swipeable[]>([]);
+  const [isEmpty, setIsEmpty] = useState<boolean>(false);
 
   const isFocused = useIsFocused();
-  const {theme} = useThemeContext();
-  const {height, width} = useWindowDimensions();
+  const { theme } = useThemeContext();
+  const { height, width } = useWindowDimensions();
   const styles = createStyles(theme);
 
   const fetchDownloadedData = useCallback(async () => {
     try {
+      setIsLoading(true);
       await fetchDownloadedDataFromLocalDir(
         async items => {
           const sortedItems = items.sort(
@@ -89,6 +96,10 @@ const FolderDetailScreen = ({route, navigation}: Props) => {
               };
             }),
           );
+          console.log("updatedItems", updatedItems)
+          if (updatedItems.length === 0) {
+            setIsEmpty(true);
+          }
           setTracks(updatedItems);
           setTrackLists(updatedItems);
         },
@@ -96,6 +107,8 @@ const FolderDetailScreen = ({route, navigation}: Props) => {
       );
     } catch (error) {
       console.error('Error fetching data:', error);
+    } finally {
+      setIsLoading(false);
     }
   }, [folderName]);
 
@@ -148,7 +161,7 @@ const FolderDetailScreen = ({route, navigation}: Props) => {
     };
   }, [fetchDownloadedData]);
 
-  const renderTrackItem = ({item, index}: {item: any; index: number}) => (
+  const renderTrackItem = ({ item, index }: { item: any; index: number }) => (
     <Swipeable
       ref={ref => {
         swipeableRefs.current[index] = ref as any;
@@ -171,7 +184,7 @@ const FolderDetailScreen = ({route, navigation}: Props) => {
       <View style={styles.trackItem}>
         <View style={styles.trackDetails}>
           <Image
-            source={{uri: item.artwork}}
+            source={{ uri: item.artwork }}
             resizeMode="cover"
             style={styles.trackImage}
           />
@@ -212,20 +225,15 @@ const FolderDetailScreen = ({route, navigation}: Props) => {
               loadingTextSize={8}
             />
           </View>
-        ) : tracks.length === 0 ? (
+
+        ) : isEmpty ? (
           <View style={styles.noDataContainer}>
-            <Image
-              source={require('../assets/nodata.png')}
-              style={{
-                width: width * 0.8,
-                height: height * 0.5,
-                borderRadius: 100,
-              }}
-              resizeMode="stretch"
-            />
+            <DataNotFound btnType='back' lottieFiePath={emptyData} handlePress={() => navigation.goBack()} />
             <Text style={styles.noDataText}>{t('UTILS.NODOWNLOADDATA')}</Text>
           </View>
+
         ) : (
+
           <FlatList
             data={tracks}
             showsVerticalScrollIndicator={false}
@@ -233,6 +241,7 @@ const FolderDetailScreen = ({route, navigation}: Props) => {
             ItemSeparatorComponent={() => <View style={styles.divider} />}
             keyExtractor={item => item.id.toString()}
           />
+
         )}
       </Container>
       <ConfirmModal

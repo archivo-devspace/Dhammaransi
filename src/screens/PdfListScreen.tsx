@@ -25,7 +25,8 @@ import ConfirmModal from '../components/commons/ConfirmModal';
 import { useTranslation } from 'react-i18next';
 import DataNotFound from '../components/commons/DataNotFound';
 import LottieView from 'lottie-react-native';
-import NetworkError from '../components/commons/NetworkError';
+import NetworkError from '../components/commons/LottieAnimationView';
+import { networkError } from '../utils/constants';
 
 
 
@@ -273,7 +274,7 @@ const PdfListScreen = () => {
               </View>
             ))
             : (isFetched && !bookLists?.data?.results?.length) || isError ? (
-              <NetworkError onRefresh={refetch}/>
+              <NetworkError handlePress={refetch} btnType='refresh' lottieFiePath={networkError}/>
             ) : bookLists?.data?.results?.map(ebook => (
               <React.Fragment key={ebook.id}>
                 <View style={styles.contentContainer}>

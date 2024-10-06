@@ -283,3 +283,7 @@ export const singlePaintingDetils = {
 
 export const fallBackImageUrl =
   'https://upload.wikimedia.org/wikipedia/commons/4/44/Paticcasamuppada_Burmese.jpg';
+
+
+export const networkError = require("../assets/lotties/failed.json");
+export const emptyData = require("../assets/lotties/empty.json");

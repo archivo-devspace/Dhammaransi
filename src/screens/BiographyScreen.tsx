@@ -11,7 +11,8 @@ import SkeletonView from '../components/commons/Skeleton';
 import { Ionicons } from '../utils/common';
 import { CustomButton } from '../components/utils';
 import LottieView from 'lottie-react-native';
-import NetworkError from '../components/commons/NetworkError';
+import NetworkError from '../components/commons/LottieAnimationView';
+import { networkError } from '../utils/constants';
 
 interface SkeletonConfig {
   height: number;
@@ -88,7 +89,7 @@ const BiographyScreen = () => {
         {isBiographyLoading ? (
           <LoadingSkeleton />
         ) : isFetched && isError ? (
-          <NetworkError onRefresh={refetch}/>
+          <NetworkError handlePress={refetch} btnType='refresh' lottieFiePath={networkError}/>
         ) : (
           <RenderHTML
          
