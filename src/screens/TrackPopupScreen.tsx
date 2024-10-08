@@ -15,12 +15,12 @@ import {
   useWindowDimensions,
   View,
 } from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Slider from '@react-native-community/slider';
-import {BottomSheetMethods} from '../components/commons/BottomSheet';
+import { BottomSheetMethods } from '../components/commons/BottomSheet';
 import RenderItem from '../components/commons/RenderItem';
 import BottomSheet from '../components/commons/BottomSheet';
-import {CustomButton} from '../components/utils';
+import { CustomButton } from '../components/utils';
 import {
   AntDesign,
   Entypo,
@@ -30,19 +30,19 @@ import {
   MaterialIcons,
   truncateText,
 } from '../utils/common';
-import {Colors} from '../theme';
+import { Colors } from '../theme';
 import TrackPlayer, {
   State,
   Track,
   usePlaybackState,
   useProgress,
 } from 'react-native-track-player';
-import {RouteProp} from '@react-navigation/native';
-import {MainStackParamList} from '../navigations/StackNavigation';
-import {NavigationMainBottomTabScreenProps} from '../navigations/BottomNavigation';
-import {useTrackContext} from '../contexts/TrackContext';
-import {Theme, useThemeContext} from '../contexts/ThemeContext';
-import {useTranslation} from 'react-i18next';
+import { RouteProp } from '@react-navigation/native';
+import { MainStackParamList } from '../navigations/StackNavigation';
+import { NavigationMainBottomTabScreenProps } from '../navigations/BottomNavigation';
+import { useTrackContext } from '../contexts/TrackContext';
+import { Theme, useThemeContext } from '../contexts/ThemeContext';
+import { useTranslation } from 'react-i18next';
 import LoadingSpinner from '../components/utils/LoadingSpinner';
 import * as Progress from 'react-native-progress'; // Import Progress
 import FolderListsBottomSheet, {
@@ -54,13 +54,13 @@ type Props = {
   navigation: NavigationMainBottomTabScreenProps['navigation'];
 };
 
-const TrackPopupScreen = ({route, navigation}: Props) => {
+const TrackPopupScreen = ({ navigation }: Props) => {
   const insets = useSafeAreaInsets();
-  const {t} = useTranslation();
-  const {theme} = useThemeContext();
+  const { t } = useTranslation();
+  const { theme } = useThemeContext();
   const [currentQueue, setCurrentQueue] = useState<Track[]>([]);
-  const {getCurrentQueue} = useTrackContext();
-  const {width, height} = useWindowDimensions();
+  const { getCurrentQueue } = useTrackContext();
+  const { width, height } = useWindowDimensions();
   const progress = useProgress();
   const playbackState = usePlaybackState();
   const {
@@ -70,17 +70,10 @@ const TrackPopupScreen = ({route, navigation}: Props) => {
     handleNextTrack,
     handlePrevTrack,
     currentTrack,
-    onDownloadPress,
     onAlreadyDownloadPress,
-    setDownloadingTrackIds,
     isAlreadyDownload,
-    setAlreadyDownload,
     isDownloading,
-    setDownloading,
     loading,
-    setLoading,
-    isModalVisible,
-    setModalVisible,
     downloadProgress,
   } = useTrackContext();
 
@@ -104,7 +97,7 @@ const TrackPopupScreen = ({route, navigation}: Props) => {
   }, []);
 
   const styles = styling(theme);
-  const {top} = insets;
+  const { top } = insets;
 
   const bottomSheetRef = useRef<BottomSheetMethods>(null);
   const folderListsbottomSheetRef = useRef<FolderListsBottomSheetMethods>(null);
@@ -170,18 +163,17 @@ const TrackPopupScreen = ({route, navigation}: Props) => {
     }
   };
 
-  const customMarginTop = top;
   const customHeight = height * (2 / 6) - 50;
 
 
   return (
     <View style={[styles.mainContainer]}>
       <StatusBar
-       
+
         barStyle={theme === 'dark' ? 'light-content' : 'dark-content'}
       />
 
-<SafeAreaView style={[styles.safeAreaView]}>
+      <SafeAreaView style={[styles.safeAreaView]}>
         <CustomButton
           onPress={() => navigation.goBack()}
           icon={
@@ -199,58 +191,58 @@ const TrackPopupScreen = ({route, navigation}: Props) => {
         {
           !currentTrack ? (
             <View
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: '100%',
-            }}>
-            <CustomButton
-              title={t('UTILS.CHOOSEALBLUM')}
-              customButtonStyle={[
-                styles.chooseFromBtn,
-                { width: width * 0.7 },
-              ]}
-              customButtonTextStyle={[
-                styles.chooseFrom,
-                { fontSize: height * 0.018 },
-              ]}
-              gap={10}
-              onPress={() => navigation.navigate('AudioCategories')}
-              icon={
-                <FontAwesome
-                  name="music"
-                  size={height * 0.02}
-                  color={Colors[theme].primary}
-                />
-              }
-            />
-          </View>
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100%',
+              }}>
+              <CustomButton
+                title={t('UTILS.CHOOSEALBLUM')}
+                customButtonStyle={[
+                  styles.chooseFromBtn,
+                  { width: width * 0.7 },
+                ]}
+                customButtonTextStyle={[
+                  styles.chooseFrom,
+                  { fontSize: height * 0.018 },
+                ]}
+                gap={10}
+                onPress={() => navigation.navigate('AudioCategories')}
+                icon={
+                  <FontAwesome
+                    name="music"
+                    size={height * 0.02}
+                    color={Colors[theme].primary}
+                  />
+                }
+              />
+            </View>
           ) : (
-              <>
+            <>
               <View
-          style={{
-            flex: 3.5,
-            justifyContent: 'center',
-            alignItems: 'center',
-            paddingHorizontal: 50,
+                style={{
+                  flex: 3.5,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  paddingHorizontal: 5,
 
-          }}>
-          <Text style={[styles.titleText, { fontSize: height * 0.03 }]}>
-          {truncateText(currentTrack?.title, 50)} 
-          </Text>
-        </View>
-        <View
-          style={{
-            flex: 2.5,
-            justifyContent: 'center',
-            alignItems: 'center',
-            paddingHorizontal: 20,
+                }}>
+                <Text style={[styles.titleText, { fontSize: height * 0.03 }]}>
+                  {truncateText(currentTrack?.title, 50)}
+                </Text>
+              </View>
+              <View
+                style={{
+                  flex: 2.5,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  paddingHorizontal: 5,
 
-          }}>
-          <Text style={[styles.artistText, { fontSize: height * 0.025 }]}>
-          {truncateText(currentTrack?.artist, 80)}          </Text>
-        </View>
-              </>
+                }}>
+                <Text style={[styles.artistText, { fontSize: height * 0.025 }]}>
+                  {truncateText(currentTrack?.artist, 80)}</Text>
+              </View>
+            </>
           )
         }
       </View>
@@ -258,15 +250,26 @@ const TrackPopupScreen = ({route, navigation}: Props) => {
       <View style={{ flex: 2, justifyContent: 'center', alignItems: 'center' }}>
         <View style={{
           borderRadius: 20,
-          overflow: 'hidden',  
-          width: customHeight,        
-          height: customHeight        
+          overflow: 'hidden',
+          width: customHeight,
+          height: customHeight,
+          shadowColor:Colors[theme].text,
+          ...Platform.select({
+            ios: {
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.3,
+              shadowRadius: 3,
+            },
+            android: {
+              elevation: 3,
+            },
+          }),
         }}>
           <Image
             source={
               currentTrack
-              ? {uri: currentTrack?.artwork} :
-            theme === 'dark' ?   require('../assets/parate_dark.jpg' ) : require('../assets/parate_light.jpg')
+                ? { uri: currentTrack?.artwork? currentTrack.artwork :  theme === 'dark' ? require('../assets/parate_dark.jpg') : require('../assets/parate_light.jpg') } :
+                theme === 'dark' ? require('../assets/parate_dark.jpg') : require('../assets/parate_light.jpg')
             }
             resizeMode="contain"
             style={{
@@ -455,9 +458,9 @@ const TrackPopupScreen = ({route, navigation}: Props) => {
           {/* <View style={{height: 90}} /> */}
         </View>
         <View style={{ flex: 2.8, paddingBottom: 14, padding: 6 }}>
-          <View style={{ flex: 1, borderWidth: 1, borderColor: 'black', justifyContent:'center', alignItems:'center'}}>
-                <Text>
-                advertisement</Text>
+          <View style={{ flex: 1, borderWidth: 1, borderColor: 'black', justifyContent: 'center', alignItems: 'center' }}>
+            <Text>
+              advertisement</Text>
           </View>
         </View>
       </View>
@@ -492,7 +495,7 @@ const styling = (theme: Theme) =>
     mainContainer: {
       flex: 1,
       backgroundColor: Colors[theme].secondary,
-     
+
     },
     imgContainer: {
       alignItems: 'center',
@@ -500,11 +503,11 @@ const styling = (theme: Theme) =>
     },
     backBtn: {
       ...Platform.select({
-        ios : {
+        ios: {
           marginLeft: 20
         },
         android: {
-          marginLeft:20,
+          marginLeft: 20,
           marginTop: 42,
         }
       })
@@ -591,8 +594,8 @@ const styling = (theme: Theme) =>
       backgroundColor: Colors[theme].secondary,
 
       justifyContent: 'center',
-     
-     
+
+
     },
     suffelIcon: {
       width: 30,
@@ -603,14 +606,14 @@ const styling = (theme: Theme) =>
 
     },
 
- safeAreaView: {
-  position: 'absolute',
-  zIndex:10,
-  width: '100%',
-  flexDirection: 'row',
-  
-  alignItems: 'center',
+    safeAreaView: {
+      position: 'absolute',
+      zIndex: 10,
+      width: '100%',
+      flexDirection: 'row',
 
-},
+      alignItems: 'center',
+
+    },
 
   });

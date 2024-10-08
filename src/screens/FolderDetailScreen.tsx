@@ -9,7 +9,7 @@ import {
   DeviceEventEmitter,
   useWindowDimensions,
 } from 'react-native';
-import RNFetchBlob from 'rn-fetch-blob';
+import ReactNativeBlobUtil from 'react-native-blob-util'
 import {
   deleteContentFromLocalDir,
   fetchDownloadedDataFromLocalDir,
@@ -85,7 +85,7 @@ const FolderDetailScreen = ({ route, navigation }: Props) => {
           );
           const updatedItems = await Promise.all(
             sortedItems.map(async (item: any) => {
-              const fileExists = await RNFetchBlob.fs.exists(item.artwork);
+              const fileExists = await ReactNativeBlobUtil.fs.exists(item.artwork);
               return {
                 ...item,
                 artwork: fileExists

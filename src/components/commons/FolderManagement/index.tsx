@@ -9,7 +9,8 @@ import {
   Alert,
   Platform,
 } from 'react-native';
-import RNFetchBlob from 'rn-fetch-blob';
+import ReactNativeBlobUtil from 'react-native-blob-util'
+
 // import {sendDownloadedDataToLocalDir} from './downloadApi'; // Adjust the path to your download API file
 
 const FolderManagement = ({navigation}: any) => {
@@ -18,20 +19,20 @@ const FolderManagement = ({navigation}: any) => {
   const [selectedFolder, setSelectedFolder] = useState<string | null>(null);
 
   const loadFolders = async () => {
-    const {dirs} = RNFetchBlob.fs;
+    const {dirs} = ReactNativeBlobUtil.fs;
     const dirToSave = Platform.OS === 'ios' ? dirs.DocumentDir : dirs.CacheDir;
     const path = `${dirToSave}/downloads`;
 
     try {
-      const exists = await RNFetchBlob.fs.isDir(path);
+      const exists = await ReactNativeBlobUtil.fs.isDir(path);
       if (!exists) {
-        await RNFetchBlob.fs.mkdir(path);
+        await ReactNativeBlobUtil.fs.mkdir(path);
       }
-      const files = await RNFetchBlob.fs.ls(path);
+      const files = await ReactNativeBlobUtil.fs.ls(path);
       const directories = await Promise.all(
         files.map(async file => {
           const fullPath = `${path}/${file}`;
-          const isDir = await RNFetchBlob.fs.isDir(fullPath);
+          const isDir = await ReactNativeBlobUtil.fs.isDir(fullPath);
           return isDir ? fullPath : null;
         }),
       );
@@ -48,14 +49,15 @@ const FolderManagement = ({navigation}: any) => {
       return;
     }
 
-    const {dirs} = RNFetchBlob.fs;
+    const {dirs} = ReactNativeBlobUtil.fs;
     const dirToSave = Platform.OS === 'ios' ? dirs.DocumentDir : dirs.CacheDir;
     const folderPath = `${dirToSave}/downloads/${folderName}`;
 
+    
     try {
-      const exists = await RNFetchBlob.fs.isDir(folderPath);
+      const exists = await ReactNativeBlobUtil.fs.isDir(folderPath);
       if (!exists) {
-        await RNFetchBlob.fs.mkdir(folderPath);
+        await ReactNativeBlobUtil.fs.mkdir(folderPath);
         Alert.alert('Success', 'Folder created successfully!');
         setFolderName('');
         loadFolders();

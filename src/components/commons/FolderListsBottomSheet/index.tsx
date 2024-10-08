@@ -34,7 +34,6 @@ import BackDrop from '../BackDrop';
 import {CustomButton} from '../../utils';
 import {AntDesign, Entypo} from '../../../utils/common';
 import {useTranslation} from 'react-i18next';
-import RNFetchBlob from 'rn-fetch-blob';
 import {Button} from 'react-native';
 import {useTrackContext} from '../../../contexts/TrackContext';
 
@@ -345,6 +344,7 @@ const styling = (theme: Theme) =>
       borderWidth: 1,
       marginBottom: 16,
       paddingHorizontal: 8,
+      color: Colors[theme].text
     },
     folderList: {
       marginTop: 5,

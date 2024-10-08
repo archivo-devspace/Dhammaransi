@@ -53,7 +53,7 @@ type Props = {
   navigation: NavigationMainBottomTabScreenProps['navigation'];
 };
 
-const TrackScreen = ({ route, navigation }: Props) => {
+const TrackScreen = ({ navigation }: Props) => {
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
   const { theme } = useThemeContext();
@@ -69,17 +69,10 @@ const TrackScreen = ({ route, navigation }: Props) => {
     handleNextTrack,
     handlePrevTrack,
     currentTrack,
-    onDownloadPress,
     onAlreadyDownloadPress,
-    setDownloadingTrackIds,
     isAlreadyDownload,
-    setAlreadyDownload,
     isDownloading,
-    setDownloading,
     loading,
-    setLoading,
-    isModalVisible,
-    setModalVisible,
     downloadProgress,
   } = useTrackContext();
 
@@ -229,7 +222,7 @@ const TrackScreen = ({ route, navigation }: Props) => {
             flex: 2.5,
             justifyContent: 'center',
             alignItems: 'center',
-            paddingHorizontal: 5,
+            paddingHorizontal: 10,
 
           }}>
           <Text style={[styles.artistText, { fontSize: height * 0.025 }]}>
@@ -246,13 +239,24 @@ const TrackScreen = ({ route, navigation }: Props) => {
           borderRadius: 20,
           overflow: 'hidden',  
           width: customHeight,        
-          height: customHeight        
+          height: customHeight ,
+          shadowColor:Colors[theme].text,
+          ...Platform.select({
+            ios: {
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.3,
+              shadowRadius: 3,
+            },
+            android: {
+              elevation: 3,
+            },
+          }),       
         }}>
           <Image
             source={
               currentTrack
-                ? {uri: currentTrack?.artwork} :
-              theme === 'dark' ?   require('../assets/parate_dark.jpg' ) : require('../assets/parate_light.jpg')
+                ? { uri: currentTrack?.artwork? currentTrack.artwork :  theme === 'dark' ? require('../assets/parate_dark.jpg') : require('../assets/parate_light.jpg') } :
+                theme === 'dark' ? require('../assets/parate_dark.jpg') : require('../assets/parate_light.jpg')
             }
             resizeMode="contain"
             style={{
@@ -514,14 +518,15 @@ const styling = (theme: Theme) =>
       // height: 50,
       fontWeight: 'bold',
       textAlign: 'center',
-      color: Colors[theme].primary,
+      color: Colors[theme].text,
     },
     artistText: {
       // fontSize: 16,
       // width: '80%',
 
       // height: 70,
-      color: Colors[theme].primary,
+     
+      color: Colors[theme].text,
       textAlign: 'center',
       paddingHorizontal: 20,
     },

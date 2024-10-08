@@ -80,8 +80,8 @@ android {
         applicationId "com.dhammaransiapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 9
-        versionName "1.1.1"
+        versionCode 11
+        versionName "1.2.3"
     }
     signingConfigs {
         debug {

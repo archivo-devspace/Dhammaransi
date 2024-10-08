@@ -23,7 +23,7 @@ import {
   sendDownloadedDataToLocalDir,
 } from '../api_services/downloadService';
 import { Alert, DeviceEventEmitter, Platform } from 'react-native';
-import RNFetchBlob from 'rn-fetch-blob';
+import ReactNativeBlobUtil from 'react-native-blob-util'
 import {
   createChannel,
   displayNotification,
@@ -119,22 +119,22 @@ export const TrackProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   // }, []);
 
   const loadFolders = async () => {
-    const { dirs } = RNFetchBlob.fs;
+    const { dirs } = ReactNativeBlobUtil.fs;
     const dirToSave = Platform.OS === 'ios' ? dirs.DocumentDir : dirs.CacheDir;
     const path = `${dirToSave}/downloads`;
     const defaultFolderPath = `${dirToSave}/downloads/Downloads`;
 
     try {
-      const exists = await RNFetchBlob.fs.isDir(path);
+      const exists = await ReactNativeBlobUtil.fs.isDir(path);
       if (!exists) {
-        await RNFetchBlob.fs.mkdir(path);
-        await RNFetchBlob.fs.mkdir(defaultFolderPath);
+        await ReactNativeBlobUtil.fs.mkdir(path);
+        await ReactNativeBlobUtil.fs.mkdir(defaultFolderPath);
       }
-      const files = await RNFetchBlob.fs.ls(path);
+      const files = await ReactNativeBlobUtil.fs.ls(path);
       const directories = await Promise.all(
         files.map(async file => {
           const fullPath = `${path}/${file}`;
-          const isDir = await RNFetchBlob.fs.isDir(fullPath);
+          const isDir = await ReactNativeBlobUtil.fs.isDir(fullPath);
           return isDir ? file : null;
         }),
       );
@@ -157,14 +157,14 @@ export const TrackProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       return;
     }
 
-    const { dirs } = RNFetchBlob.fs;
+    const { dirs } = ReactNativeBlobUtil.fs;
     const dirToSave = Platform.OS === 'ios' ? dirs.DocumentDir : dirs.CacheDir;
     const folderPath = `${dirToSave}/downloads/${folderName}`;
 
     try {
-      const exists = await RNFetchBlob.fs.isDir(folderPath);
+      const exists = await ReactNativeBlobUtil.fs.isDir(folderPath);
       if (!exists) {
-        await RNFetchBlob.fs.mkdir(folderPath);
+        await ReactNativeBlobUtil.fs.mkdir(folderPath);
         loadFolders();
         setAlertTitle('Success');
         setAlertMessage('Folder created successfully!');
@@ -185,29 +185,29 @@ export const TrackProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   };
 
   const deleteFolder = async (folderName: string) => {
-    const { dirs } = RNFetchBlob.fs;
+    const { dirs } = ReactNativeBlobUtil.fs;
     const dirToSave = Platform.OS === 'ios' ? dirs.DocumentDir : dirs.CacheDir;
     const folderPath = `${dirToSave}/downloads/${folderName}`;
 
     const jsonFile =
       Platform.OS === 'ios'
-        ? `${dirs.DocumentDir}/downloads/${folderName}/.file.json`
-        : `${dirs.CacheDir}/downloads/${folderName}/.file.json`;
+        ? `${dirs.DocumentDir}/downloads/${folderName}/file.json`
+        : `${dirs.CacheDir}/downloads/${folderName}/file.json`;
     // console.log('jsonFile', jsonFile);
 
     // console.log('folderPath', folderPath);
     // console.log('folderName', folderName);
 
     try {
-      const exists = await RNFetchBlob.fs.isDir(folderPath);
+      const exists = await ReactNativeBlobUtil.fs.isDir(folderPath);
       console.log('Folder exists:', exists, 'at path:', folderPath);
       if (exists) {
         console.log('Deleting folder:', folderPath);
 
-        const fileExists = await RNFetchBlob.fs.exists(jsonFile);
+        const fileExists = await ReactNativeBlobUtil.fs.exists(jsonFile);
         if (fileExists) {
           // Read and parse the JSON file
-          const jsonContent = await RNFetchBlob.fs.readFile(jsonFile, 'utf8');
+          const jsonContent = await ReactNativeBlobUtil.fs.readFile(jsonFile, 'utf8');
           const objectArray = JSON.parse(jsonContent);
 
           // Extract IDs from the objects in the JSON file
@@ -230,7 +230,7 @@ export const TrackProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         }
 
         await deleteAllDownloadDataFromLocal(folderName);
-        await RNFetchBlob.fs.unlink(`/${folderPath}`); // Ensure this function is correctly defined
+        await ReactNativeBlobUtil.fs.unlink(`/${folderPath}`); // Ensure this function is correctly defined
         await loadFolders(); // Reload the folder list after deletion
         // setDownloadingTrackIds([]);
         setAlertTitle('Success');
