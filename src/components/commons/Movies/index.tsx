@@ -51,7 +51,8 @@ export const Movies = ({
   });
 
   const handleClick = (id: number) => {
-    navigation.navigate('Audios', {id});
+    console.log('id', id);
+    // navigation.navigate('Audios', {id});
   };
 
   const styles = styling(theme);
@@ -77,7 +78,7 @@ export const Movies = ({
                 x={x}
                 fullWidth={ITEM_FULL_WIDTH}
                 truncateIndex={truncateIndex}
-                handleClick={()=>{}}
+                handleClick={() => {}}
                 isLoading={isLoading}
               />
             );
@@ -120,7 +121,7 @@ export const Movies = ({
                 x={x}
                 fullWidth={ITEM_FULL_WIDTH}
                 truncateIndex={truncateIndex}
-                handleClick={()=>handleClick(item.id)}
+                handleClick={handleClick}
               />
             );
           }}

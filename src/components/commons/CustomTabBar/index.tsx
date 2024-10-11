@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 // // CustomTabBar.js
 
 import {
@@ -5,9 +6,8 @@ import {
   Text,
   TouchableOpacity,
   useWindowDimensions,
-  View,
 } from 'react-native';
-import React, {useRef} from 'react';
+import React from 'react';
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -109,7 +109,6 @@ const styling = (theme: Theme) =>
     btn: {
       flexDirection: 'row',
       alignItems: 'center',
-
       paddingHorizontal: 14,
       borderRadius: 20,
       gap: 8,

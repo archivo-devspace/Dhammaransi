@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import {
   Image,
   Platform,
@@ -27,7 +28,7 @@ type Props = {
   x: SharedValue<number>;
   fullWidth: number;
   truncateIndex: number;
-  handleClick: (id:number) => void;
+  handleClick: (id: number) => void;
   isLoading?: boolean;
 };
 
@@ -98,7 +99,7 @@ const Item = ({
           </View>
         </View>
       ) : (
-        <TouchableOpacity onPress={() => handleClick(item)}>
+        <TouchableOpacity onPress={() => handleClick(item.id)}>
           <View style={styles.imageContainer}>
             <Image
               source={require('../../../assets/marguerite.jpg')}
