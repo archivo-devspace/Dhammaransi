@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useCallback, useRef, useState} from 'react';
+import React, {useRef} from 'react';
 import {
   View,
   Text,
@@ -9,7 +9,6 @@ import {
   useWindowDimensions,
   Platform,
   StatusBar,
-  RefreshControl,
 } from 'react-native';
 
 import {NavigationMainStackScreenProps} from '../navigations/StackNavigation';
@@ -49,10 +48,9 @@ const HomeScreen = ({navigation}: Props) => {
     isLoading: isPaintingLoading,
     isError: isPaintingError,
     error: paintingErrorMessage,
-    refetch: paintingRefresh,
   } = useGetPaintings();
 
- 
+  console.log('isPaintingLoading', isPaintingLoading);
 
   const {
     data: albums,
@@ -60,25 +58,7 @@ const HomeScreen = ({navigation}: Props) => {
     isLoading: isAlbumsLoading,
     isError: isAlbumsError,
     error: albumsErrorMessage,
-    refetch: albumsRefresh,
   } = useGetAlbums(1);
-
-  const [refreshing, setRefreshing] = useState(false);
-
-
-
-  const onRefresh = useCallback(async () => {
-    setRefreshing(true); // Start refreshing
-    try {
-      // Refresh both paintings and albums
-      await Promise.all([albumsRefresh(), paintingRefresh()]);
-    } catch (error) {
-      console.error('Refresh error:', error);
-      // Optionally handle error
-    } finally {
-      setRefreshing(false); // Stop refreshing regardless of success or failure
-    }
-  }, [albumsRefresh, paintingRefresh]);
 
   return (
     <View style={styles.mainContainer}>
@@ -97,17 +77,6 @@ const HomeScreen = ({navigation}: Props) => {
             useNativeDriver: true,
           },
         )}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            progressViewOffset={60}
-            tintColor={Colors[theme].primary}
-            colors={[Colors[theme].primary]}
-            style={{zIndex: 10}}
-            progressBackgroundColor={Colors[theme].secondary}
-          />
-        } // Add RefreshControl here
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={16}>
         <View style={styles.bannerContainer}>
@@ -222,22 +191,21 @@ const styling = (theme: Theme) =>
       backgroundColor: Colors[theme].secondary_light,
       borderRadius: 10,
       width: '45%',
-   
+      shadowColor: Colors[theme].text,
       ...Platform.select({
         ios: {
           shadowOffset: {
             width: 0,
-            height: 3,
+            height: 5,
           },
-          shadowOpacity: 0.2,
+          shadowOpacity: 0.4,
           shadowRadius: 4,
         },
         android: {
-          elevation: 10,
+          elevation: 2,
         },
       }),
       padding: 5,
-   
       gap: 10,
       justifyContent: 'center',
       alignItems: 'center',
