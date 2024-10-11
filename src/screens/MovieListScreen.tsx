@@ -1,11 +1,5 @@
-import {
-  Alert,
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-  useWindowDimensions,
-} from 'react-native';
+/* eslint-disable react-native/no-inline-styles */
+import {Alert, StyleSheet, Text, View, useWindowDimensions} from 'react-native';
 import React, {useCallback, useState} from 'react';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {ScrollView} from 'react-native-gesture-handler';

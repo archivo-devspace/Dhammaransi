@@ -106,8 +106,8 @@ const Item = ({
               style={{
                 width: width,
                 height: height * 0.8,
-                borderBottomLeftRadius: 20,
-                borderBottomRightRadius: 20,
+                // borderBottomLeftRadius: 20,
+                // borderBottomRightRadius: 20,
               }}
               resizeMode="cover"
             />
@@ -136,7 +136,7 @@ const styling = (theme: Theme) =>
   StyleSheet.create({
     container: {
       backgroundColor: Colors[theme].secondary_light,
-      borderRadius: 20,
+      borderRadius: 15,
       overflow: 'hidden',
       transformOrigin: 'bottom',
       position: 'relative',
