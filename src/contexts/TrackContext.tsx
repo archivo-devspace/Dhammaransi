@@ -81,6 +81,11 @@ export interface TrackContextType {
   createFolder: any;
   deleteFolder: any;
   folders: string[];
+  pdfDownloading: Record<number, boolean>;
+  startPdfDownload: (id:number) => void;
+  finishPdfDownload: (id:number) =>void;
+  pdfDownlaodProgress:Record<number, number>;
+  setPdfDownloadForProgress: (id: number, progress: number) => void;
 }
 
 const TrackContext = createContext<TrackContextType | undefined>(undefined);
@@ -110,6 +115,9 @@ export const TrackProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const [alerType, setAlertType] = useState<
     'success' | 'warning' | 'error' | null
   >(null);
+
+  const [pdfDownloading, setPdfDownloading] = useState<Record<number, boolean>>({});
+  const [pdfDownlaodProgress, setPdfDownloadProgress] = useState<Record<number, number>>({});
 
   // useLayoutEffect(() => {
   //   const getAllTracks = () => {
@@ -574,6 +582,22 @@ export const TrackProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     await TrackPlayer.play();
   };
 
+
+  
+    const startPdfDownload = (id:number) => {
+      setPdfDownloading((prev) => ({ ...prev, [id]: true }));
+      setPdfDownloadProgress((prev) => ({ ...prev, [id]: 0 }));
+    };
+  
+    const finishPdfDownload = (id:number) => {
+      setPdfDownloading((prev) => ({ ...prev, [id]: false }));
+      setPdfDownloadProgress((prev) => ({ ...prev, [id]: 100 })); 
+    };
+
+    const setPdfDownloadForProgress = (id: number, progress: number) => {
+      setPdfDownloadProgress((prev) => ({ ...prev, [id]: progress }));
+    };
+
   const contextValue: TrackContextType = {
     trackLists,
     setTrackLists,
@@ -609,6 +633,11 @@ export const TrackProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     createFolder,
     deleteFolder,
     folders,
+    pdfDownloading,
+    startPdfDownload,
+    finishPdfDownload,
+  pdfDownlaodProgress,
+    setPdfDownloadForProgress
   };
 
   return (

@@ -1,39 +1,42 @@
-import {StyleSheet, Text, View, Image, useWindowDimensions, RefreshControl, ActivityIndicator} from 'react-native';
-import React, {useCallback, useEffect, useState} from 'react';
-import {Theme, useThemeContext} from '../contexts/ThemeContext';
-import {Colors} from '../theme';
-import {AntDesign, truncateText} from '../utils/common';
-import {CustomButton} from '../components/utils';
+import { StyleSheet, Text, View, Image, useWindowDimensions, RefreshControl, ActivityIndicator } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Theme, useThemeContext } from '../contexts/ThemeContext';
+import { Colors } from '../theme';
+import { AntDesign, truncateText } from '../utils/common';
+import { CustomButton } from '../components/utils';
 import {
   MainStackParamList,
   NavigationMainStackScreenProps,
 } from '../navigations/StackNavigation';
-import {useTrackContext} from '../contexts/TrackContext';
-import {FlatList} from 'react-native';
-import TrackPlayer, {State, usePlaybackState} from 'react-native-track-player';
+import { useTrackContext } from '../contexts/TrackContext';
+import { FlatList } from 'react-native';
+import TrackPlayer, { State, usePlaybackState } from 'react-native-track-player';
 import Container from '../components/commons/Container';
-import {RouteProp} from '@react-navigation/native';
-import {useGetSingleAlbum} from '../api_services/lib/queryhooks/useAudio';
+import { RouteProp } from '@react-navigation/native';
+import { useGetSingleAlbum } from '../api_services/lib/queryhooks/useAudio';
 import { load } from 'react-native-track-player/lib/src/trackPlayer';
 import SkeletonView from '../components/commons/Skeleton';
 import NetworkError from '../components/commons/LottieAnimationView';
-import { networkError } from '../utils/constants';
+import { emptyData, networkError } from '../utils/constants';
+import DataNotFound from '../components/commons/LottieAnimationView';
+import { t } from 'i18next';
+
 
 type Props = {
   navigation: NavigationMainStackScreenProps['navigation'];
   route: RouteProp<MainStackParamList, 'Audios'>;
 };
 
-const Audios = ({navigation, route}: Props) => {
-  const {theme} = useThemeContext();
-  const {trackLists, handlePlay, currentTrack, setTrackLists, setRepeatMode} =
+const Audios = ({ navigation, route }: Props) => {
+  const { theme } = useThemeContext();
+  const { trackLists, handlePlay, currentTrack, setTrackLists, setRepeatMode } =
     useTrackContext();
   const playbackState = usePlaybackState();
   const styles = styling(theme);
-  const {height} = useWindowDimensions();
+  const { height } = useWindowDimensions();
   const [refreshing, setRefreshing] = useState(false);
 
-  const {data: album, isLoading: isAlbumLoading, refetch,isError} = useGetSingleAlbum(route.params.id);
+  const { data: album, isLoading: isAlbumLoading, refetch, isError } = useGetSingleAlbum(route.params.id);
 
   useEffect(() => {
     if (album) {
@@ -58,31 +61,42 @@ const Audios = ({navigation, route}: Props) => {
     return (
       <Container title="MENUS.AUDIOS">
         <>
-        {
-          Array.from({length:10},(_,index:number)=> (
-            <View key={index} style={styles.container}>
-          <View style={styles.trackContainer}>
-            <View style={{ flexDirection: 'row', gap: 12, alignItems: 'center' }}>
-              <SkeletonView height={70} width={70} borderRadius={12} />
-              <View style={{ width: '70%', gap: 10 }}>
-                <SkeletonView height={12} width="auto" borderRadius={10} />
-                <SkeletonView height={8} width={100} borderRadius={10} />
+          {
+            Array.from({ length: 10 }, (_, index: number) => (
+              <View key={index} style={styles.container}>
+                <View style={styles.trackContainer}>
+                  <View style={{ flexDirection: 'row', gap: 12, alignItems: 'center' }}>
+                    <SkeletonView height={70} width={70} borderRadius={12} />
+                    <View style={{ width: '70%', gap: 10 }}>
+                      <SkeletonView height={12} width="auto" borderRadius={10} />
+                      <SkeletonView height={8} width={100} borderRadius={10} />
+                    </View>
+                  </View>
+                  <SkeletonView width={35} height={35} borderRadius={5} />
+                </View>
               </View>
-            </View>
-            <SkeletonView width={35} height={35} borderRadius={5} />
-          </View>
-        </View>
-          ))
-        }
+            ))
+          }
         </>
       </Container>
     );
   }
 
-  if(isError){
+  if (isError) {
     return (
       <Container title="MENUS.AUDIOS">
-        <NetworkError handlePress={refetch} btnType='refresh' lottieFiePath={networkError}/>
+        <NetworkError handlePress={refetch} btnType='refresh' lottieFiePath={networkError} />
+      </Container>
+    )
+  }
+
+  if (album?.data.results.length === 0) {
+    return (
+      <Container title="MENUS.AUDIOS">
+        <View style={styles.noDataContainer}>
+          <DataNotFound btnType='back' lottieFiePath={emptyData} handlePress={() => navigation.goBack()} />
+          <Text style={styles.noDataText}>{t('UTILS.NODATA')}</Text>
+        </View>
       </Container>
     )
   }
@@ -92,24 +106,24 @@ const Audios = ({navigation, route}: Props) => {
       <FlatList
         data={trackLists}
         showsVerticalScrollIndicator={false}
-        renderItem={({item}) => (
+        renderItem={({ item }) => (
           <React.Fragment key={item.id}>
             <View style={styles.container}>
               <CustomButton
                 onPress={() => handlePlayAudio(item)}
                 customButtonStyle={styles.btn}>
                 <View style={styles.trackContainer}>
-                  <View style={{flexDirection: 'row', gap: 16, alignItems: 'center'}}>
+                  <View style={{ flexDirection: 'row', gap: 16, alignItems: 'center' }}>
                     <Image
-                      source={{uri: item.artwork}}
+                      source={{ uri: item.artwork }}
                       resizeMode="cover"
                       style={styles.img}
                     />
-                    <View style={{width: '70%', gap: 10}}>
-                      <Text style={[styles.title, {fontSize: height * 0.02}]}>
+                    <View style={{ width: '70%', gap: 10 }}>
+                      <Text style={[styles.title, { fontSize: height * 0.02 }]}>
                         {truncateText(item.title, 45)}
                       </Text>
-                      <Text style={[styles.desc, {fontSize: height * 0.017}]}>
+                      <Text style={[styles.desc, { fontSize: height * 0.017 }]}>
                         {truncateText(item.artist, 25)}
                       </Text>
                     </View>
@@ -189,5 +203,16 @@ const styling = (theme: Theme) =>
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
+    },
+    noDataContainer: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      flex: 1,
+      gap: 20,
+    },
+    noDataText: {
+      color: Colors[theme].text,
+      fontWeight: 'bold',
+      fontSize: 20,
     },
   });

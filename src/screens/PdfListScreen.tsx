@@ -9,33 +9,36 @@ import {
   RefreshControl,
   ScrollView,
   PermissionsAndroid,
+  DeviceEventEmitter,
 } from 'react-native';
-import React, {useState, useCallback, useEffect} from 'react';
-import {Theme, useThemeContext} from '../contexts/ThemeContext';
-import {Colors} from '../theme';
-import {CustomButton} from '../components/utils';
-import {FontAwesome, Ionicons} from '../utils/common';
+import React, { useState, useCallback, useEffect } from 'react';
+import { Theme, useThemeContext } from '../contexts/ThemeContext';
+import { Colors } from '../theme';
+import { CustomButton } from '../components/utils';
+import { FontAwesome, Ionicons } from '../utils/common';
 import Container from '../components/commons/Container';
-import {useGetBookList} from '../api_services/lib/queryhooks/useBook';
+import { useGetBookList } from '../api_services/lib/queryhooks/useBook';
 import SkeletonView from '../components/commons/Skeleton';
-import notifee, {AndroidImportance} from '@notifee/react-native';
+import notifee, { AndroidImportance } from '@notifee/react-native';
 import CustomAlert from '../components/commons/CustomAlert';
 import ConfirmModal from '../components/commons/ConfirmModal';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import NetworkError from '../components/commons/LottieAnimationView';
-import {networkError} from '../utils/constants';
+import { networkError } from '../utils/constants';
 import ReactNativeBlobUtil from 'react-native-blob-util';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useTrackContext } from '../contexts/TrackContext';
 
 const PdfListScreen = () => {
-  const {theme} = useThemeContext();
-  const {width, height} = useWindowDimensions();
+  const { theme } = useThemeContext();
+  const { pdfDownloading, startPdfDownload, finishPdfDownload, pdfDownlaodProgress, setPdfDownloadForProgress } = useTrackContext();
+  const { width, height } = useWindowDimensions();
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedPdfFile, setSelectedPdfFile] = useState<{
-    id: number | null;
+    id: number;
     fileUrl: string;
     fileName: string;
-  }>({id: null, fileUrl: '', fileName: ''});
+  }>({ id: 0, fileUrl: '', fileName: '' });
   const [downloadedFiles, setDownloadedFiles] = useState([]);
   const [isAlertVisible, setIsAlertVisible] = useState(false);
   const [alertTitle, setAlertTitle] = useState('');
@@ -43,7 +46,7 @@ const PdfListScreen = () => {
   const [alerType, setAlertType] = useState<
     'success' | 'warning' | 'error' | null
   >(null);
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   const styles = styling(theme);
 
@@ -62,75 +65,77 @@ const PdfListScreen = () => {
 
   useEffect(() => {
     fetchDownloadedFiles();
-  }, []);
+  }, [finishPdfDownload]);
 
   console.log('isloading', isBookLoading);
 
-  const requestStoragePermission = async () => {
-    if (Platform.OS === 'android') {
-      try {
-        // Check if the permission is already granted or blocked
-        const permission =
-          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE;
-        const isGranted = await PermissionsAndroid.check(permission);
 
-        if (isGranted) {
-          // Permission is already granted
-          return true;
-        }
+  //close for permissin block error at other android
+  // const requestStoragePermission = async () => {
+  //   if (Platform.OS === 'android') {
+  //     try {
+  //       // Check if the permission is already granted or blocked
+  //       const permission =
+  //         PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE;
+  //       const isGranted = await PermissionsAndroid.check(permission);
 
-        // Request permission
-        const granted = await PermissionsAndroid.request(permission, {
-          title: 'Storage Permission',
-          message: 'App needs access to your storage to download files.',
-          buttonNeutral: 'Ask Me Later',
-          buttonNegative: 'Cancel',
-          buttonPositive: 'OK',
-        });
+  //       if (isGranted) {
+  //         // Permission is already granted
+  //         return true;
+  //       }
 
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          // Permission granted
-          return true;
-        } else if (granted === PermissionsAndroid.RESULTS.DENIED) {
-          // Permission denied (not permanently blocked)
-          setAlertTitle('Permission Denied');
-          setAlertMessage(
-            'You need to enable storage permission to download files.',
-          );
-          setAlertType('error');
-          setIsAlertVisible(true);
-          // Alert.alert('Permission Denied', 'You need to enable storage permission to download files.');
-          return false;
-        } else if (granted === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
-          // Permission blocked (Don't ask me again)
-          setAlertTitle('Permission Blocked');
-          setAlertMessage(
-            'You have blocked the storage permission. Please enable it from the app settings.',
-          );
-          setAlertType('error');
-          setIsAlertVisible(true);
+  //       // Request permission
+  //       const granted = await PermissionsAndroid.request(permission, {
+  //         title: 'Storage Permission',
+  //         message: 'App needs access to your storage to download files.',
+  //         buttonNeutral: 'Ask Me Later',
+  //         buttonNegative: 'Cancel',
+  //         buttonPositive: 'OK',
+  //       });
 
-          return false;
-        }
-      } catch (err) {
-        setAlertTitle('Permission Error');
-        setAlertMessage('You have the storage permission error.');
-        setAlertType('error');
-        setIsAlertVisible(true);
-        return false;
-      }
-    }
-    return true; // iOS doesn't need this permission
-  };
+  //       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+  //         // Permission granted
+  //         return true;
+  //       } else if (granted === PermissionsAndroid.RESULTS.DENIED) {
+  //         // Permission denied (not permanently blocked)
+  //         setAlertTitle('Permission Denied');
+  //         setAlertMessage(
+  //           'You need to enable storage permission to download files.',
+  //         );
+  //         setAlertType('error');
+  //         setIsAlertVisible(true);
+  //         // Alert.alert('Permission Denied', 'You need to enable storage permission to download files.');
+  //         return false;
+  //       } else if (granted === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
+  //         // Permission blocked (Don't ask me again)
+  //         setAlertTitle('Permission Blocked');
+  //         setAlertMessage(
+  //           'You have blocked the storage permission. Please enable it from the app settings.',
+  //         );
+  //         setAlertType('error');
+  //         setIsAlertVisible(true);
+
+  //         return false;
+  //       }
+  //     } catch (err) {
+  //       setAlertTitle('Permission Error');
+  //       setAlertMessage('You have the storage permission error.');
+  //       setAlertType('error');
+  //       setIsAlertVisible(true);
+  //       return false;
+  //     }
+  //   }
+  //   return true; // iOS doesn't need this permission
+  // };
 
   const confirmDownload = (id: number, fileUrl: string, fileName: string) => {
-    setSelectedPdfFile({id, fileUrl, fileName});
+    setSelectedPdfFile({ id, fileUrl, fileName });
     setModalVisible(true);
   };
 
   const handleDownload = async () => {
     if (selectedPdfFile) {
-      console.log('download');
+      startPdfDownload(selectedPdfFile.id);
       downloadPDF(
         selectedPdfFile.id,
         selectedPdfFile.fileUrl,
@@ -141,7 +146,7 @@ const PdfListScreen = () => {
   };
 
   const handleCancelDownload = () => {
-    setSelectedPdfFile({id: null, fileUrl: '', fileName: ''});
+    setSelectedPdfFile({ id: 0, fileUrl: '', fileName: '' });
     setModalVisible(false);
   };
 
@@ -182,16 +187,16 @@ const PdfListScreen = () => {
   };
 
   const downloadPDF = async (
-    id: number | null,
+    id: number,
     fileUrl: string,
     fileName: string,
   ): Promise<void> => {
-    const hasPermission = await requestStoragePermission();
+    // const hasPermission = await requestStoragePermission();
 
-    if (!hasPermission) {
-      console.log('error');
-      return;
-    }
+    // if (!hasPermission) {
+    //   console.log('error');
+    //   return;
+    // }
 
     const folderPath =
       Platform.OS === 'android'
@@ -228,13 +233,14 @@ const PdfListScreen = () => {
         appendExt: 'pdf',
       })
         .fetch('GET', fileUrl)
-        .progress({interval: 100}, async (received, total) => {
+        .progress({ interval: 100 }, async (received, total) => {
           const progress = Math.round((received / total) * 100);
           currentNotificationId = await displayOrUpdateNotification(
             currentNotificationId,
             fileName,
             progress,
           );
+          setPdfDownloadForProgress(id, progress)
         })
         .then(async res => {
           if (res && res.path()) {
@@ -244,16 +250,20 @@ const PdfListScreen = () => {
               null,
             );
             await saveDownloadedFile(id, fileName, res.path());
-            console.log('path', res);
+            finishPdfDownload(id);
             setAlertTitle('Download Complete');
             setAlertMessage(`File saved to ${res.data}`);
             setAlertType('success');
             setIsAlertVisible(true);
+            await notifee.cancelNotification(currentNotificationId);
           } else {
+            finishPdfDownload(id);
             setAlertTitle('Download Failed');
             setAlertMessage('There was an issue downloading the file.');
             setAlertType('error');
             setIsAlertVisible(true);
+            await notifee.cancelNotification(currentNotificationId);
+
           }
 
           // Optionally, you can share the file or open it using a file viewer
@@ -262,13 +272,16 @@ const PdfListScreen = () => {
           // }
         })
         .catch(err => {
+          finishPdfDownload(id);
           setAlertTitle('Download Failed');
           setAlertMessage('There was an issue downloading the file.');
           setAlertType('error');
           setIsAlertVisible(true);
+          notifee.cancelNotification(currentNotificationId);
           console.error('Download failed: ', err);
         });
     } catch (error) {
+      finishPdfDownload(id);
       setAlertTitle('Error');
       setAlertMessage('Error creating folder or saving file:');
       setAlertType('error');
@@ -283,7 +296,7 @@ const PdfListScreen = () => {
     filePath: string,
   ) => {
     try {
-      const newFile = {id: id, name: fileName, path: filePath};
+      const newFile = { id: id, name: fileName, path: filePath };
       const storedFiles = await AsyncStorage.getItem('downloadedFiles');
       const fileList = storedFiles ? JSON.parse(storedFiles) : [];
       fileList.push(newFile);
@@ -345,14 +358,14 @@ const PdfListScreen = () => {
             [...Array(3)].map((_, index) => (
               <View
                 key={index}
-                style={[styles.contentContainer, {paddingBottom: 100}]}>
+                style={[styles.contentContainer, { paddingBottom: 100 }]}>
                 <View style={styles.innerContentContainer}>
                   <SkeletonView
                     height={height * 0.2}
                     width={width * 0.3}
                     borderRadius={10}
                   />
-                  <View style={{width: width * 0.6, marginTop: 20, gap: 20}}>
+                  <View style={{ width: width * 0.6, marginTop: 20, gap: 20 }}>
                     <SkeletonView height={20} width={150} borderRadius={10} />
                     <SkeletonView
                       height={18}
@@ -361,7 +374,7 @@ const PdfListScreen = () => {
                     />
                   </View>
                 </View>
-                <View style={{width: '100%', gap: 14}}>
+                <View style={{ width: '100%', gap: 14 }}>
                   <SkeletonView height={20} width={'auto'} borderRadius={10} />
                   <SkeletonView height={20} width={'auto'} borderRadius={10} />
                   <SkeletonView height={20} width={'auto'} borderRadius={10} />
@@ -398,24 +411,24 @@ const PdfListScreen = () => {
                           }}
                           source={
                             ebook.cover_photo
-                              ? {uri: ebook.cover_photo}
+                              ? { uri: ebook.cover_photo }
                               : require('../assets/marguerite.jpg')
                           }
                           resizeMode="cover"
                         />
                       </View>
-                      <View style={{width: width * 0.6, gap: 20}}>
-                        <Text style={[styles.text, {fontSize: height * 0.025}]}>
+                      <View style={{ width: width * 0.6, gap: 20 }}>
+                        <Text style={[styles.text, { fontSize: height * 0.025 }]}>
                           {ebook.name}
                         </Text>
                         <Text
-                          style={[styles.author, {fontSize: height * 0.022}]}>
+                          style={[styles.author, { fontSize: height * 0.022 }]}>
                           {ebook.author}
                         </Text>
                       </View>
                     </View>
                     <Text
-                      style={[styles.description, {fontSize: height * 0.021}]}>
+                      style={[styles.description, { fontSize: height * 0.021 }]}>
                       {ebook.description}
                     </Text>
 
@@ -437,13 +450,16 @@ const PdfListScreen = () => {
                           confirmDownload(ebook.id, ebook.file, ebook.name)
                         }
                         icon={
-                          <Ionicons
+                          pdfDownloading[ebook.id] ?? <Ionicons
                             name={'cloud-download-outline'}
                             size={30}
                             color={Colors[theme].primary_light}
                           />
                         }
+                        disabled={pdfDownloading[ebook.id]}
+                        title={pdfDownloading[ebook.id] ? `${String(pdfDownlaodProgress[ebook.id])} %` : undefined}
                         customButtonStyle={styles.btn}
+                        customButtonTextStyle={pdfDownloading[ebook.id] ? styles.downloadBtnText : styles.text}
                       />
                     )}
                   </View>
@@ -534,13 +550,22 @@ const styling = (theme: Theme) =>
       backgroundColor: Colors[theme].secondary_dark,
       marginVertical: 20,
     },
+    downloadBtnText: {
+      fontSize: 12,
+      fontWeight: '600',
+      color: Colors[theme].text,
+      alignSelf: 'center',
+      paddingVertical: 7,
+      width: 35
+
+    },
     btn: {
       alignSelf: 'flex-end',
       paddingHorizontal: 50,
       backgroundColor: Colors[theme].secondary,
       paddingVertical: 10,
-      // borderWidth: 1,
-      // borderColor: Colors[theme].primary,
+      justifyContent: 'center',
+      alignItems: 'center',
       shadowColor: Colors[theme].text,
       borderRadius: 20,
       ...Platform.select({
