@@ -162,7 +162,8 @@ const PdfListScreen = () => {
     fileName: string,
     progress: number | null,
   ) => {
-    const options = {
+    const isAndroid = Platform.OS === 'android';
+    const androidOption = {
       id: notificationId,
       title:
         progress !== null
@@ -183,9 +184,20 @@ const PdfListScreen = () => {
       },
     };
 
-    return await notifee.displayNotification(options);
+    const iosOptions = {
+      id: notificationId,
+      title: `Downloading ${fileName}`,
+      body: progress !== null ? 'Download in progress...' : 'Download complete!',
+      ios: {
+        sound: 'default',
+      },
+    };
+    if(isAndroid){
+      return await notifee.displayNotification(androidOption);
+    }else{
+      return await notifee.displayNotification(iosOptions);
+    }
   };
-
   const downloadPDF = async (
     id: number,
     fileUrl: string,
@@ -235,11 +247,13 @@ const PdfListScreen = () => {
         .fetch('GET', fileUrl)
         .progress({ interval: 100 }, async (received, total) => {
           const progress = Math.round((received / total) * 100);
+         if(Platform.OS === 'android'){
           currentNotificationId = await displayOrUpdateNotification(
             currentNotificationId,
             fileName,
             progress,
           );
+         }
           setPdfDownloadForProgress(id, progress)
         })
         .then(async res => {
@@ -552,12 +566,11 @@ const styling = (theme: Theme) =>
     },
     downloadBtnText: {
       fontSize: 12,
-      fontWeight: '600',
+      fontWeight: '500',
       color: Colors[theme].text,
       alignSelf: 'center',
       paddingVertical: 7,
       width: 35
-
     },
     btn: {
       alignSelf: 'flex-end',
