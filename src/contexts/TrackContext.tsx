@@ -10,7 +10,6 @@ import {
   useState,
 } from 'react';
 import TrackPlayer, {
-  Capability,
   RepeatMode,
   State,
   Track,
@@ -22,8 +21,8 @@ import {
   fetchDownloadedDataFromLocalDir,
   sendDownloadedDataToLocalDir,
 } from '../api_services/downloadService';
-import { Alert, DeviceEventEmitter, Platform } from 'react-native';
-import ReactNativeBlobUtil from 'react-native-blob-util'
+import {DeviceEventEmitter, Platform} from 'react-native';
+import ReactNativeBlobUtil from 'react-native-blob-util';
 import {
   createChannel,
   displayNotification,
@@ -82,15 +81,15 @@ export interface TrackContextType {
   deleteFolder: any;
   folders: string[];
   pdfDownloading: Record<number, boolean>;
-  startPdfDownload: (id:number) => void;
-  finishPdfDownload: (id:number) =>void;
-  pdfDownlaodProgress:Record<number, number>;
+  startPdfDownload: (id: number) => void;
+  finishPdfDownload: (id: number) => void;
+  pdfDownlaodProgress: Record<number, number>;
   setPdfDownloadForProgress: (id: number, progress: number) => void;
 }
 
 const TrackContext = createContext<TrackContextType | undefined>(undefined);
 
-export const TrackProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
   const [trackLists, setTrackLists] = useState<Array<TrackProps>>([]);
   const [playingTrackLists, setPlayingTrackLists] = useState<Array<TrackProps>>(
     [],
@@ -116,8 +115,12 @@ export const TrackProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     'success' | 'warning' | 'error' | null
   >(null);
 
-  const [pdfDownloading, setPdfDownloading] = useState<Record<number, boolean>>({});
-  const [pdfDownlaodProgress, setPdfDownloadProgress] = useState<Record<number, number>>({});
+  const [pdfDownloading, setPdfDownloading] = useState<Record<number, boolean>>(
+    {},
+  );
+  const [pdfDownlaodProgress, setPdfDownloadProgress] = useState<
+    Record<number, number>
+  >({});
 
   // useLayoutEffect(() => {
   //   const getAllTracks = () => {
@@ -127,7 +130,7 @@ export const TrackProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   // }, []);
 
   const loadFolders = async () => {
-    const { dirs } = ReactNativeBlobUtil.fs;
+    const {dirs} = ReactNativeBlobUtil.fs;
     const dirToSave = Platform.OS === 'ios' ? dirs.DocumentDir : dirs.CacheDir;
     const path = `${dirToSave}/downloads`;
     const defaultFolderPath = `${dirToSave}/downloads/Downloads`;
@@ -165,7 +168,7 @@ export const TrackProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       return;
     }
 
-    const { dirs } = ReactNativeBlobUtil.fs;
+    const {dirs} = ReactNativeBlobUtil.fs;
     const dirToSave = Platform.OS === 'ios' ? dirs.DocumentDir : dirs.CacheDir;
     const folderPath = `${dirToSave}/downloads/${folderName}`;
 
@@ -177,7 +180,7 @@ export const TrackProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         setAlertTitle('Success');
         setAlertMessage('Folder created successfully!');
         setAlertType('success');
-        setIsAlertVisible(true);        //  setFolderName('');
+        setIsAlertVisible(true); //  setFolderName('');
       } else {
         setAlertTitle('Warning');
         setAlertMessage('Folder already exists!');
@@ -193,7 +196,7 @@ export const TrackProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   };
 
   const deleteFolder = async (folderName: string) => {
-    const { dirs } = ReactNativeBlobUtil.fs;
+    const {dirs} = ReactNativeBlobUtil.fs;
     const dirToSave = Platform.OS === 'ios' ? dirs.DocumentDir : dirs.CacheDir;
     const folderPath = `${dirToSave}/downloads/${folderName}`;
 
@@ -215,7 +218,10 @@ export const TrackProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         const fileExists = await ReactNativeBlobUtil.fs.exists(jsonFile);
         if (fileExists) {
           // Read and parse the JSON file
-          const jsonContent = await ReactNativeBlobUtil.fs.readFile(jsonFile, 'utf8');
+          const jsonContent = await ReactNativeBlobUtil.fs.readFile(
+            jsonFile,
+            'utf8',
+          );
           const objectArray = JSON.parse(jsonContent);
 
           // Extract IDs from the objects in the JSON file
@@ -517,7 +523,7 @@ export const TrackProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
     const previousTrackIndexArray =
       currentTrackIndex > 0
-        ? Array.from({ length: currentTrackIndex }, (_, i) => i)
+        ? Array.from({length: currentTrackIndex}, (_, i) => i)
         : [];
 
     const activeIndex = initialQueue.findIndex(
@@ -546,7 +552,7 @@ export const TrackProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
     const previousTrackIndexArray =
       currentTrackIndex > 0
-        ? Array.from({ length: currentTrackIndex }, (_, i) => i)
+        ? Array.from({length: currentTrackIndex}, (_, i) => i)
         : [];
 
     const remainingQueue = [...upcomingQueue, ...previousQueue];
@@ -582,21 +588,19 @@ export const TrackProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     await TrackPlayer.play();
   };
 
+  const startPdfDownload = (id: number) => {
+    setPdfDownloading(prev => ({...prev, [id]: true}));
+    setPdfDownloadProgress(prev => ({...prev, [id]: 0}));
+  };
 
-  
-    const startPdfDownload = (id:number) => {
-      setPdfDownloading((prev) => ({ ...prev, [id]: true }));
-      setPdfDownloadProgress((prev) => ({ ...prev, [id]: 0 }));
-    };
-  
-    const finishPdfDownload = (id:number) => {
-      setPdfDownloading((prev) => ({ ...prev, [id]: false }));
-      setPdfDownloadProgress((prev) => ({ ...prev, [id]: 100 })); 
-    };
+  const finishPdfDownload = (id: number) => {
+    setPdfDownloading(prev => ({...prev, [id]: false}));
+    setPdfDownloadProgress(prev => ({...prev, [id]: 100}));
+  };
 
-    const setPdfDownloadForProgress = (id: number, progress: number) => {
-      setPdfDownloadProgress((prev) => ({ ...prev, [id]: progress }));
-    };
+  const setPdfDownloadForProgress = (id: number, progress: number) => {
+    setPdfDownloadProgress(prev => ({...prev, [id]: progress}));
+  };
 
   const contextValue: TrackContextType = {
     trackLists,
@@ -636,15 +640,14 @@ export const TrackProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     pdfDownloading,
     startPdfDownload,
     finishPdfDownload,
-  pdfDownlaodProgress,
-    setPdfDownloadForProgress
+    pdfDownlaodProgress,
+    setPdfDownloadForProgress,
   };
 
   return (
     <>
       <TrackContext.Provider value={contextValue}>
         {children}
-
       </TrackContext.Provider>
       <CustomAlert
         visible={isAlertVisible}
