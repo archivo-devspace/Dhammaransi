@@ -16,7 +16,7 @@ import {NavigationMainStackScreenProps} from '../navigations/StackNavigation';
 import {FontAwesome} from '../utils/common';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {Colors} from '../theme';
-import {images, menus} from '../utils/constants';
+import {menus} from '../utils/constants';
 import {Movies} from '../components/commons/Movies';
 import ImageSlider from '../components/commons/ImageSlider';
 import Audios from '../components/commons/Audio';
@@ -25,6 +25,7 @@ import TopNavigation from '../components/commons/TopNavigation';
 import {useTranslation} from 'react-i18next';
 import {useGetPaintings} from '../api_services/lib/queryhooks/usePainting';
 import {useGetAlbums} from '../api_services/lib/queryhooks/useAudio';
+import {useGetHomeData} from '../api_services/lib/queryhooks/useHome';
 
 type Props = {
   navigation: NavigationMainStackScreenProps['navigation'];
@@ -52,8 +53,6 @@ const HomeScreen = ({navigation}: Props) => {
     refetch: paintingRefresh,
   } = useGetPaintings();
 
- 
-
   const {
     data: albums,
     isFetched: isAlbumsFetched,
@@ -62,6 +61,14 @@ const HomeScreen = ({navigation}: Props) => {
     error: albumsErrorMessage,
     refetch: albumsRefresh,
   } = useGetAlbums(1);
+
+  const {
+    data: homeData,
+    isLoading: isHomeDataLoading,
+    // isError: isHomeDataError,
+  } = useGetHomeData();
+
+  const bannerImages = homeData?.data?.results?.banners?.map(img => img.file);
 
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = useCallback(async () => {
@@ -129,7 +136,13 @@ const HomeScreen = ({navigation}: Props) => {
               },
               {height: customHeight - 16},
             ]}>
-            <ImageSlider images={images} />
+            {isHomeDataLoading ? (
+              <View style={styles.loadingContainer}>
+                <Text>{t('LOADING')}</Text>
+              </View>
+            ) : (
+              <ImageSlider images={bannerImages} />
+            )}
           </Animated.View>
         </View>
         <View

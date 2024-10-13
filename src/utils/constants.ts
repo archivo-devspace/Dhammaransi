@@ -46,12 +46,12 @@ export const menus = [
   },
 ];
 
-export const images = [
-  'https://images.pexels.com/photos/1402787/pexels-photo-1402787.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-  'https://images.pexels.com/photos/1183099/pexels-photo-1183099.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-  'https://images.pexels.com/photos/6919947/pexels-photo-6919947.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-  'https://images.pexels.com/photos/1435075/pexels-photo-1435075.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-];
+// export const images = [
+//   'https://images.pexels.com/photos/1402787/pexels-photo-1402787.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+//   'https://images.pexels.com/photos/1183099/pexels-photo-1183099.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+//   'https://images.pexels.com/photos/6919947/pexels-photo-6919947.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+//   'https://images.pexels.com/photos/1435075/pexels-photo-1435075.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+// ];
 
 export const BANNER_H = 320;
 export const TOPNAVI_H = 55;
@@ -284,6 +284,5 @@ export const singlePaintingDetils = {
 export const fallBackImageUrl =
   'https://upload.wikimedia.org/wikipedia/commons/4/44/Paticcasamuppada_Burmese.jpg';
 
-
-export const networkError = require("../assets/lotties/failed.json");
-export const emptyData = require("../assets/lotties/empty.json");
+export const networkError = require('../assets/lotties/failed.json');
+export const emptyData = require('../assets/lotties/empty.json');

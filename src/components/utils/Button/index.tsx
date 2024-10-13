@@ -1,17 +1,12 @@
-import {
-  View,
-  Text,
-  Pressable,
-  StyleSheet,
-  Platform,
-  TouchableOpacity,
-} from 'react-native';
+/* eslint-disable react-native/no-inline-styles */
+import {View, Text, StyleSheet, Platform, TouchableOpacity} from 'react-native';
 import React, {ReactNode} from 'react';
 
 interface ButtonPorps {
   onPress?: () => any;
   title?: string;
   icon?: ReactNode;
+  endIcon?: ReactNode;
   customButtonStyle?: object;
   customButtonTextStyle?: object;
   children?: ReactNode;
@@ -28,6 +23,7 @@ const CustomButton = ({
   children,
   gap = 0,
   disabled,
+  endIcon,
 }: ButtonPorps) => {
   return (
     <>
@@ -61,6 +57,7 @@ const CustomButton = ({
               }>
               {title}
             </Text>
+            {endIcon && <View style={{marginLeft: 10}}>{endIcon}</View>}
           </View>
         </TouchableOpacity>
       )}

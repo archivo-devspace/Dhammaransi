@@ -1,18 +1,15 @@
 /* eslint-disable react/no-unstable-nested-components */
-import { Platform, StyleSheet, View, useWindowDimensions } from 'react-native';
+import {StyleSheet, View, useWindowDimensions} from 'react-native';
 import React from 'react';
 import Container from '../components/commons/Container';
-import { Theme, useThemeContext } from '../contexts/ThemeContext';
-import { Colors } from '../theme';
-import { ScrollView } from 'react-native-gesture-handler';
-import { useGetBiography } from '../api_services/lib/queryhooks/useBiography';
+import {Theme, useThemeContext} from '../contexts/ThemeContext';
+import {Colors} from '../theme';
+import {ScrollView} from 'react-native-gesture-handler';
+import {useGetBiography} from '../api_services/lib/queryhooks/useBiography';
 import RenderHTML from 'react-native-render-html';
 import SkeletonView from '../components/commons/Skeleton';
-import { Ionicons } from '../utils/common';
-import { CustomButton } from '../components/utils';
-import LottieView from 'lottie-react-native';
 import NetworkError from '../components/commons/LottieAnimationView';
-import { networkError } from '../utils/constants';
+import {networkError} from '../utils/constants';
 
 interface SkeletonConfig {
   height: number;
@@ -26,14 +23,20 @@ interface SkeletonGroupProps {
 }
 
 const BiographyScreen = () => {
-  const { theme } = useThemeContext();
-  const { width, height } = useWindowDimensions();
+  const {theme} = useThemeContext();
+  const {width} = useWindowDimensions();
   const styles = styling(theme);
 
-  const { data: biography, isLoading: isBiographyLoading, refetch, isFetched, isError } = useGetBiography();
+  const {
+    data: biography,
+    isLoading: isBiographyLoading,
+    refetch,
+    isFetched,
+    isError,
+  } = useGetBiography();
 
   const generateSkeletonViews = (config: SkeletonConfig[]): JSX.Element[] => {
-    return config.map(({ height, widthRatio, borderRadious }, index) => (
+    return config.map(({height, widthRatio, borderRadious}, index) => (
       <SkeletonView
         key={index}
         height={height}
@@ -43,18 +46,18 @@ const BiographyScreen = () => {
     ));
   };
 
-  const SkeletonGroup: React.FC<SkeletonGroupProps> = ({ gap, config }) => {
+  const SkeletonGroup: React.FC<SkeletonGroupProps> = ({gap, config}) => {
     return (
-      <View style={[styles.group, { gap }]}>{generateSkeletonViews(config)}</View>
+      <View style={[styles.group, {gap}]}>{generateSkeletonViews(config)}</View>
     );
   };
 
   const LoadingSkeleton = () => {
     const commonConfig: SkeletonConfig[] = [
-      { height: 10, widthRatio: 0.9, borderRadious: 6 },
-      { height: 10, widthRatio: 0.8, borderRadious: 6 },
-      { height: 10, widthRatio: 0.7, borderRadious: 6 },
-      { height: 10, widthRatio: 0.6, borderRadious: 6 },
+      {height: 10, widthRatio: 0.9, borderRadious: 6},
+      {height: 10, widthRatio: 0.8, borderRadious: 6},
+      {height: 10, widthRatio: 0.7, borderRadious: 6},
+      {height: 10, widthRatio: 0.6, borderRadious: 6},
     ];
 
     const autoConfig: SkeletonConfig[] = Array(16).fill({
@@ -85,21 +88,24 @@ const BiographyScreen = () => {
 
   return (
     <Container title="MENUS.BIOGRAPHY">
-      <ScrollView style={[styles.container, { width: width }]}>
+      <ScrollView style={[styles.container, {width: width}]}>
         {isBiographyLoading ? (
           <LoadingSkeleton />
         ) : isFetched && isError ? (
-          <NetworkError handlePress={refetch} btnType='refresh' lottieFiePath={networkError}/>
+          <NetworkError
+            handlePress={refetch}
+            btnType="refresh"
+            lottieFiePath={networkError}
+          />
         ) : (
           <RenderHTML
-         
             contentWidth={width * 0.54}
             source={{
               html:
                 biography?.data?.results?.description ||
                 '<p>No data available</p>',
             }}
-            baseStyle={{color:Colors[theme].text}}
+            baseStyle={{color: Colors[theme].text}}
           />
         )}
       </ScrollView>

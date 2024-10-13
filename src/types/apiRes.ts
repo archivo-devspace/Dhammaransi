@@ -90,3 +90,32 @@ export interface BiographyApiRes {
   id: number;
   description: string;
 }
+
+//#region HomeScreen Data
+
+export interface BannerApiRes {
+  file: string;
+  description: string;
+  mime_type: string;
+  size: number;
+  created_at: string | null;
+  updated_at: string | null;
+  id: number;
+}
+
+export interface TayarTrackApiRes {
+  id: number;
+  album_id: number;
+  title: string;
+  url: string;
+  mime_type: string;
+  size: number;
+  artist: string;
+  artwork: string;
+}
+export interface HomeScreenApiRes {
+  banners: Array<BannerApiRes>;
+  tayar_tracks: Array<TayarTrackApiRes>;
+  books: Array<BookApiRes>;
+  paintings: Array<PaintingApiRes>;
+}
