@@ -161,42 +161,48 @@ const PdfListScreen = () => {
     notificationId: string,
     fileName: string,
     progress: number | null,
+    failed?: boolean
   ) => {
-    const isAndroid = Platform.OS === 'android';
-    const androidOption = {
+    // const isAndroid = Platform.OS === 'android';
+    // const androidOption = {
+    //   id: notificationId,
+    //   title:
+    //     progress !== null
+    //       ? `Downloading ${fileName}`
+    //       : `${fileName} Downloaded`,
+    //   body:
+    //     progress !== null
+    //       ? `Download in progress... ${progress}%`
+    //       : 'Download complete!',
+    //   android: {
+    //     channelId: 'download-channel',
+    //     importance: AndroidImportance.HIGH,
+    //     progress: {
+    //       max: 100,
+    //       current: progress ?? 100,
+    //       indeterminate: false,
+    //     },
+    //   },
+    // };
+
+    const options = {
       id: notificationId,
-      title:
-        progress !== null
-          ? `Downloading ${fileName}`
-          : `${fileName} Downloaded`,
-      body:
-        progress !== null
-          ? `Download in progress... ${progress}%`
-          : 'Download complete!',
+      title: !failed ? progress !== null ? `Downloading ${fileName}` : `Downloaded ${fileName}` : `Failed ${fileName}`,
+      body: !failed ? progress !== null ? 'Download in progress ...' : 'Download complete!' : `Download Failed!`,
       android: {
         channelId: 'download-channel',
-        importance: AndroidImportance.HIGH,
-        progress: {
-          max: 100,
-          current: progress ?? 100,
-          indeterminate: false,
-        },
+        smallIcon: 'ic_notification', 
+        sound: 'downloadedalert',
+        timestamp: Date.now(),
       },
-    };
-
-    const iosOptions = {
-      id: notificationId,
-      title: `Downloading ${fileName}`,
-      body: progress !== null ? 'Download in progress...' : 'Download complete!',
       ios: {
-        sound: 'default',
-      },
+        
+        sound: 'downloadedalert.wav',
+      }
     };
-    if(isAndroid){
-      return await notifee.displayNotification(androidOption);
-    }else{
-      return await notifee.displayNotification(iosOptions);
-    }
+   
+      return await notifee.displayNotification(options);
+    
   };
   const downloadPDF = async (
     id: number,
@@ -221,6 +227,7 @@ const PdfListScreen = () => {
       id: 'download-channel',
       name: 'Download Channel',
       importance: AndroidImportance.HIGH,
+    sound: 'downloadedalert'
     });
 
     try {
@@ -247,13 +254,13 @@ const PdfListScreen = () => {
         .fetch('GET', fileUrl)
         .progress({ interval: 100 }, async (received, total) => {
           const progress = Math.round((received / total) * 100);
-         if(Platform.OS === 'android'){
-          currentNotificationId = await displayOrUpdateNotification(
-            currentNotificationId,
-            fileName,
-            progress,
-          );
-         }
+        //  if(Platform.OS === 'android'){
+        //   currentNotificationId = await displayOrUpdateNotification(
+        //     currentNotificationId,
+        //     fileName,
+        //     progress,
+        //   );
+        //  }
           setPdfDownloadForProgress(id, progress)
         })
         .then(async res => {
@@ -262,6 +269,7 @@ const PdfListScreen = () => {
               currentNotificationId,
               fileName,
               null,
+              false
             );
             await saveDownloadedFile(id, fileName, res.path());
             finishPdfDownload(id);
@@ -269,14 +277,19 @@ const PdfListScreen = () => {
             setAlertMessage(`File saved to ${res.data}`);
             setAlertType('success');
             setIsAlertVisible(true);
-            await notifee.cancelNotification(currentNotificationId);
+            // await notifee.cancelNotification(currentNotificationId);
           } else {
+            await displayOrUpdateNotification(
+              currentNotificationId,
+              fileName,
+              null,
+              true
+            );
             finishPdfDownload(id);
             setAlertTitle('Download Failed');
             setAlertMessage('There was an issue downloading the file.');
             setAlertType('error');
             setIsAlertVisible(true);
-            await notifee.cancelNotification(currentNotificationId);
 
           }
 
@@ -285,16 +298,22 @@ const PdfListScreen = () => {
           //   ReactNativeBlobUtil.ios.openDocument(res.path()); // Open the downloaded file on iOS
           // }
         })
-        .catch(err => {
+        .catch(async(err) => {
           finishPdfDownload(id);
           setAlertTitle('Download Failed');
           setAlertMessage('There was an issue downloading the file.');
           setAlertType('error');
           setIsAlertVisible(true);
-          notifee.cancelNotification(currentNotificationId);
+          await displayOrUpdateNotification(
+            currentNotificationId,
+            fileName,
+            null,
+            true
+          );
           console.error('Download failed: ', err);
         });
     } catch (error) {
+  
       finishPdfDownload(id);
       setAlertTitle('Error');
       setAlertMessage('Error creating folder or saving file:');
@@ -464,11 +483,11 @@ const PdfListScreen = () => {
                           confirmDownload(ebook.id, ebook.file, ebook.name)
                         }
                         icon={
-                          pdfDownloading[ebook.id] ?? <Ionicons
+                          !pdfDownloading[ebook.id] ? <Ionicons
                             name={'cloud-download-outline'}
                             size={30}
                             color={Colors[theme].primary_light}
-                          />
+                          /> : <></>
                         }
                         disabled={pdfDownloading[ebook.id]}
                         title={pdfDownloading[ebook.id] ? `${String(pdfDownlaodProgress[ebook.id])} %` : undefined}
@@ -477,9 +496,9 @@ const PdfListScreen = () => {
                       />
                     )}
                   </View>
-                  {bookLists?.data?.results?.length !== ebook?.id && (
+                  {/* {bookLists?.data?.results?.length !== ebook?.id && (
                     <View style={styles.divider} />
-                  )}
+                  )} */}
                 </React.Fragment>
               );
             })
@@ -521,6 +540,25 @@ const styling = (theme: Theme) =>
       alignItems: 'center',
       gap: 20,
       justifyContent: 'space-between',
+      backgroundColor: Colors[theme].secondary_light,
+      paddingHorizontal: 10, 
+      paddingVertical: 30,
+      marginBottom: 50,
+      borderRadius: 20,
+      ...Platform.select({
+        ios: {
+          shadowOffset: {
+            width: 0,
+            height: 1,
+          },
+          shadowOpacity: 0.2,
+          shadowRadius: 3,
+        },
+        android: {
+          elevation: 2,
+        },
+      }),
+
     },
     innerContentContainer: {
       width: '100%',
@@ -570,16 +608,17 @@ const styling = (theme: Theme) =>
       color: Colors[theme].text,
       alignSelf: 'center',
       paddingVertical: 7,
-      width: 35
     },
     btn: {
       alignSelf: 'flex-end',
-      paddingHorizontal: 50,
-      backgroundColor: Colors[theme].secondary,
+      width: 120,
+      borderWidth: 1,
+      borderColor: Colors[theme].text,
+      backgroundColor: Colors[theme].secondary_light,
       paddingVertical: 10,
       justifyContent: 'center',
       alignItems: 'center',
-      shadowColor: Colors[theme].text,
+      shadowColor: Colors[theme].secondary_dark,
       borderRadius: 20,
       ...Platform.select({
         ios: {

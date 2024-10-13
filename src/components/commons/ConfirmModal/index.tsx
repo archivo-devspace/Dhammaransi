@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from 'react-native';
 import React, {Dispatch, SetStateAction} from 'react';
@@ -35,6 +36,8 @@ const ConfirmModal = ({
 }: ModalProps) => {
   const {theme} = useThemeContext();
   const styles = createStyles(theme);
+  const { height} = useWindowDimensions();
+
 
   return (
     <>
@@ -65,8 +68,8 @@ const ConfirmModal = ({
                 ]}>
                 <Text
                   style={[
-                    styles.buttonText,
                     {
+                      fontSize: height * 0.018,
                       color:
                         confirmType === 'delete' ? 'white' : Colors[theme].text,
                     },
@@ -87,8 +90,9 @@ const ConfirmModal = ({
                 ]}>
                 <Text
                   style={[
-                    styles.buttonText,
+                    
                     {
+                      fontSize: height * 0.018,
                       color:
                         confirmType === 'delete' ? 'white' : Colors[theme].text,
                     },
@@ -148,7 +152,5 @@ const createStyles = (theme: Theme) =>
       alignItems: 'center',
       marginLeft: 10,
     },
-    buttonText: {
-      fontSize: 16,
-    },
+ 
   });

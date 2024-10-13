@@ -101,7 +101,12 @@ const AudioCategoryListScreen = ({ navigation }: Props) => {
                   <View style={styles.trackContainer}>
                     <View style={{ flexDirection: 'row', gap: 16, alignItems: 'center' }}>
                       <Image
-                        source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/4/44/Paticcasamuppada_Burmese.jpg' }}
+                        // source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/4/44/Paticcasamuppada_Burmese.jpg' }}
+                        source={
+                          item.artwork
+                            ? { uri: item.artwork ? item.artwork :  theme === 'dark' ? require('../assets/parate_dark.jpg') : require('../assets/parate_light.jpg') } :
+                            theme === 'dark' ? require('../assets/parate_dark.jpg') : require('../assets/parate_light.jpg')
+                        }
                         resizeMode="cover"
                         style={styles.img}
                       />

@@ -81,7 +81,7 @@ const Item = ({
     <Animated.View
       style={[
         styles.container,
-        {width: width, height: height, marginHorizontal: marginHorizontal},
+        {width: width, height: height, marginHorizontal: marginHorizontal,paddingVertical: height * 0.02},
         animatedStyle,
       ]}>
       {isLoading ? (
@@ -101,25 +101,37 @@ const Item = ({
       ) : (
         <TouchableOpacity onPress={() => handleClick(item.id)}>
           <View style={styles.imageContainer}>
+            <View style={[{ width:"100%", height: height * 0.8, overflow:'hidden'}]}>
             <Image
-              source={require('../../../assets/marguerite.jpg')}
+            // source={{ uri: item.artwork }}
+              // source={require('../../../assets/power.png') }
+              source={
+                item.artwork
+                  ? { uri: item?.artwork? item.artwork :  theme === 'dark' ? require('../../../assets/parate_dark.jpg') : require('../../../assets/parate_light.jpg') } :
+                  theme === 'dark' ? require('../../../assets/parate_dark.jpg') : require('../../../assets/parate_light.jpg')
+              }
               style={{
-                width: width,
-                height: height * 0.8,
+              width: "100%",
+                height: "100%",
+           
+          
+               
                 // borderBottomLeftRadius: 20,
                 // borderBottomRightRadius: 20,
               }}
-              resizeMode="cover"
+              resizeMode="contain"
             />
+            </View>
+          
             <View
               style={{
                 width: '100%',
                 paddingHorizontal: 4,
-                height: height * 0.2,
+                height: height * 0.18,
                 justifyContent: 'center',
                 alignItems: 'center',
               }}>
-              <Text style={[styles.text, {fontSize: height * 0.09}]}>
+              <Text style={[styles.text, {fontSize: height * 0.075}]}>
                 {truncateText(item?.description, truncateIndex)}
               </Text>
             </View>
@@ -136,31 +148,21 @@ const styling = (theme: Theme) =>
   StyleSheet.create({
     container: {
       backgroundColor: Colors[theme].secondary_light,
-      borderRadius: 15,
+      borderRadius: 10,
       overflow: 'hidden',
       transformOrigin: 'bottom',
       position: 'relative',
+      alignSelf:'center',
+      
     },
     imageContainer: {
       flex: 1,
-      ...Platform.select({
-        ios: {
-          shadowColor: Colors[theme].text,
-          shadowOffset: {
-            width: 0,
-            height: 2,
-          },
-          shadowOpacity: 0.2,
-          shadowRadius: 2,
-        },
-        android: {
-          elevation: 7,
-        },
-      }),
+      
     },
     text: {
       color: Colors[theme].text,
       textAlign: 'center',
       fontWeight: '500',
+      paddingHorizontal:4
     },
   });

@@ -35,12 +35,12 @@ export const Audios = ({
   const {theme} = useThemeContext();
   const {t} = useTranslation();
 
-  const ITEM_WIDTH = width - width * 0.6;
-  const ITEM_HEIGHT = height - height * 0.82;
+  const ITEM_WIDTH = width - width * 0.55;
+  const ITEM_HEIGHT = height - height * 0.76;
   const MARGIN_HORIZONTAL = 10;
   const ITEM_FULL_WIDTH = ITEM_WIDTH + MARGIN_HORIZONTAL * 2;
   const SPACER = (width - ITEM_FULL_WIDTH) / 2;
-  const truncateIndex = 20;
+  const truncateIndex = 18;
 
   const x = useSharedValue(0);
 
@@ -62,7 +62,7 @@ export const Audios = ({
   const styles = styling(theme);
 
   return (
-    <View style={[styles.mainContainer, {height: height - height * 0.74}]}>
+    <View style={[styles.mainContainer, {height: height - height * 0.65}]}>
       <Text style={[styles.text, {fontSize: height * 0.021}]}>
         {t('TITLES.TOP_AUDIOS')}
       </Text>
