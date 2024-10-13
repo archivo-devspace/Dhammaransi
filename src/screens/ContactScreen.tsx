@@ -11,9 +11,6 @@ import {Feather} from '../utils/common';
 const ContactScreen = () => {
   const {theme} = useThemeContext();
   const styles = styling(theme);
-  const copyToClipboard = () => {
-    Clipboard.setString('hello');
-  };
 
   return (
     <Container title="MENUS.CONTACT">
@@ -25,16 +22,29 @@ const ContactScreen = () => {
           <View>
             <Text style={styles.dataTitle}>Phone</Text>
             <CustomButton
+              customButtonStyle={styles.customButton}
+              customButtonTextStyle={styles.subtitle}
               endIcon={<Feather name="copy" />}
               title="09681060555"
-              onPress={copyToClipboard}
+              onPress={() => Clipboard.setString('09681060555')}
             />
-            <Text style={styles.subtitle}>09681060555</Text>
-            <Text style={styles.subtitle}>09681061555</Text>
+            <CustomButton
+              customButtonStyle={styles.customButton}
+              customButtonTextStyle={styles.subtitle}
+              endIcon={<Feather name="copy" />}
+              title="09681061555"
+              onPress={() => Clipboard.setString('09681061555')}
+            />
           </View>
           <View>
             <Text style={styles.dataTitle}>Email</Text>
-            <Text style={styles.email}>dhammaramsimedia@gmail.com</Text>
+            <CustomButton
+              customButtonStyle={styles.customButton}
+              customButtonTextStyle={styles.subtitle}
+              endIcon={<Feather name="copy" />}
+              title="dhammaramsimedia@gmail.com"
+              onPress={() => Clipboard.setString('dhammaramsimedia@gmail.com')}
+            />
           </View>
           <View>
             <Text style={styles.dataTitle}>Address</Text>
@@ -80,10 +90,11 @@ const styling = (theme: Theme) =>
       marginBottom: 2,
       color: Colors[theme].text,
     },
-    email: {
-      fontSize: 14,
+    customButton: {
+      alignItems: 'flex-start',
+      marginLeft: 20,
+    },
+    customText: {
       color: Colors[theme].text,
-      borderBottomColor: Colors[theme].primary,
-      paddingLeft: 10,
     },
   });
