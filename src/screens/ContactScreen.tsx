@@ -1,16 +1,28 @@
 import React from 'react';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import Container from '../components/commons/Container';
-import {StyleSheet, Text, View} from 'react-native';
-
+import {Linking, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Colors} from '../theme';
 import Clipboard from '@react-native-clipboard/clipboard';
-import {CustomButton} from '../components/utils';
-import {Feather} from '../utils/common';
+import {Feather, MaterialIcon} from '../utils/common';
 
 const ContactScreen = () => {
   const {theme} = useThemeContext();
   const styles = styling(theme);
+
+  const copyToClipboard = (text: string) => {
+    Clipboard.setString(text);
+  };
+
+  const sendEmail = (email: string) => {
+    const gmailURL = `mailto:${email}`;
+    Linking.openURL(gmailURL);
+  };
+
+  const dialPhoneNumber = (phone: string) => {
+    const phoneURL = `tel:${phone}`;
+    Linking.openURL(phoneURL);
+  };
 
   return (
     <Container title="MENUS.CONTACT">
@@ -21,34 +33,45 @@ const ContactScreen = () => {
           </Text>
           <View>
             <Text style={styles.dataTitle}>Phone</Text>
-            <CustomButton
-              customButtonStyle={styles.customButton}
-              customButtonTextStyle={styles.subtitle}
-              endIcon={<Feather name="copy" />}
-              title="09681060555"
-              onPress={() => Clipboard.setString('09681060555')}
-            />
-            <CustomButton
-              customButtonStyle={styles.customButton}
-              customButtonTextStyle={styles.subtitle}
-              endIcon={<Feather name="copy" />}
-              title="09681061555"
-              onPress={() => Clipboard.setString('09681061555')}
-            />
+            {/* First Phone  */}
+            <View style={styles.contentContainer}>
+              <TouchableOpacity onPress={() => dialPhoneNumber('09681060555')}>
+                <MaterialIcon name="phone" color={Colors[theme].text} />
+              </TouchableOpacity>
+              <Text style={styles.subtitle}>09681060555</Text>
+              <TouchableOpacity onPress={() => copyToClipboard('09681060555')}>
+                <Feather name="copy" color={Colors[theme].text} />
+              </TouchableOpacity>
+            </View>
+            {/* Second Phone  */}
+            <View style={styles.contentContainer}>
+              <TouchableOpacity onPress={() => dialPhoneNumber('09681061555')}>
+                <MaterialIcon name="phone" color={Colors[theme].text} />
+              </TouchableOpacity>
+              <Text style={styles.subtitle}>09681061555</Text>
+              <TouchableOpacity onPress={() => copyToClipboard('09681061555')}>
+                <Feather name="copy" color={Colors[theme].text} />
+              </TouchableOpacity>
+            </View>
           </View>
+          {/* Email  */}
           <View>
             <Text style={styles.dataTitle}>Email</Text>
-            <CustomButton
-              customButtonStyle={styles.customButton}
-              customButtonTextStyle={styles.subtitle}
-              endIcon={<Feather name="copy" />}
-              title="dhammaramsimedia@gmail.com"
-              onPress={() => Clipboard.setString('dhammaramsimedia@gmail.com')}
-            />
+            <View style={styles.contentContainer}>
+              <TouchableOpacity
+                onPress={() => sendEmail('dhammaramsimedia@gmail.com')}>
+                <MaterialIcon name="email" color={Colors[theme].text} />
+              </TouchableOpacity>
+              <Text style={styles.subtitle}>dhammaramsimedia@gmail.com</Text>
+              <TouchableOpacity
+                onPress={() => copyToClipboard('dhammaramsimedia@gmail.com')}>
+                <Feather name="copy" color={Colors[theme].text} />
+              </TouchableOpacity>
+            </View>
           </View>
           <View>
             <Text style={styles.dataTitle}>Address</Text>
-            <Text style={styles.subtitle}>
+            <Text style={[styles.subtitle]}>
               Yangon - Mandalay Highway, Mile 1/1, Hlegu, Yangon, Myanmar{' '}
             </Text>
           </View>
@@ -89,6 +112,11 @@ const styling = (theme: Theme) =>
       fontWeight: 'bold',
       marginBottom: 2,
       color: Colors[theme].text,
+    },
+    contentContainer: {
+      flexDirection: 'row',
+      gap: 10,
+      alignItems: 'center',
     },
     customButton: {
       alignItems: 'flex-start',
