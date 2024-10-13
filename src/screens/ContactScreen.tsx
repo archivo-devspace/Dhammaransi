@@ -116,9 +116,7 @@ const styling = (theme: Theme) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      paddingHorizontal: 10,
-      // justifyContent: 'center',
-      alignItems: 'center',
+      paddingHorizontal: 15,
     },
     card: {
       backgroundColor: Colors[theme].secondary_light,
@@ -134,7 +132,7 @@ const styling = (theme: Theme) =>
     subtitle: {
       fontSize: 16,
       color: Colors[theme].text,
-      paddingLeft: 10,
+      // paddingLeft: 10,
     },
     dataTitle: {
       fontSize: 18,
@@ -145,7 +143,6 @@ const styling = (theme: Theme) =>
     contentContainer: {
       flexDirection: 'row',
       gap: 10,
-      alignItems: 'center',
     },
     customButton: {
       alignItems: 'flex-start',
