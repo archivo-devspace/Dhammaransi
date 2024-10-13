@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import Container from '../components/commons/Container';
@@ -24,6 +25,15 @@ const ContactScreen = () => {
     Linking.openURL(phoneURL);
   };
 
+  const openGoogleMaps = (address: string) => {
+    const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+      address,
+    )}`;
+    Linking.openURL(url).catch(err =>
+      console.error('Failed to open URL:', err),
+    );
+  };
+
   return (
     <Container title="MENUS.CONTACT">
       <View style={styles.container}>
@@ -34,23 +44,31 @@ const ContactScreen = () => {
           <View>
             <Text style={styles.dataTitle}>Phone</Text>
             {/* First Phone  */}
-            <View style={styles.contentContainer}>
+            <View style={[styles.contentContainer, {marginBottom: 10}]}>
               <TouchableOpacity onPress={() => dialPhoneNumber('09681060555')}>
-                <MaterialIcon name="phone" color={Colors[theme].text} />
+                <MaterialIcon
+                  name="phone"
+                  size={20}
+                  color={Colors[theme].text}
+                />
               </TouchableOpacity>
               <Text style={styles.subtitle}>09681060555</Text>
               <TouchableOpacity onPress={() => copyToClipboard('09681060555')}>
-                <Feather name="copy" color={Colors[theme].text} />
+                <Feather name="copy" size={20} color={Colors[theme].text} />
               </TouchableOpacity>
             </View>
             {/* Second Phone  */}
             <View style={styles.contentContainer}>
               <TouchableOpacity onPress={() => dialPhoneNumber('09681061555')}>
-                <MaterialIcon name="phone" color={Colors[theme].text} />
+                <MaterialIcon
+                  name="phone"
+                  size={20}
+                  color={Colors[theme].text}
+                />
               </TouchableOpacity>
               <Text style={styles.subtitle}>09681061555</Text>
               <TouchableOpacity onPress={() => copyToClipboard('09681061555')}>
-                <Feather name="copy" color={Colors[theme].text} />
+                <Feather name="copy" size={20} color={Colors[theme].text} />
               </TouchableOpacity>
             </View>
           </View>
@@ -60,20 +78,31 @@ const ContactScreen = () => {
             <View style={styles.contentContainer}>
               <TouchableOpacity
                 onPress={() => sendEmail('dhammaramsimedia@gmail.com')}>
-                <MaterialIcon name="email" color={Colors[theme].text} />
+                <MaterialIcon
+                  name="email"
+                  size={20}
+                  color={Colors[theme].text}
+                />
               </TouchableOpacity>
               <Text style={styles.subtitle}>dhammaramsimedia@gmail.com</Text>
               <TouchableOpacity
                 onPress={() => copyToClipboard('dhammaramsimedia@gmail.com')}>
-                <Feather name="copy" color={Colors[theme].text} />
+                <Feather name="copy" size={20} color={Colors[theme].text} />
               </TouchableOpacity>
             </View>
           </View>
           <View>
             <Text style={styles.dataTitle}>Address</Text>
-            <Text style={[styles.subtitle]}>
-              Yangon - Mandalay Highway, Mile 1/1, Hlegu, Yangon, Myanmar{' '}
-            </Text>
+
+            <View style={styles.contentContainer}>
+              <Text style={[styles.subtitle]}>
+                Yangon - Mandalay Highway, Mile 1/1, Hlegu, Yangon, Myanmar{' '}
+              </Text>
+              <TouchableOpacity
+                onPress={() => openGoogleMaps('346M+9RR, Yangon')}>
+                <Feather name="map-pin" size={20} color={Colors[theme].text} />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </View>
@@ -109,7 +138,7 @@ const styling = (theme: Theme) =>
     },
     dataTitle: {
       fontSize: 18,
-      fontWeight: 'bold',
+      fontWeight: '600',
       marginBottom: 2,
       color: Colors[theme].text,
     },
