@@ -205,6 +205,10 @@ const PdfListScreen = () => {
         smallIcon: 'ic_notification',
         sound: 'downloadedalert',
         timestamp: Date.now(),
+        pressAction: {
+          id: 'default',
+        },
+        asForegroundService: true,
       },
       ios: {
         sound: 'downloadedalert.wav',

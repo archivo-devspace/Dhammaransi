@@ -81,7 +81,11 @@ const Item = ({
     <Animated.View
       style={[
         styles.container,
-        {width: width, height: height, marginHorizontal: marginHorizontal,paddingVertical: height * 0.02},
+        {
+          width: width,
+          height: height,
+          marginHorizontal: marginHorizontal,
+        },
         animatedStyle,
       ]}>
       {isLoading ? (
@@ -101,37 +105,51 @@ const Item = ({
       ) : (
         <TouchableOpacity onPress={() => handleClick(item.id)}>
           <View style={styles.imageContainer}>
-            <View style={[{ width:"100%", height: height * 0.8, overflow:'hidden'}]}>
-            <Image
-            // source={{ uri: item.artwork }}
-              // source={require('../../../assets/power.png') }
-              source={
-                item.artwork
-                  ? { uri: item?.artwork? item.artwork :  theme === 'dark' ? require('../../../assets/parate_dark.jpg') : require('../../../assets/parate_light.jpg') } :
-                  theme === 'dark' ? require('../../../assets/parate_dark.jpg') : require('../../../assets/parate_light.jpg')
-              }
-              style={{
-              width: "100%",
-                height: "100%",
-           
-          
-               
-                // borderBottomLeftRadius: 20,
-                // borderBottomRightRadius: 20,
-              }}
-              resizeMode="contain"
-            />
+            <View
+              style={[
+                {
+                  width: '100%',
+                  height: height * 0.8,
+
+                  overflow: 'hidden',
+                },
+              ]}>
+              <Image
+                // source={{ uri: item.artwork }}
+                // source={require('../../../assets/power.png') }
+                source={
+                  item.artwork
+                    ? {
+                        uri: item?.artwork
+                          ? item.artwork
+                          : theme === 'dark'
+                          ? require('../../../assets/parate_dark.jpg')
+                          : require('../../../assets/parate_light.jpg'),
+                      }
+                    : theme === 'dark'
+                    ? require('../../../assets/parate_dark.jpg')
+                    : require('../../../assets/parate_light.jpg')
+                }
+                style={{
+                  width: '100%',
+                  height: '100%',
+
+                  // borderBottomLeftRadius: 20,
+                  // borderBottomRightRadius: 20,
+                }}
+                resizeMode="contain"
+              />
             </View>
-          
+
             <View
               style={{
                 width: '100%',
-                paddingHorizontal: 4,
-                height: height * 0.18,
+                paddingTop: 3,
+                height: height * 0.17,
                 justifyContent: 'center',
                 alignItems: 'center',
               }}>
-              <Text style={[styles.text, {fontSize: height * 0.075}]}>
+              <Text style={[styles.text, {fontSize: height * 0.07}]}>
                 {truncateText(item?.description, truncateIndex)}
               </Text>
             </View>
@@ -152,17 +170,17 @@ const styling = (theme: Theme) =>
       overflow: 'hidden',
       transformOrigin: 'bottom',
       position: 'relative',
-      alignSelf:'center',
-      
+      alignSelf: 'center',
+      borderColor: Colors[theme].secondary_light,
+      borderWidth: 6,
     },
     imageContainer: {
       flex: 1,
-      
+      backgroundColor: 'blue',
     },
     text: {
       color: Colors[theme].text,
       textAlign: 'center',
       fontWeight: '500',
-      paddingHorizontal:4
     },
   });

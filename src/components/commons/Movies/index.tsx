@@ -34,8 +34,8 @@ export const Movies = ({
   const {width, height} = useWindowDimensions();
   const {theme} = useThemeContext();
   const {t} = useTranslation();
-  const ITEM_WIDTH = width - width * 0.15;
-  const ITEM_HEIGHT = height - height * 0.63;
+  const ITEM_WIDTH = width - width * 0.3;
+  const ITEM_HEIGHT = height - height * 0.7;
   const MARGIN_HORIZONTAL = 5;
   const ITEM_FULL_WIDTH = ITEM_WIDTH + MARGIN_HORIZONTAL * 2;
   const SPACER = (width - ITEM_FULL_WIDTH) / 2;
@@ -58,7 +58,7 @@ export const Movies = ({
   const styles = styling(theme);
 
   return (
-    <View style={[styles.mainContainer, {height: height - height * 0.5}]}>
+    <View style={[styles.mainContainer, {height: height - height * 0.6}]}>
       <Text style={[styles.text, {fontSize: height * 0.021}]}>
         {t('TITLES.TOP_PICTURES')}
       </Text>
@@ -161,7 +161,6 @@ const styling = (theme: Theme) =>
       textAlign: 'center',
     },
     flatListStyle: {
-      paddingTop: 5,
       alignSelf: 'center',
     },
   });

@@ -74,7 +74,7 @@ const BottomTapNavigator = () => {
           borderTopRightRadius: 16,
           borderTopLeftRadius: 16,
           borderTopColor: Colors[theme]?.secondary_dark,
-          backgroundColor: Colors[theme]?.secondary_light,
+          backgroundColor: Colors[theme]?.secondary,
         },
       }}>
       {TabArr.map((item, index) => (
