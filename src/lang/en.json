@@ -47,7 +47,11 @@
       "YES_DOWNLOAD": "Download",
       "NO_DOWNLOAD": "Cancel",
       "NO_DATA_AVAILABLE": "No data available",
-      "FETCH_FAILED": "Fetch Failed. Please try again"
+      "FETCH_FAILED": "Fetch Failed. Please try again",
+      "PHONE_NO": "Phone",
+      "EMAIL": "Email",
+      "ADDRESS": "Address",
+      "ADDRESS_DATA": "Yangon - Mandalay Highway, Mile 1/1, Hlegu, Yangon, Myanmar"
     }
   }
 }

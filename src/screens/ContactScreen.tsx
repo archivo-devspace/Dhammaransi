@@ -5,10 +5,12 @@ import Container from '../components/commons/Container';
 import {Linking, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Colors} from '../theme';
 import Clipboard from '@react-native-clipboard/clipboard';
-import {Feather, MaterialIcon} from '../utils/common';
+import {Feather, MaterialIcons, Zocial} from '../utils/common';
+import {useTranslation} from 'react-i18next';
 
 const ContactScreen = () => {
   const {theme} = useThemeContext();
+  const {t} = useTranslation();
   const styles = styling(theme);
 
   const copyToClipboard = (text: string) => {
@@ -42,12 +44,12 @@ const ContactScreen = () => {
             Dhammaramsi Mogok Vipasana Meditation Center
           </Text>
           <View>
-            <Text style={styles.dataTitle}>Phone</Text>
+            <Text style={styles.dataTitle}>{t('UTILS.PHONE_NO')}</Text>
             {/* First Phone  */}
             <View style={[styles.contentContainer, {marginBottom: 10}]}>
               <TouchableOpacity onPress={() => dialPhoneNumber('09681060555')}>
-                <MaterialIcon
-                  name="phone"
+                <MaterialIcons
+                  name="local-phone"
                   size={20}
                   color={Colors[theme].text}
                 />
@@ -60,8 +62,8 @@ const ContactScreen = () => {
             {/* Second Phone  */}
             <View style={styles.contentContainer}>
               <TouchableOpacity onPress={() => dialPhoneNumber('09681061555')}>
-                <MaterialIcon
-                  name="phone"
+                <MaterialIcons
+                  name="local-phone"
                   size={20}
                   color={Colors[theme].text}
                 />
@@ -74,15 +76,11 @@ const ContactScreen = () => {
           </View>
           {/* Email  */}
           <View>
-            <Text style={styles.dataTitle}>Email</Text>
+            <Text style={styles.dataTitle}>{t('UTILS.EMAIL')}</Text>
             <View style={styles.contentContainer}>
               <TouchableOpacity
                 onPress={() => sendEmail('dhammaramsimedia@gmail.com')}>
-                <MaterialIcon
-                  name="email"
-                  size={20}
-                  color={Colors[theme].text}
-                />
+                <Zocial name="email" size={20} color={Colors[theme].text} />
               </TouchableOpacity>
               <Text style={styles.subtitle}>dhammaramsimedia@gmail.com</Text>
               <TouchableOpacity
@@ -92,16 +90,15 @@ const ContactScreen = () => {
             </View>
           </View>
           <View>
-            <Text style={styles.dataTitle}>Address</Text>
-
+            <Text style={styles.dataTitle}>{t('UTILS.ADDRESS')}</Text>
             <View style={styles.contentContainer}>
-              <Text style={[styles.subtitle]}>
-                Yangon - Mandalay Highway, Mile 1/1, Hlegu, Yangon, Myanmar{' '}
-              </Text>
               <TouchableOpacity
                 onPress={() => openGoogleMaps('346M+9RR, Yangon')}>
                 <Feather name="map-pin" size={20} color={Colors[theme].text} />
               </TouchableOpacity>
+              <Text style={[styles.subtitle]}>
+                Yangon - Mandalay Highway, Mile 1/1, Hlegu, Yangon, Myanmar{' '}
+              </Text>
             </View>
           </View>
         </View>
@@ -132,7 +129,6 @@ const styling = (theme: Theme) =>
     subtitle: {
       fontSize: 16,
       color: Colors[theme].text,
-      // paddingLeft: 10,
     },
     dataTitle: {
       fontSize: 18,
@@ -142,6 +138,7 @@ const styling = (theme: Theme) =>
     },
     contentContainer: {
       flexDirection: 'row',
+      alignItems: 'center',
       gap: 10,
     },
     customButton: {

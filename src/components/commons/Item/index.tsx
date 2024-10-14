@@ -1,12 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import {
-  Image,
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import Animated, {
   Extrapolation,
@@ -176,7 +169,6 @@ const styling = (theme: Theme) =>
     },
     imageContainer: {
       flex: 1,
-      backgroundColor: 'blue',
     },
     text: {
       color: Colors[theme].text,

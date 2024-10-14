@@ -47,7 +47,11 @@
       "YES_DOWNLOAD": "သေချာပါသည်",
       "NO_DOWNLOAD": "မလုပ်ပါ",
       "NO_DATA_AVAILABLE": "No data available",
-      "FETCH_FAILED": "ပြန်လည် ကြိုးစားပါ"
+      "FETCH_FAILED": "ပြန်လည် ကြိုးစားပါ",
+      "PHONE_NO": "ဖုန်းနံပါတ်",
+      "EMAIL": "Email",
+      "ADDRESS": "လိပ်စာ",
+      "ADDRESS_DATA": ""
     }
   }
 }
