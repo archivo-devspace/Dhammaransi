@@ -89,16 +89,14 @@ const ContactScreen = () => {
               </TouchableOpacity>
             </View>
           </View>
-          <View>
+          <View style={{paddingRight: 15}}>
             <Text style={styles.dataTitle}>{t('UTILS.ADDRESS')}</Text>
-            <View style={styles.contentContainer}>
+            <View style={[styles.contentContainer]}>
               <TouchableOpacity
                 onPress={() => openGoogleMaps('346M+9RR, Yangon')}>
                 <Feather name="map-pin" size={20} color={Colors[theme].text} />
               </TouchableOpacity>
-              <Text style={[styles.subtitle]}>
-                Yangon - Mandalay Highway, Mile 1/1, Hlegu, Yangon, Myanmar{' '}
-              </Text>
+              <Text style={[styles.subtitle]}>{t('UTILS.ADDRESS_DATA')}</Text>
             </View>
           </View>
         </View>
