@@ -16,7 +16,7 @@ import {
 } from '../api_services/downloadService';
 import { CustomButton } from '../components/utils';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import { truncateText } from '../utils/common';
+import { getFontFamily, truncateText } from '../utils/common';
 import { useTrackContext } from '../contexts/TrackContext';
 import { NavigationMainBottomTabScreenProps } from '../navigations/BottomNavigation';
 import { Colors } from '../theme';
@@ -189,10 +189,10 @@ const FolderDetailScreen = ({ route, navigation }: Props) => {
             style={styles.trackImage}
           />
           <View style={styles.trackTextContainer}>
-            <Text style={styles.trackTitle}>
+            <Text style={[styles.trackTitle, { fontSize: height * 0.022 }]}>
               {truncateText(item.title, 45)}
             </Text>
-            <Text style={styles.trackArtist}>
+            <Text style={[styles.trackArtist, { fontSize: height * 0.015 }]}>
               {truncateText(item.artist, 30)}
             </Text>
           </View>
@@ -274,7 +274,7 @@ const createStyles = (theme: Theme) =>
     },
     noDataText: {
       color: Colors[theme].text,
-      fontWeight: 'bold',
+      fontFamily: getFontFamily('regular'),
       fontSize: 20,
     },
     trackItem: {
@@ -300,11 +300,11 @@ const createStyles = (theme: Theme) =>
       gap: 10,
     },
     trackTitle: {
-      fontSize: 16,
+      fontFamily: getFontFamily('regular'),
       color: Colors[theme].text,
     },
     trackArtist: {
-      fontSize: 12,
+      fontFamily: getFontFamily('regular'),
       color: Colors[theme].text,
     },
     playButton: {

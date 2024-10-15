@@ -12,7 +12,7 @@ import {TOPNAVI_H} from '../../../utils/constants';
 import {Colors} from '../../../theme';
 import {Theme, useThemeContext} from '../../../contexts/ThemeContext';
 import {CustomButton} from '../../utils';
-import {AntDesign} from '../../../utils/common';
+import {AntDesign, getFontFamily} from '../../../utils/common';
 import {useNavigation} from '@react-navigation/native';
 
 const TopNavigation = (props: any) => {
@@ -82,7 +82,8 @@ const TopNavigation = (props: any) => {
             styles.title,
             {
               left: backBtn && languages === 'mm' && width < 400 ? 16 : 0,
-              fontSize: height * 0.02,
+              fontSize: height * 0.021,
+              fontFamily: getFontFamily('bold'),
             },
           ]}>
           {title}
@@ -100,7 +101,7 @@ const styling = (
 ) =>
   StyleSheet.create({
     container: {
-      paddingTop: top - 10,
+      paddingTop: top - 5,
       marginBottom: isFloating ? -TOPNAVI_H - top : 0,
       height: TOPNAVI_H + top,
       justifyContent: 'center',
@@ -129,7 +130,7 @@ const styling = (
     },
     title: {
       textAlign: 'center',
-      fontWeight: '700',
+    
       alignSelf: 'center',
       opacity: isTransparent ? 0.1 : 0.7,
       color: isTransparent ? 'transparent' : Colors[theme].text,

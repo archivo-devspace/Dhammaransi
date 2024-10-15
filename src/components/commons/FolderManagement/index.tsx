@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -13,13 +13,13 @@ import ReactNativeBlobUtil from 'react-native-blob-util'
 
 // import {sendDownloadedDataToLocalDir} from './downloadApi'; // Adjust the path to your download API file
 
-const FolderManagement = ({navigation}: any) => {
+const FolderManagement = ({ navigation }: any) => {
   const [folderName, setFolderName] = useState('');
   const [folders, setFolders] = useState<string[]>([]);
   const [selectedFolder, setSelectedFolder] = useState<string | null>(null);
 
   const loadFolders = async () => {
-    const {dirs} = ReactNativeBlobUtil.fs;
+    const { dirs } = ReactNativeBlobUtil.fs;
     const dirToSave = Platform.OS === 'ios' ? dirs.DocumentDir : dirs.CacheDir;
     const path = `${dirToSave}/downloads`;
 
@@ -49,11 +49,11 @@ const FolderManagement = ({navigation}: any) => {
       return;
     }
 
-    const {dirs} = ReactNativeBlobUtil.fs;
+    const { dirs } = ReactNativeBlobUtil.fs;
     const dirToSave = Platform.OS === 'ios' ? dirs.DocumentDir : dirs.CacheDir;
     const folderPath = `${dirToSave}/downloads/${folderName}`;
 
-    
+
     try {
       const exists = await ReactNativeBlobUtil.fs.isDir(folderPath);
       if (!exists) {

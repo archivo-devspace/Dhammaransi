@@ -9,26 +9,26 @@ import {
   RefreshControl,
   ScrollView,
 } from 'react-native';
-import React, {useState, useCallback, useEffect} from 'react';
-import {Theme, useThemeContext} from '../contexts/ThemeContext';
-import {Colors} from '../theme';
-import {CustomButton} from '../components/utils';
-import {FontAwesome, Ionicons} from '../utils/common';
+import React, { useState, useCallback, useEffect } from 'react';
+import { Theme, useThemeContext } from '../contexts/ThemeContext';
+import { Colors } from '../theme';
+import { CustomButton } from '../components/utils';
+import { FontAwesome, getFontFamily, Ionicons } from '../utils/common';
 import Container from '../components/commons/Container';
-import {useGetBookList} from '../api_services/lib/queryhooks/useBook';
+import { useGetBookList } from '../api_services/lib/queryhooks/useBook';
 import SkeletonView from '../components/commons/Skeleton';
-import notifee, {AndroidImportance} from '@notifee/react-native';
+import notifee, { AndroidImportance } from '@notifee/react-native';
 import CustomAlert from '../components/commons/CustomAlert';
 import ConfirmModal from '../components/commons/ConfirmModal';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import NetworkError from '../components/commons/LottieAnimationView';
-import {networkError} from '../utils/constants';
+import { networkError } from '../utils/constants';
 import ReactNativeBlobUtil from 'react-native-blob-util';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useTrackContext} from '../contexts/TrackContext';
+import { useTrackContext } from '../contexts/TrackContext';
 
 const PdfListScreen = () => {
-  const {theme} = useThemeContext();
+  const { theme } = useThemeContext();
   const {
     pdfDownloading,
     startPdfDownload,
@@ -36,13 +36,13 @@ const PdfListScreen = () => {
     pdfDownlaodProgress,
     setPdfDownloadForProgress,
   } = useTrackContext();
-  const {width, height} = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedPdfFile, setSelectedPdfFile] = useState<{
     id: number;
     fileUrl: string;
     fileName: string;
-  }>({id: 0, fileUrl: '', fileName: ''});
+  }>({ id: 0, fileUrl: '', fileName: '' });
   const [downloadedFiles, setDownloadedFiles] = useState([]);
   const [isAlertVisible, setIsAlertVisible] = useState(false);
   const [alertTitle, setAlertTitle] = useState('');
@@ -50,7 +50,7 @@ const PdfListScreen = () => {
   const [alerType, setAlertType] = useState<
     'success' | 'warning' | 'error' | null
   >(null);
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   const styles = styling(theme);
 
@@ -132,7 +132,7 @@ const PdfListScreen = () => {
   // };
 
   const confirmDownload = (id: number, fileUrl: string, fileName: string) => {
-    setSelectedPdfFile({id, fileUrl, fileName});
+    setSelectedPdfFile({ id, fileUrl, fileName });
     setModalVisible(true);
   };
 
@@ -149,7 +149,7 @@ const PdfListScreen = () => {
   };
 
   const handleCancelDownload = () => {
-    setSelectedPdfFile({id: 0, fileUrl: '', fileName: ''});
+    setSelectedPdfFile({ id: 0, fileUrl: '', fileName: '' });
     setModalVisible(false);
   };
 
@@ -265,7 +265,7 @@ const PdfListScreen = () => {
         appendExt: 'pdf',
       })
         .fetch('GET', fileUrl)
-        .progress({interval: 100}, async (received, total) => {
+        .progress({ interval: 100 }, async (received, total) => {
           const progress = Math.round((received / total) * 100);
           //  if(Platform.OS === 'android'){
           //   currentNotificationId = await displayOrUpdateNotification(
@@ -340,7 +340,7 @@ const PdfListScreen = () => {
     filePath: string,
   ) => {
     try {
-      const newFile = {id: id, name: fileName, path: filePath};
+      const newFile = { id: id, name: fileName, path: filePath };
       const storedFiles = await AsyncStorage.getItem('downloadedFiles');
       const fileList = storedFiles ? JSON.parse(storedFiles) : [];
       fileList.push(newFile);
@@ -402,14 +402,14 @@ const PdfListScreen = () => {
             [...Array(3)].map((_, index) => (
               <View
                 key={index}
-                style={[styles.contentContainer, {paddingBottom: 100}]}>
+                style={[styles.contentContainer, { paddingBottom: 100 }]}>
                 <View style={styles.innerContentContainer}>
                   <SkeletonView
                     height={height * 0.2}
                     width={width * 0.3}
                     borderRadius={10}
                   />
-                  <View style={{width: width * 0.6, marginTop: 20, gap: 20}}>
+                  <View style={{ width: width * 0.6, marginTop: 20, gap: 20 }}>
                     <SkeletonView height={20} width={150} borderRadius={10} />
                     <SkeletonView
                       height={18}
@@ -418,7 +418,7 @@ const PdfListScreen = () => {
                     />
                   </View>
                 </View>
-                <View style={{width: '100%', gap: 14}}>
+                <View style={{ width: '100%', gap: 14 }}>
                   <SkeletonView height={20} width={'auto'} borderRadius={10} />
                   <SkeletonView height={20} width={'auto'} borderRadius={10} />
                   <SkeletonView height={20} width={'auto'} borderRadius={10} />
@@ -455,24 +455,24 @@ const PdfListScreen = () => {
                           }}
                           source={
                             ebook.cover_photo
-                              ? {uri: ebook.cover_photo}
+                              ? { uri: ebook.cover_photo }
                               : require('../assets/marguerite.jpg')
                           }
                           resizeMode="cover"
                         />
                       </View>
-                      <View style={{width: width * 0.6, gap: 20}}>
-                        <Text style={[styles.text, {fontSize: height * 0.025}]}>
+                      <View style={{ width: width * 0.6, gap: 20 }}>
+                        <Text style={[styles.text, { fontSize: height * 0.027 }]}>
                           {ebook.name}
                         </Text>
                         <Text
-                          style={[styles.author, {fontSize: height * 0.022}]}>
+                          style={[styles.author, { fontSize: height * 0.022 }]}>
                           {ebook.author}
                         </Text>
                       </View>
                     </View>
                     <Text
-                      style={[styles.description, {fontSize: height * 0.021}]}>
+                      style={[styles.description, { fontSize: height * 0.023 }]}>
                       {ebook.description}
                     </Text>
 
@@ -566,8 +566,8 @@ const styling = (theme: Theme) =>
       backgroundColor: Colors[theme].secondary_light,
       paddingHorizontal: 10,
       paddingVertical: 30,
-      marginBottom: 50,
-      borderRadius: 20,
+      marginBottom: 20,
+      borderRadius: 16,
       ...Platform.select({
         ios: {
           shadowOffset: {
@@ -586,20 +586,20 @@ const styling = (theme: Theme) =>
       width: '100%',
       flexDirection: 'row',
       justifyContent: 'space-between',
-      gap: 5,
+      gap: 10,
       marginBottom: 10,
     },
     text: {
-      fontWeight: '700',
+      fontFamily: getFontFamily('bold'),
       color: Colors[theme].text,
     },
     description: {
-      fontWeight: '500',
+      fontFamily: getFontFamily('regular'),
       color: Colors[theme].text,
       paddingHorizontal: 5,
     },
     author: {
-      fontWeight: '600',
+      fontFamily: getFontFamily('regular'),
       color: Colors[theme].text,
     },
     img: {

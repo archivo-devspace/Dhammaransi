@@ -6,7 +6,7 @@ import Animated, {
   useSharedValue,
 } from 'react-native-reanimated';
 import Item from '../Item';
-import {remToPx} from '../../../utils/common';
+import {getFontFamily, remToPx} from '../../../utils/common';
 import {Theme, useThemeContext} from '../../../contexts/ThemeContext';
 import {Colors} from '../../../theme';
 import {NavigationMainStackScreenProps} from '../../../navigations/StackNavigation';
@@ -58,8 +58,8 @@ export const Movies = ({
   const styles = styling(theme);
 
   return (
-    <View style={[styles.mainContainer, {height: height - height * 0.6}]}>
-      <Text style={[styles.text, {fontSize: height * 0.021}]}>
+    <View style={[styles.mainContainer, {height: height - height * 0.62}]}>
+      <Text style={[styles.text, {fontSize: height * 0.022}]}>
         {t('TITLES.TOP_PICTURES')}
       </Text>
       {isLoading ? (
@@ -156,12 +156,12 @@ const styling = (theme: Theme) =>
     text: {
       color: Colors[theme].text,
       marginHorizontal: 10,
-      marginBottom: remToPx(0.8),
-      fontWeight: '600',
+      fontFamily: getFontFamily('bold'),
       textAlign: 'center',
     },
     flatListStyle: {
       alignSelf: 'center',
+      
     },
   });
 

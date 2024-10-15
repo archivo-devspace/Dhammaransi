@@ -10,7 +10,7 @@ import {
   RefreshControl,
 } from 'react-native';
 import React, { useState, useEffect, useCallback } from 'react';
-import { AntDesign, Ionicons, truncateText } from '../utils/common';
+import { AntDesign, getFontFamily, Ionicons, truncateText } from '../utils/common';
 import { CustomButton } from '../components/utils';
 import Container from '../components/commons/Container';
 import { Theme, useThemeContext } from '../contexts/ThemeContext';
@@ -41,9 +41,9 @@ const AudioCategoryListScreen = ({ navigation }: Props) => {
     isFetchingNextPage,
     refetch,
     isRefetching,
-    isLoading:albumLoading,
+    isLoading: albumLoading,
     isError,
-    
+
   } = useGetAlbumsInfinite();
 
   // Combine pages to create a flat array of album data
@@ -63,7 +63,7 @@ const AudioCategoryListScreen = ({ navigation }: Props) => {
     }
   };
 
- 
+
   const onRefresh = useCallback(() => {
     setRefreshing(true); // Start refreshing
     refetch().finally(() => setRefreshing(false)); // Refetch the data and stop refreshing once done
@@ -71,24 +71,24 @@ const AudioCategoryListScreen = ({ navigation }: Props) => {
 
   return (
     <Container title="TITLES.AUDIOCATEGORIES">
-      {(albumLoading || (isRefetching && finalAlbumList.length === 0))? (
-      Array.from({length:10},(_,index:number)=> (
-        <View key={index} style={styles.container}>
-      <View style={styles.trackContainer}>
-        <View style={{ flexDirection: 'row', gap: 12, alignItems: 'center' }}>
-          <SkeletonView height={70} width={70} borderRadius={12} />
-          <View style={{ width: '70%', gap: 10 }}>
-            <SkeletonView height={12} width="auto" borderRadius={10} />
-            <SkeletonView height={8} width={100} borderRadius={10} />
+      {(albumLoading || (isRefetching && finalAlbumList.length === 0)) ? (
+        Array.from({ length: 10 }, (_, index: number) => (
+          <View key={index} style={styles.container}>
+            <View style={styles.trackContainer}>
+              <View style={{ flexDirection: 'row', gap: 12, alignItems: 'center' }}>
+                <SkeletonView height={70} width={70} borderRadius={12} />
+                <View style={{ width: '70%', gap: 10 }}>
+                  <SkeletonView height={12} width="auto" borderRadius={10} />
+                  <SkeletonView height={8} width={100} borderRadius={10} />
+                </View>
+              </View>
+              <SkeletonView width={35} height={35} borderRadius={5} />
+            </View>
           </View>
-        </View>
-        <SkeletonView width={35} height={35} borderRadius={5} />
-      </View>
-    </View>
-      ))
+        ))
       ) :
         isError ? (
-          <NetworkError handlePress={refetch} btnType='refresh' lottieFiePath={networkError}/>
+          <NetworkError handlePress={refetch} btnType='refresh' lottieFiePath={networkError} />
         ) : (
           <FlatList
             data={finalAlbumList}
@@ -104,17 +104,17 @@ const AudioCategoryListScreen = ({ navigation }: Props) => {
                         // source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/4/44/Paticcasamuppada_Burmese.jpg' }}
                         source={
                           item.artwork
-                            ? { uri: item.artwork ? item.artwork :  theme === 'dark' ? require('../assets/parate_dark.jpg') : require('../assets/parate_light.jpg') } :
+                            ? { uri: item.artwork ? item.artwork : theme === 'dark' ? require('../assets/parate_dark.jpg') : require('../assets/parate_light.jpg') } :
                             theme === 'dark' ? require('../assets/parate_dark.jpg') : require('../assets/parate_light.jpg')
                         }
                         resizeMode="cover"
                         style={styles.img}
                       />
                       <View style={{ width: '70%', gap: 10 }}>
-                        <Text style={[styles.title, { fontSize: height * 0.02 }]}>
+                        <Text style={[styles.title, { fontSize: height * 0.022 }]}>
                           {truncateText(item.title, 45)}
                         </Text>
-                        <Text style={[styles.desc, { fontSize: height * 0.017 }]}>
+                        <Text style={[styles.desc, { fontSize: height * 0.015 }]}>
                           {truncateText(item.status, 30)}
                         </Text>
                       </View>
@@ -181,16 +181,17 @@ const styling = (theme: Theme) =>
     },
     title: {
       color: Colors[theme].text,
-      fontWeight: '600',
+      fontFamily: getFontFamily('regular'),
     },
     desc: {
       color: Colors[theme].text,
+      fontFamily: getFontFamily('regular'),
     },
     divider: {
       width: '100%',
       height: 1,
       backgroundColor: Colors[theme].secondary_dark,
     },
-   
+
   });
 

@@ -1,15 +1,15 @@
-import {StyleSheet, Text, View} from 'react-native';
-import React, {useCallback, useState} from 'react';
-import {Theme, useThemeContext} from '../../../contexts/ThemeContext';
-import {Colors} from '../../../theme';
-import {CustomButton} from '../../utils';
-import {AntDesign, truncateText} from '../../../utils/common';
+import { StyleSheet, Text, View } from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { Theme, useThemeContext } from '../../../contexts/ThemeContext';
+import { Colors } from '../../../theme';
+import { CustomButton } from '../../utils';
+import { AntDesign, getFontFamily, truncateText } from '../../../utils/common';
 import TrackPlayer, {
   State,
   Track,
   usePlaybackState,
 } from 'react-native-track-player';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   currentQueue: Track[];
@@ -24,8 +24,8 @@ const RenderItem = ({
 
   getCurrentActiveTrack,
 }: Props) => {
-  const {theme} = useThemeContext();
-  const {t} = useTranslation();
+  const { theme } = useThemeContext();
+  const { t } = useTranslation();
 
   const playbackState = usePlaybackState();
   const styles = styling(theme);
@@ -138,7 +138,7 @@ const RenderItem = ({
             alignSelf: 'center',
             marginTop: '50%',
           }}>
-          <Text style={{color: Colors[theme].text}}>{t('UTILS.EMPTY')}</Text>
+          <Text style={{ color: Colors[theme].text }}>{t('UTILS.EMPTY')}</Text>
         </View>
       )}
     </View>
@@ -192,10 +192,10 @@ const styling = (theme: Theme) =>
     textContainer: {},
     text: {
       color: Colors[theme].primary,
-      fontWeight: 'bold',
+      fontFamily: getFontFamily('bold'),
     },
     inactiveText: {
       color: Colors[theme].text,
-      fontWeight: 'bold',
+      fontFamily: getFontFamily('regular'),
     },
   });

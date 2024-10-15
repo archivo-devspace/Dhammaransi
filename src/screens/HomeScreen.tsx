@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 
 import {NavigationMainStackScreenProps} from '../navigations/StackNavigation';
-import {FontAwesome} from '../utils/common';
+import {FontAwesome, getFontFamily} from '../utils/common';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {Colors} from '../theme';
 import {menus} from '../utils/constants';
@@ -155,28 +155,30 @@ const HomeScreen = ({navigation}: Props) => {
             borderTopWidth: 1,
             borderLeftWidth: 1,
             borderRightWidth: 1,
-            gap: 10,
+            gap: 16,
           }}>
           <View style={styles.menuContainer}>
             {menus?.map(menu => (
               <TouchableOpacity
                 style={[
                   styles.menu,
-                  {height: width < 500 ? height * 0.1 : height * 0.11},
+                  {height: width < 500 ? height * 0.12 : height * 0.13},
                 ]}
                 key={menu.id}
                 onPress={() => navigation.navigate(menu.link as any)}>
                 <FontAwesome
                   name={menu.icon}
-                  size={height * 0.03}
+                  size={25}
                   color={Colors[theme].primary}
                 />
                 <Text
                   style={{
                     color: Colors[theme].text,
-                    fontSize: height * 0.019,
-                    fontWeight: '600',
+                    fontSize: height * 0.02,
+                    // fontWeight: '700',
+                    fontFamily: getFontFamily('regular'),
                     // opacity: 0.8,
+                    textAlign:'center'
                   }}>
                   {t(menu.name)}
                 </Text>

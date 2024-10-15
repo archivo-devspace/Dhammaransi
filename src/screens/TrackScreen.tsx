@@ -24,6 +24,7 @@ import { CustomButton } from '../components/utils';
 import {
   Entypo,
   FontAwesome,
+  getFontFamily,
   Ionicons,
   MaterialIcon,
   MaterialIcons,
@@ -177,59 +178,59 @@ const TrackScreen = ({ navigation }: Props) => {
         {
           !currentTrack ? (
             <View
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: '100%',
-            }}>
-            <CustomButton
-              title={t('UTILS.CHOOSEALBLUM')}
-              customButtonStyle={[
-                styles.chooseFromBtn,
-                { width: width * 0.7 },
-              ]}
-              customButtonTextStyle={[
-                styles.chooseFrom,
-                { fontSize: height * 0.018 },
-              ]}
-              gap={10}
-              onPress={() => navigation.navigate('AudioCategories')}
-              icon={
-                <FontAwesome
-                  name="music"
-                  size={height * 0.02}
-                  color={Colors[theme].primary}
-                />
-              }
-            />
-          </View>
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100%',
+              }}>
+              <CustomButton
+                title={t('UTILS.CHOOSEALBLUM')}
+                customButtonStyle={[
+                  styles.chooseFromBtn,
+                  { width: width * 0.7 },
+                ]}
+                customButtonTextStyle={[
+                  styles.chooseFrom,
+                  { fontSize: height * 0.018 },
+                ]}
+                gap={10}
+                onPress={() => navigation.navigate('AudioCategories')}
+                icon={
+                  <FontAwesome
+                    name="music"
+                    size={height * 0.02}
+                    color={Colors[theme].primary}
+                  />
+                }
+              />
+            </View>
           ) : (
-              <>
+            <>
               <View
-          style={{
-            flex: 3.5,
-            justifyContent: 'center',
-            alignItems: 'center',
-            paddingHorizontal: 5,
+                style={{
+                  flex: 3.5,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  paddingHorizontal: 5,
 
-          }}>
-          <Text style={[styles.titleText, { fontSize: height * 0.03 }]}>
-            {truncateText(currentTrack?.title, 50)} 
-          </Text>
-        </View>
-        <View
-          style={{
-            flex: 2.5,
-            justifyContent: 'center',
-            alignItems: 'center',
-            paddingHorizontal: 10,
+                }}>
+                <Text style={[styles.titleText, { fontSize: height * 0.027 }]}>
+                  {truncateText(currentTrack?.title, 50)}
+                </Text>
+              </View>
+              <View
+                style={{
+                  flex: 2.5,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  paddingHorizontal: 10,
 
-          }}>
-          <Text style={[styles.artistText, { fontSize: height * 0.025 }]}>
-            {truncateText(currentTrack?.artist, 80)}
-          </Text>
-        </View>
-              </>
+                }}>
+                <Text style={[styles.artistText, { fontSize: height * 0.025 }]}>
+                  {truncateText(currentTrack?.artist, 80)}
+                </Text>
+              </View>
+            </>
           )
         }
       </View>
@@ -237,10 +238,10 @@ const TrackScreen = ({ navigation }: Props) => {
       <View style={{ flex: 2, justifyContent: 'center', alignItems: 'center' }}>
         <View style={{
           borderRadius: 20,
-          overflow: 'hidden',  
-          width: customHeight,        
-          height: customHeight ,
-          shadowColor:Colors[theme].text,
+          overflow: 'hidden',
+          width: customHeight,
+          height: customHeight,
+          shadowColor: Colors[theme].text,
           ...Platform.select({
             ios: {
               shadowOffset: { width: 0, height: 2 },
@@ -250,12 +251,12 @@ const TrackScreen = ({ navigation }: Props) => {
             android: {
               elevation: 3,
             },
-          }),       
+          }),
         }}>
           <Image
             source={
               currentTrack
-                ? { uri: currentTrack?.artwork? currentTrack.artwork :  theme === 'dark' ? require('../assets/parate_dark.jpg') : require('../assets/parate_light.jpg') } :
+                ? { uri: currentTrack?.artwork ? currentTrack.artwork : theme === 'dark' ? require('../assets/parate_dark.jpg') : require('../assets/parate_light.jpg') } :
                 theme === 'dark' ? require('../assets/parate_dark.jpg') : require('../assets/parate_light.jpg')
             }
             resizeMode="contain"
@@ -297,7 +298,7 @@ const TrackScreen = ({ navigation }: Props) => {
                     borderWidth={1}
                   />
                   <Text
-                    style={{ color: Colors[theme].primary, paddingVertical: 1, fontSize: height * 0.015 }}>
+                    style={{ color: Colors[theme].primary, paddingVertical: 1, fontSize: height * 0.015, fontFamily: getFontFamily('regular') }}>
                     {downloadProgress < 100
                       ? `${t('UTILS.DOWNLOADING')}`
                       : `${t('UTILS.DOWNLOADED')}`}
@@ -445,9 +446,9 @@ const TrackScreen = ({ navigation }: Props) => {
           {/* <View style={{height: 90}} /> */}
         </View>
         <View style={{ flex: 2.8, paddingBottom: 14, padding: 6 }}>
-          <View style={{ flex: 1, borderWidth: 1, borderColor: 'black', justifyContent:'center', alignItems:'center'}}>
-                <Text>
-                advertisement</Text>
+          <View style={{ flex: 1, borderWidth: 1, borderColor: 'black', justifyContent: 'center', alignItems: 'center', }}>
+            <Text style={{ fontFamily: getFontFamily('regular'), }}>
+              advertisement</Text>
           </View>
         </View>
       </View>
@@ -516,7 +517,7 @@ const styling = (theme: Theme) =>
       // width: '80%',
 
       // height: 50,
-      fontWeight: 'bold',
+      fontFamily: getFontFamily('bold'),
       textAlign: 'center',
       color: Colors[theme].text,
     },
@@ -525,7 +526,7 @@ const styling = (theme: Theme) =>
       // width: '80%',
 
       // height: 70,
-     
+      fontFamily: getFontFamily('regular'),
       color: Colors[theme].text,
       textAlign: 'center',
       paddingHorizontal: 20,
@@ -548,8 +549,7 @@ const styling = (theme: Theme) =>
     },
     durationText: {
       color: Colors[theme].primary,
-
-      fontWeight: 'bold',
+      fontFamily: getFontFamily('regular'),
     },
     btn: {
       backgroundColor: 'transparent',
@@ -564,15 +564,14 @@ const styling = (theme: Theme) =>
     },
     chooseFrom: {
       color: Colors[theme].text,
-
+      fontFamily: getFontFamily('regular'),
       // fontSize: 14,
     },
     chooseFromBtn: {
       backgroundColor: Colors[theme].secondary,
-
       justifyContent: 'center',
-     
-     
+
+
     },
     suffelIcon: {
       width: 30,

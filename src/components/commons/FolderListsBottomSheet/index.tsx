@@ -17,8 +17,8 @@ import React, {
   useImperativeHandle,
   useState,
 } from 'react';
-import {Theme, useThemeContext} from '../../../contexts/ThemeContext';
-import {Colors} from '../../../theme';
+import { Theme, useThemeContext } from '../../../contexts/ThemeContext';
+import { Colors } from '../../../theme';
 import Animated, {
   AnimatedProps,
   AnimatedScrollViewProps,
@@ -29,13 +29,13 @@ import Animated, {
   withSpring,
   withTiming,
 } from 'react-native-reanimated';
-import {Gesture, GestureDetector} from 'react-native-gesture-handler';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import BackDrop from '../BackDrop';
-import {CustomButton} from '../../utils';
-import {AntDesign, Entypo} from '../../../utils/common';
-import {useTranslation} from 'react-i18next';
-import {Button} from 'react-native';
-import {useTrackContext} from '../../../contexts/TrackContext';
+import { CustomButton } from '../../utils';
+import { AntDesign, Entypo, getFontFamily, Ionicons } from '../../../utils/common';
+import { useTranslation } from 'react-i18next';
+import { Button } from 'react-native';
+import { useTrackContext } from '../../../contexts/TrackContext';
 
 interface Props extends AnimatedProps<AnimatedScrollViewProps> {
   snapTo: string;
@@ -49,8 +49,8 @@ export interface FolderListsBottomSheetMethods {
 }
 
 const FolderListsBottomSheet = forwardRef<FolderListsBottomSheetMethods, Props>(
-  ({snapTo, children, backGroundColor, ...rest}: Props, ref) => {
-    const {theme} = useThemeContext();
+  ({ snapTo, children, backGroundColor, ...rest }: Props, ref) => {
+    const { theme } = useThemeContext();
     const {
       onDownloadPress,
       selectedFolder,
@@ -66,7 +66,7 @@ const FolderListsBottomSheet = forwardRef<FolderListsBottomSheetMethods, Props>(
     // const [folders, setFolders] = useState<string[]>([]);
     // const [selectedFolder, setSelectedFolder] = useState<string | null>(null);
 
-    const {height} = Dimensions.get('screen');
+    const { height } = Dimensions.get('screen');
     const closeHeight = height;
 
     const percentage = parseFloat(snapTo.replace('%', '')) / 100;
@@ -76,7 +76,7 @@ const FolderListsBottomSheet = forwardRef<FolderListsBottomSheetMethods, Props>(
     const scrollBegin = useSharedValue(0);
     const scrollY = useSharedValue(0);
     const [enableScroll, setEnableScroll] = useState(true);
-    const {t} = useTranslation();
+    const { t } = useTranslation();
 
     useEffect(() => {
       loadFolders();
@@ -230,7 +230,7 @@ const FolderListsBottomSheet = forwardRef<FolderListsBottomSheetMethods, Props>(
             style={[
               styles.continer,
               animationStyle,
-              {backgroundColor: backGroundColor},
+              { backgroundColor: backGroundColor },
             ]}>
             <View style={styles.lineContainer}>
               <Text style={styles.playlists}>
@@ -258,6 +258,14 @@ const FolderListsBottomSheet = forwardRef<FolderListsBottomSheetMethods, Props>(
                 customButtonTextStyle={styles.textButton}
                 title={t('UTILS.CREATE')}
                 onPress={handleCreateFolder}
+                icon={
+                  <Ionicons
+                    name="save"
+                    size={20}
+                    color={Colors[theme].black}
+                  />
+                }
+                gap={10}
               />
             </View>
             <GestureDetector
@@ -319,7 +327,7 @@ const styling = (theme: Theme) =>
     playlists: {
       color: Colors[theme].text,
       fontSize: 20,
-      fontWeight: '500',
+      fontFamily: getFontFamily('bold'),
     },
     icon: {
       backgroundColor: Colors[theme].primary,
@@ -340,6 +348,7 @@ const styling = (theme: Theme) =>
     },
     input: {
       height: 50,
+      fontFamily: getFontFamily('regular'),
       borderColor: Colors[theme].primary,
       borderWidth: 1,
       marginBottom: 16,
@@ -354,13 +363,15 @@ const styling = (theme: Theme) =>
       padding: 16,
       backgroundColor: Colors[theme].secondary_light,
       shadowColor: '#000',
-      shadowOffset: {width: 0, height: 1},
+      shadowOffset: { width: 0, height: 1 },
       shadowOpacity: 0.18,
       shadowRadius: 1.0,
       elevation: 1,
       color: Colors[theme].text,
       marginBottom: 8,
       borderRadius: 4,
+      fontSize: 16,
+      fontFamily: getFontFamily('regular'),
     },
     createButton: {
       backgroundColor: Colors[theme].primary,
@@ -370,8 +381,8 @@ const styling = (theme: Theme) =>
       width: '100%',
     },
     textButton: {
-      fontSize: 20,
-      fontWeight: '500',
+      fontSize: 18,
+      fontFamily: getFontFamily('bold'),
       color: Colors[theme].black,
     },
   });

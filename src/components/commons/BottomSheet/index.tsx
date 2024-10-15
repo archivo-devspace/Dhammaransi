@@ -21,7 +21,7 @@ import Animated, {
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import BackDrop from '../BackDrop';
 import {CustomButton} from '../../utils';
-import {AntDesign, Entypo} from '../../../utils/common';
+import {AntDesign, Entypo, getFontFamily} from '../../../utils/common';
 import {useTranslation} from 'react-i18next';
 
 interface Props extends AnimatedProps<AnimatedScrollViewProps> {
@@ -234,7 +234,7 @@ const styling = (theme: Theme) =>
     playlists: {
       color: Colors[theme].text,
       fontSize: 20,
-      fontWeight: '500',
+      fontFamily: getFontFamily('bold'),
     },
     icon: {
       backgroundColor: Colors[theme].primary,

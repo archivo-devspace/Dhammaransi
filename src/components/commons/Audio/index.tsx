@@ -6,7 +6,7 @@ import Animated, {
   useSharedValue,
 } from 'react-native-reanimated';
 import Item from '../Item';
-import {remToPx} from '../../../utils/common';
+import {getFontFamily, remToPx} from '../../../utils/common';
 import {Theme, useThemeContext} from '../../../contexts/ThemeContext';
 import {Colors} from '../../../theme';
 import {NavigationMainStackScreenProps} from '../../../navigations/StackNavigation';
@@ -62,8 +62,8 @@ export const Audios = ({
   const styles = styling(theme);
 
   return (
-    <View style={[styles.mainContainer, {height: height - height * 0.65}]}>
-      <Text style={[styles.text, {fontSize: height * 0.021}]}>
+    <View style={[styles.mainContainer, {height: height - height * 0.68}]}>
+      <Text style={[styles.text, {fontSize: height * 0.022}]}>
         {t('TITLES.TOP_AUDIOS')}
       </Text>
       {isLoading ? (
@@ -160,8 +160,7 @@ const styling = (theme: Theme) =>
     text: {
       color: Colors[theme].text,
       marginHorizontal: 5,
-      marginBottom: remToPx(0.8),
-      fontWeight: '600',
+      fontFamily: getFontFamily('bold'),
       textAlign: 'center',
     },
     flatListStyle: {

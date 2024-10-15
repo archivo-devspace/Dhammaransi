@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, Image, useWindowDimensions, RefreshControl, Act
 import React, { useCallback, useEffect, useState } from 'react';
 import { Theme, useThemeContext } from '../contexts/ThemeContext';
 import { Colors } from '../theme';
-import { AntDesign, truncateText } from '../utils/common';
+import { AntDesign, getFontFamily, truncateText } from '../utils/common';
 import { CustomButton } from '../components/utils';
 import {
   MainStackParamList,
@@ -120,10 +120,10 @@ const Audios = ({ navigation, route }: Props) => {
                       style={styles.img}
                     />
                     <View style={{ width: '70%', gap: 10 }}>
-                      <Text style={[styles.title, { fontSize: height * 0.02 }]}>
+                      <Text style={[styles.title, { fontSize: height * 0.022 }]}>
                         {truncateText(item.title, 45)}
                       </Text>
-                      <Text style={[styles.desc, { fontSize: height * 0.017 }]}>
+                      <Text style={[styles.desc, { fontSize: height * 0.015 }]}>
                         {truncateText(item.artist, 25)}
                       </Text>
                     </View>
@@ -189,10 +189,11 @@ const styling = (theme: Theme) =>
     },
     title: {
       color: Colors[theme].text,
-      fontWeight: '600',
+      fontFamily: getFontFamily('regular'),
     },
     desc: {
       color: Colors[theme].text,
+      fontFamily: getFontFamily('regular'),
     },
     divider: {
       width: '100%',

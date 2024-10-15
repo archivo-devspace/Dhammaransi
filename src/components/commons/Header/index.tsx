@@ -1,27 +1,27 @@
-import {StyleSheet, Text, useWindowDimensions, View} from 'react-native';
+import { StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import React from 'react';
-import {Theme, useThemeContext} from '../../../contexts/ThemeContext';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {CustomButton} from '../../utils';
-import {AntDesign} from '../../../utils/common';
-import {Colors} from '../../../theme';
-import {useTranslation} from 'react-i18next';
-import {useNavigation} from '@react-navigation/native';
+import { Theme, useThemeContext } from '../../../contexts/ThemeContext';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { CustomButton } from '../../utils';
+import { AntDesign, getFontFamily } from '../../../utils/common';
+import { Colors } from '../../../theme';
+import { useTranslation } from 'react-i18next';
+import { useNavigation } from '@react-navigation/native';
 
 interface HeaderProps {
   title: string;
 }
 
-const Header = ({title}: HeaderProps) => {
-  const {theme} = useThemeContext();
-  const {height} = useWindowDimensions();
+const Header = ({ title }: HeaderProps) => {
+  const { theme } = useThemeContext();
+  const { height } = useWindowDimensions();
 
   const insets = useSafeAreaInsets();
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const navigation = useNavigation();
-  const {top} = insets;
+  const { top } = insets;
   const styles = styling(theme);
-  const customMarginTop = top ;
+  const customMarginTop = top + 10;
 
   return (
     <View
@@ -47,7 +47,9 @@ const Header = ({title}: HeaderProps) => {
         customButtonStyle={styles.btn}
       />
 
-      <Text style={[styles.headerText, {fontSize: height * 0.025}]}>{t(title)}</Text>
+      <Text style={[styles.headerText, {
+        fontSize: height * 0.025,  fontFamily: getFontFamily('regular'),
+      }]}>{t(title)}</Text>
     </View>
   );
 };
@@ -62,7 +64,6 @@ const styling = (theme: Theme) =>
       position: 'absolute',
     },
     headerText: {
-      fontWeight: 'bold',
       color: Colors[theme].text,
     }
   });

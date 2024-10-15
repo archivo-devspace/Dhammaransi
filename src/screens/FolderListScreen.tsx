@@ -11,7 +11,7 @@ import {useTrackContext} from '../contexts/TrackContext';
 import {Colors} from '../theme';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {NavigationMainBottomTabScreenProps} from '../navigations/BottomNavigation';
-import {AntDesign, MaterialIcons} from '../utils/common';
+import {AntDesign, FontAwesome, getFontFamily, Ionicons, MaterialIcons} from '../utils/common';
 import Container from '../components/commons/Container';
 import {CustomButton} from '../components/utils';
 import {useTranslation} from 'react-i18next';
@@ -52,10 +52,8 @@ const FolderListScreen = ({navigation}: Props) => {
     setSelectedFolderName(folderName);
     setModalVisible(true);
   };
-  console.log('setDeletion', folderName);
 
   const handleDeletion = async () => {
-    console.log('selectedFolderName', selectedFolderName);
     if (selectedFolderName) {
       swipeableRefs.current.forEach(ref => ref?.close());
       await deleteFolder(selectedFolderName);
@@ -70,7 +68,6 @@ const FolderListScreen = ({navigation}: Props) => {
   };
 
   const renderFolderItem = ({item, index}: {item: string; index: number}) => {
-    console.log('renderFolderItem', item);
     return (
       <Swipeable
         // ref={swipeableRef}
@@ -138,6 +135,14 @@ const FolderListScreen = ({navigation}: Props) => {
           customButtonTextStyle={styles.textButton}
           title={t('UTILS.CREATE')}
           onPress={handleCreateFolder}
+          icon= {
+            <Ionicons
+              name="save"
+              size={20}
+              color={Colors[theme].black}
+            />
+          }
+          gap={10}
         />
       </View>
 
@@ -185,7 +190,8 @@ const createStyles = (theme: Theme) =>
       borderRadius: 8,
     },
     folderName: {
-      fontSize: 16,
+      fontSize: 18,
+      fontFamily: getFontFamily('regular'),
       color: Colors[theme].text,
     },
     formcontainer: {
@@ -201,6 +207,7 @@ const createStyles = (theme: Theme) =>
       height: 50,
       borderColor: Colors[theme].primary,
       color: Colors[theme].text,
+      fontFamily: getFontFamily('regular'),
       borderWidth: 1,
       marginBottom: 16,
       paddingHorizontal: 15,
@@ -214,8 +221,8 @@ const createStyles = (theme: Theme) =>
       width: '100%',
     },
     textButton: {
-      fontSize: 20,
-      fontWeight: '500',
+      fontSize: 18,
+      fontFamily: getFontFamily('bold'),
       color: Colors[theme].black,
     },
     trackItem: {

@@ -18,6 +18,7 @@ import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {
   FontAwesome,
   FontAwesomePro,
+  getFontFamily,
   MaterialIcon,
   MaterialIcons,
   Zocial,
@@ -146,8 +147,8 @@ const MoreScreen = ({navigation}: Props) => {
                   <Text
                     style={{
                       color: Colors[theme].text,
-                      fontSize: height * 0.02,
-                      fontWeight: '600',
+                      fontSize: height * 0.022,
+                      fontFamily: getFontFamily('regular'),
                     }}>
                     {t(menu.name)}
                   </Text>
@@ -178,7 +179,7 @@ const MoreScreen = ({navigation}: Props) => {
         <Text
           style={{
             fontSize: 12,
-            fontWeight: '500',
+            fontFamily: getFontFamily('regular'),
             color: Colors[theme].text,
             opacity: 0.8,
             paddingTop: 10,
@@ -259,12 +260,12 @@ const styling = (theme: Theme) =>
     power: {
       color: Colors[theme].text,
       fontSize: 14,
-      fontWeight: '500',
+      fontFamily: getFontFamily('regular'),
       textAlign: 'center',
     },
     headerText: {
       textAlign: 'center',
-      fontWeight: 'bold',
+      fontFamily: getFontFamily('regular'),
       color: Colors[theme].text,
     },
     optionContainer: {

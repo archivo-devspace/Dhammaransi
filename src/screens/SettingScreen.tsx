@@ -12,6 +12,7 @@ import { Theme, useThemeContext } from '../contexts/ThemeContext';
 import { Colors } from '../theme';
 import { useTranslation } from 'react-i18next';
 import Container from '../components/commons/Container';
+import { getFontFamily } from '../utils/common';
 
 const SettingScreen = () => {
   const { theme, setTheme, languages, setLanguages } = useThemeContext();
@@ -60,8 +61,8 @@ const SettingScreen = () => {
           <Text
             style={{
               color: Colors[theme].text,
-              fontSize: height * 0.02,
-              fontWeight: '500',
+              fontSize: height * 0.022,
+              fontFamily: getFontFamily('regular'),
             }}>
             {t('UTILS.DARK_MODE_ON')}
           </Text>
@@ -96,8 +97,8 @@ const SettingScreen = () => {
         <View style={styles.divider} />
         <View style={styles.contentContainer}>
           <Text style={[styles.text, {
-            fontSize: height * 0.02,
-            fontWeight: '500',
+            fontSize: height * 0.022,
+            fontFamily: getFontFamily('regular'),
           }]}>{t('UTILS.LANGUAGES')}</Text>
           <Switch
             value={burmeseLanguages}

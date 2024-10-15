@@ -13,7 +13,7 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated';
-import {FontAwesome} from '../../../utils/common';
+import {FontAwesome, getFontFamily} from '../../../utils/common';
 import {TabBar} from '../../../navigations/BottomNavigation';
 import {Theme, useThemeContext} from '../../../contexts/ThemeContext';
 import {Colors} from '../../../theme';
@@ -84,7 +84,7 @@ const CustomTabBar = ({rest, item}: CustomTabBarProps) => {
             <Text
               style={{
                 color: Colors[theme].text,
-                fontWeight: '500',
+                fontFamily: getFontFamily('bold'),
                 fontSize: height * 0.018,
               }}>
               {item.label}

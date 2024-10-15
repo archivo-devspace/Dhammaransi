@@ -1,0 +1,17 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "src/assets/fonts/Z06-Walone Bold.ttf",
+      "sha1": "451f7b5f5518f9561cacf611e4b2b152c1f65412"
+    },
+    {
+      "path": "src/assets/fonts/Z06-Walone Regular.ttf",
+      "sha1": "e8be2b4e3acdeef070cd975b9a81affb35e546a9"
+    },
+    {
+      "path": "src/assets/fonts/Z06-Walone Thin.ttf",
+      "sha1": "71ae75461ecfb6b1dd50106b23b12271829b630d"
+    }
+  ]
+}
