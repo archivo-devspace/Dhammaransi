@@ -178,7 +178,7 @@ const HomeScreen = ({navigation}: Props) => {
                     // fontWeight: '700',
                     fontFamily: getFontFamily('regular'),
                     // opacity: 0.8,
-                    textAlign:'center'
+                    textAlign: 'center',
                   }}>
                   {t(menu.name)}
                 </Text>

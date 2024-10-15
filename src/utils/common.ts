@@ -12,9 +12,22 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Zocial from 'react-native-vector-icons/Zocial';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import { fontFamilies } from './fonts';
+import {fontFamilies} from './fonts';
 
-export {FontAwesome, AntDesign, Entypo, Ionicons, Feather, MaterialIcon, MaterialIcons,FontAwesomePro,FontAwesome6,Fontisto, Zocial,SimpleLineIcons};
+export {
+  FontAwesome,
+  AntDesign,
+  Entypo,
+  Ionicons,
+  Feather,
+  MaterialIcon,
+  MaterialIcons,
+  FontAwesomePro,
+  FontAwesome6,
+  Fontisto,
+  Zocial,
+  SimpleLineIcons,
+};
 
 export const handleAxiosError = (error: any) => {
   if (axios.isAxiosError(error)) {
@@ -37,15 +50,13 @@ export const remToPx = (rem: number) => {
 };
 
 export const truncateText = (text: string, maxLength: number) => {
-  if (!text) return '';
+  if (!text) {
+    return '';
+  }
   return text.length > maxLength ? text.slice(0, maxLength) + ' ...' : text;
 };
 
-
-
-export const getFontFamily = (
-  weight: 'thin' | 'regular' | 'bold',
-) => {
-  const selectedFontFamily = fontFamilies.Walone
+export const getFontFamily = (weight: 'thin' | 'regular' | 'bold') => {
+  const selectedFontFamily = fontFamilies.Walone;
   return selectedFontFamily[weight];
 };

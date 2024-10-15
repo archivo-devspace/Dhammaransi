@@ -5,7 +5,7 @@ import Container from '../components/commons/Container';
 import {Linking, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Colors} from '../theme';
 import Clipboard from '@react-native-clipboard/clipboard';
-import {Feather, MaterialIcons, Zocial} from '../utils/common';
+import {Feather, MaterialIcons, Zocial, getFontFamily} from '../utils/common';
 import {useTranslation} from 'react-i18next';
 
 const ContactScreen = () => {
@@ -39,65 +39,85 @@ const ContactScreen = () => {
   return (
     <Container title="MENUS.CONTACT">
       <View style={styles.container}>
-        <View style={styles.card}>
-          <Text style={[styles.title]}>
-            Dhammaramsi Mogok Vipasana Meditation Center
-          </Text>
-          <View>
-            <Text style={styles.dataTitle}>{t('UTILS.PHONE_NO')}</Text>
-            {/* First Phone  */}
-            <View style={[styles.contentContainer, {marginBottom: 10}]}>
-              <TouchableOpacity onPress={() => dialPhoneNumber('09681060555')}>
-                <MaterialIcons
-                  name="local-phone"
-                  size={20}
-                  color={Colors[theme].text}
-                />
-              </TouchableOpacity>
-              <Text style={styles.subtitle}>09681060555</Text>
-              <TouchableOpacity onPress={() => copyToClipboard('09681060555')}>
-                <Feather name="copy" size={20} color={Colors[theme].text} />
-              </TouchableOpacity>
+        <View style={[styles.card]}>
+          {/* Content  */}
+          <View style={{gap: 30}}>
+            <Text style={[styles.title, {textAlign: 'center'}]}>
+              Dhammaramsi Mogok Vipasana Meditation Center
+            </Text>
+            {/* Phone  */}
+            <View style={{gap: 5}}>
+              {/* <Text style={styles.dataTitle}>{t('UTILS.PHONE_NO')}</Text> */}
+              {/* First Phone  */}
+              <View style={[styles.contentContainer, {marginBottom: 10}]}>
+                <TouchableOpacity
+                  onPress={() => dialPhoneNumber('09681060555')}>
+                  <MaterialIcons
+                    name="local-phone"
+                    size={20}
+                    color={Colors[theme].primary_light}
+                  />
+                </TouchableOpacity>
+                <Text style={styles.subtitle}>09681060555</Text>
+                <TouchableOpacity
+                  onPress={() => copyToClipboard('09681060555')}>
+                  <Feather name="copy" size={20} color={Colors[theme].text} />
+                </TouchableOpacity>
+              </View>
+              {/* Second Phone  */}
+              <View style={styles.contentContainer}>
+                <TouchableOpacity
+                  onPress={() => dialPhoneNumber('09681061555')}>
+                  <MaterialIcons
+                    name="local-phone"
+                    size={20}
+                    color={Colors[theme].primary_light}
+                  />
+                </TouchableOpacity>
+                <Text style={styles.subtitle}>09681061555</Text>
+                <TouchableOpacity
+                  onPress={() => copyToClipboard('09681061555')}>
+                  <Feather name="copy" size={20} color={Colors[theme].text} />
+                </TouchableOpacity>
+              </View>
             </View>
-            {/* Second Phone  */}
-            <View style={styles.contentContainer}>
-              <TouchableOpacity onPress={() => dialPhoneNumber('09681061555')}>
-                <MaterialIcons
-                  name="local-phone"
-                  size={20}
-                  color={Colors[theme].text}
-                />
-              </TouchableOpacity>
-              <Text style={styles.subtitle}>09681061555</Text>
-              <TouchableOpacity onPress={() => copyToClipboard('09681061555')}>
-                <Feather name="copy" size={20} color={Colors[theme].text} />
-              </TouchableOpacity>
+            {/* Email  */}
+            <View>
+              {/* <Text style={styles.dataTitle}>{t('UTILS.EMAIL')}</Text> */}
+              <View style={styles.contentContainer}>
+                <TouchableOpacity
+                  onPress={() => sendEmail('dhammaramsimedia@gmail.com')}>
+                  <Zocial
+                    name="email"
+                    size={20}
+                    color={Colors[theme].primary_light}
+                  />
+                </TouchableOpacity>
+                <Text style={styles.subtitle}>dhammaramsimedia@gmail.com</Text>
+                <TouchableOpacity
+                  onPress={() => copyToClipboard('dhammaramsimedia@gmail.com')}>
+                  <Feather name="copy" size={20} color={Colors[theme].text} />
+                </TouchableOpacity>
+              </View>
+            </View>
+            {/* Address  */}
+            <View style={{paddingRight: 15}}>
+              {/* <Text style={styles.dataTitle}>{t('UTILS.ADDRESS')}</Text> */}
+              <View style={[styles.contentContainer]}>
+                <TouchableOpacity
+                  onPress={() => openGoogleMaps('346M+9RR, Yangon')}>
+                  <Feather
+                    name="map-pin"
+                    size={20}
+                    color={Colors[theme].primary_light}
+                  />
+                </TouchableOpacity>
+                <Text style={[styles.subtitle]}>{t('UTILS.ADDRESS_DATA')}</Text>
+              </View>
             </View>
           </View>
-          {/* Email  */}
-          <View>
-            <Text style={styles.dataTitle}>{t('UTILS.EMAIL')}</Text>
-            <View style={styles.contentContainer}>
-              <TouchableOpacity
-                onPress={() => sendEmail('dhammaramsimedia@gmail.com')}>
-                <Zocial name="email" size={20} color={Colors[theme].text} />
-              </TouchableOpacity>
-              <Text style={styles.subtitle}>dhammaramsimedia@gmail.com</Text>
-              <TouchableOpacity
-                onPress={() => copyToClipboard('dhammaramsimedia@gmail.com')}>
-                <Feather name="copy" size={20} color={Colors[theme].text} />
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={{paddingRight: 15}}>
-            <Text style={styles.dataTitle}>{t('UTILS.ADDRESS')}</Text>
-            <View style={[styles.contentContainer]}>
-              <TouchableOpacity
-                onPress={() => openGoogleMaps('346M+9RR, Yangon')}>
-                <Feather name="map-pin" size={20} color={Colors[theme].text} />
-              </TouchableOpacity>
-              <Text style={[styles.subtitle]}>{t('UTILS.ADDRESS_DATA')}</Text>
-            </View>
+          <View style={styles.warningContainer}>
+            <Text style={styles.dataTitle}>{t('UTILS.WARNING_TEXT')}</Text>
           </View>
         </View>
       </View>
@@ -115,21 +135,25 @@ const styling = (theme: Theme) =>
     },
     card: {
       backgroundColor: Colors[theme].secondary_light,
+      justifyContent: 'space-between',
+      height: '97%',
       padding: 20,
       borderRadius: 10,
-      gap: 10,
+      gap: 30,
     },
     title: {
+      fontFamily: getFontFamily('bold'),
       fontSize: 24,
-      fontWeight: 'bold',
       color: Colors[theme].text,
     },
     subtitle: {
-      fontSize: 16,
+      fontFamily: getFontFamily('thin'),
+      fontSize: 18,
       color: Colors[theme].text,
     },
     dataTitle: {
-      fontSize: 18,
+      fontFamily: getFontFamily('thin'),
+      fontSize: 16,
       fontWeight: '600',
       marginBottom: 2,
       color: Colors[theme].text,
@@ -139,11 +163,11 @@ const styling = (theme: Theme) =>
       alignItems: 'center',
       gap: 10,
     },
-    customButton: {
-      alignItems: 'flex-start',
-      marginLeft: 20,
-    },
-    customText: {
-      color: Colors[theme].text,
+    warningContainer: {
+      backgroundColor: Colors[theme].primary_light,
+      padding: 10,
+      borderRadius: 5,
+      justifyContent: 'center',
+      alignItems: 'center',
     },
   });
