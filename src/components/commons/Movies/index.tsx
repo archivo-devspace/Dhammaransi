@@ -6,7 +6,7 @@ import Animated, {
   useSharedValue,
 } from 'react-native-reanimated';
 import Item from '../Item';
-import {getFontFamily, remToPx} from '../../../utils/common';
+import {getFontFamily} from '../../../utils/common';
 import {Theme, useThemeContext} from '../../../contexts/ThemeContext';
 import {Colors} from '../../../theme';
 import {NavigationMainStackScreenProps} from '../../../navigations/StackNavigation';
@@ -23,14 +23,7 @@ type Props = {
   error: unknown;
 };
 
-export const Movies = ({
-  data,
-  navigation,
-  isLoading,
-  isFetched,
-  isError,
-  error,
-}: Props) => {
+export const Movies = ({data, isLoading, isFetched, isError, error}: Props) => {
   const {width, height} = useWindowDimensions();
   const {theme} = useThemeContext();
   const {t} = useTranslation();
@@ -161,7 +154,6 @@ const styling = (theme: Theme) =>
     },
     flatListStyle: {
       alignSelf: 'center',
-      
     },
   });
 
