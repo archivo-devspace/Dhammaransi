@@ -84,7 +84,7 @@ const ContactScreen = () => {
             {/* Email  */}
             <View>
               {/* <Text style={styles.dataTitle}>{t('UTILS.EMAIL')}</Text> */}
-              <View style={styles.contentContainer}>
+              <View style={[styles.contentContainer]}>
                 <TouchableOpacity
                   onPress={() => sendEmail('dhammaramsimedia@gmail.com')}>
                   <Zocial
@@ -93,7 +93,9 @@ const ContactScreen = () => {
                     color={Colors[theme].primary_light}
                   />
                 </TouchableOpacity>
-                <Text style={styles.subtitle}>dhammaramsimedia@gmail.com</Text>
+                <Text style={[styles.subtitle, {fontSize: 16}]}>
+                  dhammaramsimedia@gmail.com
+                </Text>
                 <TouchableOpacity
                   onPress={() => copyToClipboard('dhammaramsimedia@gmail.com')}>
                   <Feather name="copy" size={20} color={Colors[theme].text} />
