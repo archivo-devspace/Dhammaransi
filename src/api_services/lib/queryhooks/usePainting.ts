@@ -14,7 +14,7 @@ export const useGetPaintings = () => {
   });
 };
 
-export const useGetSinglePainting = (id: string) => {
+export const useGetSinglePainting = (id: number) => {
   return useQuery<ApiRes<SinglePaintingApiRes[]>>({
     queryKey: ['singlePainting', id],
     queryFn: () => fetchSinglePainting(id),

@@ -16,8 +16,6 @@ const MovieListScreen = () => {
   const styles = styling(theme);
   const [playing, setPlaying] = useState(false);
 
-  console.log('height', width);
-
   // Unlock orientation for fullscreen and return to portrait on exit
   const handleFullscreenChange = useCallback((isFullscreen: boolean) => {
     if (isFullscreen) {

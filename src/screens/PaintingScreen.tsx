@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
@@ -13,7 +14,10 @@ import {
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {useTranslation} from 'react-i18next';
-import {MainStackParamList} from '../navigations/StackNavigation';
+import {
+  MainStackParamList,
+  NavigationMainStackScreenProps,
+} from '../navigations/StackNavigation';
 import {RouteProp} from '@react-navigation/native';
 import {Colors} from '../theme';
 import TopNavigation from '../components/commons/TopNavigation';
@@ -28,43 +32,46 @@ import TrackPlayer, {
 import LoadingSpinner from '../components/utils/LoadingSpinner';
 import {CustomButton} from '../components/utils';
 import {useTrackContext} from '../contexts/TrackContext';
-import {singlePaintingDetils} from '../utils/constants';
+// import {singlePaintingDetils} from '../utils/constants';
 import {SinglePaintingDetialsProps} from '../types/golbal';
+import {useGetSinglePainting} from '../api_services/lib/queryhooks/usePainting';
 
 type Props = {
   route: RouteProp<MainStackParamList, 'PaintingScreen'>;
+  navigation: NavigationMainStackScreenProps['navigation'];
 };
 
-const PaintingScreen = ({route}: Props) => {
-  console.log('route', route.params);
+const PaintingScreen = ({route, navigation}: Props) => {
   const {theme} = useThemeContext();
   const [icon, setIcon] = useState();
   const playbackState = usePlaybackState();
   const styles = styling(theme);
   const {t} = useTranslation();
   const {width, height} = useWindowDimensions();
-  const [playing, setPlaying] = useState(false);
-  const [paintingDetils, setPaintingDetails] =
-    useState<SinglePaintingDetialsProps>();
+  // const [playing, setPlaying] = useState(false);
+  // const [paintingDetils, setPaintingDetails] =
+  //   useState<SinglePaintingDetialsProps>();
   const progress = useProgress();
   const {togglePlayingMode} = useTrackContext();
   const scrollA = useRef(new Animated.Value(0)).current;
 
-  const customHeight = height * 0.3;
+  const customHeight = height * 0.39;
   const BANNER_H = height * 0.4;
+
+  const {
+    data,
+    isLoading: isPaintingLoading,
+    isError: isPaintingError,
+  } = useGetSinglePainting(route.params.id);
+
+  const paintingDetails = data?.data?.results[0];
+
+  // console.log('paintingDetails', paintingDetails);
 
   useEffect(() => {
     MaterialIcon.getImageSource('circle', 20, Colors[theme].primary).then(
       setIcon,
     );
-  }, []);
-
-  const getPaintingDetails = async () => {
-    setPaintingDetails(singlePaintingDetils);
-  };
-
-  useEffect(() => {
-    getPaintingDetails();
   }, []);
 
   const getTrackDuration = (_progress: any) => {
@@ -82,15 +89,19 @@ const PaintingScreen = ({route}: Props) => {
     }
   };
 
-  const onStateChange = useCallback((state: string) => {
-    if (state === 'ended') {
-      setPlaying(false);
-      Alert.alert('video has finished playing!');
-    }
-  }, []);
+  // const onStateChange = useCallback((state: string) => {
+  //   if (state === 'ended') {
+  //     setPlaying(false);
+  //     Alert.alert('video has finished playing!');
+  //   }
+  // }, []);
 
-  const togglePlayer = async () => {
-    paintingDetils && (await TrackPlayer.add(paintingDetils.music));
+  const togglePlayer = () => {
+    TrackPlayer.add({
+      id: paintingDetails?.id,
+      url: paintingDetails?.details[1]?.file as string,
+      title: paintingDetails?.title,
+    });
     togglePlayingMode();
   };
 
@@ -140,7 +151,7 @@ const PaintingScreen = ({route}: Props) => {
             ]}>
             <View style={styles.backBtn} />
             <Image
-              source={{uri: paintingDetils?.imageUrl}}
+              source={{uri: paintingDetails?.details[0].file}}
               style={{width: '100%', height: customHeight}}
             />
           </Animated.View>
@@ -162,23 +173,23 @@ const PaintingScreen = ({route}: Props) => {
               alignItems: 'center',
               gap: 10,
             }}>
-            <Text style={styles.paintingTitle}>{paintingDetils?.title}</Text>
+            <Text style={styles.paintingTitle}>{paintingDetails?.title}</Text>
 
-            <YoutubePlayer
+            {/* <YoutubePlayer
               height={height * 0.28}
               width={width * 0.96}
               play={playing}
               videoId={paintingDetils?.video?.videoId}
               onChangeState={onStateChange}
-            />
-            <Text
+            /> */}
+            {/* <Text
               style={{
                 color: Colors[theme]?.text,
                 fontSize: 15,
                 marginBottom: 15,
               }}>
               {paintingDetils?.video?.title}
-            </Text>
+            </Text> */}
             <View
               style={{
                 borderBottomWidth: 1,
@@ -188,7 +199,7 @@ const PaintingScreen = ({route}: Props) => {
             />
             {/* Music  */}
             <View style={[{width: width * 0.98}, styles.musicContainer]}>
-              <Text
+              {/* <Text
                 style={{
                   color: Colors[theme]?.text,
                   fontSize: 15,
@@ -196,7 +207,7 @@ const PaintingScreen = ({route}: Props) => {
                   marginBottom: 15,
                 }}>
                 {paintingDetils?.music?.title}
-              </Text>
+              </Text> */}
               <Slider
                 trackImage={icon}
                 value={progress.position}
@@ -265,11 +276,11 @@ const PaintingScreen = ({route}: Props) => {
             <View style={{width, padding: 10}}>
               <Text
                 style={{
-                  textAlign: 'justify',
+                  textAlign: 'center',
                   letterSpacing: 3,
                   color: Colors[theme]?.text,
                 }}>
-                {paintingDetils?.desc}
+                {paintingDetails?.description}
               </Text>
             </View>
           </View>

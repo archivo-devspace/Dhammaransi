@@ -23,7 +23,14 @@ type Props = {
   error: unknown;
 };
 
-export const Movies = ({data, isLoading, isFetched, isError, error}: Props) => {
+export const Movies = ({
+  data,
+  isLoading,
+  isFetched,
+  isError,
+  error,
+  navigation,
+}: Props) => {
   const {width, height} = useWindowDimensions();
   const {theme} = useThemeContext();
   const {t} = useTranslation();
@@ -33,7 +40,7 @@ export const Movies = ({data, isLoading, isFetched, isError, error}: Props) => {
   const ITEM_FULL_WIDTH = ITEM_WIDTH + MARGIN_HORIZONTAL * 2;
   const SPACER = (width - ITEM_FULL_WIDTH) / 2;
 
-  const truncateIndex = 40;
+  const truncateIndex = 28;
 
   const x = useSharedValue(0);
 
@@ -44,11 +51,16 @@ export const Movies = ({data, isLoading, isFetched, isError, error}: Props) => {
   });
 
   const handleClick = (id: number) => {
-    console.log('id', id);
-    // navigation.navigate('Audios', {id});
+    // console.log('id', id);
+    navigation.navigate('PaintingScreen', {id});
   };
 
   const styles = styling(theme);
+
+  const paintings = data?.map(item => ({
+    ...item,
+    description: item.title,
+  }));
 
   return (
     <View style={[styles.mainContainer, {height: height - height * 0.62}]}>
@@ -101,7 +113,7 @@ export const Movies = ({data, isLoading, isFetched, isError, error}: Props) => {
       ) : (
         <Animated.FlatList
           onScroll={onScroll}
-          data={data}
+          data={paintings}
           keyExtractor={(item: any) => item.id.toString()}
           renderItem={({item, index}) => {
             return (

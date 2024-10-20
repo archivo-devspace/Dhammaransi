@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {
   useCallback,
   useEffect,
@@ -7,7 +8,6 @@ import React, {
 } from 'react';
 import {
   Image,
-  ImageBackground,
   Platform,
   StatusBar,
   StyleSheet,
@@ -15,12 +15,12 @@ import {
   useWindowDimensions,
   View,
 } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Slider from '@react-native-community/slider';
-import { BottomSheetMethods } from '../components/commons/BottomSheet';
+import {BottomSheetMethods} from '../components/commons/BottomSheet';
 import RenderItem from '../components/commons/RenderItem';
 import BottomSheet from '../components/commons/BottomSheet';
-import { CustomButton } from '../components/utils';
+import {CustomButton} from '../components/utils';
 import {
   Entypo,
   FontAwesome,
@@ -30,19 +30,19 @@ import {
   MaterialIcons,
   truncateText,
 } from '../utils/common';
-import { Colors } from '../theme';
+import {Colors} from '../theme';
 import TrackPlayer, {
   State,
   Track,
   usePlaybackState,
   useProgress,
 } from 'react-native-track-player';
-import { RouteProp } from '@react-navigation/native';
-import { MainStackParamList } from '../navigations/StackNavigation';
-import { NavigationMainBottomTabScreenProps } from '../navigations/BottomNavigation';
-import { useTrackContext } from '../contexts/TrackContext';
-import { Theme, useThemeContext } from '../contexts/ThemeContext';
-import { useTranslation } from 'react-i18next';
+import {RouteProp} from '@react-navigation/native';
+import {MainStackParamList} from '../navigations/StackNavigation';
+import {NavigationMainBottomTabScreenProps} from '../navigations/BottomNavigation';
+import {useTrackContext} from '../contexts/TrackContext';
+import {Theme, useThemeContext} from '../contexts/ThemeContext';
+import {useTranslation} from 'react-i18next';
 import LoadingSpinner from '../components/utils/LoadingSpinner';
 import * as Progress from 'react-native-progress'; // Import Progress
 import FolderListsBottomSheet, {
@@ -54,13 +54,13 @@ type Props = {
   navigation: NavigationMainBottomTabScreenProps['navigation'];
 };
 
-const TrackScreen = ({ navigation }: Props) => {
+const TrackScreen = ({navigation}: Props) => {
   const insets = useSafeAreaInsets();
-  const { t } = useTranslation();
-  const { theme } = useThemeContext();
+  const {t} = useTranslation();
+  const {theme} = useThemeContext();
   const [currentQueue, setCurrentQueue] = useState<Track[]>([]);
-  const { getCurrentQueue } = useTrackContext();
-  const { width, height } = useWindowDimensions();
+  const {getCurrentQueue} = useTrackContext();
+  const {width, height} = useWindowDimensions();
   const progress = useProgress();
   const playbackState = usePlaybackState();
   const {
@@ -99,7 +99,7 @@ const TrackScreen = ({ navigation }: Props) => {
   }, []);
 
   const styles = styling(theme);
-  const { top } = insets;
+  const {top} = insets;
 
   const customHeight = height * (2 / 6) - 50;
   const bottomSheetRef = useRef<BottomSheetMethods>(null);
@@ -174,109 +174,111 @@ const TrackScreen = ({ navigation }: Props) => {
         barStyle={theme === 'dark' ? 'light-content' : 'dark-content'}
       />
 
-      <View style={{ flex: 1, paddingTop: top }}>
-        {
-          !currentTrack ? (
+      <View style={{flex: 1, paddingTop: top}}>
+        {!currentTrack ? (
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '100%',
+            }}>
+            <CustomButton
+              title={t('UTILS.CHOOSEALBLUM')}
+              customButtonStyle={[styles.chooseFromBtn, {width: width * 0.7}]}
+              customButtonTextStyle={[
+                styles.chooseFrom,
+                {fontSize: height * 0.018},
+              ]}
+              gap={10}
+              onPress={() => navigation.navigate('AudioCategories')}
+              icon={
+                <FontAwesome
+                  name="music"
+                  size={height * 0.02}
+                  color={Colors[theme].primary}
+                />
+              }
+            />
+          </View>
+        ) : (
+          <>
             <View
               style={{
+                flex: 3.5,
                 justifyContent: 'center',
                 alignItems: 'center',
-                height: '100%',
+                paddingHorizontal: 5,
               }}>
-              <CustomButton
-                title={t('UTILS.CHOOSEALBLUM')}
-                customButtonStyle={[
-                  styles.chooseFromBtn,
-                  { width: width * 0.7 },
-                ]}
-                customButtonTextStyle={[
-                  styles.chooseFrom,
-                  { fontSize: height * 0.018 },
-                ]}
-                gap={10}
-                onPress={() => navigation.navigate('AudioCategories')}
-                icon={
-                  <FontAwesome
-                    name="music"
-                    size={height * 0.02}
-                    color={Colors[theme].primary}
-                  />
-                }
-              />
+              <Text style={[styles.titleText, {fontSize: height * 0.027}]}>
+                {truncateText(currentTrack?.title, 50)}
+              </Text>
             </View>
-          ) : (
-            <>
-              <View
-                style={{
-                  flex: 3.5,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  paddingHorizontal: 5,
-
-                }}>
-                <Text style={[styles.titleText, { fontSize: height * 0.027 }]}>
-                  {truncateText(currentTrack?.title, 50)}
-                </Text>
-              </View>
-              <View
-                style={{
-                  flex: 2.5,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  paddingHorizontal: 10,
-
-                }}>
-                <Text style={[styles.artistText, { fontSize: height * 0.025 }]}>
-                  {truncateText(currentTrack?.artist, 80)}
-                </Text>
-              </View>
-            </>
-          )
-        }
+            <View
+              style={{
+                flex: 2.5,
+                justifyContent: 'center',
+                alignItems: 'center',
+                paddingHorizontal: 10,
+              }}>
+              <Text style={[styles.artistText, {fontSize: height * 0.025}]}>
+                {truncateText(currentTrack?.artist, 80)}
+              </Text>
+            </View>
+          </>
+        )}
       </View>
 
-      <View style={{ flex: 2, justifyContent: 'center', alignItems: 'center' }}>
-        <View style={{
-          borderRadius: 20,
-          overflow: 'hidden',
-          width: customHeight,
-          height: customHeight,
-          shadowColor: Colors[theme].text,
-          ...Platform.select({
-            ios: {
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.3,
-              shadowRadius: 3,
-            },
-            android: {
-              elevation: 3,
-            },
-          }),
-        }}>
+      <View style={{flex: 2, justifyContent: 'center', alignItems: 'center'}}>
+        <View
+          style={{
+            borderRadius: 20,
+            overflow: 'hidden',
+            width: customHeight,
+            height: customHeight,
+            shadowColor: Colors[theme].text,
+            ...Platform.select({
+              ios: {
+                shadowOffset: {width: 0, height: 2},
+                shadowOpacity: 0.3,
+                shadowRadius: 3,
+              },
+              android: {
+                elevation: 3,
+              },
+            }),
+          }}>
           <Image
             source={
               currentTrack
-                ? { uri: currentTrack?.artwork ? currentTrack.artwork : theme === 'dark' ? require('../assets/parate_dark.jpg') : require('../assets/parate_light.jpg') } :
-                theme === 'dark' ? require('../assets/parate_dark.jpg') : require('../assets/parate_light.jpg')
+                ? {
+                    uri: currentTrack?.artwork
+                      ? currentTrack.artwork
+                      : theme === 'dark'
+                      ? require('../assets/parate_dark.jpg')
+                      : require('../assets/parate_light.jpg'),
+                  }
+                : theme === 'dark'
+                ? require('../assets/parate_dark.jpg')
+                : require('../assets/parate_light.jpg')
             }
             resizeMode="contain"
             style={{
-              width: "100%",      // Image takes up the full width of the container
-              height: "100%"      // Image takes up the full height of the container
+              width: '100%', // Image takes up the full width of the container
+              height: '100%', // Image takes up the full height of the container
             }}
           />
         </View>
-
       </View>
 
-      <View style={{ flex: 3 }}>
-        <View
-          style={[
-            styles.contentContainer,
-          ]}>
-
+      <View style={{flex: 3}}>
+        <View style={[styles.contentContainer]}>
           {currentTrack ? (
-            <View style={{ flex: 1.5, justifyContent: 'center', alignItems: 'center' }}>
+            <View
+              style={{
+                flex: 1.5,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
               {isAlreadyDownload ? (
                 <CustomButton
                   customButtonStyle={styles.btn}
@@ -284,7 +286,7 @@ const TrackScreen = ({ navigation }: Props) => {
                   onPress={handleAlreadyDownloaded}
                   icon={
                     <Ionicons
-                      name={`cloud-done-sharp`}
+                      name={'cloud-done-sharp'}
                       size={height * 0.04}
                       color={Colors[theme].primary}
                     />
@@ -298,7 +300,12 @@ const TrackScreen = ({ navigation }: Props) => {
                     borderWidth={1}
                   />
                   <Text
-                    style={{ color: Colors[theme].primary, paddingVertical: 1, fontSize: height * 0.015, fontFamily: getFontFamily('regular') }}>
+                    style={{
+                      color: Colors[theme].primary,
+                      paddingVertical: 1,
+                      fontSize: height * 0.015,
+                      fontFamily: getFontFamily('regular'),
+                    }}>
                     {downloadProgress < 100
                       ? `${t('UTILS.DOWNLOADING')}`
                       : `${t('UTILS.DOWNLOADED')}`}
@@ -311,7 +318,7 @@ const TrackScreen = ({ navigation }: Props) => {
                   disabled={isAlreadyDownload}
                   icon={
                     <MaterialIcon
-                      name={`cloud-download`}
+                      name={'cloud-download'}
                       size={height * 0.04}
                       color={Colors[theme].primary}
                     />
@@ -320,12 +327,12 @@ const TrackScreen = ({ navigation }: Props) => {
               )}
             </View>
           ) : (
-            <View style={{ flex: 1.5 }}></View>
+            <View style={{flex: 1.5}}></View>
           )}
           <View
             style={[
               styles.buttonContainer,
-              { flex: 2, width: width * 0.9, gap: height * 0.03 },
+              {flex: 2, width: width * 0.9, gap: height * 0.03},
             ]}>
             <CustomButton
               customButtonStyle={styles.btn}
@@ -343,7 +350,7 @@ const TrackScreen = ({ navigation }: Props) => {
               customButtonStyle={[styles.btn]}
               icon={
                 <Entypo
-                  name={`controller-jump-to-start`}
+                  name={'controller-jump-to-start'}
                   size={height * 0.035}
                   color={Colors[theme].primary}
                 />
@@ -355,16 +362,16 @@ const TrackScreen = ({ navigation }: Props) => {
               icon={
                 playbackState.state === State.Playing ? (
                   <MaterialIcons
-                    name={`pause-circle`}
+                    name={'pause-circle'}
                     size={height * 0.06}
-                    style={{ elevation: 2 }}
+                    style={{elevation: 2}}
                     color={Colors[theme].primary}
                   />
                 ) : playbackState.state === State.Paused ? (
                   <MaterialIcons
-                    name={`play-circle`}
+                    name={'play-circle'}
                     size={height * 0.06}
-                    style={{ elevation: 2 }}
+                    style={{elevation: 2}}
                     color={Colors[theme].primary}
                   />
                 ) : playbackState.state === State.Ready ||
@@ -380,9 +387,9 @@ const TrackScreen = ({ navigation }: Props) => {
                   />
                 ) : (
                   <Entypo
-                    name={`controller-stop`}
+                    name={'controller-stop'}
                     size={height * 0.06}
-                    style={{ elevation: 2 }}
+                    style={{elevation: 2}}
                     color={Colors[theme].primary}
                   />
                 )
@@ -393,7 +400,7 @@ const TrackScreen = ({ navigation }: Props) => {
               customButtonStyle={styles.btn}
               icon={
                 <Entypo
-                  name={`controller-next`}
+                  name={'controller-next'}
                   size={height * 0.035}
                   color={Colors[theme].primary}
                 />
@@ -402,25 +409,25 @@ const TrackScreen = ({ navigation }: Props) => {
             <CustomButton
               customButtonStyle={[
                 styles.btn,
-                currentQueue.length === 0 && { opacity: 0.5 },
+                currentQueue.length === 0 && {opacity: 0.5},
               ]}
               onPress={expandHandler}
               disabled={currentQueue.length === 0}
               icon={
                 <MaterialIcon
-                  name={`playlist-music`}
+                  name={'playlist-music'}
                   size={height * 0.035}
                   color={Colors[theme].primary}
                 />
               }
             />
           </View>
-          <View style={[styles.trackContainer, { flex: 2.5 }]}>
+          <View style={[styles.trackContainer, {flex: 2.5}]}>
             <Slider
               style={{
                 height: height * 0.028,
                 width: width * 0.8,
-                marginTop: 5
+                marginTop: 5,
               }}
               value={progress.position}
               minimumValue={0}
@@ -435,20 +442,28 @@ const TrackScreen = ({ navigation }: Props) => {
               maximumTrackTintColor={Colors[theme].text}
             />
             <View style={styles.trackDuration}>
-              <Text style={[styles.durationText, { fontSize: height * 0.02 }]}>
+              <Text style={[styles.durationText, {fontSize: height * 0.02}]}>
                 {new Date(progress.position * 1000).toISOString().substr(14, 5)}
               </Text>
-              <Text style={[styles.durationText, { fontSize: height * 0.02 }]}>
+              <Text style={[styles.durationText, {fontSize: height * 0.02}]}>
                 {getTrackDuration(progress)}
               </Text>
             </View>
           </View>
           {/* <View style={{height: 90}} /> */}
         </View>
-        <View style={{ flex: 2.8, paddingBottom: 14, padding: 6 }}>
-          <View style={{ flex: 1, borderWidth: 1, borderColor: 'black', justifyContent: 'center', alignItems: 'center', }}>
-            <Text style={{ fontFamily: getFontFamily('regular'), }}>
-              advertisement</Text>
+        <View style={{flex: 2.8, paddingBottom: 14, padding: 6}}>
+          <View
+            style={{
+              flex: 1,
+              borderWidth: 1,
+              borderColor: 'black',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Text style={{fontFamily: getFontFamily('regular')}}>
+              advertisement
+            </Text>
           </View>
         </View>
       </View>
@@ -458,7 +473,7 @@ const TrackScreen = ({ navigation }: Props) => {
         ref={bottomSheetRef}
         backGroundColor={Colors[theme].secondary}>
         <View
-          style={{ paddingBottom: height > 800 ? height * 0.1 : height * 0.17 }}>
+          style={{paddingBottom: height > 800 ? height * 0.1 : height * 0.17}}>
           <RenderItem
             currentQueue={currentQueue}
             currentActiveTrack={currentActiveTrack}
@@ -507,8 +522,7 @@ const styling = (theme: Theme) =>
       }),
     },
     img: {
-
-      height: "100%",
+      height: '100%',
       alignSelf: 'center',
       borderBottomRightRadius: 20,
       borderBottomLeftRadius: 20,
@@ -570,8 +584,6 @@ const styling = (theme: Theme) =>
     chooseFromBtn: {
       backgroundColor: Colors[theme].secondary,
       justifyContent: 'center',
-
-
     },
     suffelIcon: {
       width: 30,
@@ -579,6 +591,5 @@ const styling = (theme: Theme) =>
     },
     progressBarContainer: {
       alignItems: 'center',
-
     },
   });

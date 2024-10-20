@@ -6,7 +6,7 @@ import Animated, {
   useSharedValue,
 } from 'react-native-reanimated';
 import Item from '../Item';
-import {getFontFamily, remToPx} from '../../../utils/common';
+import {getFontFamily} from '../../../utils/common';
 import {Theme, useThemeContext} from '../../../contexts/ThemeContext';
 import {Colors} from '../../../theme';
 import {NavigationMainStackScreenProps} from '../../../navigations/StackNavigation';

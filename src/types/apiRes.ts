@@ -31,6 +31,7 @@ export interface ApiWithPaginations<T> {
 export interface PaintingApiRes {
   id: number;
   description: string;
+  title: string;
   category: string;
   created_at: string;
   updated_at: string;
@@ -38,12 +39,20 @@ export interface PaintingApiRes {
 
 export interface SinglePaintingApiRes {
   id: number;
-  gallery_id: number;
-  file: string;
-  mime_type: string;
-  size: number;
+  description: string;
+  title: string;
   created_at: string;
   updated_at: string;
+  details: Array<{
+    id: number;
+    gallery_id: number;
+    file: string;
+    mime_type: string;
+    size: number;
+    created_at: string;
+    updated_at: string;
+  }>;
+  //image[0], audio[1]
 }
 //#endregion
 

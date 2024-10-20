@@ -5,7 +5,7 @@ export const fetchPaintings = async () => {
   return res.data;
 };
 
-export const fetchSinglePainting = async (id: string) => {
+export const fetchSinglePainting = async (id: number) => {
   const response = await axiosInstance.get(`/painting/${id}`);
   return response.data;
 };
