@@ -66,7 +66,7 @@ const PaintingScreen = ({route, navigation}: Props) => {
 
   const paintingDetails = data?.data?.results[0];
 
-  // console.log('paintingDetails', paintingDetails);
+  console.log('paintingDetailsid', paintingDetails?.id);
 
   useEffect(() => {
     MaterialIcon.getImageSource('circle', 20, Colors[theme].primary).then(

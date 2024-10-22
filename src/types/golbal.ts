@@ -20,3 +20,10 @@ export interface SinglePaintingDetialsProps {
   };
   desc: string;
 }
+
+export interface YoutubeVideosProps {
+  id: number;
+  videoId: string;
+  title: string;
+  description?: string;
+}
