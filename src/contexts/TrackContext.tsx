@@ -86,6 +86,7 @@ export interface TrackContextType {
   finishPdfDownload: (id: number) => void;
   pdfDownlaodProgress: Record<number, number>;
   setPdfDownloadForProgress: (id: number, progress: number) => void;
+  getTrackDuration: (progressed: any) => string;
 }
 
 const TrackContext = createContext<TrackContextType | undefined>(undefined);
@@ -589,6 +590,21 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     await TrackPlayer.play();
   };
 
+  const getTrackDuration = (progressed: any) => {
+    const durationInSeconds = progressed.duration - progressed.position;
+
+    if (durationInSeconds <= 0) {
+      return '00:00';
+    } else {
+      const minutes = Math.floor(durationInSeconds / 60);
+      const seconds = Math.floor(durationInSeconds % 60);
+
+      return `${minutes.toString().padStart(2, '0')}:${seconds
+        .toString()
+        .padStart(2, '0')}`;
+    }
+  };
+
   const startPdfDownload = (id: number) => {
     setPdfDownloading(prev => ({...prev, [id]: true}));
     setPdfDownloadProgress(prev => ({...prev, [id]: 0}));
@@ -625,6 +641,7 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
     setDownloading,
     isAlreadyDownload,
     setAlreadyDownload,
+    getTrackDuration,
     isDownloading,
     loading,
     setLoading,

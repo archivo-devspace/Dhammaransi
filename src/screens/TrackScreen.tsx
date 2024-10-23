@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 import React, {
   useCallback,
@@ -75,6 +76,7 @@ const TrackScreen = ({navigation}: Props) => {
     isDownloading,
     loading,
     downloadProgress,
+    getTrackDuration,
   } = useTrackContext();
 
   // console.log('orientation', orientation);
@@ -136,21 +138,6 @@ const TrackScreen = ({navigation}: Props) => {
 
   const expandFolderListsHandler = () => {
     folderListsbottomSheetRef.current?.expand();
-  };
-
-  const getTrackDuration = (progress: any) => {
-    const durationInSeconds = progress.duration - progress.position;
-
-    if (durationInSeconds <= 0) {
-      return '00:00';
-    } else {
-      const minutes = Math.floor(durationInSeconds / 60);
-      const seconds = Math.floor(durationInSeconds % 60);
-
-      return `${minutes.toString().padStart(2, '0')}:${seconds
-        .toString()
-        .padStart(2, '0')}`;
-    }
   };
 
   const handleAlreadyDownloaded = async () => {
@@ -254,12 +241,12 @@ const TrackScreen = ({navigation}: Props) => {
                     uri: currentTrack?.artwork
                       ? currentTrack.artwork
                       : theme === 'dark'
-                      ? require('../assets/parate_dark.jpg')
-                      : require('../assets/parate_light.jpg'),
+                        ? require('../assets/parate_dark.jpg')
+                        : require('../assets/parate_light.jpg'),
                   }
                 : theme === 'dark'
-                ? require('../assets/parate_dark.jpg')
-                : require('../assets/parate_light.jpg')
+                  ? require('../assets/parate_dark.jpg')
+                  : require('../assets/parate_light.jpg')
             }
             resizeMode="contain"
             style={{
@@ -327,7 +314,7 @@ const TrackScreen = ({navigation}: Props) => {
               )}
             </View>
           ) : (
-            <View style={{flex: 1.5}}></View>
+            <View style={{flex: 1.5}} />
           )}
           <View
             style={[
