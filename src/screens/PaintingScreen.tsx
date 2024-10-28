@@ -7,7 +7,7 @@ import {
   useWindowDimensions,
   StatusBar,
 } from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {useTranslation} from 'react-i18next';
 import {
@@ -18,7 +18,7 @@ import {RouteProp} from '@react-navigation/native';
 import {Colors} from '../theme';
 import TopNavigation from '../components/commons/TopNavigation';
 import Slider from '@react-native-community/slider';
-import {Entypo, MaterialIcon, MaterialIcons} from '../utils/common';
+import {Entypo, MaterialIcons} from '../utils/common';
 import TrackPlayer, {
   State,
   usePlaybackState,
@@ -26,7 +26,7 @@ import TrackPlayer, {
 } from 'react-native-track-player';
 import LoadingSpinner from '../components/utils/LoadingSpinner';
 import {CustomButton} from '../components/utils';
-import {TrackProps, useTrackContext} from '../contexts/TrackContext';
+import {useTrackContext} from '../contexts/TrackContext';
 // import {singlePaintingDetils} from '../utils/constants';
 import {useGetSinglePainting} from '../api_services/lib/queryhooks/usePainting';
 
@@ -38,7 +38,6 @@ export interface PaintingScreenProps {
 const PaintingScreen = ({route, navigation}: PaintingScreenProps) => {
   const {theme} = useThemeContext();
   const playbackState = usePlaybackState();
-  const [isExitTrack, setIsExitTrack] = useState<number>();
   const styles = styling(theme);
   const {t} = useTranslation();
   const {width, height} = useWindowDimensions();
