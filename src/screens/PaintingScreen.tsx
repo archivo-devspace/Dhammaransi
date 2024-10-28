@@ -60,53 +60,42 @@ const PaintingScreen = ({route, navigation}: PaintingScreenProps) => {
 
   const paintingDetails = data?.data?.results[0];
 
+  const sameTrackExit = () => {
+    const sameTrack = trackLists.find(
+      track => track.id === paintingDetails?.id,
+    );
+    return sameTrack ? true : false;
+  };
+
+  const initializeTrack = () => {
+    const track = {
+      id: paintingDetails?.id as number,
+      url: paintingDetails?.details[1]?.file as string,
+      title: paintingDetails?.title as string,
+      artwork: paintingDetails?.details[0].file,
+      artist: 'Ashin Joti Sara',
+      date: paintingDetails?.created_at.split(' ')[0] as string,
+    };
+    setTrackLists([track]);
+  };
+
   useEffect(() => {
     if (!isLoading && isFetched && !isError && data) {
-      const track = {
-        id: paintingDetails?.id as number,
-        url: paintingDetails?.details[1]?.file as string,
-        title: paintingDetails?.title as string,
-        artwork: paintingDetails?.details[0].file,
-        artist: 'Ashin Joti Sara',
-        date: paintingDetails?.created_at.split(' ')[0] as string,
-      };
-      setTrackLists([track]);
-      const sameTrack = trackLists.find(
-        track => track.id === paintingDetails?.id,
-      );
-      if (sameTrack) {
-        return;
+      const sameTrack = sameTrackExit();
+      if (!sameTrack) {
+        TrackPlayer.reset();
+        initializeTrack();
       }
-      TrackPlayer.reset();
     }
   }, [isFetched, data, isLoading, isError]);
 
   const handlePlayTrack = () => {
-    if (!isExitTrack) {
-      setIsExitTrack(paintingDetails?.id);
-      handlePlay(paintingDetails?.id as number);
-    } else if (isExitTrack !== paintingDetails?.id) {
-      TrackPlayer.reset();
-      setIsExitTrack(paintingDetails?.id);
+    const sameTrack = sameTrackExit();
+    if (sameTrack && progress.position === 0) {
       handlePlay(paintingDetails?.id as number);
     }
     togglePlayingMode();
   };
-
-  // const getTrackDuration = (progressed: any) => {
-  //   const durationInSeconds = progressed.duration - progressed.position;
-
-  //   if (durationInSeconds <= 0) {
-  //     return '00:00';
-  //   } else {
-  //     const minutes = Math.floor(durationInSeconds / 60);
-  //     const seconds = Math.floor(durationInSeconds % 60);
-
-  //     return `${minutes.toString().padStart(2, '0')}:${seconds
-  //       .toString()
-  //       .padStart(2, '0')}`;
-  //   }
-  // };
 
   return (
     <View style={styles.mainContainer}>
