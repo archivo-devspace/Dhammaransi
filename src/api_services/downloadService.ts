@@ -1,5 +1,7 @@
 import {Platform, DeviceEventEmitter} from 'react-native';
-import ReactNativeBlobUtil, { ReactNativeBlobUtilConfig } from 'react-native-blob-util';
+import ReactNativeBlobUtil, {
+  ReactNativeBlobUtilConfig,
+} from 'react-native-blob-util';
 
 type Callback = (err: any) => void;
 type ProgressCallback = (progress: number) => void;
@@ -46,7 +48,6 @@ export const sendDownloadedDataToLocalDir = async (
       : `${dirToSave}/${getNewTime}.mp4`,
     mediaScannable: true,
     description: 'file download',
-  
   };
 
   const configOptions = Platform.select({
@@ -62,14 +63,20 @@ export const sendDownloadedDataToLocalDir = async (
     let secondPathList: OfflineDownloadData[] = [];
 
     try {
-      const localDownloads = await ReactNativeBlobUtil.fs.readFile(path, 'utf8');
+      const localDownloads = await ReactNativeBlobUtil.fs.readFile(
+        path,
+        'utf8',
+      );
       offlineDownloadList = JSON.parse(localDownloads) as OfflineDownloadData[];
     } catch (e) {
       // Handle file read error, if any
     }
 
     try {
-      const localDownloads = await ReactNativeBlobUtil.fs.readFile(secondPath, 'utf8');
+      const localDownloads = await ReactNativeBlobUtil.fs.readFile(
+        secondPath,
+        'utf8',
+      );
       secondPathList = JSON.parse(localDownloads) as OfflineDownloadData[];
     } catch (e) {
       // Handle file read error, if any
@@ -117,7 +124,7 @@ export const sendDownloadedDataToLocalDir = async (
   if (src) {
     ReactNativeBlobUtil.config(configOptions as any)
       .fetch('GET', src, {})
-      .progress((received :any , total:any) => {
+      .progress((received: any, total: any) => {
         const percentageValue = (received / total) * 100;
         roundOffValue = Math.round(percentageValue);
         if (onProgress) {
@@ -134,9 +141,7 @@ export const sendDownloadedDataToLocalDir = async (
         DeviceEventEmitter.emit('downloadProgress', params);
       })
       .then(async res => {
-        
-          offlineMusicPlayerUrl = res.path();
-        
+        offlineMusicPlayerUrl = res.path();
 
         await startDownloadingPosterImage(async () => {
           const offlineObjData: OfflineDownloadData = {
@@ -173,7 +178,6 @@ export const fetchDownloadedDataFromLocalDir = async (
   sendData = (localDownloads: any) => {},
   folderName?: string,
 ) => {
-  console.log("folderName", folderName);
   const trackFolder =
     Platform.OS === 'ios'
       ? ReactNativeBlobUtil.fs.dirs.DocumentDir
@@ -183,18 +187,21 @@ export const fetchDownloadedDataFromLocalDir = async (
     ? `${trackFolder}/downloads/${folderName}/file.json`
     : `${trackFolder}/file.json`;
 
-    console.log("folderpath", fetchPath)
+  // console.log("folderpath", fetchPath)
 
   try {
     const exists = await ReactNativeBlobUtil.fs.exists(fetchPath);
-    console.log("exist", exists)
+    // console.log("exist", exists)
     if (!exists) {
       sendData([]); // Send an empty array if the file doesn't exist
       return;
     }
 
-    let localDownloads = await ReactNativeBlobUtil.fs.readFile(fetchPath, 'utf8');
-    console.log("localDownlaods", localDownloads)
+    let localDownloads = await ReactNativeBlobUtil.fs.readFile(
+      fetchPath,
+      'utf8',
+    );
+    // console.log("localDownlaods", localDownloads)
     localDownloads = JSON.parse(localDownloads);
     if (Array.isArray(localDownloads)) {
       sendData(localDownloads);
@@ -245,7 +252,11 @@ const updateJsonFile = async (filePath: string, downloadedId: any) => {
     const index = jsonObj.findIndex((item: any) => item.id === downloadedId);
     if (index !== -1) {
       jsonObj.splice(index, 1);
-      await ReactNativeBlobUtil.fs.writeFile(filePath, JSON.stringify(jsonObj), 'utf8');
+      await ReactNativeBlobUtil.fs.writeFile(
+        filePath,
+        JSON.stringify(jsonObj),
+        'utf8',
+      );
     }
   } catch (e) {
     console.error(`Failed to update file at ${filePath}`, e);
@@ -330,7 +341,11 @@ const updateJsonFileForAllDelete = async (
       );
     }
 
-    await ReactNativeBlobUtil.fs.writeFile(filePath, JSON.stringify(jsonObj), 'utf8');
+    await ReactNativeBlobUtil.fs.writeFile(
+      filePath,
+      JSON.stringify(jsonObj),
+      'utf8',
+    );
   } catch (e) {
     console.error(`Failed to update file at ${filePath}`, e);
   }

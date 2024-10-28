@@ -206,16 +206,12 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
       Platform.OS === 'ios'
         ? `${dirs.DocumentDir}/downloads/${folderName}/file.json`
         : `${dirs.CacheDir}/downloads/${folderName}/file.json`;
-    // console.log('jsonFile', jsonFile);
-
-    // console.log('folderPath', folderPath);
-    // console.log('folderName', folderName);
 
     try {
       const exists = await ReactNativeBlobUtil.fs.isDir(folderPath);
-      console.log('Folder exists:', exists, 'at path:', folderPath);
+      // console.log('Folder exists:', exists, 'at path:', folderPath);
       if (exists) {
-        console.log('Deleting folder:', folderPath);
+        // console.log('Deleting folder:', folderPath);
 
         const fileExists = await ReactNativeBlobUtil.fs.exists(jsonFile);
         if (fileExists) {
@@ -285,7 +281,6 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
       (element: any) => element === currentTrack.id,
     );
 
-    // console.log('find', find);
     if (find !== undefined) {
       setLoading(true);
     } else {
@@ -296,8 +291,6 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
       setDownloading(false);
     }
   }, [currentTrack, downloadingTrackIds, deleteFolder]);
-
-  // console.log('downloading...', downloadingTrackIds);
 
   const deleteTrackById = async (id: any) => {
     const remainTracks = downloadingTrackIds.filter((item: any) => {
@@ -411,9 +404,7 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
         if (playingTrack.id !== activeTrack?.id) {
           await TrackPlayer.reset();
         }
-        console.log('shuggle', repeatMode);
         if (repeatMode == 'shuffle') {
-          console.log('shuggle', repeatMode);
           handleShuffleTracks();
         } else {
           await TrackPlayer.add(current);
