@@ -67,10 +67,10 @@ const CustomTabBar = ({rest, item}: CustomTabBarProps) => {
           styles.btn,
           viewStyle,
           {
-            backgroundColor: focused
-              ? Colors[theme].secondary_dark
-              : 'transparent',
-            paddingVertical: focused ? 10 : 0,
+            // backgroundColor: focused
+            //   ? Colors[theme].secondary_dark
+            //   : 'transparent',
+            // paddingVertical: focused ? 10 : 0,
           },
         ]}>
         <FontAwesome
@@ -83,9 +83,9 @@ const CustomTabBar = ({rest, item}: CustomTabBarProps) => {
           {focused && (
             <Text
               style={{
-                color: Colors[theme].text,
+                color: Colors[theme].primary,
                 fontFamily: getFontFamily('bold'),
-                fontSize: height * 0.018,
+                fontSize: height * 0.019,
               }}>
               {item.label}
             </Text>
@@ -107,10 +107,9 @@ const styling = (theme: Theme) =>
       width: '100%',
     },
     btn: {
-      flexDirection: 'row',
       alignItems: 'center',
       paddingHorizontal: 14,
       borderRadius: 20,
-      gap: 8,
+      gap: 2,
     },
   });
