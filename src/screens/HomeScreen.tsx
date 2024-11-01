@@ -10,6 +10,7 @@ import {
   Platform,
   StatusBar,
   RefreshControl,
+  Alert,
 } from 'react-native';
 
 import {NavigationMainStackScreenProps} from '../navigations/StackNavigation';
@@ -83,6 +84,12 @@ const HomeScreen = ({navigation}: Props) => {
       setRefreshing(false); // Stop refreshing regardless of success or failure
     }
   }, [albumsRefresh, paintingRefresh]);
+
+  const handleNavigation = (link: any) => {
+    link
+      ? navigation.navigate(link)
+      : Alert.alert('Feature Coming Soon', 'Thanks for letting us know');
+  };
 
   return (
     <View style={styles.mainContainer}>
@@ -165,7 +172,7 @@ const HomeScreen = ({navigation}: Props) => {
                   {height: width < 500 ? height * 0.12 : height * 0.13},
                 ]}
                 key={menu.id}
-                onPress={() => navigation.navigate(menu.link as any)}>
+                onPress={() => handleNavigation(menu.link)}>
                 <FontAwesome
                   name={menu.icon}
                   size={25}
