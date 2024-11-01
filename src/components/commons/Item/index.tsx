@@ -70,6 +70,21 @@ const Item = ({
 
   const styles = styling(theme);
 
+  const getImageSource = ({
+    artwork,
+    theme,
+  }: {
+    artwork: string;
+    theme: string;
+  }) => {
+    if (artwork) {
+      return {uri: artwork};
+    }
+    return theme === 'dark'
+      ? require('../../../assets/parate_dark.jpg')
+      : require('../../../assets/parate_light.jpg');
+  };
+
   return (
     <Animated.View
       style={[
@@ -110,19 +125,7 @@ const Item = ({
               <Image
                 // source={{ uri: item.artwork }}
                 // source={require('../../../assets/power.png') }
-                source={
-                  item.artwork
-                    ? {
-                        uri: item?.artwork
-                          ? item.artwork
-                          : theme === 'dark'
-                          ? require('../../../assets/parate_dark.jpg')
-                          : require('../../../assets/parate_light.jpg'),
-                      }
-                    : theme === 'dark'
-                    ? require('../../../assets/parate_dark.jpg')
-                    : require('../../../assets/parate_light.jpg')
-                }
+                source={getImageSource({artwork: item?.artwork, theme})}
                 style={{
                   width: '100%',
                   height: '100%',

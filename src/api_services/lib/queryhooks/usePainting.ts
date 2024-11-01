@@ -8,7 +8,7 @@ import {
 } from '../../../types/apiRes';
 
 export const useGetPaintings = () => {
-  return useQuery<ApiWithPaginations<PaintingApiRes[]>>({
+  return useQuery<ApiWithPaginations<SinglePaintingApiRes[]>>({
     queryKey: ['paintings'],
     queryFn: fetchPaintings,
   });

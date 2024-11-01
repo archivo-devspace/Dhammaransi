@@ -13,9 +13,10 @@ import {NavigationMainStackScreenProps} from '../../../navigations/StackNavigati
 import {useTranslation} from 'react-i18next';
 import {PaintingApiRes} from '../../../types/apiRes';
 import DataNotFound from '../DataNotFound';
+import {SinglePaintingApiRes} from '../../../types/apiRes';
 
 type Props = {
-  data?: PaintingApiRes[];
+  data?: SinglePaintingApiRes[];
   navigation: NavigationMainStackScreenProps['navigation'];
   isLoading?: boolean;
   isFetched: boolean;
@@ -59,6 +60,7 @@ export const Movies = ({
 
   const paintings = data?.map(item => ({
     ...item,
+    artwork: item.details[0].file,
     description: item.title,
   }));
 
