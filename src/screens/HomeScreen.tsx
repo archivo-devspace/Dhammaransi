@@ -27,6 +27,7 @@ import {useTranslation} from 'react-i18next';
 import {useGetPaintings} from '../api_services/lib/queryhooks/usePainting';
 import {useGetAlbums} from '../api_services/lib/queryhooks/useAudio';
 import {useGetHomeData} from '../api_services/lib/queryhooks/useHome';
+import CustomAlert from '../components/commons/CustomAlert';
 
 type Props = {
   navigation: NavigationMainStackScreenProps['navigation'];
@@ -37,6 +38,7 @@ const HomeScreen = ({navigation}: Props) => {
   const {width, height} = useWindowDimensions();
   const {t} = useTranslation();
   const scrollA = useRef(new Animated.Value(0)).current;
+  const [isAlertVisible, setIsAlertVisible] = useState(false);
 
   const customHeight = height * 0.3;
 
@@ -86,9 +88,7 @@ const HomeScreen = ({navigation}: Props) => {
   }, [albumsRefresh, paintingRefresh]);
 
   const handleNavigation = (link: any) => {
-    link
-      ? navigation.navigate(link)
-      : Alert.alert('Feature Coming Soon', 'Thanks for letting us know');
+    link ? navigation.navigate(link) : setIsAlertVisible(true);
   };
 
   return (
@@ -212,6 +212,15 @@ const HomeScreen = ({navigation}: Props) => {
           />
         </View>
       </Animated.ScrollView>
+
+      <CustomAlert
+        visible={isAlertVisible}
+        onClose={() => setIsAlertVisible(false)}
+        title={'Feature Coming Soon'}
+        message={'Thanks for letting us know'}
+        btnText="Ok"
+        type={'warning'}
+      />
     </View>
   );
 };
