@@ -39,7 +39,7 @@ const TabArr: TabBar[] = [
   },
   {
     route: 'FolderList',
-    label: 'Downloaded',
+    label: 'Offline',
     component: FolderListScreen,
     icon: 'download',
   },
