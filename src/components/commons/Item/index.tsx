@@ -9,7 +9,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import {Colors} from '../../../theme';
 import {Theme, useThemeContext} from '../../../contexts/ThemeContext';
-import {truncateText} from '../../../utils/common';
+import {getFontFamily, truncateText} from '../../../utils/common';
 import SkeletonView from '../Skeleton';
 
 type Props = {
@@ -176,6 +176,6 @@ const styling = (theme: Theme) =>
     text: {
       color: Colors[theme].text,
       textAlign: 'center',
-      fontWeight: '500',
+      fontFamily: getFontFamily('bold'),
     },
   });

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -7,19 +7,29 @@ import {
   View,
 } from 'react-native';
 import Switch from '../components/utils/Switch/Switch';
-import { save } from '../utils/storage';
-import { Theme, useThemeContext } from '../contexts/ThemeContext';
-import { Colors } from '../theme';
-import { useTranslation } from 'react-i18next';
+import {save} from '../utils/storage';
+import {Theme, useThemeContext} from '../contexts/ThemeContext';
+import {Colors} from '../theme';
+import {useTranslation} from 'react-i18next';
 import Container from '../components/commons/Container';
-import { getFontFamily } from '../utils/common';
+import {getFontFamily} from '../utils/common';
+import DeviceInfo from 'react-native-device-info';
 
 const SettingScreen = () => {
-  const { theme, setTheme, languages, setLanguages } = useThemeContext();
-  const { t } = useTranslation();
+  const {theme, setTheme, languages, setLanguages} = useThemeContext();
+  const {t} = useTranslation();
   const [isEnabled, setIsEnabled] = useState<boolean>(false);
   const [burmeseLanguages, setBurmeseLanguages] = useState<boolean>(false);
-  const { height } = useWindowDimensions();
+  const {height} = useWindowDimensions();
+
+  const getAppVersion = async () => {
+    let version = DeviceInfo.getVersion();
+    console.log('version: ', version);
+  };
+
+  getAppVersion();
+
+  const versionName = DeviceInfo.getVersion();
 
   const styles = styling(theme);
 
@@ -96,10 +106,16 @@ const SettingScreen = () => {
         </View>
         <View style={styles.divider} />
         <View style={styles.contentContainer}>
-          <Text style={[styles.text, {
-            fontSize: height * 0.022,
-            fontFamily: getFontFamily('regular'),
-          }]}>{t('UTILS.LANGUAGES')}</Text>
+          <Text
+            style={[
+              styles.text,
+              {
+                fontSize: height * 0.022,
+                fontFamily: getFontFamily('regular'),
+              },
+            ]}>
+            {t('UTILS.LANGUAGES')}
+          </Text>
           <Switch
             value={burmeseLanguages}
             handleSwitch={toggleSwitchLang}
@@ -129,6 +145,10 @@ const SettingScreen = () => {
           />
         </View>
       </ScrollView>
+
+      <View style={styles.versionContainer}>
+        <Text style={styles.versionText}>Version: {versionName}</Text>
+      </View>
     </Container>
   );
 };
@@ -145,6 +165,7 @@ const styling = (theme: Theme) =>
     text: {
       color: Colors[theme].text,
       fontSize: 14,
+      fontFamily: getFontFamily('regular'),
     },
     optionContainer: {
       marginTop: 30,
@@ -166,6 +187,16 @@ const styling = (theme: Theme) =>
       height: 1,
       backgroundColor: Colors[theme].secondary_dark,
       marginVertical: 10,
+    },
+    versionContainer: {
+      width: '100%',
+      alignItems: 'center',
+      padding: 10,
+    },
+    versionText: {
+      color: Colors[theme].text,
+      fontSize: 14,
+      fontFamily: getFontFamily('regular'),
     },
   });
 

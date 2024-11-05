@@ -1,6 +1,5 @@
 import {View, Text, StyleSheet, useWindowDimensions} from 'react-native';
-import React from 'react';
-
+import React, {useEffect, useRef, useState} from 'react';
 import Animated, {
   useAnimatedScrollHandler,
   useSharedValue,
@@ -39,10 +38,12 @@ export const Movies = ({
   const MARGIN_HORIZONTAL = 5;
   const ITEM_FULL_WIDTH = ITEM_WIDTH + MARGIN_HORIZONTAL * 2;
   const SPACER = (width - ITEM_FULL_WIDTH) / 2;
-
   const truncateIndex = 28;
-
+  const [activeIndex, setActiveIndex] = useState(1); // Starting at 1 for the duplicated data
+  const flatListRef = useRef<any>(null);
   const x = useSharedValue(0);
+
+  const loopedData = data ? [data[data.length - 1], ...data, data[0]] : [];
 
   const onScroll = useAnimatedScrollHandler({
     onScroll: event => {
@@ -50,14 +51,33 @@ export const Movies = ({
     },
   });
 
+  const handleScrollEnd = (event: any) => {
+    const contentOffsetX = event.nativeEvent.contentOffset.x;
+    const index = Math.round(contentOffsetX / ITEM_FULL_WIDTH);
+    setActiveIndex(index);
+
+    if (index === 0) {
+      flatListRef.current?.scrollToOffset({
+        offset: (loopedData.length - 2) * ITEM_FULL_WIDTH,
+        animated: false,
+      });
+      setActiveIndex(loopedData.length - 2);
+    } else if (index === loopedData.length - 1) {
+      flatListRef.current?.scrollToOffset({
+        offset: ITEM_FULL_WIDTH,
+        animated: false,
+      });
+      setActiveIndex(1);
+    }
+  };
+
   const handleClick = (id: number) => {
-    // console.log('id', id);
     navigation.navigate('PaintingScreen', {id});
   };
 
   const styles = styling(theme);
 
-  const paintings = data?.map(item => ({
+  const paintings = loopedData.map(item => ({
     ...item,
     artwork: item.details[0]?.file,
     description: item.title,
@@ -70,7 +90,9 @@ export const Movies = ({
       </Text>
       {isLoading ? (
         <Animated.FlatList
+          ref={flatListRef}
           onScroll={onScroll}
+          onMomentumScrollEnd={handleScrollEnd}
           data={[1, 2, 3]}
           keyExtractor={(item: any) => item.toString()}
           renderItem={({item, index}) => {
@@ -83,8 +105,8 @@ export const Movies = ({
                 marginHorizontal={MARGIN_HORIZONTAL}
                 x={x}
                 fullWidth={ITEM_FULL_WIDTH}
-                truncateIndex={truncateIndex}
                 handleClick={() => {}}
+                truncateIndex={truncateIndex}
                 isLoading={isLoading}
               />
             );
@@ -113,9 +135,11 @@ export const Movies = ({
         />
       ) : (
         <Animated.FlatList
+          ref={flatListRef}
           onScroll={onScroll}
+          onMomentumScrollEnd={handleScrollEnd}
           data={paintings}
-          keyExtractor={(item: any) => item.id.toString()}
+          keyExtractor={(item: any, index: any) => index}
           renderItem={({item, index}) => {
             return (
               <Item

@@ -18,6 +18,7 @@ import {useGetPaintingInfinite} from '../api_services/lib/queryhooks/usePainting
 import NetworkError from '../components/commons/LottieAnimationView';
 import {networkError} from '../utils/constants';
 import SkeletonView from '../components/commons/Skeleton';
+import {getFontFamily} from '../utils/common';
 
 type Props = {
   navigation: NavigationMainStackScreenProps['navigation'];
@@ -74,7 +75,7 @@ const PaintingsScreen = ({navigation}: Props) => {
               styles.img,
               {
                 width: width * 0.9,
-                height: height * 0.18,
+                height: height * 0.25,
               },
             ]}>
             <Image
@@ -83,7 +84,9 @@ const PaintingsScreen = ({navigation}: Props) => {
               resizeMode="cover"
             />
           </View>
-          <Text style={styles.text}>{item.title}</Text>
+          <Text style={[styles.text, {fontSize: height * 0.023}]}>
+            {item.title}
+          </Text>
         </Pressable>
       </View>
     );
@@ -96,7 +99,11 @@ const PaintingsScreen = ({navigation}: Props) => {
           <View key={index} style={styles.container}>
             <View style={styles.contentContainer}>
               <View style={{gap: 12, width: '100%'}}>
-                <SkeletonView height={150} width={'auto'} borderRadius={12} />
+                <SkeletonView
+                  height={height * 0.25}
+                  width={'auto'}
+                  borderRadius={12}
+                />
                 <SkeletonView height={12} width="auto" borderRadius={10} />
                 <SkeletonView height={12} width={200} borderRadius={10} />
               </View>
@@ -149,9 +156,9 @@ const styling = (theme: Theme) =>
       marginBottom: 10,
     },
     text: {
-      fontWeight: 'bold',
+      fontFamily: getFontFamily('regular'),
       color: Colors[theme].text,
-      fontSize: 18,
+      textAlign: 'center',
     },
     img: {
       borderRadius: 100,
