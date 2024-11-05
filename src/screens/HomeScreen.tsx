@@ -54,7 +54,7 @@ const HomeScreen = ({navigation}: Props) => {
     isError: isPaintingError,
     error: paintingErrorMessage,
     refetch: paintingRefresh,
-  } = useGetPaintings();
+  } = useGetPaintings(1);
 
   const {
     data: albums,

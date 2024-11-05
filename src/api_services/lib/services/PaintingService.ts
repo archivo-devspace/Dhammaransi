@@ -1,7 +1,12 @@
 import axiosInstance from '../AxiosInstance';
 
-export const fetchPaintings = async () => {
-  const res = await axiosInstance.get('/painting/all');
+export const fetchPaintings = async (page: number) => {
+  const res = await axiosInstance.get(`/painting/all`, {
+    params: {
+      page,
+      per_page: 5,
+    },
+  });
   return res.data;
 };
 

@@ -44,7 +44,7 @@ export type MainStackParamList = {
   };
   AudioCategories: undefined;
   Pdf: undefined;
-  Painting: undefined;
+  PaintingList: undefined;
   Biography: undefined;
   Timetable: undefined;
   Contact: undefined;
@@ -88,7 +88,7 @@ const StackNavigation = () => {
         component={AudioCategoryListScreen}
       />
       <Stack.Screen name="Pdf" component={PdfListScreen} />
-      <Stack.Screen name="Painting" component={PaintingsScreen} />
+      <Stack.Screen name="PaintingList" component={PaintingsScreen} />
       <Stack.Screen name="Track" component={TrackPopupScreen} />
 
       <Stack.Screen name="More" component={MoreScreen} />

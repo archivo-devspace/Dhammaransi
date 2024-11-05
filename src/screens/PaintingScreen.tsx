@@ -6,6 +6,7 @@ import {
   Animated,
   useWindowDimensions,
   StatusBar,
+  ScrollView,
 } from 'react-native';
 import React, {useEffect, useRef} from 'react';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
@@ -27,7 +28,6 @@ import TrackPlayer, {
 import LoadingSpinner from '../components/utils/LoadingSpinner';
 import {CustomButton} from '../components/utils';
 import {useTrackContext} from '../contexts/TrackContext';
-// import {singlePaintingDetils} from '../utils/constants';
 import {useGetSinglePainting} from '../api_services/lib/queryhooks/usePainting';
 
 export interface PaintingScreenProps {
@@ -35,7 +35,7 @@ export interface PaintingScreenProps {
   navigation: NavigationMainStackScreenProps['navigation'];
 }
 
-const PaintingScreen = ({route, navigation}: PaintingScreenProps) => {
+const PaintingScreen = ({route}: PaintingScreenProps) => {
   const {theme} = useThemeContext();
   const playbackState = usePlaybackState();
   const styles = styling(theme);
@@ -97,7 +97,7 @@ const PaintingScreen = ({route, navigation}: PaintingScreenProps) => {
   };
 
   return (
-    <View style={styles.mainContainer}>
+    <ScrollView style={styles.mainContainer}>
       <StatusBar translucent barStyle="default" backgroundColor="transparent" />
       <TopNavigation
         title={t('TITLES.HOME')}
@@ -125,7 +125,7 @@ const PaintingScreen = ({route, navigation}: PaintingScreenProps) => {
               backgroundColor: Colors[theme]?.secondary,
               borderTopRightRadius: 16,
               borderTopLeftRadius: 16,
-              paddingBottom: 60,
+              paddingBottom: 10,
               borderColor: Colors[theme]?.secondary_dark,
               borderTopWidth: 1,
               borderLeftWidth: 1,
@@ -209,7 +209,12 @@ const PaintingScreen = ({route, navigation}: PaintingScreenProps) => {
               </View>
 
               {/* Description */}
-              <View style={{width, padding: 10}}>
+              <View
+                style={{
+                  width,
+                  padding: 10,
+                  paddingBottom: 20,
+                }}>
                 <Text
                   style={{
                     textAlign: 'center',
@@ -223,7 +228,7 @@ const PaintingScreen = ({route, navigation}: PaintingScreenProps) => {
           </View>
         </View>
       )}
-    </View>
+    </ScrollView>
   );
 };
 
@@ -231,7 +236,7 @@ const styling = (theme: Theme) =>
   StyleSheet.create({
     mainContainer: {
       flex: 1,
-      backgroundColor: Colors[theme]?.secondary,
+      backgroundColor: 'white', //for the top border radius of the content under image
     },
     skeletonContainer: {
       padding: 20,

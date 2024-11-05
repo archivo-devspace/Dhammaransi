@@ -44,7 +44,7 @@ export const menus = [
     id: 4,
     icon: 'image',
     name: 'MENUS.PICTURES',
-    link: '',
+    link: 'PaintingList',
   },
 ];
 

@@ -11,7 +11,6 @@ import {Theme, useThemeContext} from '../../../contexts/ThemeContext';
 import {Colors} from '../../../theme';
 import {NavigationMainStackScreenProps} from '../../../navigations/StackNavigation';
 import {useTranslation} from 'react-i18next';
-import {PaintingApiRes} from '../../../types/apiRes';
 import DataNotFound from '../DataNotFound';
 import {SinglePaintingApiRes} from '../../../types/apiRes';
 
@@ -60,7 +59,7 @@ export const Movies = ({
 
   const paintings = data?.map(item => ({
     ...item,
-    artwork: item.details[0].file,
+    artwork: item.details[0]?.file,
     description: item.title,
   }));
 
