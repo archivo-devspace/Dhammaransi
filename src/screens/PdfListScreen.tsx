@@ -9,26 +9,26 @@ import {
   RefreshControl,
   ScrollView,
 } from 'react-native';
-import React, { useState, useCallback, useEffect } from 'react';
-import { Theme, useThemeContext } from '../contexts/ThemeContext';
-import { Colors } from '../theme';
-import { CustomButton } from '../components/utils';
-import { FontAwesome, getFontFamily, Ionicons } from '../utils/common';
+import React, {useState, useCallback, useEffect} from 'react';
+import {Theme, useThemeContext} from '../contexts/ThemeContext';
+import {Colors} from '../theme';
+import {CustomButton} from '../components/utils';
+import {FontAwesome, getFontFamily, Ionicons} from '../utils/common';
 import Container from '../components/commons/Container';
-import { useGetBookList } from '../api_services/lib/queryhooks/useBook';
+import {useGetBookList} from '../api_services/lib/queryhooks/useBook';
 import SkeletonView from '../components/commons/Skeleton';
-import notifee, { AndroidImportance } from '@notifee/react-native';
+import notifee, {AndroidImportance} from '@notifee/react-native';
 import CustomAlert from '../components/commons/CustomAlert';
 import ConfirmModal from '../components/commons/ConfirmModal';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 import NetworkError from '../components/commons/LottieAnimationView';
-import { networkError } from '../utils/constants';
+import {networkError} from '../utils/constants';
 import ReactNativeBlobUtil from 'react-native-blob-util';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useTrackContext } from '../contexts/TrackContext';
+import {useTrackContext} from '../contexts/TrackContext';
 
 const PdfListScreen = () => {
-  const { theme } = useThemeContext();
+  const {theme} = useThemeContext();
   const {
     pdfDownloading,
     startPdfDownload,
@@ -36,13 +36,13 @@ const PdfListScreen = () => {
     pdfDownlaodProgress,
     setPdfDownloadForProgress,
   } = useTrackContext();
-  const { width, height } = useWindowDimensions();
+  const {width, height} = useWindowDimensions();
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedPdfFile, setSelectedPdfFile] = useState<{
     id: number;
     fileUrl: string;
     fileName: string;
-  }>({ id: 0, fileUrl: '', fileName: '' });
+  }>({id: 0, fileUrl: '', fileName: ''});
   const [downloadedFiles, setDownloadedFiles] = useState([]);
   const [isAlertVisible, setIsAlertVisible] = useState(false);
   const [alertTitle, setAlertTitle] = useState('');
@@ -50,7 +50,7 @@ const PdfListScreen = () => {
   const [alerType, setAlertType] = useState<
     'success' | 'warning' | 'error' | null
   >(null);
-  const { t } = useTranslation();
+  const {t} = useTranslation();
 
   const styles = styling(theme);
 
@@ -73,66 +73,8 @@ const PdfListScreen = () => {
 
   console.log('isloading', isBookLoading);
 
-  //close for permissin block error at other android
-  // const requestStoragePermission = async () => {
-  //   if (Platform.OS === 'android') {
-  //     try {
-  //       // Check if the permission is already granted or blocked
-  //       const permission =
-  //         PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE;
-  //       const isGranted = await PermissionsAndroid.check(permission);
-
-  //       if (isGranted) {
-  //         // Permission is already granted
-  //         return true;
-  //       }
-
-  //       // Request permission
-  //       const granted = await PermissionsAndroid.request(permission, {
-  //         title: 'Storage Permission',
-  //         message: 'App needs access to your storage to download files.',
-  //         buttonNeutral: 'Ask Me Later',
-  //         buttonNegative: 'Cancel',
-  //         buttonPositive: 'OK',
-  //       });
-
-  //       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-  //         // Permission granted
-  //         return true;
-  //       } else if (granted === PermissionsAndroid.RESULTS.DENIED) {
-  //         // Permission denied (not permanently blocked)
-  //         setAlertTitle('Permission Denied');
-  //         setAlertMessage(
-  //           'You need to enable storage permission to download files.',
-  //         );
-  //         setAlertType('error');
-  //         setIsAlertVisible(true);
-  //         // Alert.alert('Permission Denied', 'You need to enable storage permission to download files.');
-  //         return false;
-  //       } else if (granted === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
-  //         // Permission blocked (Don't ask me again)
-  //         setAlertTitle('Permission Blocked');
-  //         setAlertMessage(
-  //           'You have blocked the storage permission. Please enable it from the app settings.',
-  //         );
-  //         setAlertType('error');
-  //         setIsAlertVisible(true);
-
-  //         return false;
-  //       }
-  //     } catch (err) {
-  //       setAlertTitle('Permission Error');
-  //       setAlertMessage('You have the storage permission error.');
-  //       setAlertType('error');
-  //       setIsAlertVisible(true);
-  //       return false;
-  //     }
-  //   }
-  //   return true; // iOS doesn't need this permission
-  // };
-
   const confirmDownload = (id: number, fileUrl: string, fileName: string) => {
-    setSelectedPdfFile({ id, fileUrl, fileName });
+    setSelectedPdfFile({id, fileUrl, fileName});
     setModalVisible(true);
   };
 
@@ -149,7 +91,7 @@ const PdfListScreen = () => {
   };
 
   const handleCancelDownload = () => {
-    setSelectedPdfFile({ id: 0, fileUrl: '', fileName: '' });
+    setSelectedPdfFile({id: 0, fileUrl: '', fileName: ''});
     setModalVisible(false);
   };
 
@@ -161,79 +103,41 @@ const PdfListScreen = () => {
 
   // Function to display or update the progress notification
   const displayOrUpdateNotification = async (
-    notificationId: string,
-    fileName: string,
+    id: any,
+    fileName: any,
     progress: number | null,
     failed?: boolean,
   ) => {
-    // const isAndroid = Platform.OS === 'android';
-    // const androidOption = {
-    //   id: notificationId,
-    //   title:
-    //     progress !== null
-    //       ? `Downloading ${fileName}`
-    //       : `${fileName} Downloaded`,
-    //   body:
-    //     progress !== null
-    //       ? `Download in progress... ${progress}%`
-    //       : 'Download complete!',
-    //   android: {
-    //     channelId: 'download-channel',
-    //     importance: AndroidImportance.HIGH,
-    //     progress: {
-    //       max: 100,
-    //       current: progress ?? 100,
-    //       indeterminate: false,
-    //     },
-    //   },
-    // };
+    const title = failed
+      ? `Failed ${fileName}`
+      : progress !== null
+        ? `Downloading ${fileName}`
+        : `Downloaded ${fileName}`;
+    const body = failed
+      ? 'Download Failed!'
+      : progress !== null
+        ? `Download in progress ...`
+        : 'Download complete!';
 
-    const options = {
-      id: notificationId,
-      title: !failed
-        ? progress !== null
-          ? `Downloading ${fileName}`
-          : `Downloaded ${fileName}`
-        : `Failed ${fileName}`,
-      body: !failed
-        ? progress !== null
-          ? 'Download in progress ...'
-          : 'Download complete!'
-        : 'Download Failed!',
+    await notifee.displayNotification({
+      id,
+      title,
+      body,
       android: {
         channelId: 'download-channel',
         smallIcon: 'ic_notification',
         sound: 'downloadedalert',
-        timestamp: Date.now(),
-        pressAction: {
-          id: 'default',
-        },
-        asForegroundService: true,
+        importance: AndroidImportance.HIGH,
       },
-      ios: {
-        sound: 'downloadedalert.wav',
-      },
-    };
-
-    return await notifee.displayNotification(options);
+      ios: {sound: 'downloadedalert.wav'},
+    });
   };
-  const downloadPDF = async (
-    id: number,
-    fileUrl: string,
-    fileName: string,
-  ): Promise<void> => {
-    // const hasPermission = await requestStoragePermission();
 
-    // if (!hasPermission) {
-    //   console.log('error');
-    //   return;
-    // }
-
+  const downloadPDF = async (id: number, fileUrl: string, fileName: string) => {
     const folderPath =
       Platform.OS === 'android'
         ? ReactNativeBlobUtil.fs.dirs.DownloadDir + '/Dhammaransi'
-        : ReactNativeBlobUtil.fs.dirs.DocumentDir + '/Dhammaransi'; // iOS-specific path
-
+        : ReactNativeBlobUtil.fs.dirs.DocumentDir + '/Dhammaransi';
     const filePath = `${folderPath}/${fileName}.pdf`;
 
     await notifee.createChannel({
@@ -244,85 +148,53 @@ const PdfListScreen = () => {
     });
 
     try {
-      const folderExists = await ReactNativeBlobUtil.fs.isDir(folderPath);
-
-      if (!folderExists) {
+      if (!(await ReactNativeBlobUtil.fs.isDir(folderPath)))
         await ReactNativeBlobUtil.fs.mkdir(folderPath);
-      }
+      const notificationId = Date.now().toString();
+      await displayOrUpdateNotification(notificationId, fileName, 0);
 
-      const notificationId = Date.now().toString(); // Unique notification ID
-
-      let currentNotificationId = await displayOrUpdateNotification(
-        notificationId,
-        fileName,
-        0,
-      );
-
-      // Download and save the file to the folder
       ReactNativeBlobUtil.config({
         fileCache: true,
         path: filePath,
         appendExt: 'pdf',
       })
         .fetch('GET', fileUrl)
-        .progress({ interval: 100 }, async (received, total) => {
+        .progress({interval: 100}, async (received, total) => {
           const progress = Math.round((received / total) * 100);
-          //  if(Platform.OS === 'android'){
-          //   currentNotificationId = await displayOrUpdateNotification(
-          //     currentNotificationId,
-          //     fileName,
-          //     progress,
-          //   );
-          //  }
-          setPdfDownloadForProgress(id, progress);
+          setPdfDownloadForProgress(id, progress); // Update context/state progress
+          // await displayOrUpdateNotification(notificationId, fileName, progress); // Update notification with progress
         })
         .then(async res => {
+          const success = !!res.path();
           if (res && res.path()) {
             await displayOrUpdateNotification(
-              currentNotificationId,
+              notificationId,
               fileName,
               null,
               false,
             );
-            await saveDownloadedFile(id, fileName, res.path());
-            finishPdfDownload(id);
-            setAlertTitle('Download Complete');
-            setAlertMessage(`File saved to ${res.data}`);
-            setAlertType('success');
-            setIsAlertVisible(true);
-            // await notifee.cancelNotification(currentNotificationId);
-          } else {
-            await displayOrUpdateNotification(
-              currentNotificationId,
-              fileName,
-              null,
-              true,
-            );
-            finishPdfDownload(id);
-            setAlertTitle('Download Failed');
-            setAlertMessage('There was an issue downloading the file.');
-            setAlertType('error');
-            setIsAlertVisible(true);
           }
-
-          // Optionally, you can share the file or open it using a file viewer
-          // if (Platform.OS === 'ios') {
-          //   ReactNativeBlobUtil.ios.openDocument(res.path()); // Open the downloaded file on iOS
-          // }
+          if (success) await saveDownloadedFile(id, fileName, res.path());
+          finishPdfDownload(id);
+          finishPdfDownload(id);
+          setAlertTitle('Download Complete');
+          setAlertMessage(`File saved to ${res.data}`);
+          setAlertType('success');
+          setIsAlertVisible(true);
         })
         .catch(async err => {
           finishPdfDownload(id);
-          setAlertTitle('Download Failed');
-          setAlertMessage('There was an issue downloading the file.');
-          setAlertType('error');
-          setIsAlertVisible(true);
           await displayOrUpdateNotification(
-            currentNotificationId,
+            notificationId,
             fileName,
             null,
             true,
           );
-          console.error('Download failed: ', err);
+          setAlertTitle('Download Failed');
+          setAlertMessage('There was an issue downloading the file.');
+          setAlertType('error');
+          setIsAlertVisible(true);
+          console.error('Download failed:', err);
         });
     } catch (error) {
       finishPdfDownload(id);
@@ -330,7 +202,7 @@ const PdfListScreen = () => {
       setAlertMessage('Error creating folder or saving file:');
       setAlertType('error');
       setIsAlertVisible(true);
-      console.error('Error creating folder or saving file: ', error);
+      console.error('Error creating folder or saving file:', error);
     }
   };
 
@@ -340,7 +212,7 @@ const PdfListScreen = () => {
     filePath: string,
   ) => {
     try {
-      const newFile = { id: id, name: fileName, path: filePath };
+      const newFile = {id: id, name: fileName, path: filePath};
       const storedFiles = await AsyncStorage.getItem('downloadedFiles');
       const fileList = storedFiles ? JSON.parse(storedFiles) : [];
       fileList.push(newFile);
@@ -402,14 +274,14 @@ const PdfListScreen = () => {
             [...Array(3)].map((_, index) => (
               <View
                 key={index}
-                style={[styles.contentContainer, { paddingBottom: 100 }]}>
+                style={[styles.contentContainer, {paddingBottom: 100}]}>
                 <View style={styles.innerContentContainer}>
                   <SkeletonView
                     height={height * 0.2}
                     width={width * 0.3}
                     borderRadius={10}
                   />
-                  <View style={{ width: width * 0.6, marginTop: 20, gap: 20 }}>
+                  <View style={{width: width * 0.6, marginTop: 20, gap: 20}}>
                     <SkeletonView height={20} width={150} borderRadius={10} />
                     <SkeletonView
                       height={18}
@@ -418,7 +290,7 @@ const PdfListScreen = () => {
                     />
                   </View>
                 </View>
-                <View style={{ width: '100%', gap: 14 }}>
+                <View style={{width: '100%', gap: 14}}>
                   <SkeletonView height={20} width={'auto'} borderRadius={10} />
                   <SkeletonView height={20} width={'auto'} borderRadius={10} />
                   <SkeletonView height={20} width={'auto'} borderRadius={10} />
@@ -455,24 +327,24 @@ const PdfListScreen = () => {
                           }}
                           source={
                             ebook.cover_photo
-                              ? { uri: ebook.cover_photo }
+                              ? {uri: ebook.cover_photo}
                               : require('../assets/marguerite.jpg')
                           }
                           resizeMode="cover"
                         />
                       </View>
-                      <View style={{ width: width * 0.6, gap: 20 }}>
-                        <Text style={[styles.text, { fontSize: height * 0.027 }]}>
+                      <View style={{width: width * 0.6, gap: 20}}>
+                        <Text style={[styles.text, {fontSize: height * 0.027}]}>
                           {ebook.name}
                         </Text>
                         <Text
-                          style={[styles.author, { fontSize: height * 0.022 }]}>
+                          style={[styles.author, {fontSize: height * 0.022}]}>
                           {ebook.author}
                         </Text>
                       </View>
                     </View>
                     <Text
-                      style={[styles.description, { fontSize: height * 0.023 }]}>
+                      style={[styles.description, {fontSize: height * 0.023}]}>
                       {ebook.description}
                     </Text>
 
