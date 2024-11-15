@@ -10,6 +10,7 @@ import RenderHTML from 'react-native-render-html';
 import SkeletonView from '../components/commons/Skeleton';
 import NetworkError from '../components/commons/LottieAnimationView';
 import {networkError} from '../utils/constants';
+import {getFontFamily} from '../utils/common';
 
 interface SkeletonConfig {
   height: number;
@@ -105,7 +106,10 @@ const BiographyScreen = () => {
                 biography?.data?.results?.description ||
                 '<p>No data available</p>',
             }}
-            baseStyle={{color: Colors[theme].text}}
+            baseStyle={{
+              color: Colors[theme].text,
+              fontFamily: getFontFamily('thin'),
+            }}
           />
         )}
       </ScrollView>

@@ -28,6 +28,7 @@ import {useGetPaintings} from '../api_services/lib/queryhooks/usePainting';
 import {useGetAlbums} from '../api_services/lib/queryhooks/useAudio';
 import {useGetHomeData} from '../api_services/lib/queryhooks/useHome';
 import CustomAlert from '../components/commons/CustomAlert';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type Props = {
   navigation: NavigationMainStackScreenProps['navigation'];
@@ -36,6 +37,7 @@ type Props = {
 const HomeScreen = ({navigation}: Props) => {
   const {theme} = useThemeContext();
   const {width, height} = useWindowDimensions();
+  const {top} = useSafeAreaInsets();
   const {t} = useTranslation();
   const scrollA = useRef(new Animated.Value(0)).current;
   const [isAlertVisible, setIsAlertVisible] = useState(false);
@@ -92,14 +94,14 @@ const HomeScreen = ({navigation}: Props) => {
   };
 
   return (
-    <View style={styles.mainContainer}>
-      <StatusBar
-        translucent
-        barStyle={'default'}
-        backgroundColor={'transparent'}
-      />
+    <View style={[styles.mainContainer, {marginTop: top}]}>
+      <StatusBar backgroundColor={Colors['light'].primary} />
 
-      <TopNavigation title={t('TITLES.HOME')} scrollA={scrollA} />
+      <TopNavigation
+        title={t('TITLES.HOME')}
+        scrollA={scrollA}
+        statusBar={false}
+      />
 
       <Animated.ScrollView
         onScroll={Animated.event(

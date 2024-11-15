@@ -98,8 +98,8 @@ const PaintingScreen = ({route}: PaintingScreenProps) => {
 
   return (
     <ScrollView style={styles.mainContainer}>
-      <StatusBar translucent barStyle="default" backgroundColor="transparent" />
       <TopNavigation
+        statusBar={true}
         title={t('TITLES.HOME')}
         scrollA={scrollA}
         backBtn={true}

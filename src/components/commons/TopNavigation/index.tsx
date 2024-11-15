@@ -41,11 +41,13 @@ const TopNavigation = (props: any) => {
 
   return (
     <>
-      <StatusBar
-        barStyle={isTransparent ? 'light-content' : 'dark-content'}
-        backgroundColor="transparent"
-        translucent
-      />
+      {props.statusBar && (
+        <StatusBar
+          barStyle={isTransparent ? 'light-content' : 'dark-content'}
+          backgroundColor="transparent"
+          translucent
+        />
+      )}
       <View style={styles.container}>
         {isTransparent
           ? backBtn && (
@@ -130,7 +132,7 @@ const styling = (
     },
     title: {
       textAlign: 'center',
-    
+
       alignSelf: 'center',
       opacity: isTransparent ? 0.1 : 0.7,
       color: isTransparent ? 'transparent' : Colors[theme].text,
