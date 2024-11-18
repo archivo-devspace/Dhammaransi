@@ -30,7 +30,7 @@ const TopNavigation = (props: any) => {
       return;
     }
     const listenerId = scrollA.addListener((a: any) => {
-      const topNaviOffset = BANNER_H - TOPNAVI_H - top - (TOPNAVI_H - top + 65);
+      const topNaviOffset = BANNER_H - TOPNAVI_H - top - (TOPNAVI_H - top);
       isTransparent !== a.value < topNaviOffset &&
         setTransparent(!isTransparent);
     });
@@ -43,8 +43,8 @@ const TopNavigation = (props: any) => {
     <>
       {props.statusBar && (
         <StatusBar
-          barStyle={isTransparent ? 'light-content' : 'dark-content'}
-          backgroundColor="transparent"
+          barStyle={theme === 'dark' ? 'light-content' : 'dark-content'}
+          backgroundColor={Colors[theme].secondary}
           translucent
         />
       )}
@@ -103,25 +103,25 @@ const styling = (
 ) =>
   StyleSheet.create({
     container: {
-      paddingTop: top - 5,
-      marginBottom: isFloating ? -TOPNAVI_H - top : 0,
+      paddingTop: top,
+      marginBottom: -10,
       height: TOPNAVI_H + top,
       justifyContent: 'center',
-      borderBottomLeftRadius: 10,
-      borderBottomRightRadius: 10,
+      borderBottomLeftRadius: 8,
+      borderBottomRightRadius: 8,
       borderBottomColor: isTransparent
-        ? 'transparent'
+        ? Colors[theme].secondary_dark
         : Colors[theme].secondary_dark,
       borderLeftColor: isTransparent
-        ? 'transparent'
+        ? Colors[theme].secondary_dark
         : Colors[theme].secondary_dark,
       borderRightColor: isTransparent
-        ? 'transparent'
+        ? Colors[theme].secondary_dark
         : Colors[theme].secondary_dark,
-      borderWidth: isTransparent ? 0 : 1,
-      backgroundColor: isTransparent ? 'transparent' : Colors[theme].secondary,
-      shadowOpacity: isTransparent ? 0 : 0.5,
-      elevation: isTransparent ? 0.05 : 5,
+   
+      backgroundColor: isTransparent ? Colors[theme].secondary : Colors[theme].secondary,
+      shadowOpacity: isTransparent ? 0.5 : 0.5,
+      elevation: isTransparent ? 5 : 5,
       zIndex: 100,
     },
     btn: {
@@ -134,8 +134,7 @@ const styling = (
       textAlign: 'center',
 
       alignSelf: 'center',
-      opacity: isTransparent ? 0.1 : 0.7,
-      color: isTransparent ? 'transparent' : Colors[theme].text,
+      color: isTransparent ? Colors[theme].text : Colors[theme].primary,
       flexWrap: 'wrap', // Ensures text wraps to the next line if necessary
       width: '87%',
     },

@@ -15,11 +15,11 @@ import {
   MainStackParamList,
   NavigationMainStackScreenProps,
 } from '../navigations/StackNavigation';
-import {RouteProp} from '@react-navigation/native';
+import {RouteProp, useNavigation} from '@react-navigation/native';
 import {Colors} from '../theme';
 import TopNavigation from '../components/commons/TopNavigation';
 import Slider from '@react-native-community/slider';
-import {Entypo, MaterialIcons} from '../utils/common';
+import {AntDesign, Entypo, MaterialIcons} from '../utils/common';
 import TrackPlayer, {
   State,
   usePlaybackState,
@@ -42,6 +42,8 @@ const PaintingScreen = ({route}: PaintingScreenProps) => {
   const {t} = useTranslation();
   const {width, height} = useWindowDimensions();
   const progress = useProgress();
+  const navigation = useNavigation();
+
   const {
     handlePlay,
     trackLists,
@@ -98,13 +100,28 @@ const PaintingScreen = ({route}: PaintingScreenProps) => {
 
   return (
     <ScrollView style={styles.mainContainer}>
-      <TopNavigation
+      <StatusBar
+          barStyle={'default'}
+         
+        />
+      {/* <TopNavigation
         statusBar={true}
         title={t('TITLES.HOME')}
         scrollA={scrollA}
         backBtn={true}
-      />
-
+      /> */}
+<CustomButton
+                onPress={() => navigation.goBack()}
+                icon={
+                  <AntDesign
+                    name={'arrowleft'}
+                    size={height * 0.04}
+                    color={Colors[theme].primary}
+                  />
+                }
+                gap={5}
+                customButtonStyle={styles.btnArrow}
+              />
       {isLoading ? (
         <View style={styles.skeletonContainer}>
           <View style={styles.skeletonImage} />
@@ -291,6 +308,12 @@ const styling = (theme: Theme) =>
     btn: {
       backgroundColor: 'transparent',
       alignSelf: 'center',
+    },
+    btnArrow: {
+      left: 16,
+      position: 'absolute',
+      paddingTop: 50,
+      zIndex: 1,
     },
   });
 

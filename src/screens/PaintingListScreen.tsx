@@ -74,8 +74,8 @@ const PaintingsScreen = ({navigation}: Props) => {
             style={[
               styles.img,
               {
-                width: width * 0.9,
-                height: height * 0.25,
+                width: width * 0.92,
+                height: height * 0.35,
               },
             ]}>
             <Image
@@ -172,14 +172,14 @@ const styling = (theme: Theme) =>
           shadowRadius: 5,
         },
         android: {
-          elevation: 4,
+          elevation: 0,
         },
       }),
     },
     divider: {
       width: '100%',
       height: 1,
-      backgroundColor: Colors[theme].secondary_dark,
+      backgroundColor: Colors[theme].text,
       marginVertical: 20,
     },
     btn: {},

@@ -14,7 +14,7 @@ import {Colors} from '../../../theme';
 const ImageSlider = ({images}: {images: any}) => {
   const {width, height} = useWindowDimensions();
   const {theme} = useThemeContext();
-  const customHeight = height * 0.3;
+  const customHeight = height * 0.35;
 
   // Duplicate images for infinite scrolling
   const infiniteImages = [images[images.length - 1], ...images, images[0]];
@@ -107,7 +107,7 @@ const ImageSlider = ({images}: {images: any}) => {
           <Image
             key={index}
             source={{uri: image}}
-            style={{width, height: customHeight, resizeMode: 'stretch'}}
+            style={{width, height: customHeight, resizeMode: 'cover'}}
           />
         ))}
       </ScrollView>

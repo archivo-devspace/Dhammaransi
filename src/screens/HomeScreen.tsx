@@ -42,7 +42,7 @@ const HomeScreen = ({navigation}: Props) => {
   const scrollA = useRef(new Animated.Value(0)).current;
   const [isAlertVisible, setIsAlertVisible] = useState(false);
 
-  const customHeight = height * 0.3;
+  const customHeight = height * 0.35;
 
   const BANNER_H = height * 0.4;
 
@@ -94,13 +94,16 @@ const HomeScreen = ({navigation}: Props) => {
   };
 
   return (
-    <View style={[styles.mainContainer, {marginTop: top}]}>
-      <StatusBar backgroundColor={Colors['light'].primary} />
-
+    <View style={[styles.mainContainer]}>
+ {/* <StatusBar
+          barStyle='default'
+          backgroundColor={Colors[theme].secondary}
+          
+        /> */}
       <TopNavigation
         title={t('TITLES.HOME')}
         scrollA={scrollA}
-        statusBar={false}
+        statusBar={true}
       />
 
       <Animated.ScrollView
@@ -128,6 +131,8 @@ const HomeScreen = ({navigation}: Props) => {
             style={[
               {
                 width: '100%',
+               
+                
                 transform: [
                   {
                     translateY: scrollA.interpolate({
@@ -272,8 +277,7 @@ const styling = (theme: Theme) =>
       alignItems: 'center',
     },
     bannerContainer: {
-      marginTop: -1000,
-      paddingTop: 1000,
+     
       alignItems: 'center',
       overflow: 'visible',
     },
