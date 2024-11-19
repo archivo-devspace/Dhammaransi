@@ -52,6 +52,7 @@ export const Audios = ({
 
   const handleClick = (id: number) => {
     navigation.navigate('Audios', {id});
+    console.log('testing>>>');
   };
 
   const audios = data?.map(item => ({
@@ -124,7 +125,7 @@ export const Audios = ({
                 marginHorizontal={MARGIN_HORIZONTAL}
                 x={x}
                 fullWidth={ITEM_FULL_WIDTH}
-                handleClick={() => handleClick(item.id)}
+                handleClick={handleClick}
                 truncateIndex={truncateIndex}
               />
             );

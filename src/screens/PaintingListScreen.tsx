@@ -74,14 +74,14 @@ const PaintingsScreen = ({navigation}: Props) => {
             style={[
               styles.img,
               {
-                width: width * 0.92,
-                height: height * 0.35,
+                width: width * 0.9,
+                height: height * 0.39,
               },
             ]}>
             <Image
               style={{width: '100%', height: '100%', borderRadius: 10}}
               source={imageSource}
-              resizeMode="cover"
+              resizeMode="stretch"
             />
           </View>
           <Text style={[styles.text, {fontSize: height * 0.023}]}>
@@ -161,7 +161,8 @@ const styling = (theme: Theme) =>
       textAlign: 'center',
     },
     img: {
-      borderRadius: 100,
+      borderRadius: 16,
+      overflow: 'hidden',
       ...Platform.select({
         ios: {
           shadowOffset: {
@@ -172,7 +173,7 @@ const styling = (theme: Theme) =>
           shadowRadius: 5,
         },
         android: {
-          elevation: 0,
+          elevation: 3,
         },
       }),
     },

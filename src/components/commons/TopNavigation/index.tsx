@@ -25,6 +25,8 @@ const TopNavigation = (props: any) => {
   const isFloating = !!scrollA;
   const [isTransparent, setTransparent] = useState(isFloating);
 
+  console.log('home', isTransparent);
+
   useEffect(() => {
     if (!scrollA) {
       return;
@@ -118,8 +120,10 @@ const styling = (
       borderRightColor: isTransparent
         ? Colors[theme].secondary_dark
         : Colors[theme].secondary_dark,
-   
-      backgroundColor: isTransparent ? Colors[theme].secondary : Colors[theme].secondary,
+
+      backgroundColor: isTransparent
+        ? Colors[theme].secondary
+        : Colors[theme].secondary,
       shadowOpacity: isTransparent ? 0.5 : 0.5,
       elevation: isTransparent ? 5 : 5,
       zIndex: 100,
@@ -134,7 +138,7 @@ const styling = (
       textAlign: 'center',
 
       alignSelf: 'center',
-      color: isTransparent ? Colors[theme].text : Colors[theme].primary,
+      color: isTransparent ? Colors[theme].text : Colors[theme].text,
       flexWrap: 'wrap', // Ensures text wraps to the next line if necessary
       width: '87%',
     },

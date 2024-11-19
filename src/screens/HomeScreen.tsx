@@ -95,7 +95,7 @@ const HomeScreen = ({navigation}: Props) => {
 
   return (
     <View style={[styles.mainContainer]}>
- {/* <StatusBar
+      {/* <StatusBar
           barStyle='default'
           backgroundColor={Colors[theme].secondary}
           
@@ -131,8 +131,7 @@ const HomeScreen = ({navigation}: Props) => {
             style={[
               {
                 width: '100%',
-               
-                
+
                 transform: [
                   {
                     translateY: scrollA.interpolate({
@@ -162,13 +161,13 @@ const HomeScreen = ({navigation}: Props) => {
         <View
           style={{
             backgroundColor: Colors[theme]?.secondary,
-            borderTopRightRadius: 16,
-            borderTopLeftRadius: 16,
+            borderTopRightRadius: 8,
+            borderTopLeftRadius: 8,
             paddingBottom: 75,
-            borderColor: Colors[theme]?.secondary_dark,
-            borderTopWidth: 1,
-            borderLeftWidth: 1,
-            borderRightWidth: 1,
+            // borderColor: Colors[theme]?.secondary_dark,
+            // borderTopWidth: 1,
+            // borderLeftWidth: 1,
+            // borderRightWidth: 1,
             gap: 16,
           }}>
           <View style={styles.menuContainer}>
@@ -251,7 +250,7 @@ const styling = (theme: Theme) =>
       flexWrap: 'wrap',
       gap: 14,
       columnGap: 14,
-      marginVertical: 20,
+      marginVertical: 18,
     },
     menu: {
       backgroundColor: Colors[theme].secondary_light,
@@ -277,7 +276,6 @@ const styling = (theme: Theme) =>
       alignItems: 'center',
     },
     bannerContainer: {
-     
       alignItems: 'center',
       overflow: 'visible',
     },

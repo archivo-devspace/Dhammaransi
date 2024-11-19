@@ -111,15 +111,15 @@ const Item = ({
           </View>
         </View>
       ) : (
-        <TouchableOpacity onPress={() => handleClick(item.id)}>
+        <TouchableOpacity
+          style={{height: '100%'}}
+          onPress={() => handleClick(item.id)}>
           <View style={styles.imageContainer}>
             <View
               style={[
                 {
                   width: '100%',
                   height: height * 0.8,
-
-                  overflow: 'hidden',
                 },
               ]}>
               <Image

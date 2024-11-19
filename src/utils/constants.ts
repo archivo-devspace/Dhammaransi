@@ -36,9 +36,9 @@ export const menus = [
   },
   {
     id: 3,
-    icon: 'film',
+    icon: 'user-circle',
     name: 'MENUS.MOVIES',
-    link: 'MovieLists',
+    link: 'Biography',
   },
   {
     id: 4,
