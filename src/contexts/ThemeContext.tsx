@@ -33,7 +33,7 @@ export const useThemeContext = () => {
 };
 
 export const ThemeProvider: React.FC<{children: ReactNode}> = ({children}) => {
-  const [theme, setTheme] = useState<Theme>('light');
+  const [theme, setTheme] = useState<Theme>('dark');
   const [themeLoading, setThemeLoading] = useState(true);
   const [languages, setLanguages] = useState<Languages>('mm');
 
@@ -42,9 +42,10 @@ export const ThemeProvider: React.FC<{children: ReactNode}> = ({children}) => {
       const savedTheme = await get('Theme');
       const saveLanguage = await get('LANGUAGE');
 
-      // const systemTheme = Appearance.getColorScheme();
-      // setTheme(savedTheme || systemTheme);
-      setTheme(savedTheme || 'light');
+      const systemTheme = Appearance.getColorScheme();
+      console.log("systheme", systemTheme)
+      setTheme(savedTheme || systemTheme);
+      // setTheme(savedTheme || 'light');
       setLanguages(saveLanguage || 'mm');
 
       setThemeLoading(false);

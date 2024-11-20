@@ -17,7 +17,7 @@ const ImageSlider = ({images}: {images: any}) => {
   const customHeight = height * 0.35;
 
   // Duplicate images for infinite scrolling
-  const infiniteImages = [images[images.length - 1], ...images, images[0]];
+  const infiniteImages = images ? [images[images?.length - 1], ...images, images[0]] : [];
 
   const [active, setActive] = useState(1); // Start from the first actual image
 
@@ -112,7 +112,7 @@ const ImageSlider = ({images}: {images: any}) => {
         ))}
       </ScrollView>
       <View style={styles.pagination}>
-        {images.map((i: any, k: any) => (
+        {images?.map((i: any, k: any) => (
           <Text
             key={k}
             style={k === realActiveIndex ? styles.activeDot : styles.dot}>

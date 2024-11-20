@@ -11,10 +11,10 @@ import {
   View,
 } from 'react-native';
 import React from 'react';
-import {StatusBar} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {Colors} from '../theme';
-import {Theme, useThemeContext} from '../contexts/ThemeContext';
+import { StatusBar } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Colors } from '../theme';
+import { Theme, useThemeContext } from '../contexts/ThemeContext';
 import {
   FontAwesome,
   FontAwesomePro,
@@ -23,21 +23,22 @@ import {
   MaterialIcons,
   Zocial,
 } from '../utils/common';
-import {NavigationMainStackScreenProps} from '../navigations/StackNavigation';
-import {CustomButton} from '../components/utils';
-import {useTranslation} from 'react-i18next';
+import { NavigationMainStackScreenProps } from '../navigations/StackNavigation';
+import { CustomButton } from '../components/utils';
+import { useTranslation } from 'react-i18next';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 type Props = {
   navigation: NavigationMainStackScreenProps['navigation'];
 };
 
-const MoreScreen = ({navigation}: Props) => {
+const MoreScreen = ({ navigation }: Props) => {
   const insets = useSafeAreaInsets();
-  const {theme} = useThemeContext();
-  const {height} = useWindowDimensions();
-  const {t} = useTranslation();
+  const { theme } = useThemeContext();
+  const { height } = useWindowDimensions();
+  const { t } = useTranslation();
   const styles = styling(theme);
-  const {top} = insets;
+  const { top } = insets;
 
   const openFacebook = async () => {
     const facebookAppUrl =
@@ -58,8 +59,8 @@ const MoreScreen = ({navigation}: Props) => {
         'Facebook App Not Installed',
         'Opening Facebook in your browser instead.',
         [
-          {text: 'Cancel', style: 'cancel'},
-          {text: 'Open', onPress: () => Linking.openURL(facebookWebUrl)},
+          { text: 'Cancel', style: 'cancel' },
+          { text: 'Open', onPress: () => Linking.openURL(facebookWebUrl) },
         ],
       );
     }
@@ -86,7 +87,7 @@ const MoreScreen = ({navigation}: Props) => {
   };
 
   const openWebsite = async () => {
-    const websiteUrl = 'https://www.yourwebsite.com';
+    const websiteUrl = '';
     try {
       await Linking.openURL(websiteUrl);
     } catch (error) {
@@ -119,8 +120,8 @@ const MoreScreen = ({navigation}: Props) => {
   return (
     <View style={styles.mainContainer}>
       <StatusBar translucent backgroundColor="transparent" />
-      <View style={{marginTop: top + 10}}>
-        <Text style={[styles.headerText, {fontSize: height * 0.025}]}>
+      <View style={{ marginTop: top + 10 }}>
+        <Text style={[styles.headerText, { fontSize: height * 0.025 }]}>
           {t('TITLES.MORE')}
         </Text>
       </View>
@@ -165,16 +166,20 @@ const MoreScreen = ({navigation}: Props) => {
         ))}
       </ScrollView>
       <View style={styles.powerContainer}>
-        <Image
-          key={'logo'}
-          source={require('../assets/power.png')}
-          style={{
-            width: 50,
-            height: 50,
-            resizeMode: 'contain',
-            alignSelf: 'center',
-          }}
-        />
+        <TouchableOpacity onPress={openFacebook}>
+          <Image
+            key={'logo'}
+            source={require('../assets/power.png')}
+            style={{
+              width: 50,
+              height: 50,
+              resizeMode: 'contain',
+              alignSelf: 'center',
+            }}
+
+          />
+        </TouchableOpacity>
+
         <Text style={styles.power}>Powered by ARCHIVO</Text>
         <Text
           style={{
@@ -194,34 +199,44 @@ const MoreScreen = ({navigation}: Props) => {
             gap: 26,
             paddingTop: 20,
           }}>
-          <MaterialIcons
-            name="local-phone"
-            size={20}
-            style={styles.icon}
-            color={Colors[theme].text}
-            onPress={makePhoneCall}
-          />
-          <FontAwesomePro
-            name="facebook"
-            size={20}
-            style={styles.icon}
-            color={Colors[theme].text}
-            onPress={openFacebook}
-          />
-          <Zocial
-            name="email"
-            size={20}
-            style={styles.icon}
-            color={Colors[theme].text}
-            onPress={sendEmail}
-          />
-          <MaterialIcon
-            name="web"
-            size={20}
-            style={styles.icon}
-            color={Colors[theme].text}
-            onPress={openWebsite}
-          />
+          <TouchableOpacity onPress={makePhoneCall}>
+            <MaterialIcons
+              name="local-phone"
+              size={20}
+              style={styles.icon}
+              color={Colors[theme].text}
+
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={openFacebook}
+          >
+            <FontAwesomePro
+              name="facebook"
+              size={20}
+              style={styles.icon}
+              color={Colors[theme].text}
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={sendEmail}
+          >
+            <Zocial
+              name="email"
+              size={20}
+              style={styles.icon}
+              color={Colors[theme].text}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={openWebsite}
+          >
+            <MaterialIcon
+              name="web"
+              size={20}
+              style={styles.icon}
+              color={Colors[theme].text}
+            />
+          </TouchableOpacity>
         </View>
       </View>
     </View>
@@ -247,7 +262,7 @@ const styling = (theme: Theme) =>
         ios: {
           alignSelf: 'center',
           shadowColor: Colors[theme].text,
-          shadowOffset: {width: 0, height: 5},
+          shadowOffset: { width: 0, height: 5 },
           shadowOpacity: 0.1,
           shadowRadius: 2,
         },

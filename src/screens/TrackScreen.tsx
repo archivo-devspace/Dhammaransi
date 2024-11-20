@@ -302,7 +302,7 @@ const TrackScreen = ({navigation}: Props) => {
                 <CustomButton
                   customButtonStyle={styles.btn}
                   onPress={expandFolderListsHandler}
-                  disabled={isAlreadyDownload}
+                  disabled={isAlreadyDownload || currentQueue.length === 0}
                   icon={
                     <MaterialIcon
                       name={'cloud-download'}
@@ -331,6 +331,7 @@ const TrackScreen = ({navigation}: Props) => {
                 />
               }
               onPress={changeRepeatMode}
+              disabled={currentQueue.length === 0}
             />
             <CustomButton
               onPress={handlePrevTrack}
