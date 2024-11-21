@@ -135,7 +135,7 @@ const HomeScreen = ({ navigation }: Props) => {
         translucent
       />
       <Animated.View onLayout={handleLayout} style={[styles.header, { width: width }]}>
-        <Text style={[{ alignSelf: 'center', textAlign: 'center', color: Colors[theme].text, fontSize: height * 0.026, paddingVertical: 10, paddingHorizontal: 10, fontFamily: getFontFamily('bold') }]}>{t('TITLES.HOME')}</Text>
+        <Text style={[{ alignSelf: 'center', textAlign: 'center', color: Colors[theme].text, fontSize: height * 0.025, paddingVertical: 10, paddingHorizontal: 10, fontFamily: getFontFamily('bold') }]}>{t('TITLES.HOME')}</Text>
       </Animated.View>
 
       <Animated.ScrollView

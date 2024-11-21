@@ -7,6 +7,7 @@ import {
   StatusBar,
   ScrollView,
   Platform,
+  Vibration,
 } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { Theme, useThemeContext } from '../contexts/ThemeContext';
@@ -217,13 +218,13 @@ const PaintingScreen = ({ route }: PaintingScreenProps) => {
       />
       <Animated.View style={[headerAnimatedStyle, styles.header, { width: width }]}>
         <CustomButton
-          onPress={() => navigation.goBack()}
+          onPress={() => {Vibration.vibrate(5);navigation.goBack()}}
           icon={
             <AntDesign
-              name={'arrowleft'}
-              size={height * 0.04}
-              color={Colors[theme].primary}
-            />
+            name={'left'}
+            size={26}
+            color={Colors[theme].primary}
+          />
           }
           gap={5}
           customButtonStyle={[styles.btnArrow]}
