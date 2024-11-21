@@ -1,4 +1,4 @@
-import { StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { StyleSheet, Text, useWindowDimensions, Vibration, View } from 'react-native';
 import React from 'react';
 import { Theme, useThemeContext } from '../../../contexts/ThemeContext';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -10,9 +10,10 @@ import { useNavigation } from '@react-navigation/native';
 
 interface HeaderProps {
   title: string;
+  backArrow?:boolean;
 }
 
-const Header = ({ title }: HeaderProps) => {
+const Header = ({ title,backArrow=true }: HeaderProps) => {
   const { theme } = useThemeContext();
   const { height } = useWindowDimensions();
 
@@ -34,21 +35,21 @@ const Header = ({ title }: HeaderProps) => {
         height: height * 0.047,
 
       }}>
-      <CustomButton
-        onPress={() => navigation.goBack()}
+      {backArrow && <CustomButton
+        onPress={() => {Vibration.vibrate(5);navigation.goBack()}}
         icon={
           <AntDesign
-            name={'arrowleft'}
-            size={height * 0.04}
+            name={'left'}
+            size={26}
             color={Colors[theme].primary}
           />
         }
         gap={5}
         customButtonStyle={styles.btn}
-      />
+      />}
 
       <Text style={[styles.headerText, {
-        fontSize: height * 0.025,  fontFamily: getFontFamily('regular'),
+        fontSize: height * 0.026,  fontFamily: getFontFamily('regular'),
       }]}>{t(title)}</Text>
     </View>
   );
@@ -62,6 +63,7 @@ const styling = (theme: Theme) =>
       backgroundColor: Colors[theme].secondary,
       left: 16,
       position: 'absolute',
+      
     },
     headerText: {
       color: Colors[theme].text,

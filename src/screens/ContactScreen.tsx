@@ -138,10 +138,11 @@ const styling = (theme: Theme) =>
     card: {
       backgroundColor: Colors[theme].secondary_light,
       justifyContent: 'space-between',
-      height: '97%',
+      height: '90%',
       padding: 20,
       borderRadius: 10,
       gap: 30,
+      marginTop:20
     },
     title: {
       fontFamily: getFontFamily('bold'),

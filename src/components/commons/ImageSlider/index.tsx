@@ -14,7 +14,7 @@ import {Colors} from '../../../theme';
 const ImageSlider = ({images}: {images: any}) => {
   const {width, height} = useWindowDimensions();
   const {theme} = useThemeContext();
-  const customHeight = height * 0.35;
+  const customHeight = height * 0.36;
 
   // Duplicate images for infinite scrolling
   const infiniteImages = images ? [images[images?.length - 1], ...images, images[0]] : [];
@@ -97,13 +97,14 @@ const ImageSlider = ({images}: {images: any}) => {
   return (
     <View>
       <ScrollView
+       scrollEventThrottle={16}
         pagingEnabled
         horizontal
         onMomentumScrollEnd={onScrollChange} // Use this for updating active after full scroll
         showsHorizontalScrollIndicator={false}
         ref={scrollViewRef}
         style={{width, height: customHeight}}>
-        {infiniteImages.map((image: any, index: any) => (
+        {infiniteImages?.map((image: any, index: any) => (
           <Image
             key={index}
             source={{uri: image}}

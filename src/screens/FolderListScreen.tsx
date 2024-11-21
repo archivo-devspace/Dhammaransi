@@ -121,7 +121,7 @@ const FolderListScreen = ({navigation}: Props) => {
   };
 
   return (
-    <Container title={t('UTILS.DOWNLOAD_MANAGED')}>
+    <Container title={t('UTILS.DOWNLOAD_MANAGED')} backArrow={false} >
       <View style={styles.formcontainer}>
         <TextInput
           style={styles.input}

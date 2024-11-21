@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
   useWindowDimensions,
+  Vibration,
 } from 'react-native';
 import React from 'react';
 import Animated, {
@@ -30,6 +31,11 @@ const CustomTabBar = ({rest, item}: CustomTabBarProps) => {
 
   const {theme} = useThemeContext();
   const styles = styling(theme);
+
+  const handlePress = () => {
+    Vibration.vibrate(5);
+    onPress();
+  }
 
   const viewStyle = useAnimatedStyle(() => {
     return {
@@ -59,9 +65,9 @@ const CustomTabBar = ({rest, item}: CustomTabBarProps) => {
 
   return (
     <TouchableOpacity
-      onPress={onPress}
+      onPress={handlePress}
       activeOpacity={1}
-      style={[styles.container, {flex: focused ? 1 : 0.65}]}>
+      style={[styles.container, {flex: focused ? 1 : 1}]}>
       <Animated.View
         style={[
           styles.btn,

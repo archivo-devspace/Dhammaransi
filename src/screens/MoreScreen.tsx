@@ -121,7 +121,7 @@ const MoreScreen = ({ navigation }: Props) => {
     <View style={styles.mainContainer}>
       <StatusBar translucent backgroundColor="transparent" />
       <View style={{ marginTop: top + 10 }}>
-        <Text style={[styles.headerText, { fontSize: height * 0.025 }]}>
+        <Text style={[styles.headerText, { fontSize: height * 0.026 }]}>
           {t('TITLES.MORE')}
         </Text>
       </View>

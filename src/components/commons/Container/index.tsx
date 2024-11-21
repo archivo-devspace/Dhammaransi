@@ -7,15 +7,16 @@ import Header from '../Header';
 interface ContainerProps {
   children: React.ReactNode;
   title: string;
+  backArrow?: boolean;
 }
 
-const Container = ({children, title}: ContainerProps) => {
+const Container = ({children, title,backArrow}: ContainerProps) => {
   const {theme} = useThemeContext();
   const styles = styling(theme);
   return (
     <View style={styles.mainContainer}>
       <StatusBar translucent backgroundColor="transparent" />
-      <Header title={title} />
+      <Header title={title} backArrow={backArrow}/>
       {children}
     </View>
   );

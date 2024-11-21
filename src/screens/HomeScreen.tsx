@@ -1,52 +1,48 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useCallback, useRef, useState} from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
-  Animated,
   useWindowDimensions,
   Platform,
   StatusBar,
   RefreshControl,
   Alert,
+  Vibration,
 } from 'react-native';
 
-import {NavigationMainStackScreenProps} from '../navigations/StackNavigation';
-import {FontAwesome, getFontFamily} from '../utils/common';
-import {Theme, useThemeContext} from '../contexts/ThemeContext';
-import {Colors} from '../theme';
-import {menus} from '../utils/constants';
-import {Movies} from '../components/commons/Movies';
+import { NavigationMainStackScreenProps } from '../navigations/StackNavigation';
+import { FontAwesome, getFontFamily } from '../utils/common';
+import { Theme, useThemeContext } from '../contexts/ThemeContext';
+import { Colors } from '../theme';
+import { menus } from '../utils/constants';
+import { Movies } from '../components/commons/Movies';
 import ImageSlider from '../components/commons/ImageSlider';
 import Audios from '../components/commons/Audio';
 import TopNavigation from '../components/commons/TopNavigation';
 
-import {useTranslation} from 'react-i18next';
-import {useGetPaintings} from '../api_services/lib/queryhooks/usePainting';
-import {useGetAlbums} from '../api_services/lib/queryhooks/useAudio';
-import {useGetHomeData} from '../api_services/lib/queryhooks/useHome';
+import { useTranslation } from 'react-i18next';
+import { useGetPaintings } from '../api_services/lib/queryhooks/usePainting';
+import { useGetAlbums } from '../api_services/lib/queryhooks/useAudio';
+import { useGetHomeData } from '../api_services/lib/queryhooks/useHome';
 import CustomAlert from '../components/commons/CustomAlert';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Animated, { interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewOffset } from 'react-native-reanimated';
 
 type Props = {
   navigation: NavigationMainStackScreenProps['navigation'];
 };
 
-const HomeScreen = ({navigation}: Props) => {
-  const {theme} = useThemeContext();
-  const {width, height} = useWindowDimensions();
-  const {top} = useSafeAreaInsets();
-  const {t} = useTranslation();
-  const scrollA = useRef(new Animated.Value(0)).current;
+const HomeScreen = ({ navigation }: Props) => {
+  const { theme } = useThemeContext();
+  const { width, height } = useWindowDimensions();
+  const { top } = useSafeAreaInsets();
+  const { t } = useTranslation();
   const [isAlertVisible, setIsAlertVisible] = useState(false);
 
-  const customHeight = height * 0.35;
-
-  const BANNER_H = height * 0.4;
-
-  const styles = styling(theme);
+  const styles = styling(theme, top);
 
   //api call with react query
   const {
@@ -76,6 +72,13 @@ const HomeScreen = ({navigation}: Props) => {
   const bannerImages = homeData?.data?.results?.banners?.map(img => img.file);
 
   const [refreshing, setRefreshing] = useState(false);
+  const [viewHeight, setViewHeight] = useState(0);
+
+  const handleLayout = (event: any) => {
+    const { height } = event.nativeEvent.layout;
+    setViewHeight(height);
+  };
+
   const onRefresh = useCallback(async () => {
     setRefreshing(true); // Start refreshing
     try {
@@ -93,26 +96,50 @@ const HomeScreen = ({navigation}: Props) => {
     link ? navigation.navigate(link) : setIsAlertVisible(true);
   };
 
+  const IMG_HEIGHT = height * 0.39;
+  const scrollRef = useAnimatedRef<Animated.ScrollView>();
+
+  const scrollOfset = useScrollViewOffset(scrollRef);
+
+  const imageAnimatedStyle = useAnimatedStyle(() => {
+    return {
+
+      transform: [
+        {
+          translateY: interpolate(
+            scrollOfset.value,
+            [-IMG_HEIGHT, 0, IMG_HEIGHT],
+            [-IMG_HEIGHT / 2, 0, IMG_HEIGHT * 0.75],
+          ),
+        },
+        {
+          scale: interpolate(
+            scrollOfset.value,
+            [-IMG_HEIGHT, 0, IMG_HEIGHT],
+            [2, 1, 1],
+          ),
+        },
+      ],
+    };
+  });
+
+
+
+
+
   return (
     <View style={[styles.mainContainer]}>
-      {/* <StatusBar
-          barStyle='default'
-          backgroundColor={Colors[theme].secondary}
-          
-        /> */}
-      <TopNavigation
-        title={t('TITLES.HOME')}
-        scrollA={scrollA}
-        statusBar={true}
+      <StatusBar
+        barStyle='default'
+        backgroundColor="transparent"
+        translucent
       />
+      <Animated.View onLayout={handleLayout} style={[styles.header, { width: width }]}>
+        <Text style={[{ alignSelf: 'center', textAlign: 'center', color: Colors[theme].text, fontSize: height * 0.026, paddingVertical: 10, paddingHorizontal: 10, fontFamily: getFontFamily('bold') }]}>{t('TITLES.HOME')}</Text>
+      </Animated.View>
 
       <Animated.ScrollView
-        onScroll={Animated.event(
-          [{nativeEvent: {contentOffset: {y: scrollA}}}],
-          {
-            useNativeDriver: true,
-          },
-        )}
+        ref={scrollRef} scrollEventThrottle={16} showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -120,38 +147,24 @@ const HomeScreen = ({navigation}: Props) => {
             progressViewOffset={60}
             tintColor={Colors[theme].primary}
             colors={[Colors[theme].primary]}
-            style={{zIndex: 10}}
+            style={{ zIndex: 10 }}
             progressBackgroundColor={Colors[theme].secondary}
           />
-        } // Add RefreshControl here
-        showsVerticalScrollIndicator={false}
-        scrollEventThrottle={16}>
+        } 
+      >
         <View style={styles.bannerContainer}>
           <Animated.View
             style={[
+              imageAnimatedStyle,
               {
                 width: '100%',
-
-                transform: [
-                  {
-                    translateY: scrollA.interpolate({
-                      inputRange: [-BANNER_H, 0, BANNER_H, BANNER_H + 1],
-                      outputRange: [
-                        -BANNER_H / 2,
-                        0,
-                        BANNER_H * 0.75,
-                        BANNER_H * 0.75,
-                      ],
-                    }),
-                  },
-                  {scale: 1},
-                ],
+                paddingTop: viewHeight - 6
               },
-              {height: customHeight - 16},
+
             ]}>
             {isHomeDataLoading ? (
-              <View style={styles.loadingContainer}>
-                <Text>{t('LOADING')}</Text>
+              <View style={[styles.loadingContainer, { height: height * 0.36 }]}>
+                <Text style={{color: Colors[theme].text}}>{t('LOADING')}</Text>
               </View>
             ) : (
               <ImageSlider images={bannerImages} />
@@ -164,10 +177,6 @@ const HomeScreen = ({navigation}: Props) => {
             borderTopRightRadius: 8,
             borderTopLeftRadius: 8,
             paddingBottom: 75,
-            // borderColor: Colors[theme]?.secondary_dark,
-            // borderTopWidth: 1,
-            // borderLeftWidth: 1,
-            // borderRightWidth: 1,
             gap: 16,
           }}>
           <View style={styles.menuContainer}>
@@ -175,10 +184,10 @@ const HomeScreen = ({navigation}: Props) => {
               <TouchableOpacity
                 style={[
                   styles.menu,
-                  {height: width < 500 ? height * 0.12 : height * 0.13},
+                  { height: width < 500 ? height * 0.12 : height * 0.13 },
                 ]}
                 key={menu.id}
-                onPress={() => handleNavigation(menu.link)}>
+                onPress={() => { Vibration.vibrate(5); handleNavigation(menu.link) }}>
                 <FontAwesome
                   name={menu.icon}
                   size={25}
@@ -231,7 +240,7 @@ const HomeScreen = ({navigation}: Props) => {
   );
 };
 
-const styling = (theme: Theme) =>
+const styling = (theme: Theme, top: number) =>
   StyleSheet.create({
     mainContainer: {
       flex: 1,
@@ -278,6 +287,26 @@ const styling = (theme: Theme) =>
     bannerContainer: {
       alignItems: 'center',
       overflow: 'visible',
+    },
+    header: {
+      ...Platform.select({
+        ios: {
+          paddingTop: top,
+        },
+        android: {
+          paddingTop: top
+        }
+      }),
+      display: 'flex',
+      position: 'absolute',
+      backgroundColor: Colors[theme].secondary,
+      zIndex: 1,
+      top: 0,
+      borderBottomLeftRadius: 8,
+      borderBottomRightRadius: 8,
+      borderColor: Colors[theme].secondary_dark,
+      borderWidth: 1,
+      height: "auto"
     },
   });
 

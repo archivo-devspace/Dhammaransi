@@ -6,6 +6,7 @@ import {
   StatusBar,
   useWindowDimensions,
   StyleSheet,
+  Vibration,
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {TOPNAVI_H} from '../../../utils/constants';
@@ -46,7 +47,7 @@ const TopNavigation = (props: any) => {
       {props.statusBar && (
         <StatusBar
           barStyle={theme === 'dark' ? 'light-content' : 'dark-content'}
-          backgroundColor={Colors[theme].secondary}
+          backgroundColor={"transparent"}
           translucent
         />
       )}
@@ -54,13 +55,13 @@ const TopNavigation = (props: any) => {
         {isTransparent
           ? backBtn && (
               <CustomButton
-                onPress={() => navigation.goBack()}
+                onPress={() => {Vibration.vibrate(5);navigation.goBack()}}
                 icon={
                   <AntDesign
-                    name={'arrowleft'}
-                    size={height * 0.04}
-                    color={Colors[theme].primary}
-                  />
+                  name={'left'}
+                  size={30}
+                  color={Colors[theme].primary}
+                />
                 }
                 gap={5}
                 customButtonStyle={styles.btn}
@@ -68,13 +69,13 @@ const TopNavigation = (props: any) => {
             )
           : backBtn && (
               <CustomButton
-                onPress={() => navigation.goBack()}
+                onPress={() => {Vibration.vibrate(5);navigation.goBack()}}
                 icon={
                   <AntDesign
-                    name={'arrowleft'}
-                    size={height * 0.04}
-                    color={Colors[theme].primary}
-                  />
+                  name={'left'}
+                  size={30}
+                  color={Colors[theme].primary}
+                />
                 }
                 gap={5}
                 customButtonStyle={styles.btn}
@@ -86,7 +87,7 @@ const TopNavigation = (props: any) => {
             styles.title,
             {
               left: backBtn && languages === 'mm' && width < 400 ? 16 : 0,
-              fontSize: height * 0.021,
+              fontSize: height * 0.027,
               fontFamily: getFontFamily('bold'),
             },
           ]}>
