@@ -108,14 +108,18 @@ const styling = (theme: Theme) =>
   StyleSheet.create({
     container: {
       justifyContent: 'center',
-      alignItems: 'center',
-      height: 75,
+      height: 'auto',
       width: '100%',
+      alignSelf:'center',
+    
     },
     btn: {
-      alignItems: 'center',
-      paddingHorizontal: 14,
+      marginVertical: 6,
+      alignItems:'center',
+      justifyContent:'center',
       borderRadius: 20,
       gap: 2,
+      paddingTop: 8,
+      paddingBottom: 4
     },
   });

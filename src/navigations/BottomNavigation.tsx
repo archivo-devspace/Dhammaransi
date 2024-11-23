@@ -59,9 +59,10 @@ const BottomTapNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={{
+      
         headerShown: false,
         tabBarStyle: {
-          height: 75,
+          height: 'auto',
           paddingHorizontal: 10,
           borderTopWidth: 1,
           borderLeftWidth: 1,

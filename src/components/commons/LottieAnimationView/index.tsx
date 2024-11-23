@@ -1,6 +1,6 @@
 import LottieView from 'lottie-react-native'
 import React from 'react'
-import { Platform, StyleSheet, useWindowDimensions, View } from 'react-native'
+import { Platform, StyleSheet, useWindowDimensions, Vibration, View } from 'react-native'
 import { CustomButton } from '../../utils';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Theme, useThemeContext } from '../../../contexts/ThemeContext';
@@ -19,6 +19,11 @@ const LottieAnimationView = ({ handlePress,lottieFiePath,btnType }: Props) => {
     const styles = styling(theme);
 
 
+    const onPressControl = () => {
+        Vibration.vibrate(5);
+        handlePress();
+    }
+
     return (
         <View style={{ height: height * 0.6, width: width, justifyContent: "flex-end", alignItems: "center", paddingBottom: 10 }}>
             <LottieView
@@ -30,7 +35,7 @@ const LottieAnimationView = ({ handlePress,lottieFiePath,btnType }: Props) => {
             />
             <View style={{ alignSelf: 'center' }}>
                 <CustomButton
-                    onPress={handlePress}
+                    onPress={onPressControl}
                     icon={
                         <Ionicons
                             name={btnType === "refresh" ? "reload-circle-sharp": "return-down-back-outline"}

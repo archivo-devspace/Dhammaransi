@@ -460,8 +460,9 @@ const TrackPopupScreen = ({navigation}: Props) => {
               borderColor: 'black',
               justifyContent: 'center',
               alignItems: 'center',
+              borderRadius:8
             }}>
-            <Text style={{fontFamily: getFontFamily('regular')}}>
+            <Text style={{fontFamily: getFontFamily('regular'),color:Colors[theme].text}}>
               advertisement
             </Text>
           </View>

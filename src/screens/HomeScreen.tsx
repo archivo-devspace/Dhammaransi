@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 
 import { NavigationMainStackScreenProps } from '../navigations/StackNavigation';
-import { FontAwesome, getFontFamily } from '../utils/common';
+import { Feather, FontAwesome, getFontFamily } from '../utils/common';
 import { Theme, useThemeContext } from '../contexts/ThemeContext';
 import { Colors } from '../theme';
 import { menus } from '../utils/constants';
@@ -30,6 +30,7 @@ import { useGetHomeData } from '../api_services/lib/queryhooks/useHome';
 import CustomAlert from '../components/commons/CustomAlert';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated, { interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewOffset } from 'react-native-reanimated';
+import SkeletonView from '../components/commons/Skeleton';
 
 type Props = {
   navigation: NavigationMainStackScreenProps['navigation'];
@@ -66,7 +67,8 @@ const HomeScreen = ({ navigation }: Props) => {
   const {
     data: homeData,
     isLoading: isHomeDataLoading,
-    // isError: isHomeDataError,
+    isError: isHomeDataError,
+    refetch: homeRefresh
   } = useGetHomeData();
 
   const bannerImages = homeData?.data?.results?.banners?.map(img => img.file);
@@ -83,14 +85,14 @@ const HomeScreen = ({ navigation }: Props) => {
     setRefreshing(true); // Start refreshing
     try {
       // Refresh both paintings and albums
-      await Promise.all([albumsRefresh(), paintingRefresh()]);
+      await Promise.all([homeRefresh(), albumsRefresh(), paintingRefresh()]);
     } catch (error) {
       console.error('Refresh error:', error);
       // Optionally handle error
     } finally {
       setRefreshing(false); // Stop refreshing regardless of success or failure
     }
-  }, [albumsRefresh, paintingRefresh]);
+  }, [homeRefresh, albumsRefresh, paintingRefresh]);
 
   const handleNavigation = (link: any) => {
     link ? navigation.navigate(link) : setIsAlertVisible(true);
@@ -144,13 +146,13 @@ const HomeScreen = ({ navigation }: Props) => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            progressViewOffset={60}
+            progressViewOffset={80}
             tintColor={Colors[theme].primary}
             colors={[Colors[theme].primary]}
             style={{ zIndex: 10 }}
             progressBackgroundColor={Colors[theme].secondary}
           />
-        } 
+        }
       >
         <View style={styles.bannerContainer}>
           <Animated.View
@@ -164,7 +166,18 @@ const HomeScreen = ({ navigation }: Props) => {
             ]}>
             {isHomeDataLoading ? (
               <View style={[styles.loadingContainer, { height: height * 0.36 }]}>
-                <Text style={{color: Colors[theme].text}}>{t('LOADING')}</Text>
+                <SkeletonView height={height * 0.36} width={width} />
+                <Text style={{ color: Colors[theme].text, position: 'absolute' }}>{t('Loading...')}</Text>
+
+              </View>
+            ) : isHomeDataError ? (
+              <View style={[styles.loadingContainer, { height: height * 0.36 }]}>
+                <Feather
+                  name="wifi-off"
+                  size={height * 0.035}
+                  color={Colors[theme].primary}
+                />
+                <Text style={{ color: Colors[theme].text }}>{t('UTILS.FETCH_FAILED')}</Text>
               </View>
             ) : (
               <ImageSlider images={bannerImages} />

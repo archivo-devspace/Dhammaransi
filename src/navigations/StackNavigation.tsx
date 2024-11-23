@@ -18,7 +18,7 @@ import LanguageScreen from '../screens/LanguagesScreen';
 import SettingScreen from '../screens/SettingScreen';
 import BottomTapNavigator from './BottomNavigation';
 import TrackPopupScreen from '../screens/TrackPopupScreen';
-// import OfflineDownloadGrid from '../screens/DownloadedAudioListScreen';
+import FolderListScreen from '../screens/FolderListScreen';
 import AudioCategoryListScreen from '../screens/AudioCategoryListScreen';
 import PaintingScreen from '../screens/PaintingScreen';
 import FolderDetailScreen from '../screens/FolderDetailScreen';
@@ -79,7 +79,7 @@ const StackNavigation = () => {
     <Stack.Navigator
       initialRouteName="Home"
       screenOptions={{headerShown: false, animation: 'fade_from_bottom'}}>
-      <Stack.Screen name="Home" component={BottomTapNavigator} />
+      <Stack.Screen name="Home" component={BottomTapNavigator}/>
       <Stack.Screen name="Movie" component={MovieScreen} />
       <Stack.Screen name="MovieLists" component={MovieListScreen} />
       <Stack.Screen name="Audios" component={Audios} />
@@ -89,7 +89,7 @@ const StackNavigation = () => {
       />
       <Stack.Screen name="Pdf" component={PdfListScreen} />
       <Stack.Screen name="PaintingList" component={PaintingsScreen} />
-      <Stack.Screen name="Track" component={TrackPopupScreen} />
+      <Stack.Screen name="Track" component={TrackPopupScreen}/>
 
       <Stack.Screen name="More" component={MoreScreen} />
       <Stack.Screen name="Biography" component={BiographyScreen} />
@@ -98,7 +98,7 @@ const StackNavigation = () => {
       <Stack.Screen name="Missionary" component={MissionaryScreen} />
       <Stack.Screen name="Languages" component={LanguageScreen} />
       <Stack.Screen name="Setting" component={SettingScreen} />
-      {/* <Stack.Screen name="Downloaded" component={OfflineDownloadGrid} /> */}
+      <Stack.Screen name="FolderList" component={FolderListScreen}/>
       <Stack.Screen name="PaintingScreen" component={PaintingScreen} />
       <Stack.Screen name="FolderDetail" component={FolderDetailScreen} />
       <Stack.Screen name="MissionDetail" component={MissionDetailScreen} />

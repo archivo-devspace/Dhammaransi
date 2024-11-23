@@ -255,7 +255,7 @@ const styling = (theme: Theme) =>
       marginTop: 100,
       justifyContent: 'center',
       alignSelf: 'center',
-      bottom: 100,
+      bottom: '12%',
     },
     icon: {
       ...Platform.select({
