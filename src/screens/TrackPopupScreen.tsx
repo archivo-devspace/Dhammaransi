@@ -15,6 +15,7 @@ import {
   StyleSheet,
   Text,
   useWindowDimensions,
+  Vibration,
   View,
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -162,11 +163,11 @@ const TrackPopupScreen = ({navigation}: Props) => {
 
       <SafeAreaView style={[styles.safeAreaView]}>
         <CustomButton
-          onPress={() => navigation.goBack()}
-          icon={
+        onPress={() => {Vibration.vibrate(5);navigation.goBack()}}
+        icon={
             <AntDesign
-              name={'arrowleft'}
-              size={height * 0.04}
+              name={'left'}
+              size={26}
               color={Colors[theme].primary}
             />
           }
@@ -505,9 +506,11 @@ const styling = (theme: Theme) =>
       flex: 1,
     },
     backBtn: {
+      
       ...Platform.select({
         ios: {
-          marginLeft: 20,
+          marginLeft: 16,
+          marginTop:16
         },
         android: {
           marginLeft: 20,

@@ -238,11 +238,16 @@ const FolderListsBottomSheet = forwardRef<FolderListsBottomSheetMethods, Props>(
               </Text>
 
               <CustomButton customButtonStyle={styles.icon} onPress={close}>
-                <Entypo
+                {/* <Entypo
                   name="circle-with-cross"
                   size={25}
                   color={Colors[theme].black}
-                />
+                /> */}
+                 <AntDesign
+              name={'closecircleo'}
+              size={24}
+              color={Colors[theme].black}
+            />
               </CustomButton>
             </View>
             <View style={styles.container}>

@@ -12,6 +12,8 @@ import TrackScreen from '../screens/TrackScreen';
 import HomeScreen from '../screens/HomeScreen';
 import MoreScreen from '../screens/MoreScreen';
 import FolderListScreen from '../screens/FolderListScreen';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Platform } from 'react-native';
 
 export type NavigationMainBottomTabScreenProps = {
   navigation: BottomTabNavigationProp<MainStackParamList>;
@@ -55,6 +57,7 @@ const Tab = createBottomTabNavigator();
 
 const BottomTapNavigator = () => {
   const {theme} = useThemeContext();
+  const insets = useSafeAreaInsets();
 
   return (
     <Tab.Navigator
@@ -68,7 +71,14 @@ const BottomTapNavigator = () => {
           borderLeftWidth: 1,
           borderRightWidth: 1,
           position: 'absolute',
-          bottom: 0,
+         ...Platform.select ({
+          ios : {
+            paddingBottom: insets.bottom - 30,
+          },
+          android : {
+            bottom: 0
+          }
+         }),
           left: 0,
           right: 0,
           borderColor: Colors[theme]?.secondary_dark,

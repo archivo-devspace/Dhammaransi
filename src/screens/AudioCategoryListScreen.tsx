@@ -100,6 +100,7 @@ const AudioCategoryListScreen = ({navigation}: Props) => {
       ) : (
         <FlatList
           data={finalAlbumList}
+          showsVerticalScrollIndicator={false}
           keyExtractor={item => item.id.toString()}
           renderItem={({item}) => (
             <View style={styles.container}>
@@ -141,8 +142,8 @@ const AudioCategoryListScreen = ({navigation}: Props) => {
                     </View>
                   </View>
                   <AntDesign
-                    name={'arrowright'}
-                    size={30}
+                    name={'right'}
+                    size={26}
                     color={Colors[theme].primary}
                   />
                 </View>
@@ -194,7 +195,7 @@ const styling = (theme: Theme) =>
       justifyContent: 'space-between',
       alignItems: 'center',
       width: '100%',
-      paddingRight: 20,
+      paddingRight: 0,
     },
     img: {
       width: 60,
