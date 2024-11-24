@@ -16,6 +16,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Colors } from '../theme';
 import { Theme, useThemeContext } from '../contexts/ThemeContext';
 import {
+  AntDesign,
   FontAwesome,
   FontAwesomePro,
   getFontFamily,
@@ -154,11 +155,11 @@ const MoreScreen = ({ navigation }: Props) => {
                     {t(menu.name)}
                   </Text>
                 </View>
-                <FontAwesome
-                  name={'angle-right'}
-                  size={20}
-                  color={Colors[theme].text}
-                />
+                <AntDesign
+                    name={'right'}
+                    size={26}
+                    color={Colors[theme].primary}
+                  />
               </View>
             </CustomButton>
             {menuOptions.length !== menu.id && <View style={styles.divider} />}

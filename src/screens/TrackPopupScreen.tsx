@@ -513,8 +513,8 @@ const styling = (theme: Theme) =>
           marginTop:16
         },
         android: {
-          marginLeft: 20,
-          marginTop: 42,
+          marginLeft: 16,
+          marginTop: 54,
         },
       }),
     },

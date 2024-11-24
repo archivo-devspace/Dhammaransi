@@ -347,6 +347,9 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
       });
     });
 
+    console.log("originalImage", currentTrack?.originalImage)
+    console.log("originalUrl", currentTrack?.originalUrl)
+
     // If the track is not being downloaded and does not already exist, start the download
     if (!find && !alreadyExists) {
       setDownloading(true); // Set the downloading state
@@ -364,12 +367,15 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
           }
         },
         currentTrack?.id,
-        currentTrack?.url,
+        currentTrack?.isDownloaded === true ? currentTrack?.originalUrl : currentTrack?.url,
         currentTrack?.artist,
         currentTrack?.title,
-        currentTrack?.artwork,
+        currentTrack?.isDownloaded === true ? currentTrack?.originalArtwork :  currentTrack?.artwork,
         true, // Assuming this is for audio
         selectedFolder,
+        false,
+        null,
+        null
       );
 
       // Reset states after download completes

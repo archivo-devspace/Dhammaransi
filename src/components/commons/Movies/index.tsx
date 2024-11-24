@@ -1,5 +1,5 @@
-import {View, Text, StyleSheet, useWindowDimensions} from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
+import {View, Text, StyleSheet, useWindowDimensions} from 'react-native';
 import Animated, {
   useAnimatedScrollHandler,
   useSharedValue,
@@ -75,6 +75,32 @@ export const Movies = ({
     navigation.navigate('PaintingScreen', {id});
   };
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // Auto-scroll logic
+      const nextIndex = activeIndex + 1;
+      flatListRef.current?.scrollToOffset({
+        offset: nextIndex * ITEM_FULL_WIDTH,
+        animated: true,
+      });
+
+      if (nextIndex === loopedData.length - 1) {
+        // Reset to the first item
+        setTimeout(() => {
+          flatListRef.current?.scrollToOffset({
+            offset: ITEM_FULL_WIDTH,
+            animated: false,
+          });
+          setActiveIndex(1);
+        }, 500); // Delay to allow smooth scrolling
+      } else {
+        setActiveIndex(nextIndex);
+      }
+    }, 4000); // Adjust interval time as needed
+
+    return () => clearInterval(interval);
+  }, [activeIndex, loopedData.length, ITEM_FULL_WIDTH]);
+
   const styles = styling(theme);
 
   const paintings = loopedData.map(item => ({
@@ -95,22 +121,20 @@ export const Movies = ({
           onMomentumScrollEnd={handleScrollEnd}
           data={[1, 2, 3]}
           keyExtractor={(item: any) => item.toString()}
-          renderItem={({item, index}) => {
-            return (
-              <Item
-                item={item}
-                index={index}
-                height={ITEM_HEIGHT}
-                width={ITEM_WIDTH}
-                marginHorizontal={MARGIN_HORIZONTAL}
-                x={x}
-                fullWidth={ITEM_FULL_WIDTH}
-                handleClick={() => {}}
-                truncateIndex={truncateIndex}
-                isLoading={isLoading}
-              />
-            );
-          }}
+          renderItem={({item, index}) => (
+            <Item
+              item={item}
+              index={index}
+              height={ITEM_HEIGHT}
+              width={ITEM_WIDTH}
+              marginHorizontal={MARGIN_HORIZONTAL}
+              x={x}
+              fullWidth={ITEM_FULL_WIDTH}
+              handleClick={() => {}}
+              truncateIndex={truncateIndex}
+              isLoading={isLoading}
+            />
+          )}
           ListHeaderComponent={<View />}
           ListHeaderComponentStyle={{width: SPACER}}
           ListFooterComponent={<View />}
@@ -118,7 +142,7 @@ export const Movies = ({
           horizontal
           showsHorizontalScrollIndicator={false}
           scrollEventThrottle={16}
-          decelerationRate={'fast'}
+          decelerationRate={'normal'}
           snapToInterval={ITEM_FULL_WIDTH}
           initialScrollIndex={1}
           getItemLayout={(_, index) => ({
@@ -140,21 +164,19 @@ export const Movies = ({
           onMomentumScrollEnd={handleScrollEnd}
           data={paintings}
           keyExtractor={(item: any, index: any) => index}
-          renderItem={({item, index}) => {
-            return (
-              <Item
-                item={item}
-                index={index}
-                height={ITEM_HEIGHT}
-                width={ITEM_WIDTH}
-                marginHorizontal={MARGIN_HORIZONTAL}
-                x={x}
-                fullWidth={ITEM_FULL_WIDTH}
-                truncateIndex={truncateIndex}
-                handleClick={handleClick}
-              />
-            );
-          }}
+          renderItem={({item, index}) => (
+            <Item
+              item={item}
+              index={index}
+              height={ITEM_HEIGHT}
+              width={ITEM_WIDTH}
+              marginHorizontal={MARGIN_HORIZONTAL}
+              x={x}
+              fullWidth={ITEM_FULL_WIDTH}
+              truncateIndex={truncateIndex}
+              handleClick={handleClick}
+            />
+          )}
           ListHeaderComponent={<View />}
           ListHeaderComponentStyle={{width: SPACER}}
           ListFooterComponent={<View />}
@@ -162,7 +184,7 @@ export const Movies = ({
           horizontal
           showsHorizontalScrollIndicator={false}
           scrollEventThrottle={16}
-          decelerationRate={'fast'}
+          decelerationRate={'normal'}
           snapToInterval={ITEM_FULL_WIDTH}
           initialScrollIndex={1}
           getItemLayout={(_, index) => ({
@@ -179,10 +201,7 @@ export const Movies = ({
 
 const styling = (theme: Theme) =>
   StyleSheet.create({
-    mainContainer: {
-      // backgroundColor: 'black',
-      // marginTop: 10,
-    },
+    mainContainer: {},
     text: {
       color: Colors[theme].text,
       marginHorizontal: 10,

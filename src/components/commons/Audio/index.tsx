@@ -1,6 +1,5 @@
 import {View, Text, StyleSheet, useWindowDimensions} from 'react-native';
-import React from 'react';
-
+import React, { useEffect, useRef, useState } from 'react';
 import Animated, {
   useAnimatedScrollHandler,
   useSharedValue,
@@ -41,8 +40,12 @@ export const Audios = ({
   const ITEM_FULL_WIDTH = ITEM_WIDTH + MARGIN_HORIZONTAL * 2;
   const SPACER = (width - ITEM_FULL_WIDTH) / 2;
   const truncateIndex = 18;
-
+  const [activeIndex, setActiveIndex] = useState(1); // Starting at 1 for the duplicated data
+  const flatListRef = useRef<any>(null);
   const x = useSharedValue(0);
+
+
+  const loopedData = data ? [data[data.length - 1], ...data, data[0]] : [];
 
   const onScroll = useAnimatedScrollHandler({
     onScroll: event => {
@@ -50,44 +53,89 @@ export const Audios = ({
     },
   });
 
-  const handleClick = (id: number) => {
-    navigation.navigate('Audios', {id});
-    console.log('testing>>>');
+  const handleScrollEnd = (event: any) => {
+    const contentOffsetX = event.nativeEvent.contentOffset.x;
+    const index = Math.round(contentOffsetX / ITEM_FULL_WIDTH);
+    setActiveIndex(index);
+
+    if (index === 0) {
+      flatListRef.current?.scrollToOffset({
+        offset: (loopedData.length - 2) * ITEM_FULL_WIDTH,
+        animated: false,
+      });
+      setActiveIndex(loopedData.length - 2);
+    } else if (index === loopedData.length - 1) {
+      flatListRef.current?.scrollToOffset({
+        offset: ITEM_FULL_WIDTH,
+        animated: false,
+      });
+      setActiveIndex(1);
+    }
   };
 
-  const audios = data?.map(item => ({
+  const handleClick = (id: number) => {
+    navigation.navigate('Audios', {id});
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // Auto-scroll logic
+      const nextIndex = activeIndex + 1;
+      flatListRef.current?.scrollToOffset({
+        offset: nextIndex * ITEM_FULL_WIDTH,
+        animated: true,
+      });
+
+      if (nextIndex === loopedData.length - 1) {
+        // Reset to the first item
+        setTimeout(() => {
+          flatListRef.current?.scrollToOffset({
+            offset: ITEM_FULL_WIDTH,
+            animated: false,
+          });
+          setActiveIndex(1);
+        }, 500); // Delay to allow smooth scrolling
+      } else {
+        setActiveIndex(nextIndex);
+      }
+    }, 4000); // Adjust interval time as needed
+
+    return () => clearInterval(interval);
+  }, [activeIndex, loopedData.length, ITEM_FULL_WIDTH]);
+
+  const styles = styling(theme);
+
+  const audios = loopedData.map(item => ({
     ...item,
     description: item.title,
   }));
 
-  const styles = styling(theme);
-
   return (
-    <View style={[styles.mainContainer, {height: height - height * 0.68}]}>
+    <View style={[styles.mainContainer, {height: height - height * 0.62}]}>
       <Text style={[styles.text, {fontSize: height * 0.022}]}>
-        {t('TITLES.TOP_AUDIOS')}
+        {t('TITLES.TOP_PICTURES')}
       </Text>
       {isLoading ? (
         <Animated.FlatList
+          ref={flatListRef}
           onScroll={onScroll}
+          onMomentumScrollEnd={handleScrollEnd}
           data={[1, 2, 3]}
           keyExtractor={(item: any) => item.toString()}
-          renderItem={({item, index}) => {
-            return (
-              <Item
-                item={item}
-                index={index}
-                height={ITEM_HEIGHT}
-                width={ITEM_WIDTH}
-                marginHorizontal={MARGIN_HORIZONTAL}
-                x={x}
-                fullWidth={ITEM_FULL_WIDTH}
-                handleClick={() => console.log('hello')}
-                truncateIndex={truncateIndex}
-                isLoading={isLoading}
-              />
-            );
-          }}
+          renderItem={({item, index}) => (
+            <Item
+              item={item}
+              index={index}
+              height={ITEM_HEIGHT}
+              width={ITEM_WIDTH}
+              marginHorizontal={MARGIN_HORIZONTAL}
+              x={x}
+              fullWidth={ITEM_FULL_WIDTH}
+              handleClick={() => {}}
+              truncateIndex={truncateIndex}
+              isLoading={isLoading}
+            />
+          )}
           ListHeaderComponent={<View />}
           ListHeaderComponentStyle={{width: SPACER}}
           ListFooterComponent={<View />}
@@ -95,7 +143,7 @@ export const Audios = ({
           horizontal
           showsHorizontalScrollIndicator={false}
           scrollEventThrottle={16}
-          decelerationRate={'fast'}
+          decelerationRate={'normal'}
           snapToInterval={ITEM_FULL_WIDTH}
           initialScrollIndex={1}
           getItemLayout={(_, index) => ({
@@ -112,24 +160,24 @@ export const Audios = ({
         />
       ) : (
         <Animated.FlatList
+          ref={flatListRef}
           onScroll={onScroll}
+          onMomentumScrollEnd={handleScrollEnd}
           data={audios}
-          keyExtractor={(item: any) => item.id.toString()}
-          renderItem={({item, index}) => {
-            return (
-              <Item
-                item={item}
-                index={index}
-                height={ITEM_HEIGHT}
-                width={ITEM_WIDTH}
-                marginHorizontal={MARGIN_HORIZONTAL}
-                x={x}
-                fullWidth={ITEM_FULL_WIDTH}
-                handleClick={handleClick}
-                truncateIndex={truncateIndex}
-              />
-            );
-          }}
+          keyExtractor={(item: any, index: any) => index}
+          renderItem={({item, index}) => (
+            <Item
+              item={item}
+              index={index}
+              height={ITEM_HEIGHT}
+              width={ITEM_WIDTH}
+              marginHorizontal={MARGIN_HORIZONTAL}
+              x={x}
+              fullWidth={ITEM_FULL_WIDTH}
+              truncateIndex={truncateIndex}
+              handleClick={handleClick}
+            />
+          )}
           ListHeaderComponent={<View />}
           ListHeaderComponentStyle={{width: SPACER}}
           ListFooterComponent={<View />}
@@ -137,7 +185,7 @@ export const Audios = ({
           horizontal
           showsHorizontalScrollIndicator={false}
           scrollEventThrottle={16}
-          decelerationRate={'fast'}
+          decelerationRate={'normal'}
           snapToInterval={ITEM_FULL_WIDTH}
           initialScrollIndex={1}
           getItemLayout={(_, index) => ({
