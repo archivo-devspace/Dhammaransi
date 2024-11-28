@@ -195,7 +195,7 @@ const styling = (theme: Theme) =>
       justifyContent: 'space-between',
       alignItems: 'center',
       width: '100%',
-      paddingRight: 0,
+      paddingRight: 10,
     },
     img: {
       width: 60,
