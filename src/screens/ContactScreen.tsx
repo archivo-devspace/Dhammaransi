@@ -27,10 +27,10 @@ const ContactScreen = () => {
     Linking.openURL(phoneURL);
   };
 
-  const openGoogleMaps = (address: string) => {
-    const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-      address,
-    )}`;
+  const openGoogleMaps = () => {
+    const url =
+      'https://www.google.com/maps/place/Dhamma+Yan+Thi+Mogok+Yeik+Thar+Monastery/@17.0832558,96.173311,17z/data=!3m1!4b1!4m6!3m5!1s0x30c19b6db775f52d:0x82f69726bf52287!8m2!3d17.0832558!4d96.173311!16s%2Fg%2F11jv8_nn23?entry=ttu&g_ep=EgoyMDI0MTIwMS4xIKXMDSoASAFQAw%3D%3D';
+
     Linking.openURL(url).catch(err =>
       console.error('Failed to open URL:', err),
     );
@@ -106,8 +106,7 @@ const ContactScreen = () => {
             <View style={{paddingRight: 15}}>
               {/* <Text style={styles.dataTitle}>{t('UTILS.ADDRESS')}</Text> */}
               <View style={[styles.contentContainer]}>
-                <TouchableOpacity
-                  onPress={() => openGoogleMaps('346M+9RR, Yangon')}>
+                <TouchableOpacity onPress={openGoogleMaps}>
                   <Feather
                     name="map-pin"
                     size={20}
@@ -142,7 +141,7 @@ const styling = (theme: Theme) =>
       padding: 20,
       borderRadius: 10,
       gap: 30,
-      marginTop:20
+      marginTop: 20,
     },
     title: {
       fontFamily: getFontFamily('bold'),
