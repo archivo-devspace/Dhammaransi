@@ -390,7 +390,6 @@ const PaintingScreen = ({route}: PaintingScreenProps) => {
                 <Text
                   style={{
                     textAlign: 'left',
-                    letterSpacing: 3,
                     fontSize: height * 0.023,
                     color: Colors[theme]?.text,
                     fontFamily: getFontFamily('regular'),
