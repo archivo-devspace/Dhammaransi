@@ -1,12 +1,11 @@
 /* eslint-disable react/no-unstable-nested-components */
-import {StyleSheet, View, useWindowDimensions} from 'react-native';
+import {StyleSheet, Text, View, useWindowDimensions} from 'react-native';
 import React from 'react';
 import Container from '../components/commons/Container';
 import {Theme, useThemeContext} from '../contexts/ThemeContext';
 import {Colors} from '../theme';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useGetBiography} from '../api_services/lib/queryhooks/useBiography';
-import RenderHTML from 'react-native-render-html';
 import SkeletonView from '../components/commons/Skeleton';
 import NetworkError from '../components/commons/LottieAnimationView';
 import {networkError} from '../utils/constants';
@@ -25,7 +24,7 @@ interface SkeletonGroupProps {
 
 const BiographyScreen = () => {
   const {theme} = useThemeContext();
-  const {width} = useWindowDimensions();
+  const {width, height} = useWindowDimensions();
   const styles = styling(theme);
 
   const {
@@ -87,6 +86,15 @@ const BiographyScreen = () => {
     );
   };
 
+  console.log('html', biography?.data?.results?.description);
+
+  const formattedDescription = biography?.data?.results?.description
+    ?.replace(/<\/p>/gi, '\n') // Replace closing </p> with two newlines
+    ?.replace(/<p[^>]*>/gi, '') // Remove opening <p> tags
+    ?.replace(/<br\s*\/?>/gi, '\n') // Replace <br> with newline
+    ?.replace(/&nbsp;/g, ' ') // Replace &nbsp; with a space
+    ?.replace(/<\/?[^>]+(>|$)/g, ''); // Remove any remaining HTML tags
+
   return (
     <Container title="MENUS.BIOGRAPHY">
       <ScrollView style={[styles.container, {width: width}]}>
@@ -99,18 +107,15 @@ const BiographyScreen = () => {
             lottieFiePath={networkError}
           />
         ) : (
-          <RenderHTML
-            contentWidth={width * 0.54}
-            source={{
-              html:
-                biography?.data?.results?.description ||
-                '<p>No data available</p>',
-            }}
-            baseStyle={{
-              color: Colors[theme].text,
-              fontFamily: getFontFamily('thin'),
-            }}
-          />
+          <Text
+            style={{
+              textAlign: 'left',
+              fontSize: height * 0.023,
+              color: Colors[theme]?.text,
+              fontFamily: getFontFamily('regular'),
+            }}>
+            {formattedDescription}
+          </Text>
         )}
       </ScrollView>
     </Container>
@@ -124,6 +129,7 @@ const styling = (theme: Theme) =>
     container: {
       flex: 1,
       paddingHorizontal: 10,
+      paddingVertical: 20,
     },
     headerContainer: {
       flexDirection: 'row',

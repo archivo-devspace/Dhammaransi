@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useCallback, useRef, useState } from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 import {
   View,
   Text,
@@ -13,34 +13,39 @@ import {
   Vibration,
 } from 'react-native';
 
-import { NavigationMainStackScreenProps } from '../navigations/StackNavigation';
-import { Feather, FontAwesome, getFontFamily } from '../utils/common';
-import { Theme, useThemeContext } from '../contexts/ThemeContext';
-import { Colors } from '../theme';
-import { menus } from '../utils/constants';
-import { Movies } from '../components/commons/Movies';
+import {NavigationMainStackScreenProps} from '../navigations/StackNavigation';
+import {Feather, FontAwesome, getFontFamily} from '../utils/common';
+import {Theme, useThemeContext} from '../contexts/ThemeContext';
+import {Colors} from '../theme';
+import {menus} from '../utils/constants';
+import {Movies} from '../components/commons/Movies';
 import ImageSlider from '../components/commons/ImageSlider';
 import Audios from '../components/commons/Audio';
 import TopNavigation from '../components/commons/TopNavigation';
 
-import { useTranslation } from 'react-i18next';
-import { useGetPaintings } from '../api_services/lib/queryhooks/usePainting';
-import { useGetAlbums } from '../api_services/lib/queryhooks/useAudio';
-import { useGetHomeData } from '../api_services/lib/queryhooks/useHome';
+import {useTranslation} from 'react-i18next';
+import {useGetPaintings} from '../api_services/lib/queryhooks/usePainting';
+import {useGetAlbums} from '../api_services/lib/queryhooks/useAudio';
+import {useGetHomeData} from '../api_services/lib/queryhooks/useHome';
 import CustomAlert from '../components/commons/CustomAlert';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Animated, { interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewOffset } from 'react-native-reanimated';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import Animated, {
+  interpolate,
+  useAnimatedRef,
+  useAnimatedStyle,
+  useScrollViewOffset,
+} from 'react-native-reanimated';
 import SkeletonView from '../components/commons/Skeleton';
 
 type Props = {
   navigation: NavigationMainStackScreenProps['navigation'];
 };
 
-const HomeScreen = ({ navigation }: Props) => {
-  const { theme } = useThemeContext();
-  const { width, height } = useWindowDimensions();
-  const { top } = useSafeAreaInsets();
-  const { t } = useTranslation();
+const HomeScreen = ({navigation}: Props) => {
+  const {theme} = useThemeContext();
+  const {width, height} = useWindowDimensions();
+  const {top} = useSafeAreaInsets();
+  const {t} = useTranslation();
   const [isAlertVisible, setIsAlertVisible] = useState(false);
 
   const styles = styling(theme, top);
@@ -68,7 +73,7 @@ const HomeScreen = ({ navigation }: Props) => {
     data: homeData,
     isLoading: isHomeDataLoading,
     isError: isHomeDataError,
-    refetch: homeRefresh
+    refetch: homeRefresh,
   } = useGetHomeData();
 
   const bannerImages = homeData?.data?.results?.banners?.map(img => img.file);
@@ -77,7 +82,7 @@ const HomeScreen = ({ navigation }: Props) => {
   const [viewHeight, setViewHeight] = useState(0);
 
   const handleLayout = (event: any) => {
-    const { height } = event.nativeEvent.layout;
+    const {height} = event.nativeEvent.layout;
     setViewHeight(height);
   };
 
@@ -105,7 +110,6 @@ const HomeScreen = ({ navigation }: Props) => {
 
   const imageAnimatedStyle = useAnimatedStyle(() => {
     return {
-
       transform: [
         {
           translateY: interpolate(
@@ -125,23 +129,32 @@ const HomeScreen = ({ navigation }: Props) => {
     };
   });
 
-
-
-
-
   return (
     <View style={[styles.mainContainer]}>
-      <StatusBar
-        barStyle='default'
-        backgroundColor="transparent"
-        translucent
-      />
-      <Animated.View onLayout={handleLayout} style={[styles.header, { width: width }]}>
-        <Text style={[{ alignSelf: 'center', textAlign: 'center', color: Colors[theme].text, fontSize: height * 0.025, paddingVertical: 10, paddingHorizontal: 10, fontFamily: getFontFamily('bold') }]}>{t('TITLES.HOME')}</Text>
+      <StatusBar barStyle="default" backgroundColor="transparent" translucent />
+      <Animated.View
+        onLayout={handleLayout}
+        style={[styles.header, {width: width}]}>
+        <Text
+          style={[
+            {
+              alignSelf: 'center',
+              textAlign: 'center',
+              color: Colors[theme].text,
+              fontSize: height * 0.025,
+              paddingVertical: 10,
+              paddingHorizontal: 10,
+              fontFamily: getFontFamily('bold'),
+            },
+          ]}>
+          {t('TITLES.HOME')}
+        </Text>
       </Animated.View>
 
       <Animated.ScrollView
-        ref={scrollRef} scrollEventThrottle={16} showsVerticalScrollIndicator={false}
+        ref={scrollRef}
+        scrollEventThrottle={16}
+        showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -149,35 +162,36 @@ const HomeScreen = ({ navigation }: Props) => {
             progressViewOffset={80}
             tintColor={Colors[theme].primary}
             colors={[Colors[theme].primary]}
-            style={{ zIndex: 10 }}
+            style={{zIndex: 10}}
             progressBackgroundColor={Colors[theme].secondary}
           />
-        }
-      >
+        }>
         <View style={styles.bannerContainer}>
           <Animated.View
             style={[
               imageAnimatedStyle,
               {
                 width: '100%',
-                paddingTop: viewHeight - 6
+                paddingTop: viewHeight - 6,
               },
-
             ]}>
             {isHomeDataLoading ? (
-              <View style={[styles.loadingContainer, { height: height * 0.36 }]}>
+              <View style={[styles.loadingContainer, {height: height * 0.36}]}>
                 <SkeletonView height={height * 0.36} width={width} />
-                <Text style={{ color: Colors[theme].text, position: 'absolute' }}>{t('Loading...')}</Text>
-
+                <Text style={{color: Colors[theme].text, position: 'absolute'}}>
+                  {t('Loading...')}
+                </Text>
               </View>
             ) : isHomeDataError ? (
-              <View style={[styles.loadingContainer, { height: height * 0.36 }]}>
+              <View style={[styles.loadingContainer, {height: height * 0.36}]}>
                 <Feather
                   name="wifi-off"
                   size={height * 0.035}
                   color={Colors[theme].primary}
                 />
-                <Text style={{ color: Colors[theme].text }}>{t('UTILS.FETCH_FAILED')}</Text>
+                <Text style={{color: Colors[theme].text}}>
+                  {t('UTILS.FETCH_FAILED')}
+                </Text>
               </View>
             ) : (
               <ImageSlider images={bannerImages} />
@@ -197,10 +211,13 @@ const HomeScreen = ({ navigation }: Props) => {
               <TouchableOpacity
                 style={[
                   styles.menu,
-                  { height: width < 500 ? height * 0.12 : height * 0.13 },
+                  {height: width < 500 ? height * 0.12 : height * 0.13},
                 ]}
                 key={menu.id}
-                onPress={() => { Vibration.vibrate(5); handleNavigation(menu.link) }}>
+                onPress={() => {
+                  Vibration.vibrate(5);
+                  handleNavigation(menu.link);
+                }}>
                 <FontAwesome
                   name={menu.icon}
                   size={25}
@@ -273,6 +290,7 @@ const styling = (theme: Theme, top: number) =>
       gap: 14,
       columnGap: 14,
       marginVertical: 18,
+      paddingBottom: 10,
     },
     menu: {
       backgroundColor: Colors[theme].secondary_light,
@@ -307,8 +325,8 @@ const styling = (theme: Theme, top: number) =>
           paddingTop: top,
         },
         android: {
-          paddingTop: top
-        }
+          paddingTop: top,
+        },
       }),
       display: 'flex',
       position: 'absolute',
@@ -319,7 +337,7 @@ const styling = (theme: Theme, top: number) =>
       borderBottomRightRadius: 8,
       borderColor: Colors[theme].secondary_dark,
       borderWidth: 1,
-      height: "auto"
+      height: 'auto',
     },
   });
 

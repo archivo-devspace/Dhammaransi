@@ -42,7 +42,7 @@ const Item = ({
     const customHeight = interpolate(
       x.value,
       [(index - 1) * fullWidth, index * fullWidth, (index + 1) * fullWidth],
-      [height - 40, height, height - 40],
+      [height - 55, height, height - 55],
       Extrapolation.CLAMP,
     );
 
@@ -129,19 +129,18 @@ const Item = ({
                 style={{
                   width: '100%',
                   height: '100%',
-
                   // borderBottomLeftRadius: 20,
                   // borderBottomRightRadius: 20,
                 }}
-                resizeMode="contain"
+                resizeMode="cover"
               />
             </View>
 
             <View
               style={{
                 width: '100%',
-                paddingTop: 3,
-                height: height * 0.17,
+                // paddingTop: 3,
+                height: height * 0.2,
                 justifyContent: 'center',
                 alignItems: 'center',
               }}>
@@ -168,7 +167,6 @@ const styling = (theme: Theme) =>
       position: 'relative',
       alignSelf: 'center',
       borderColor: Colors[theme].secondary_light,
-      borderWidth: 6,
     },
     imageContainer: {
       flex: 1,
