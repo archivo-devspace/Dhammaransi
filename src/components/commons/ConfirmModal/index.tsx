@@ -7,10 +7,10 @@ import {
   useWindowDimensions,
   View,
 } from 'react-native';
-import React, { Dispatch, SetStateAction } from 'react';
-import { Colors } from '../../../theme';
-import { Theme, useThemeContext } from '../../../contexts/ThemeContext';
-import { getFontFamily } from '../../../utils/common';
+import React, {Dispatch, SetStateAction} from 'react';
+import {Colors} from '../../../theme';
+import {Theme, useThemeContext} from '../../../contexts/ThemeContext';
+import {getFontFamily} from '../../../utils/common';
 
 interface ModalProps {
   isModalVisible: boolean;
@@ -22,6 +22,7 @@ interface ModalProps {
   cancelText: string;
   title: string;
   confirmType?: 'delete' | 'confirm';
+  requiredCancelBtn?: boolean;
 }
 
 const ConfirmModal = ({
@@ -34,11 +35,11 @@ const ConfirmModal = ({
   cancelText,
   title,
   confirmType = 'delete',
+  requiredCancelBtn = true,
 }: ModalProps) => {
-  const { theme } = useThemeContext();
+  const {theme} = useThemeContext();
   const styles = createStyles(theme);
-  const { height } = useWindowDimensions();
-
+  const {height} = useWindowDimensions();
 
   return (
     <>
@@ -70,7 +71,6 @@ const ConfirmModal = ({
                 <Text
                   style={[
                     {
-
                       fontFamily: getFontFamily('regular'),
                       fontSize: height * 0.02,
                       color:
@@ -80,31 +80,33 @@ const ConfirmModal = ({
                   {confirmText}
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity
-                onPress={handleCancel}
-                style={[
-                  styles.cancelButton,
-                  {
-                    backgroundColor:
-                      confirmType === 'delete'
-                        ? Colors[theme].primary
-                        : Colors[theme].secondary_light,
-                  },
-                ]}>
-                <Text
+              {requiredCancelBtn && (
+                <TouchableOpacity
+                  onPress={handleCancel}
                   style={[
-
+                    styles.cancelButton,
                     {
-
-                      fontFamily: getFontFamily('regular'),
-                      fontSize: height * 0.02,
-                      color:
-                        confirmType === 'delete' ? 'white' : Colors[theme].text,
+                      backgroundColor:
+                        confirmType === 'delete'
+                          ? Colors[theme].primary
+                          : Colors[theme].secondary_light,
                     },
                   ]}>
-                  {cancelText}
-                </Text>
-              </TouchableOpacity>
+                  <Text
+                    style={[
+                      {
+                        fontFamily: getFontFamily('regular'),
+                        fontSize: height * 0.02,
+                        color:
+                          confirmType === 'delete'
+                            ? 'white'
+                            : Colors[theme].text,
+                      },
+                    ]}>
+                    {cancelText}
+                  </Text>
+                </TouchableOpacity>
+              )}
             </View>
           </View>
         </View>
@@ -158,5 +160,4 @@ const createStyles = (theme: Theme) =>
       alignItems: 'center',
       marginLeft: 10,
     },
-
   });

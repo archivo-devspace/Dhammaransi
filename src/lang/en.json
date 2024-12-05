@@ -52,7 +52,10 @@
       "EMAIL": "Email",
       "ADDRESS": "Address",
       "ADDRESS_DATA": "Yangon - Mandalay Highway, Mile 1/1, Hlegu, Yangon, Myanmar",
-      "WARNING_TEXT": "Click the yellow icon for connecting easily"
+      "WARNING_TEXT": "Click the yellow icon for connecting easily",
+      "VERSION_UPDATE_TITLE": "Update Required",
+      "VERSION_UPDATE_LATER": "Later",
+      "VERSION_UPDATE_NOW": "Update Now"
     }
   }
 }
