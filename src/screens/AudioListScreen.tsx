@@ -238,7 +238,7 @@ const styling = (theme: Theme) =>
     },
     noDataText: {
       color: Colors[theme].text,
-      fontWeight: 'bold',
       fontSize: 20,
+      fontFamily: getFontFamily('bold'),
     },
   });

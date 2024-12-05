@@ -10,7 +10,7 @@ import {
 import React from 'react';
 import {Theme, useThemeContext} from '../../../contexts/ThemeContext';
 import {Colors} from '../../../theme';
-import {AntDesign, Feather, remToPx} from '../../../utils/common';
+import {AntDesign, Feather, getFontFamily, remToPx} from '../../../utils/common';
 import {useTranslation} from 'react-i18next';
 
 export interface DataNotFoundProps {
@@ -75,7 +75,7 @@ const styling = (theme: Theme) =>
       color: Colors[theme].text,
       marginHorizontal: 10,
       marginBottom: remToPx(0.8),
-      fontWeight: '400',
       textAlign: 'center',
+      fontFamily: getFontFamily('regular'),
     },
   });

@@ -97,7 +97,7 @@ const BiographyScreen = () => {
 
   return (
     <Container title="MENUS.BIOGRAPHY">
-      <ScrollView style={[styles.container, {width: width}]}>
+      <ScrollView style={[styles.container, {width: width}]} showsVerticalScrollIndicator={false}>
         {isBiographyLoading ? (
           <LoadingSkeleton />
         ) : isFetched && isError ? (

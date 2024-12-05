@@ -35,17 +35,12 @@ const App = () => {
     const getVersion = async () => {
       try {
         const currentVersion = DeviceInfo.getVersion();
-
-        console.log('versionName:', currentVersion);
-        console.log('platform:', platform);
-
         const result = await fetchAppVersion({
           platform,
           current_version: currentVersion,
         });
         setStoreUrl(result.download_url);
-        console.log('result:', result);
-        if (!result.update_required) {
+        if (result.update_required) {
           if (result.force_update) {
             setIsShowCancelBtn(false);
             setModalVisible(true);
@@ -60,10 +55,7 @@ const App = () => {
         SplashScreen.hide();
       }
     };
-    getVersion();
-  }, []);
 
-  useEffect(() => {
     const setUpPlayer = async () => {
       await TrackPlayer.setupPlayer();
       await TrackPlayer.updateOptions({
@@ -77,9 +69,12 @@ const App = () => {
     const notifeePermission = async () => {
       await notifee.requestPermission();
     };
+    
+    getVersion();
     notifeePermission();
     setUpPlayer();
   }, []);
+
 
   const handleCancelUpdate = () => {
     setModalVisible(false);
@@ -89,7 +84,6 @@ const App = () => {
     try {
       await Linking.openURL(storeUrl);
     } catch (error) {
-      console.log('Error opening website:', error);
       if (platform === 'android') {
         Alert.alert('Unable to open Play Store');
       } else {

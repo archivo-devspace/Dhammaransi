@@ -43,7 +43,7 @@ const ContactScreen = () => {
           {/* Content  */}
           <View style={{gap: 30}}>
             <Text style={[styles.title, {textAlign: 'center'}]}>
-              Dhammaramsi Mogok Vipasana Meditation Center
+                {t('TITLES.HOME')}
             </Text>
             {/* Phone  */}
             <View style={{gap: 5}}>
@@ -144,19 +144,18 @@ const styling = (theme: Theme) =>
       marginTop: 20,
     },
     title: {
-      fontFamily: getFontFamily('bold'),
+      fontFamily: getFontFamily('regular'),
       fontSize: 24,
       color: Colors[theme].text,
     },
     subtitle: {
-      fontFamily: getFontFamily('thin'),
+      fontFamily: getFontFamily('regular'),
       fontSize: 18,
       color: Colors[theme].text,
     },
     dataTitle: {
-      fontFamily: getFontFamily('thin'),
+      fontFamily: getFontFamily('regular'),
       fontSize: 16,
-      fontWeight: '600',
       marginBottom: 2,
       color: Colors[theme].text,
     },
