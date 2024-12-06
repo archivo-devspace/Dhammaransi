@@ -1009,8 +1009,6 @@ PODS:
     - React-Core
   - react-native-orientation-locker (1.7.0):
     - React-Core
-  - react-native-render-html (6.3.4):
-    - React-Core
   - react-native-safe-area-context (4.9.0):
     - React-Core
   - react-native-slider (4.5.2):
@@ -1291,7 +1289,6 @@ DEPENDENCIES:
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - react-native-blob-util (from `../node_modules/react-native-blob-util`)
   - react-native-orientation-locker (from `../node_modules/react-native-orientation-locker`)
-  - react-native-render-html (from `../node_modules/react-native-render-html`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
@@ -1417,8 +1414,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-blob-util"
   react-native-orientation-locker:
     :path: "../node_modules/react-native-orientation-locker"
-  react-native-render-html:
-    :path: "../node_modules/react-native-render-html"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-slider:
@@ -1544,7 +1539,6 @@ SPEC CHECKSUMS:
   React-Mapbuffer: 84ea43c6c6232049135b1550b8c60b2faac19fab
   react-native-blob-util: 39a20f2ef11556d958dc4beb0aa07d1ef2690745
   react-native-orientation-locker: 5819fd23ca89cbac0d736fb4314745f62716d517
-  react-native-render-html: 984dfe2294163d04bf5fe25d7c9f122e60e05ebe
   react-native-safe-area-context: b97eb6f9e3b7f437806c2ce5983f479f8eb5de4b
   react-native-slider: 7a39874fc1fcdfee48e448fa72cce0a8f2c7c5d6
   react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457

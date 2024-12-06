@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "DhammaransiApp.app"
-               BlueprintName = "DhammaransiApp"
-               ReferencedContainer = "container:DhammaransiApp.xcodeproj">
+               BuildableName = "Dhammaransi.app"
+               BlueprintName = "Dhammaransi"
+               ReferencedContainer = "container:Dhammaransi.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "DhammaransiAppTests.xctest"
-               BlueprintName = "DhammaransiAppTests"
-               ReferencedContainer = "container:DhammaransiApp.xcodeproj">
+               BuildableName = "DhammaransiTests.xctest"
+               BlueprintName = "DhammaransiTests"
+               ReferencedContainer = "container:Dhammaransi.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "DhammaransiApp.app"
-            BlueprintName = "DhammaransiApp"
-            ReferencedContainer = "container:DhammaransiApp.xcodeproj">
+            BuildableName = "Dhammaransi.app"
+            BlueprintName = "Dhammaransi"
+            ReferencedContainer = "container:Dhammaransi.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "DhammaransiApp.app"
-            BlueprintName = "DhammaransiApp"
-            ReferencedContainer = "container:DhammaransiApp.xcodeproj">
+            BuildableName = "Dhammaransi.app"
+            BlueprintName = "Dhammaransi"
+            ReferencedContainer = "container:Dhammaransi.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

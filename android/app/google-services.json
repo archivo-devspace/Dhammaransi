@@ -1,24 +1,25 @@
+
 {
   "project_info": {
     "project_number": "223500300678",
     "project_id": "dhammaransi-36e9d",
-    "storage_bucket": "dhammaransi-36e9d.appspot.com"
+    "storage_bucket": "dhammaransi-36e9d.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:223500300678:android:210eeaf67160d67d903c07",
+        "mobilesdk_app_id": "1:223500300678:android:92d8614611c7dcf4903c07",
         "android_client_info": {
-          "package_name": "com.dhammaransiapp"
+          "package_name": "com.archivo.dhammaransiapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "223500300678-bdqvi0joadcq4t0f4bbhmn6knbh8jfai.apps.googleusercontent.com",
+          "client_id": "223500300678-qlbdajpr79r4q6nf8qnj5hmtoelokt8u.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.dhammaransiapp",
-            "certificate_hash": "858562d13d550c58a675acca71a0d1097f963bf3"
+            "package_name": "com.archivo.dhammaransiapp",
+            "certificate_hash": "a4b924816f5bf55447ad4f7a0815d126969d5a5f"
           }
         },
         {
@@ -43,5 +44,5 @@
       }
     }
   ],
-  "configuration_version": "1001"
+  "configuration_version": "1"
 }

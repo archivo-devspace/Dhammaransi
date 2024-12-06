@@ -1,4 +1,4 @@
-package com.dhammaransiapp
+package com.archivo.dhammaransiapp
 
 import android.app.Application
 import com.facebook.react.PackageList

@@ -75,13 +75,13 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.dhammaransiapp"
+    namespace "com.archivo.dhammaransiapp"
     defaultConfig {
-        applicationId "com.dhammaransiapp"
+        applicationId "com.archivo.dhammaransiapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 26
-        versionName "1.8.7"
+        versionCode 1
+        versionName "1.0.0"
     }
     signingConfigs {
         debug {
