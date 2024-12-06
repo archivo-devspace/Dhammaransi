@@ -84,14 +84,14 @@ const MoreScreen = ({ navigation }: Props) => {
     }
   };
 
-  const openWebsite = async () => {
-    const websiteUrl = '';
-    try {
-      await Linking.openURL(websiteUrl);
-    } catch (error) {
-      Alert.alert('Unable to open website');
-    }
-  };
+  // const openWebsite = async () => {
+  //   const websiteUrl = '';
+  //   try {
+  //     await Linking.openURL(websiteUrl);
+  //   } catch (error) {
+  //     Alert.alert('Unable to open website');
+  //   }
+  // };
 
   const menuOptions = [
     {
@@ -225,7 +225,7 @@ const MoreScreen = ({ navigation }: Props) => {
               color={Colors[theme].text}
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={openWebsite}
+          {/* <TouchableOpacity onPress={openWebsite}
           >
             <MaterialIcon
               name="web"
@@ -233,7 +233,7 @@ const MoreScreen = ({ navigation }: Props) => {
               style={styles.icon}
               color={Colors[theme].text}
             />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
     </View>
