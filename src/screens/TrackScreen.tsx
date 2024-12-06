@@ -79,8 +79,6 @@ const TrackScreen = ({navigation}: Props) => {
     getTrackDuration,
   } = useTrackContext();
 
-  // console.log('orientation', orientation);
-
   const [currentActiveTrack, setCurrentActiveTrack] = useState<Track | null>(
     null,
   );

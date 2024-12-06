@@ -14,9 +14,7 @@ interface MovieScreenProps {
 
 const MovieScreen = ({navigation, route}: MovieScreenProps) => {
   const item = route.params.item;
-  console.log('item', item);
-  const {data, isLoading, isError} = useGetSinglePainting(item.id.toString());
-  console.log('single painting', data);
+  const {data, isLoading, isError} = useGetSinglePainting(item.id);
   return (
     <View>
       <Text>MovieScreen</Text>

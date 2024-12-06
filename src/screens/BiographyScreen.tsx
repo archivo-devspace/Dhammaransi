@@ -86,7 +86,6 @@ const BiographyScreen = () => {
     );
   };
 
-  console.log('html', biography?.data?.results?.description);
 
   const formattedDescription = biography?.data?.results?.description
     ?.replace(/<\/p>/gi, '\n') // Replace closing </p> with two newlines

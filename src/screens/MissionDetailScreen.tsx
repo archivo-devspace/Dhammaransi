@@ -11,7 +11,6 @@ type Props = {
 
 const MissionDetailScreen = ({navigation, route}: Props) => {
   const {id} = route.params;
-  console.log('id', id);
   return (
     <View>
       <Text>MissionDetailScreen</Text>

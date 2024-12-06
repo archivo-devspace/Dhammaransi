@@ -54,7 +54,6 @@ const PdfListScreen = () => {
 
   const styles = styling(theme);
 
-  console.log('downloadfiles', downloadedFiles);
 
   // State for handling refresh control
   const [refreshing, setRefreshing] = useState(false);
@@ -71,7 +70,6 @@ const PdfListScreen = () => {
     fetchDownloadedFiles();
   }, [finishPdfDownload]);
 
-  console.log('isloading', isBookLoading);
 
   const confirmDownload = (id: number, fileUrl: string, fileName: string) => {
     setSelectedPdfFile({id, fileUrl, fileName});
@@ -306,7 +304,6 @@ const PdfListScreen = () => {
           ) : (
             bookLists?.data?.results?.map(ebook => {
               const downloadedFilePath = getDownloadedFilePath(ebook.id);
-              console.log('downlaod file path', downloadedFilePath);
               return (
                 <React.Fragment key={ebook.id}>
                   <View style={styles.contentContainer}>

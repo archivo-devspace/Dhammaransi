@@ -144,7 +144,7 @@ const styling = (theme: Theme) =>
       marginTop: 20,
     },
     title: {
-      fontFamily: getFontFamily('regular'),
+      fontFamily: getFontFamily('bold'),
       fontSize: 24,
       color: Colors[theme].text,
     },

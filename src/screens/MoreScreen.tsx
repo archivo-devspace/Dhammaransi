@@ -55,7 +55,6 @@ const MoreScreen = ({ navigation }: Props) => {
     try {
       await Linking.openURL(facebookAppUrl);
     } catch (error) {
-      console.log('Error opening Facebook app:', error);
       Alert.alert(
         'Facebook App Not Installed',
         'Opening Facebook in your browser instead.',
@@ -72,7 +71,6 @@ const MoreScreen = ({ navigation }: Props) => {
     try {
       await Linking.openURL(phoneNumber);
     } catch (error) {
-      console.log('Error making a phone call:', error);
       Alert.alert('Unable to make a phone call');
     }
   };
@@ -82,7 +80,6 @@ const MoreScreen = ({ navigation }: Props) => {
     try {
       await Linking.openURL(email);
     } catch (error) {
-      console.log('Error opening email:', error);
       Alert.alert('Unable to send an email');
     }
   };
@@ -92,7 +89,6 @@ const MoreScreen = ({ navigation }: Props) => {
     try {
       await Linking.openURL(websiteUrl);
     } catch (error) {
-      console.log('Error opening website:', error);
       Alert.alert('Unable to open website');
     }
   };

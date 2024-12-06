@@ -98,8 +98,6 @@ export const sendDownloadedDataToLocalDir = async (
   const getNewTime = new Date().getTime();
   const commonConfig = createCommonConfig(songName, isAudio, dirToSave, getNewTime);
   if (src) {
-    console.log("url", src)
-    console.log("posterImage", posterImage)
     ReactNativeBlobUtil.config(commonConfig)
       .fetch('GET', src)
       .progress((received: any, total: any) => {

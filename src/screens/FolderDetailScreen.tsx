@@ -96,7 +96,6 @@ const FolderDetailScreen = ({ route, navigation }: Props) => {
               };
             }),
           );
-          console.log("updatedItems", updatedItems)
           if (updatedItems.length === 0) {
             setIsEmpty(true);
           }
@@ -112,12 +111,10 @@ const FolderDetailScreen = ({ route, navigation }: Props) => {
     }
   }, [folderName]);
 
-  console.log('track', tracks);
 
   const handlePlayAudio = async (item: any) => {
     // if (!currentTrack) {
     await TrackPlayer.reset();
-    console.log('puse');
     handlePlay(item.id);
     // }
     navigation.navigate('TrackBottom');
@@ -127,7 +124,6 @@ const FolderDetailScreen = ({ route, navigation }: Props) => {
     setSelectedTrackId(id);
     setModalVisible(true);
   };
-  console.log('setDeletion', folderName);
   const handleDeletion = async () => {
     if (selectedTrackId) {
       await deleteContentFromLocalDir(selectedTrackId, folderName);

@@ -24,7 +24,6 @@ const SettingScreen = () => {
 
   const getAppVersion = async () => {
     let version = DeviceInfo.getVersion();
-    console.log('version: ', version);
   };
 
   getAppVersion();

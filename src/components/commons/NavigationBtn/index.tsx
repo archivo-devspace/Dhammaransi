@@ -1,8 +1,8 @@
-import {Platform, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {Platform, SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {AntDesign} from '../../../utils/common';
 import {Colors} from '../../../theme';
-import {Theme} from '../../../contexts/ThemeContext';
+import {Theme, useThemeContext} from '../../../contexts/ThemeContext';
 
 const NavigationBtn = () => {
   const {theme} = useThemeContext();
@@ -18,7 +18,6 @@ const NavigationBtn = () => {
             size={30}
             name="menu-fold"
             color={Colors[theme]?.primary}
-            onPress={navigation.openDrawer}
           />
         </View>
       </SafeAreaView>

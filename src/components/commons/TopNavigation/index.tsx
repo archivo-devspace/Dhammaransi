@@ -26,7 +26,6 @@ const TopNavigation = (props: any) => {
   const isFloating = !!scrollA;
   const [isTransparent, setTransparent] = useState(isFloating);
 
-  console.log('home', isTransparent);
 
   useEffect(() => {
     if (!scrollA) {

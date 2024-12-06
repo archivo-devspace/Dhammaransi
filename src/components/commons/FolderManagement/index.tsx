@@ -70,38 +70,7 @@ const FolderManagement = ({ navigation }: any) => {
     }
   };
 
-  //   const downloadMP3 = async (folderPath: string) => {
-  //     const mp3Url =
-  //       'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'; // Replace with your MP3 URL
-  //     const artistName = 'Artist Name'; // Replace with actual artist name
-  //     const songName = 'Song Name'; // Replace with actual song name
-  //     const posterImage = 'https://example.com/image.jpg'; // Replace with actual poster image URL
-  //     const isAudio = true;
-
-  //     try {
-  //       await sendDownloadedDataToLocalDir(
-  //         (err: any) => {
-  //           if (err) {
-  //             Alert.alert('Error', 'Failed to download MP3 file!');
-  //           } else {
-  //             Alert.alert('Success', 'MP3 file downloaded successfully!');
-  //           }
-  //         },
-  //         'contentId', // Replace with actual content ID
-  //         mp3Url,
-  //         artistName,
-  //         songName,
-  //         posterImage,
-  //         isAudio,
-  //         (progress: number) => {
-  //           console.log(`Download progress: ${progress}%`);
-  //         },
-  //       );
-  //     } catch (error) {
-  //       console.error(error);
-  //       Alert.alert('Error', 'Failed to download MP3 file!');
-  //     }
-  //   };
+  
 
   useEffect(() => {
     loadFolders();

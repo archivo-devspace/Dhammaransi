@@ -43,7 +43,6 @@ export const ThemeProvider: React.FC<{children: ReactNode}> = ({children}) => {
       const saveLanguage = await get('LANGUAGE');
 
       const systemTheme = Appearance.getColorScheme();
-      console.log("systheme", systemTheme)
       setTheme(savedTheme || systemTheme);
       // setTheme(savedTheme || 'light');
       setLanguages(saveLanguage || 'mm');

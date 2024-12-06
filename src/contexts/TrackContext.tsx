@@ -347,8 +347,7 @@ export const TrackProvider: React.FC<{children: ReactNode}> = ({children}) => {
       });
     });
 
-    console.log("originalImage", currentTrack?.originalImage)
-    console.log("originalUrl", currentTrack?.originalUrl)
+   
 
     // If the track is not being downloaded and does not already exist, start the download
     if (!find && !alreadyExists) {

@@ -20,7 +20,6 @@ const LanguageScreen = (navigation: any) => {
     try {
       i18next.changeLanguage(selectedLanguage); // it will change the language through out the app.
       await AsyncStorage.setItem('LANGUAGE', selectedLanguage as string);
-      console.log('saved');
     } catch {
       console.log('err in saving data');
     }
