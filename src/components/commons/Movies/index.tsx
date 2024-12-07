@@ -43,7 +43,7 @@ export const Movies = ({
   const flatListRef = useRef<any>(null);
   const x = useSharedValue(0);
 
-  const loopedData = data ? [data[data.length - 1], ...data, data[0]] : [];
+  const loopedData = data?.length ? [data.at(-1), ...data, data[0]] : [];
 
   const onScroll = useAnimatedScrollHandler({
     onScroll: event => {
@@ -103,10 +103,10 @@ export const Movies = ({
 
   const styles = styling(theme);
 
-  const paintings = loopedData.map(item => ({
+  const paintings = loopedData?.map(item => ({
     ...item,
-    artwork: item.details[0]?.file,
-    description: item.title,
+    artwork: item?.details[0]?.file,
+    description: item?.title,
   }));
 
   return (

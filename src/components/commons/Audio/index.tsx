@@ -44,7 +44,7 @@ export const Audios = ({
   const flatListRef = useRef<any>(null);
   const x = useSharedValue(0);
 
-  const loopedData = data ? [data[data.length - 1], ...data, data[0]] : [];
+  const loopedData = data?.length ? [data.at(-1), ...data, data[0]] : [];
 
   const onScroll = useAnimatedScrollHandler({
     onScroll: event => {
@@ -106,7 +106,7 @@ export const Audios = ({
 
   const audios = loopedData.map(item => ({
     ...item,
-    description: item.title,
+    description: item?.title,
   }));
 
   return (
