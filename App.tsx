@@ -22,7 +22,16 @@ const NOTIFICATION = [
 
 const App = () => {
   // const getVersionMutation = useGetVersion();
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: Infinity, // Data will never be considered stale
+        cacheTime: 1000 * 60 * 60 * 48, // Cache the data for 48 hours
+        refetchOnWindowFocus: false, // Avoid refetching on window focus
+        retry: false, // Disable retries if the data won't change
+      },
+    },
+  });
 
   const [isModalVisible, setModalVisible] = useState(false);
   const [isShowCancelBtn, setIsShowCancelBtn] = useState(false);
@@ -69,12 +78,11 @@ const App = () => {
     const notifeePermission = async () => {
       await notifee.requestPermission();
     };
-    
+
     getVersion();
     notifeePermission();
     setUpPlayer();
   }, []);
-
 
   const handleCancelUpdate = () => {
     setModalVisible(false);
